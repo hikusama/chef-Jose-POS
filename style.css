@@ -446,13 +446,12 @@ img {
     border-bottom: solid 1px rgb(161, 161, 161);
     overflow-y: scroll;
     padding-bottom: 2rem;
-
+    scrollbar-width: thin;
+    scrollbar-gutter: stable;
 }
 
-/* #counter_body::-webkit-scrollbar {
-    
-} */
 
+ 
 #counter_body ol {
     width: 90%;
     list-style: none;
