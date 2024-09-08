@@ -74,10 +74,10 @@ $(document).ready(function () {
     $(".category_nav_inner li:nth-child(1)").addClass("prod_nav")
 
 
-    $(".products li").click(function (e) { 
+    $(".products .category_nav_inner li").click(function (e) { 
         e.preventDefault();
         
-        $(".products li").removeClass("prod_nav");
+        $(".products .category_nav_inner li").removeClass("prod_nav");
 
 
         $(this).addClass("prod_nav")
