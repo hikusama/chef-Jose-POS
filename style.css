@@ -442,7 +442,7 @@ img {
     justify-content: start;
     row-gap: .7rem;
     margin-top: 3rem;
-    height: 42%;
+    height: 50vh;
     border-bottom: solid 1px rgb(161, 161, 161);
     overflow-y: scroll;
     padding-bottom: 2rem;
@@ -455,10 +455,10 @@ img {
 #counter_body ol {
     width: 90%;
     list-style: none;
-    height: 2.8rem;
     border: solid 1px rgb(161, 161, 161);
     border-radius: .4rem;
     cursor: pointer;
+    
 }
 
 #counter_body ol:hover {
@@ -489,7 +489,46 @@ img {
 #counter_body ol p:nth-child(3) {
     display: grid;
 }
+.qntity{
+    visibility: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.qntity div{
+    width: 70%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    row-gap: .3rem;
+    margin-top: 1rem;
 
+}
+.qntity p,.qntity input{
+    width: 10rem;
+}
+.qntity p{
+    font-size: .85rem;
+    display: grid;
+    justify-content: start;
+    transform: translateX(-1rem);
+}
+.qntity input{
+    text-align: end;
+    padding: 0 1rem;
+    height: 1.8rem;
+}
+ 
+.quantityShow{
+    height: 5rem !important;
+}
+.quantityShow > *{
+    visibility: visible !important;
+}
+.arrow{
+    transform: rotate(90deg);
+    transition: .4s;
+}
 #counter_body ol p img {
     height: .9rem;
 }

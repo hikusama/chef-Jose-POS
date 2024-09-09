@@ -82,6 +82,23 @@ $(document).ready(function () {
 
         $(this).addClass("prod_nav")
     });
+
+    $(".counting #counter_body ol li:nth-child(1)").click(function (e) { 
+        e.preventDefault();
+        let hasclass = $(this).next(".qntity").hasClass("quantityShow");
+        
+        if (hasclass) {
+            
+            $(this).find("p img").removeClass("arrow");
+            $(this).next(".qntity").removeClass("quantityShow");
+        }else{
+            $("p img").removeClass("arrow");
+            $(".qntity").removeClass("quantityShow");
+            $(this).find("p img").addClass("arrow");
+            $(this).next(".qntity").addClass("quantityShow");
+        }
+    });
+    //  $(this).closest("qntity") 
   
 
 
