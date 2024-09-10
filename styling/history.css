@@ -99,22 +99,47 @@
 }
 .history_info ol:nth-child(1) p{
     font-size: 1.2rem;
+
 }
 .history_info ol:nth-child(1) h4{
     font-size: .88rem;
 }
-.history_info ol:nth-child(2){
-    height: 14rem;
-    border: solid 1px;
+ 
+.history_info ol:nth-child(2) p{
+    display: flex;
+    align-items: center;
 }
 .history_info ol:nth-child(2) {
+    height: 14rem;
     display: flex;
+    align-items: center;
+    text-align: center;
     flex-direction: column;
     justify-content: start;
-    align-items: center;
     overflow-y: scroll;
     scrollbar-width: thin;
+    height: fit-content;
+    max-height: 50%;
+    padding: 1rem 0;
+    row-gap: .3rem;
 }
 .history_info ol:nth-child(2) li{
     display: flex;
+    justify-content: space-between;
+    column-gap: .6rem;
+    width: 90%;
+}
+
+.history_info ol:nth-child(2) li:hover{
+    background-color: rgba(189, 189, 189, 0.438);
+    border-radius: .5rem;
+}
+.history_info ol:nth-child(3){
+    margin-top: 1rem;
+}
+.history_info ol:nth-child(3) li{
+    display: flex;
+    justify-content: space-between;
+    font-size: .8rem;
+    margin: 0 1rem;
 }
