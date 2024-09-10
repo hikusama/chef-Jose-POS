@@ -1,0 +1,120 @@
+.history_cont{
+    background-color: rgb(221, 221, 221);
+    padding: 9.5rem 0 0 4rem;
+
+}
+.time_section{
+    display: flex;
+    flex-direction: column;
+    row-gap: 1.3rem;
+}
+.history_cont h4{
+    padding-left: 1rem;
+}
+.history_pane{
+    background-color: rgb(221, 221, 221);
+    position: relative;
+
+}
+.title_section{
+    font-size: 1.2rem;
+    font-weight: 800;
+    font-style: italic;
+}
+
+.history_cont h2{
+    position: absolute;
+    top: 12%;
+    left: 54%;
+    transform: translate(-50%,-50%);
+}
+.history_info{
+    
+    height: 80%;
+    background-color: white;
+    position: absolute;
+    border-left: solid 1px rgb(189, 189, 189);
+    border-top: solid 1px rgb(189, 189, 189);
+    width: 100%;
+    min-width: 14rem;
+    left: 50%;
+    top: 54%;
+    transform: translate(-50%,-50%);
+    border-radius: 1rem 0 0 1rem;
+
+}
+.history_cont ol{
+    display: flex;
+    justify-content: space-between;
+    width: 80%;
+    background-color: white;
+    border-radius: .4rem;
+    border: solid 1px rgb(189, 189, 189);
+    padding: .5rem .8rem;
+}
+.history_cont li{
+    list-style: none;
+    display: grid;
+    row-gap: 5px;
+}
+.history_cont h5{
+    font-size: .7rem;
+}
+.history_cont p{
+    font-size: 14px;
+}
+.today_cont,.yesterday_cont,.last_week_cont{
+    margin-top: .5rem;
+    height: fit-content;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    row-gap: .3rem;
+}
+.today_cont > *:hover{
+    background-color: rgba(255, 104, 3, 0.329);
+    border-color: rgba(255, 104, 3, 0.87);
+}
+.yesterday_cont > *:hover{
+    background-color: rgba(255, 104, 3, 0.329);
+    border-color: rgba(255, 104, 3, 0.87);
+}
+.last_week_cont > *:hover{
+    background-color: rgba(255, 104, 3, 0.329);
+    border-color: rgba(255, 104, 3, 0.87);
+}
+
+
+.history_info ol{
+    list-style: none;
+}
+.history_info ol:nth-child(1){
+    height: 7rem;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    place-items: center;
+
+}
+.history_info ol:nth-child(1) p{
+    font-size: 1.2rem;
+}
+.history_info ol:nth-child(1) h4{
+    font-size: .88rem;
+}
+.history_info ol:nth-child(2){
+    height: 14rem;
+    border: solid 1px;
+}
+.history_info ol:nth-child(2) {
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: center;
+    overflow-y: scroll;
+    scrollbar-width: thin;
+}
+.history_info ol:nth-child(2) li{
+    display: flex;
+}
