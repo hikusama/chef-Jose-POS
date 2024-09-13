@@ -1,6 +1,6 @@
 .history_cont{
     background-color: rgb(221, 221, 221);
-    padding: 9.5rem 0 0 4rem;
+    padding: 6rem 0 0 4rem;
 
 }
 .time_section{
@@ -51,6 +51,9 @@
     border-radius: .4rem;
     border: solid 1px rgb(189, 189, 189);
     padding: .5rem .8rem;
+}
+.history_cont li:nth-child(2){
+    text-align: center;
 }
 .history_cont li{
     list-style: none;
@@ -160,4 +163,26 @@
     justify-content: space-between;
     font-size: .8rem;
     margin: 0 1rem;
+}
+.askReceipt{
+    display: flex;
+    justify-content: center;
+    margin-top: 2rem;
+
+}
+#print_receipt{
+    height: 2rem;
+    border-radius: .3rem;
+    border: none;
+    outline: solid 1px #ffbb00;
+    background-color: #d4ab3a94;
+    cursor: pointer;
+    font-size: .9rem;
+    font-weight: 60;
+    width: 8rem;
+}
+#print_receipt:hover{
+    box-shadow: inset 8rem 0 0 #a27c129c;
+    transition: .3s;
+    background-color: #a27c129c;
 }

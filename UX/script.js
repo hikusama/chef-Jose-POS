@@ -31,7 +31,6 @@ $(document).ready(function () {
                 document.documentElement.msRequestFullscreen();
             }
         } else {
-            // Exit fullscreen
             $("#screencontroll img").attr("src", "../image/fullscreen.png")
 
             if (document.exitFullscreen) {
@@ -91,9 +90,12 @@ $(document).ready(function () {
             
             $(this).find("p img").removeClass("arrow");
             $(this).next(".qntity").removeClass("quantityShow");
+            $(this).closest("ol").removeClass("bxselected");
         }else{
             $("p img").removeClass("arrow");
             $(".qntity").removeClass("quantityShow");
+            $("#counter_body ol").removeClass("bxselected");
+            $(this).closest("ol").addClass("bxselected");
             $(this).find("p img").addClass("arrow");
             $(this).next(".qntity").addClass("quantityShow");
         }
