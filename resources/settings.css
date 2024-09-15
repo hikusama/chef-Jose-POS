@@ -87,22 +87,29 @@
     opacity: 1 !important;
 
 }
+.inv{
+    opacity: 1 !important;
+    cursor: default !important;
+}
+.inv:hover{
+    background-color: rgba(255, 167, 3, 0.63)  !important;
+    border: solid 1px rgb(207, 135, 1) !important;
+}
 .themes_select input{
     position: absolute;
     top: .5rem;
     left: .5rem;
 }
 #save_theme{
+    cursor: not-allowed;
     padding: .5rem .9rem .5rem 1.8rem;
     position: relative;
     background-color: white;
     border: solid 1px rgba(122, 122, 122, 0.623);
     border-radius: .3rem;
+    opacity: 50%;
 }
-#save_theme:hover{
-    background-color: rgba(255, 167, 3, 0.63);
-    border: solid 1px rgb(207, 135, 1);
-}
+
 .savetm{
     margin: 0 3rem;
 }
