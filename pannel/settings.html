@@ -4,7 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="../resources/style.css">
+    <link rel="stylesheet" href="../resources/settings.css">
+    <link rel="stylesheet" href="../resources/fontawesome-free-5.15.4-web/css/all.css">
     <title>POS</title>
 </head>
 
@@ -16,8 +18,7 @@
 
             <section>
                 <li><img src="../image/logo.png" alt="logo" id="logo"></li>
-                <li class="search"><input type="search" name="search" placeholder="Seach products..." id="search"
-                        onclick="funs()"><label for="search"><i class="fa "></i></label></li>
+                <li class="title_section">Settings</li>
             </section>
             <section>
                 <li class="first">r</li>
@@ -31,34 +32,89 @@
         <div class="side_nav">
             <div class="side_nav2d">
                 <div class="inner_side_nav">
+                    <li id="overview">
+                        <div class="textdp"><i class="fas fa-chart-pie"></i>Overview</div>
+                    </li>
                     <li id="cashier">
-                        <div class="textdp"><i></i>Cashier</div>
+                        <div class="textdp"><i class="fas fa-home"></i>Cashier</div>
                     </li>
                     <li id="reports">
-                        <div class="textdp"><i></i>Reports</div>
+                        <div class="textdp"><i class="fas fa-file-medical-alt"></i>Reports</div>
                     </li>
+                    <li id="myproducts">
+                        <div class="textdp"><i class="fas fa-hamburger"></i>Products</div>
+                    </li>
+
                     <li id="history">
-                        <div class="textdp"><i></i>History</div>
+                        <div class="textdp"><i class="fas fa-history"></i>History</div>
                     </li>
                 </div>
                 <div class="inner_side_nav_settings">
                     <li id="settings" class="on_select">
                         <div class="bgsect"></div>
-                        <div class="textdp"><i></i>Settings</div>
+                        <div class="textdp"><i class="fas fa-cog"></i>Settings</div>
                     </li>
                 </div>
             </div>
-
         </div>
         <div class="middle_side">
+            <div class="settings_cont">
+                <ol>
+                    <h3><i class="fas fa-user-cog"></i>Profiles and Account</h3>
+                    <hr>
+                    <li>
+                        <p><i class="fas fa-pen"></i> Edit Cedentials</p>
+                        <button type="button" id="edit_prof"><i class="fas fa-pen"></i>Edit</button>
+                    </li>
+                    <li>
+                        <p><i class="fas fa-key"></i> Change password</p>
+                        <button type="button" id="change_pw"><i class="fas fa-key"></i>Change password</button>
+                    </li>
+                </ol>
+                <ol>
+                    <h3><i class="fas fa-chart-pie"></i> Themes</h3>
+                    <hr>
+                    <div class="themes_select">
+                        <label for="theme1">
+                            <div>
+                                <input type="radio" name="tm" id="theme1">
+                            </div>
+                            <div class="sample_theme">
+                                
+                            </div>
+                            <div class="theme_name">
+                                <h4>Light</h4>
+                            </div>
+                        </label>
+                        <label for="theme2">
+                            <div>
+                                <input type="radio" name="tm" id="theme2">
+                            </div>
+                            <div class="sample_theme">
+                                
+                            </div>
+                            <div class="theme_name">
+                                <h4>Monokai</h4>
+                            </div>
+                        </label>
+                        <label for="theme3">
+                            <div>
+                                <input type="radio" name="tm" id="theme3">
+                            </div>
+                            <div class="sample_theme">
+                                
+                            </div>
+                            <div class="theme_name">
+                                <h4>Dark Modern</h4>
+                            </div>
+                        </label>
+                    </div>
+                    <div class="savetm">
+                        <button type="button" id="save_theme"><i class="fas fa-save"></i> Save Theme</button>
+                    </div>
+                </ol>
 
-            <div class="products">
-                <div class="category_nav"></div>
-                <div class="products_content">
-
-                </div>
             </div>
-            <div class="counting">sdad</div>
         </div>
 
     </div>
