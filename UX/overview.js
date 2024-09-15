@@ -8,8 +8,8 @@ $(document).ready(function () {
         data: {
             labels: type,
             datasets: [{
-                label: 'Monthly Income',
-                data: [12, 19, 3, 5, 2, 3, 7, 10, 6, 8, 9, 4],
+                label: 'Monthly Income 2024',
+                data: [12000, 10109, 3000, 5500, 20000, 8000, 17540, 10050, 16000, 18000, 22078, 40000],
                 backgroundColor: [
                     'rgba(255, 99, 132, 0.2)',  
                     'rgba(54, 162, 235, 0.2)',  
