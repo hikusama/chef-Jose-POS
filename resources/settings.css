@@ -1,20 +1,20 @@
-
-
-.middle_side{
+.middle_side {
     grid-template-columns: unset;
     background-color: rgba(199, 199, 199, 0.623);
 
 }
 
-.settings_cont{
-    margin: 6.2rem 2.5rem 0 5.5rem;
+.settings_cont {
+    margin: 7.2rem 2.5rem 0 5.5rem;
+    position: relative;
+}
+
+.settings_cont ol {
+    margin-bottom: 2rem;
 
 }
-.settings_cont ol{
-    margin-bottom: 2rem;
-    
-}
-.settings_cont li{
+
+.settings_cont li {
     list-style: none;
     display: flex;
     justify-content: space-between;
@@ -24,7 +24,7 @@
 }
 
 #change_pw,
-#edit_prof{
+#edit_prof {
     display: flex;
     border: solid 1px rgba(128, 128, 128, 0.623);
     gap: .5rem;
@@ -34,22 +34,27 @@
     position: relative;
     background-color: #ffffffea;
 }
-#change_pw:hover{
+
+#change_pw:hover {
     background-color: rgba(255, 255, 255, 0.199);
 }
-#edit_prof:hover{
+
+#edit_prof:hover {
     background-color: rgba(255, 255, 255, 0.199);
 }
+
 #change_pw i,
-#edit_prof i{
+#edit_prof i {
     left: .6rem;
     position: absolute;
 }
-.settings_cont h3{
+
+.settings_cont h3 {
     display: flex;
     justify-content: start;
     gap: .5rem;
 }
+
 .themes_select {
     display: flex;
     justify-content: start;
@@ -57,50 +62,59 @@
     gap: 1rem;
     margin: 1rem 3rem;
 }
-.themes_select label{
+
+.themes_select label {
     border-radius: .5rem;
     border: solid 1px rgba(141, 141, 141, 0.507);
     height: 8rem;
     width: 10rem;
     background-color: white;
-    box-shadow:  5px 5px 3px #8d8d8d;
+    box-shadow: 5px 5px 3px #8d8d8d;
     position: relative;
     display: grid;
     grid-template-rows: 1.7rem auto 2rem;
     opacity: 50%;
 }
-.themes_select label .theme_name{
+
+.themes_select label .theme_name {
     display: grid;
     place-items: center;
     justify-content: end;
 }
-.themes_select label h4{
+
+.themes_select label h4 {
     width: fit-content;
     margin-right: 1rem;
 }
-.themes_select label:hover{
+
+.themes_select label:hover {
     background-color: rgba(255, 104, 3, 0.63);
-    border:solid 1px rgb(255, 104, 3);
+    border: solid 1px rgb(255, 104, 3);
     opacity: 1;
 }
-.selected_class{
+
+.selected_class {
     opacity: 1 !important;
 
 }
-.inv{
+
+.inv {
     opacity: 1 !important;
     cursor: default !important;
 }
-.inv:hover{
-    background-color: rgba(255, 167, 3, 0.63)  !important;
+
+.inv:hover {
+    background-color: rgba(255, 167, 3, 0.63) !important;
     border: solid 1px rgb(207, 135, 1) !important;
 }
-.themes_select input{
+
+.themes_select input {
     position: absolute;
     top: .5rem;
     left: .5rem;
 }
-#save_theme{
+
+#save_theme {
     cursor: not-allowed;
     padding: .5rem .9rem .5rem 1.8rem;
     position: relative;
@@ -110,11 +124,161 @@
     opacity: 50%;
 }
 
-.savetm{
+.savetm {
     margin: 0 3rem;
 }
-#save_theme i{
+
+#save_theme i {
     position: absolute;
     left: .7rem;
 }
 
+.sample_theme {
+    overflow: hidden;
+    position: relative;
+    display: grid;
+    place-items: center;
+}
+
+.sample_theme img {
+    height: 5rem;
+    width: 6rem;
+}
+
+.notif_settings {
+    width: fit-content;
+    position: absolute;
+    background-color: rgb(255, 255, 255);
+    border: solid 1px rgba(167, 167, 167, 0.692);
+    display: grid;
+    grid-template-columns: 2rem auto;
+    padding: .8rem 1rem;
+    right: -40rem;
+    border-radius: .4rem;
+    top: -3rem;
+    overflow: hidden;
+    place-items: center;
+    transition: .3s;
+}
+.notifsw{
+    right: -1rem !important;
+}
+.notif_settings i {
+    background-color: rgb(0, 199, 0);
+    padding: .2rem;
+    border-radius: 50%;
+    color: white;
+}
+
+.notif_settings::after {
+    left: 0;
+    position: absolute;
+    content: "";
+    width: .3rem;
+    height: 100%;
+    background-color: rgb(0, 199, 0);
+}
+
+.themes_select label:nth-child(2) img {
+    filter: saturate(60);
+}
+
+.themes_select label:nth-child(3) img {
+    filter: saturate(0);
+}
+
+.confirm_change>*:nth-child(2) {
+    bottom: 0;
+    display: flex;
+    gap: 2rem;
+    place-items: center;
+    justify-content: center;
+    margin-top: .4rem;
+
+
+}
+
+.confirm_change {
+    z-index: 1;
+    bottom: 0;
+    transform: translate(-50%,10rem);
+    left: 50%;
+    display: grid;
+    border-radius: .4rem;
+    overflow: hidden;
+    background-color: white;
+    border: solid 1px rgba(0, 0, 0, 0.336);
+    padding: 1.1rem 2rem ;
+    width: 17rem;
+    position: absolute;
+    justify-content: center;
+    place-items: center;
+    transition: .3s;
+
+}
+.New_confirm_change{
+    transition: .3s;
+    transform: translate(-50%,-50%);
+}
+.overlay_settings{
+    height: 100%;
+    background-color: transparent;
+    width: 100%;
+    position: absolute;
+    z-index: 1;
+}
+
+
+.confirm_change::after {
+    top: 0;
+    position: absolute;
+    content: "";
+    height: .3rem;
+    width: 100%;
+    background-color: rgb(236, 8, 0);
+}
+
+.confirm_change>* {
+    width: fit-content;
+}
+
+.confirm_change button {
+    border-radius: .3rem;
+    border: solid 1px rgba(0, 0, 0, 0.247);
+    padding: .2rem .3rem .2rem 1.4rem;
+    justify-content: center;
+    place-items: center;
+    display: grid;
+    position: relative;
+    color: white;
+    cursor: pointer;
+
+}
+
+.confirm_change button i {
+    position: absolute;
+    left: .3rem;
+
+}
+
+#changetheme_yes {
+    background-color: rgba(161, 34, 34, 0.966);
+}
+
+#changetheme_yes:hover {
+    background-color: rgba(161, 34, 34, 0.6);
+
+}
+
+#changetheme_no {
+    background-color: rgba(34, 161, 72, 0.966);
+}
+
+#changetheme_no:hover {
+    background-color: rgba(34, 161, 72, 0.6);
+
+}
+
+#changetheme_no i {
+    transform: rotate(45deg);
+}

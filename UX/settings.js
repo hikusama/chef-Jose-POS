@@ -51,17 +51,41 @@ $(document).ready(function () {
 
         }
     });
-
+    let intervalId;
     $("#save_theme").click(function (e) {
         e.preventDefault();
 
         if (theme_selected != "") {
 
-            localStorage.setItem('theme', theme_selected);
-            // console.log("good" + theme_selected);
-            theme_selected = ""
-            $("#save_theme").removeClass("inv");
+            // conf = confirm("Are you sure you want to change theme?")
+            // if (conf) {
 
+            //     localStorage.setItem('theme', theme_selected);
+            //     // console.log("good" + theme_selected);
+            //     theme_selected = ""
+            //     $("#save_theme").removeClass("inv");
+
+
+            // }
+            let hasclass = $(this).hasClass("New_confirm_change");
+            if (!hasclass) {
+                $(".confirm_change").addClass("New_confirm_change");
+                $(".overlay_settings").show();
+                intervalId = setInterval(() => {
+                    console.log("helo");
+                    $(".overlay_settings").show();
+                    check_ov = $(".overlay_settings").css("display", "none");
+                    if (check_ov) {
+                    
+                        $(".overlay_settings").show();
+                    }else{
+                        $(".overlay_settings").hide();
+                    }
+                }, 500);
+            }else{
+
+            }
+            // $(".confirm_change").show();
 
 
         } else {
@@ -71,10 +95,34 @@ $(document).ready(function () {
         }
 
 
+    });
+
+    $(".overlay_settings").hide();
+
+    $("#changetheme_yes").click(function (e) {
+        e.preventDefault();
+        clearInterval(intervalId);
+        $(".overlay_settings").hide();
+        $(".confirm_change").removeClass("New_confirm_change");
+
+        localStorage.setItem('theme', theme_selected);
+        // console.log("good" + theme_selected);
+        theme_selected = ""
+        $("#save_theme").removeClass("inv");
+
+        $(".notif_settings").addClass("notifsw");
+        setTimeout(() => {
+            $(".notif_settings").removeClass("notifsw");
+        }, 3000);
 
 
+    });
 
-
+    $("#changetheme_no").click(function (e) {
+        e.preventDefault();
+        clearInterval(intervalId);
+        $(".overlay_settings").hide();
+        $(".confirm_change").removeClass("New_confirm_change");
 
     });
 
