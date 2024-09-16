@@ -4,6 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="../UX/jquery-3.5.1.min.js"></script>
+    <script src="../UX/script.js"></script>
     <link rel="stylesheet" href="../resources/style.css">
     <link rel="stylesheet" href="../resources/cashier.css">
     <link rel="stylesheet" href="../resources/fontawesome-free-5.15.4-web/css/all.css">
@@ -20,7 +22,8 @@
             <section>
                 <li><img src="../image/logo.png" alt="logo" id="logo"></li>
                 <li class="search"><input type="search" name="search" placeholder="Seach products..." id="search"
-                        onclick="funs()"><label for="search"><img src="../image/search.png" alt="search"></label></li>
+                       ><label for="search"><i class="fas fa-search"></i></label>
+                </li>
             </section>
             <section>
                 <li class="first" id="refresh"><img src="../image/refresh.png" alt="refresh"></li>
@@ -147,11 +150,26 @@
                 <div id="counter_body">
                     <ol>
                         <li>
-                            <p><img src="../image/dropdown.png" alt="dropdown"></p>
+                            <p class="arrow_controll"><i class="fas fa-arrow-right"></i></p>
                             <p>455</p>
                             <p>Beef pattyasd </p>
                             <p>₱1900</p>
-                            <div><i><img src="../image/remove.png" alt="X"></i></div>
+                            <div><i class="fas fa-plus" style="transform: rotate(45deg);"></i></div>
+                        </li>
+                        <li class="qntity">
+                            <div>
+                                <p>Quantity</p>
+                                <input type="number" name="qntity" id="">
+                            </div>
+                        </li>
+                    </ol>
+                    <ol>
+                        <li>
+                            <p class="arrow_controll"><i class="fas fa-arrow-right"></i></p>
+                            <p>4</p>
+                            <p>Beef patty</p>
+                            <p>₱190</p>
+                            <div><i class="fas fa-plus" style="transform: rotate(45deg);"></i></div>
                         </li>
                         <li class="qntity">
                             <div>
@@ -163,11 +181,11 @@
                     </ol>
                     <ol>
                         <li>
-                            <p><img src="../image/dropdown.png" alt="dropdown"></p>
+                            <p class="arrow_controll"><i class="fas fa-arrow-right"></i></p>
                             <p>4</p>
                             <p>Beef patty</p>
                             <p>₱190</p>
-                            <div><i><img src="../image/remove.png" alt="X"></i></div>
+                            <div><i class="fas fa-plus" style="transform: rotate(45deg);"></i></div>
                         </li>
                         <li class="qntity">
                             <div>
@@ -179,11 +197,11 @@
                     </ol>
                     <ol>
                         <li>
-                            <p><img src="../image/dropdown.png" alt="dropdown"></p>
+                            <p class="arrow_controll"><i class="fas fa-arrow-right"></i></p>
                             <p>4</p>
                             <p>Beef patty</p>
                             <p>₱190</p>
-                            <div><i><img src="../image/remove.png" alt="X"></i></div>
+                            <div><i class="fas fa-plus" style="transform: rotate(45deg);"></i></div>
                         </li>
                         <li class="qntity">
                             <div>
@@ -195,11 +213,11 @@
                     </ol>
                     <ol>
                         <li>
-                            <p><img src="../image/dropdown.png" alt="dropdown"></p>
+                            <p class="arrow_controll"><i class="fas fa-arrow-right"></i></p>
                             <p>4</p>
                             <p>Beef patty</p>
                             <p>₱190</p>
-                            <div><i><img src="../image/remove.png" alt="X"></i></div>
+                            <div><i class="fas fa-plus" style="transform: rotate(45deg);"></i></div>
                         </li>
                         <li class="qntity">
                             <div>
@@ -211,11 +229,11 @@
                     </ol>
                     <ol>
                         <li>
-                            <p><img src="../image/dropdown.png" alt="dropdown"></p>
+                            <p class="arrow_controll"><i class="fas fa-arrow-right"></i></p>
                             <p>4</p>
                             <p>Beef patty</p>
                             <p>₱190</p>
-                            <div><i><img src="../image/remove.png" alt="X"></i></div>
+                            <div><i class="fas fa-plus" style="transform: rotate(45deg);"></i></div>
                         </li>
                         <li class="qntity">
                             <div>
@@ -227,11 +245,11 @@
                     </ol>
                     <ol>
                         <li>
-                            <p><img src="../image/dropdown.png" alt="dropdown"></p>
+                            <p class="arrow_controll"><i class="fas fa-arrow-right"></i></p>
                             <p>4</p>
                             <p>Beef patty</p>
                             <p>₱190</p>
-                            <div><i><img src="../image/remove.png" alt="X"></i></div>
+                            <div><i class="fas fa-plus" style="transform: rotate(45deg);"></i></div>
                         </li>
                         <li class="qntity">
                             <div>
@@ -243,11 +261,11 @@
                     </ol>
                     <ol>
                         <li>
-                            <p><img src="../image/dropdown.png" alt="dropdown"></p>
+                            <p class="arrow_controll"><i class="fas fa-arrow-right"></i></p>
                             <p>4</p>
                             <p>Beef patty</p>
                             <p>₱190</p>
-                            <div><i><img src="../image/remove.png" alt="X"></i></div>
+                            <div><i class="fas fa-plus" style="transform: rotate(45deg);"></i></div>
                         </li>
                         <li class="qntity">
                             <div>
@@ -259,11 +277,11 @@
                     </ol>
                     <ol>
                         <li>
-                            <p><img src="../image/dropdown.png" alt="dropdown"></p>
+                            <p class="arrow_controll"><i class="fas fa-arrow-right"></i></p>
                             <p>4</p>
                             <p>Beef patty</p>
                             <p>₱190</p>
-                            <div><i><img src="../image/remove.png" alt="X"></i></div>
+                            <div><i class="fas fa-plus" style="transform: rotate(45deg);"></i></div>
                         </li>
                         <li class="qntity">
                             <div>
@@ -275,11 +293,11 @@
                     </ol>
                     <ol>
                         <li>
-                            <p><img src="../image/dropdown.png" alt="dropdown"></p>
+                            <p class="arrow_controll"><i class="fas fa-arrow-right"></i></p>
                             <p>4</p>
                             <p>Beef patty</p>
                             <p>₱190</p>
-                            <div><i><img src="../image/remove.png" alt="X"></i></div>
+                            <div><i class="fas fa-plus" style="transform: rotate(45deg);"></i></div>
                         </li>
                         <li class="qntity">
                             <div>
@@ -291,11 +309,11 @@
                     </ol>
                     <ol>
                         <li>
-                            <p><img src="../image/dropdown.png" alt="dropdown"></p>
+                            <p class="arrow_controll"><i class="fas fa-arrow-right"></i></p>
                             <p>4</p>
                             <p>Beef patty</p>
                             <p>₱190</p>
-                            <div><i><img src="../image/remove.png" alt="X"></i></div>
+                            <div><i class="fas fa-plus" style="transform: rotate(45deg);"></i></div>
                         </li>
                         <li class="qntity">
                             <div>
@@ -307,11 +325,11 @@
                     </ol>
                     <ol>
                         <li>
-                            <p><img src="../image/dropdown.png" alt="dropdown"></p>
+                            <p class="arrow_controll"><i class="fas fa-arrow-right"></i></p>
                             <p>4</p>
                             <p>Beef patty</p>
                             <p>₱190</p>
-                            <div><i><img src="../image/remove.png" alt="X"></i></div>
+                            <div><i class="fas fa-plus" style="transform: rotate(45deg);"></i></div>
                         </li>
                         <li class="qntity">
                             <div>
@@ -323,11 +341,11 @@
                     </ol>
                     <ol>
                         <li>
-                            <p><img src="../image/dropdown.png" alt="dropdown"></p>
+                            <p class="arrow_controll"><i class="fas fa-arrow-right"></i></p>
                             <p>4</p>
                             <p>Beef patty</p>
                             <p>₱190</p>
-                            <div><i><img src="../image/remove.png" alt="X"></i></div>
+                            <div><i class="fas fa-plus" style="transform: rotate(45deg);"></i></div>
                         </li>
                         <li class="qntity">
                             <div>
@@ -339,27 +357,11 @@
                     </ol>
                     <ol>
                         <li>
-                            <p><img src="../image/dropdown.png" alt="dropdown"></p>
+                            <p class="arrow_controll"><i class="fas fa-arrow-right"></i></p>
                             <p>4</p>
                             <p>Beef patty</p>
                             <p>₱190</p>
-                            <div><i><img src="../image/remove.png" alt="X"></i></div>
-                        </li>
-                        <li class="qntity">
-                            <div>
-
-                                <p>Quantity</p>
-                                <input type="number" name="qntity" id="">
-                            </div>
-                        </li>
-                    </ol>
-                    <ol>
-                        <li>
-                            <p><img src="../image/dropdown.png" alt="dropdown"></p>
-                            <p>4</p>
-                            <p>Beef patty</p>
-                            <p>₱190</p>
-                            <div><i><img src="../image/remove.png" alt="X"></i></div>
+                            <div><i class="fas fa-plus" style="transform: rotate(45deg);"></i></div>
                         </li>
                         <li class="qntity">
                             <div>
@@ -403,10 +405,7 @@
     </div>
 
 
-    <script src="../UX/jquery-3.5.1.min.js">
 
-    </script>
-    <script src="../UX/script.js"></script>
 </body>
 
 </html>

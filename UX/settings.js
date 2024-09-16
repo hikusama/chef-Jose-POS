@@ -23,6 +23,7 @@ $(document).ready(function () {
 
 
     }
+    setNewBody()
 
 
 
@@ -110,6 +111,7 @@ $(document).ready(function () {
         theme_selected = ""
         $("#save_theme").removeClass("inv");
 
+        setNewBody();
         $(".notif_settings").addClass("notifsw");
         setTimeout(() => {
             $(".notif_settings").removeClass("notifsw");
@@ -156,7 +158,40 @@ $(document).ready(function () {
 
     }
 
+
+
+
+    function setNewBody() {
+        const theme = localStorage.getItem('theme');
+
+        if (theme === "light") {
+            console.log("light mode");
+            
+            document.body.classList.remove("dark_mode")
+            document.body.classList.remove("monokai_mode")
+        }else if(theme === "monokai"){
+            console.log("monokai mode");
+            document.body.classList.remove("dark_mode")
+            document.body.classList.add("monokai_mode")
+        }else if(theme === "dark_modern"){
+            console.log("dark mode");
+            document.body.classList.remove("monokai_mode")
+            document.body.classList.add("dark_mode")
+            
+        }else{
+            console.log("light mode");
+            document.body.classList.remove("dark_mode")
+            document.body.classList.remove("monokai_mode")
+        }
+
+        
+
+    }
+
 });
+
+
+
 
 
 

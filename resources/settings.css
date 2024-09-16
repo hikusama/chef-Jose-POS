@@ -3,6 +3,14 @@
     background-color: rgba(199, 199, 199, 0.623);
 
 }
+.monokai_mode .middle_side{
+    background-color: #47493e;
+    color: rgb(199, 199, 199);
+}
+.dark_mode .middle_side{
+    background-color: #1F1F1F;
+    color: rgb(199, 199, 199);
+}
 
 .settings_cont {
     margin: 7.2rem 2.5rem 0 5.5rem;
@@ -34,7 +42,16 @@
     position: relative;
     background-color: #ffffffea;
 }
-
+.monokai_mode #change_pw,
+.monokai_mode #edit_prof {
+    background-color: #1E1F1C;
+    color: rgb(199, 199, 199);
+}
+.dark_mode #change_pw,
+.dark_mode #edit_prof {
+    background-color: #181818;
+    color: rgb(199, 199, 199);
+}
 #change_pw:hover {
     background-color: rgba(255, 255, 255, 0.199);
 }
@@ -42,6 +59,7 @@
 #edit_prof:hover {
     background-color: rgba(255, 255, 255, 0.199);
 }
+
 
 #change_pw i,
 #edit_prof i {
@@ -74,6 +92,12 @@
     display: grid;
     grid-template-rows: 1.7rem auto 2rem;
     opacity: 50%;
+}
+.monokai_mode .themes_select label {
+    background-color: #1E1F1C;
+}
+.dark_mode .themes_select label {
+    background-color: #181818;
 }
 
 .themes_select label .theme_name {
@@ -123,6 +147,14 @@
     border-radius: .3rem;
     opacity: 50%;
 }
+.monokai_mode #save_theme{
+    background-color: #1E1F1C;
+    color: rgb(199, 199, 199);
+}
+.dark_mode #save_theme{
+    background-color: #181818;
+    color: rgb(199, 199, 199);
+}
 
 .savetm {
     margin: 0 3rem;
@@ -158,7 +190,15 @@
     top: -3rem;
     overflow: hidden;
     place-items: center;
-    transition: .3s;
+    transition: .3s ease;
+}
+.monokai_mode .notif_settings{
+
+    background-color: #1E1F1C;
+}
+.dark_mode .notif_settings{
+
+    background-color: #181818;
 }
 .notifsw{
     right: -1rem !important;
@@ -180,7 +220,7 @@
 }
 
 .themes_select label:nth-child(2) img {
-    filter: saturate(60);
+    filter: saturate(25);
 }
 
 .themes_select label:nth-child(3) img {
@@ -214,6 +254,16 @@
     justify-content: center;
     place-items: center;
     transition: .3s;
+
+}
+.monokai_mode .confirm_change{
+    background-color: #1E1F1C;
+    border: solid 1px rgba(255, 255, 255, 0.363);
+
+}
+.dark_mode .confirm_change{
+    background-color: #181818;
+    border: solid 1px rgba(255, 255, 255, 0.363);
 
 }
 .New_confirm_change{
