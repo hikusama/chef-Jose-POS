@@ -14,7 +14,7 @@ $(document).ready(function () {
         console.log(clicked_location);
 
         
-        window.location.href = clicked_location +".html";
+        window.location.href = clicked_location ;
         
         
     });

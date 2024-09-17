@@ -1,5 +1,5 @@
 <?php
-require_once '../model/loginModel.php';
+require_once 'loginModel.php';
 
 class Logincontr extends Login {
     private $username;
