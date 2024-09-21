@@ -9,6 +9,8 @@
 }
 .dark_mode .history_cont{
     background-color: #1F1F1F;
+    background-image: radial-gradient(rgb(255, 255, 255) 0.5px,#1F1F1F 0.5px);
+    background-size: 35px 35px;
     color: rgb(199, 199, 199);
 }
 .time_section{
@@ -55,12 +57,12 @@
 .monokai_mode .history_info{
     background-color: #1E1F1C;
     color: rgb(199, 199, 199);
-    border: solid 1px rgba(255, 255, 255, 0.363);
+    border: solid 1px rgb(128 127 127 / 26%);
 }
 .dark_mode .history_info{
     background-color: #181818;
     color: rgb(199, 199, 199);
-    border: solid 1px rgba(255, 255, 255, 0.363);
+    border: solid 1px rgba(128, 127, 127, 0.39);
 }
 
 
@@ -76,11 +78,11 @@
 
 .monokai_mode .history_cont ol{
     background-color: #1E1F1C;
-    border: solid 1px rgba(255, 255, 255, 0.363);
+    border: solid 1px rgb(128 127 127 / 26%);
 }
 .dark_mode .history_cont ol{
     background-color: #181818;
-    border: solid 1px rgba(255, 255, 255, 0.363);
+    border: solid 1px rgb(128 127 127 / 26%);
 }
 
 .history_cont li:nth-child(2){

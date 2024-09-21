@@ -3,14 +3,7 @@
     background-color: rgba(199, 199, 199, 0.623);
 
 }
-.monokai_mode .middle_side{
-    background-color: #47493e;
-    color: rgb(199, 199, 199);
-}
-.dark_mode .middle_side{
-    background-color: #1F1F1F;
-    color: rgb(199, 199, 199);
-}
+
 
 .settings_cont {
     margin: 7.2rem 2.5rem 0 5.5rem;
@@ -249,7 +242,6 @@
     background-color: white;
     border: solid 1px rgba(0, 0, 0, 0.336);
     padding: 1.1rem 2rem ;
-    width: 17rem;
     position: absolute;
     justify-content: center;
     place-items: center;
@@ -289,7 +281,7 @@
 }
 
 .confirm_change>* {
-    width: fit-content;
+    white-space: nowrap;
 }
 
 .confirm_change button {

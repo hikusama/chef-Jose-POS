@@ -2,12 +2,7 @@
     grid-template-columns: unset;
     background-color: rgb(221, 221, 221);
 }
-.monokai_mode .middle_side{
-    background-color: #47493e;
-} 
-.dark_mode .middle_side{
-    background-color: #1F1F1F;
-} 
+
 
 .dashboard {
     margin: 5.2rem 0 0 4rem;
@@ -66,10 +61,12 @@
 .monokai_mode .summary_show li::after{
     background-color: #1F1F1F !important;
     color: rgb(199,199,199);
+    border:  solid 1px rgb(160 160 160 / 34%) ;
 }
 .dark_mode .summary_show li::after{
     background-color: #181818 !important;
     color: rgb(199,199,199);
+    border:  solid 1px rgb(160 160 160 / 34%) ;
 }
 
 .summary_show {
@@ -84,7 +81,7 @@
 
 .summary_show li,
 .dashboard_body li {
-    border: solid 1px rgba(160, 160, 160, 0.712) ;
+    border:  solid 1px rgb(160 160 160 / 35%) ;
     list-style: none;
     height: 7rem;
     width: 15rem;
@@ -93,7 +90,6 @@
     flex-direction: column;
     align-items: center;
     justify-content: start;
-
     background: linear-gradient(145deg, #cacaca, #fcfcfc);
     box-shadow:  15px 15px 10px #8d8d8d;
 
@@ -103,6 +99,7 @@
     background: #1E1F1C !important;
     color: rgb(199,199,199);
     box-shadow:  10px 10px 5px #1E1F1C !important;
+    border:  solid 1px rgb(160 160 160 / 26%) ;
 
 }
 .dark_mode .summary_show li,
@@ -110,6 +107,7 @@
     background: #181818 !important;
     color: rgb(199,199,199);
     box-shadow:  10px 10px 5px #181818 !important;
+    border:  solid 1px rgb(160 160 160 / 26%) ;
 
 }
 .summary_show li:hover {
@@ -178,10 +176,11 @@
 }
 .monokai_mode #myBarChart{
     background-color: #1E1F1C !important;
+    border: solid 1px rgb(192 192 192 / 26%);
 }
 .dark_mode #myBarChart{
     background-color: #181818 !important;
-    border: solid 1px rgba(192, 192, 192, 0.781);
+    border: solid 1px rgb(192 192 192 / 26%);
 
 }
 

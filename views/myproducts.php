@@ -4,13 +4,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
-    <script src="../UX/jquery-3.5.1.min.js"></script>
-    <script src="../UX/products.js"></script>
-    <script src="../UX/script.js"></script>
+
     <link rel="stylesheet" href="../resources/style.css">
     <link rel="stylesheet" href="../resources/products.css">
     <link rel="stylesheet" href="../resources/fontawesome-free-5.15.4-web/css/all.css">
+    <script src="../UX/jquery-3.5.1.min.js"></script>
+    <script src="../UX/products.js"></script>
+    <script src="../UX/script.js"></script>
 
     <title>POS</title>
 </head>
@@ -65,6 +65,7 @@
 
         </div>
         <div class="middle_side">
+            <div id="overlay_prod"></div>
             <div class="myproducts">
 
                 <div class="myprod_container">
@@ -203,6 +204,81 @@
                         <li id="sample6">Snacks</li>
                         <li id="sample7">Snacks</li>
                     </div>
+                </div>
+                <div id="addProductForm">
+                    <form id="submit_form">
+                        <div class="label_style">
+                            <p></p>
+                            <h3>Add Products</h3>
+                            <p></p>
+
+                        </div>
+                        <section>
+                            <ol>
+                                <li>
+                                    <div>
+                                        <img src="../image/sample.png" id="imgdisplay" alt="Display pic">
+                                    </div>
+                                    <label for="addpic">
+                                        <i class="fas fa-plus"></i>
+                                    </label>
+                                    <input type="file" id="addpic" style="visibility: hidden; position: absolute; height: 0; width: 0; ">
+                                </li>
+                            </ol>
+                            <ol>
+                                <li>
+                                    <div>
+                                        <i class="fas fa-book"></i>
+                                        <input placeholder="Price" type="number" name="price" id="prod_price">
+                                    </div>
+                                    <p>Price</p>
+                                </li>
+                                <li>
+                                    <div>
+                                        <i class="fas fa-book"></i>
+                                        <input type="number" name="invested" placeholder="Invested" id="prod_invested">
+                                    </div>
+                                    <p>Invested</p>
+                                </li>
+                            </ol>
+                        </section>
+                        <section>
+                            <ol>
+                                <li>
+                                    <div>
+                                        <i class="fas fa-book"></i>
+                                        <input type="text" placeholder="Product" id="prod_name" name="product">
+                                    </div>
+                                    <p>Product</p>
+                                </li>
+                            </ol>
+                            <ol>
+                                <li>
+                                    <div>
+                                        <i class="fas fa-book"></i>
+                                        <input type="number" placeholder="Stock" id="prod_stock" name="product">
+                                    </div>
+                                    <p>Stock</p>
+                                </li>
+                                <li>
+                                    <div>
+                                        <i class="fas fa-book"></i>
+                                        <select name="category" id="prod_category">
+                                            <option value="">Category</option>
+                                            <option value="snacks">Snacks</option>
+                                        </select>
+                                    </div>
+                                    <p>Category</p>
+                                </li>
+                            </ol>
+                            <div class="add_cont_button">
+                                <button type="submit" id="submit_prod"><i class="fas fa-plus"></i>Add product</button>
+                            </div>
+                        </section>
+                        <button type="button" id="canc" title="Cancel">
+                            <i class="fas fa-plus"></i>
+                        </button>
+                    </form>
                 </div>
             </div>
 
