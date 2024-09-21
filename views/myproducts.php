@@ -278,6 +278,11 @@
                         <button type="button" id="canc" title="Cancel">
                             <i class="fas fa-plus"></i>
                         </button>
+                        <div class="response">
+                            <li>Please fill all fields</li>
+                            <li>Please fill all fields</li>
+                            <li>Please fill all fields</li>
+                        </div>
                     </form>
                 </div>
             </div>

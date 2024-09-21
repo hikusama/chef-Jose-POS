@@ -337,7 +337,7 @@
 }
 #addProductForm{
     z-index: 2;
-    /* display: none; */
+    display: none;
     position: absolute;
     top: 50%;
     left: 50%;
