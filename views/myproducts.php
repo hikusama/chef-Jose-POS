@@ -97,7 +97,14 @@
                                 <p>Snacks</p>
                                 <p>available</p>
                                 <p>₱50</p>
-                                <p><i class="fas fa-ellipsis-v" title="See More"></i></p>
+                                <p>
+                                    <i class="fas fa-ellipsis-v more_showPane" title="See More"></i>
+                                <div class="action_select">
+                                    <p><i class="fas fa-edit"></i> Edit</p>
+                                    <p><i class="fas fa-trash"></i> Delete</p>
+                                    <p><i class="fas fa-eye"></i> View</p>
+                                </div>
+                                </p>
                             </li>
                             <li>
                                 <div class="dp">
@@ -107,7 +114,15 @@
                                 <p>Snacks</p>
                                 <p>available</p>
                                 <p>₱5000</p>
-                                <p><i class="fas fa-ellipsis-v" title="See More"></i></p>
+                                <p>
+                                    <i class="fas fa-ellipsis-v more_showPane" title="See More"></i>
+
+                                <div class="action_select">
+                                    <p><i class="fas fa-edit"></i> Edit</p>
+                                    <p><i class="fas fa-trash"></i> Delete</p>
+                                    <p><i class="fas fa-eye"></i> View</p>
+                                </div>
+                                </p>
                             </li>
                             <li>
                                 <div class="dp">
@@ -117,7 +132,15 @@
                                 <p>Snacks</p>
                                 <p>available</p>
                                 <p>₱50</p>
-                                <p><i class="fas fa-ellipsis-v" title="See More"></i></p>
+                                <p>
+                                    <i class="fas fa-ellipsis-v more_showPane" title="See More"></i>
+
+                                <div class="action_select">
+                                    <p><i class="fas fa-edit"></i> Edit</p>
+                                    <p><i class="fas fa-trash"></i> Delete</p>
+                                    <p><i class="fas fa-eye"></i> View</p>
+                                </div>
+                                </p>
                             </li>
                             <li>
                                 <div class="dp">
@@ -127,7 +150,15 @@
                                 <p>Snacks</p>
                                 <p>available</p>
                                 <p>₱5000</p>
-                                <p><i class="fas fa-ellipsis-v" title="See More"></i></p>
+                                <p>
+                                    <i class="fas fa-ellipsis-v more_showPane" title="See More"></i>
+
+                                <div class="action_select">
+                                    <p><i class="fas fa-edit"></i> Edit</p>
+                                    <p><i class="fas fa-trash"></i> Delete</p>
+                                    <p><i class="fas fa-eye"></i> View</p>
+                                </div>
+                                </p>
                             </li>
                             <li>
                                 <div class="dp">
@@ -137,7 +168,15 @@
                                 <p>Snacks</p>
                                 <p>available</p>
                                 <p>₱50</p>
-                                <p><i class="fas fa-ellipsis-v" title="See More"></i></p>
+                                <p>
+                                    <i class="fas fa-ellipsis-v more_showPane" title="See More"></i>
+
+                                <div class="action_select">
+                                    <p><i class="fas fa-edit"></i> Edit</p>
+                                    <p><i class="fas fa-trash"></i> Delete</p>
+                                    <p><i class="fas fa-eye"></i> View</p>
+                                </div>
+                                </p>
                             </li>
                             <li>
                                 <div class="dp">
@@ -147,7 +186,15 @@
                                 <p>Snacks</p>
                                 <p>available</p>
                                 <p>₱5000</p>
-                                <p><i class="fas fa-ellipsis-v" title="See More"></i></p>
+                                <p>
+                                    <i class="fas fa-ellipsis-v more_showPane" title="See More"></i>
+
+                                <div class="action_select">
+                                    <p><i class="fas fa-edit"></i> Edit</p>
+                                    <p><i class="fas fa-trash"></i> Delete</p>
+                                    <p><i class="fas fa-eye"></i> View</p>
+                                </div>
+                                </p>
                             </li>
                             <li>
                                 <div class="dp">
@@ -157,7 +204,15 @@
                                 <p>Snacks</p>
                                 <p>available</p>
                                 <p>₱50</p>
-                                <p><i class="fas fa-ellipsis-v" title="See More"></i></p>
+                                <p>
+                                    <i class="fas fa-ellipsis-v more_showPane" title="See More"></i>
+
+                                <div class="action_select">
+                                    <p><i class="fas fa-edit"></i> Edit</p>
+                                    <p><i class="fas fa-trash"></i> Delete</p>
+                                    <p><i class="fas fa-eye"></i> View</p>
+                                </div>
+                                </p>
                             </li>
                             <li>
                                 <div class="dp">
@@ -167,7 +222,15 @@
                                 <p>Snacks</p>
                                 <p>available</p>
                                 <p>₱5000</p>
-                                <p><i class="fas fa-ellipsis-v" title="See More"></i></p>
+                                <p>
+                                    <i class="fas fa-ellipsis-v more_showPane" title="See More"></i>
+
+                                <div class="action_select">
+                                    <p><i class="fas fa-edit"></i> Edit</p>
+                                    <p><i class="fas fa-trash"></i> Delete</p>
+                                    <p><i class="fas fa-eye"></i> View</p>
+                                </div>
+                                </p>
                             </li>
                             <li>
                                 <div class="dp">
@@ -177,7 +240,15 @@
                                 <p>Snacks</p>
                                 <p>available</p>
                                 <p>₱50</p>
-                                <p><i class="fas fa-ellipsis-v" title="See More"></i></p>
+                                <p>
+                                    <i class="fas fa-ellipsis-v more_showPane" title="See More"></i>
+
+                                <div class="action_select">
+                                    <p><i class="fas fa-edit"></i> Edit</p>
+                                    <p><i class="fas fa-trash"></i> Delete</p>
+                                    <p><i class="fas fa-eye"></i> View</p>
+                                </div>
+                                </p>
                             </li>
                             <li>
                                 <div class="dp">
@@ -187,7 +258,15 @@
                                 <p>Snacks</p>
                                 <p>available</p>
                                 <p>₱5000</p>
-                                <p><i class="fas fa-ellipsis-v" title="See More"></i></p>
+                                <p>
+                                    <i class="fas fa-ellipsis-v more_showPane" title="See More"></i>
+
+                                <div class="action_select">
+                                    <p><i class="fas fa-edit"></i> Edit</p>
+                                    <p><i class="fas fa-trash"></i> Delete</p>
+                                    <p><i class="fas fa-eye"></i> View</p>
+                                </div>
+                                </p>
                             </li>
                         </div>
                     </div>

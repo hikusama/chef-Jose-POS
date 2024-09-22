@@ -61,6 +61,24 @@ $(document).ready(function () {
 
     });
 
+    $("#submit_prod").click(function (e) { 
+        e.preventDefault();
+        
+    });
+    $(".more_showPane").click(function (e) { 
+        e.preventDefault();
+        hasClass = $(this).closest("li").find(".action_selectNew").hasClass("action_selectNew");
+
+        if (!hasClass) {
+            console.log("hello");
+            $(".action_select").removeClass("action_selectNew");
+            $(this).closest("li").find(".action_select").addClass("action_selectNew");
+        }else{
+            
+            $(".action_select").removeClass("action_selectNew");
+        }
+    });
+
 
 
 
