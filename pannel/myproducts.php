@@ -285,7 +285,7 @@
                     </div>
                 </div>
                 <div id="addProductForm">
-                    <form id="submit_form">
+                    <form id="submit_form" method="post" action="../Views/productView.php">
                         <div class="label_style">
                             <p></p>
                             <h3>Add Products</h3>
@@ -301,7 +301,7 @@
                                     <label for="addpic">
                                         <i class="fas fa-plus"></i>
                                     </label>
-                                    <input type="file" id="addpic" style="visibility: hidden; position: absolute; height: 0; width: 0; ">
+                                    <input type="file" id="addpic" style="visibility: hidden; position: absolute; height: 0; width: 0; " name="product_image">
                                 </li>
                             </ol>
                             <ol>
@@ -311,13 +311,6 @@
                                         <input placeholder="Price" type="number" name="price" id="prod_price">
                                     </div>
                                     <p>Price</p>
-                                </li>
-                                <li>
-                                    <div>
-                                        <i class="fas fa-book"></i>
-                                        <input type="number" name="invested" placeholder="Invested" id="prod_invested">
-                                    </div>
-                                    <p>Invested</p>
                                 </li>
                             </ol>
                         </section>
@@ -335,14 +328,14 @@
                                 <li>
                                     <div>
                                         <i class="fas fa-book"></i>
-                                        <input type="number" placeholder="Stock" id="prod_stock" name="product">
+                                        <input type="number" placeholder="Stock" id="prod_stock" name="quantityInStock">
                                     </div>
                                     <p>Stock</p>
                                 </li>
                                 <li>
                                     <div>
                                         <i class="fas fa-book"></i>
-                                        <select name="category" id="prod_category">
+                                        <select name="category" id="prod_category" name="category">
                                             <option value="">Category</option>
                                             <option value="snacks">Snacks</option>
                                         </select>
@@ -351,7 +344,7 @@
                                 </li>
                             </ol>
                             <div class="add_cont_button">
-                                <button type="submit" id="submit_prod"><i class="fas fa-plus"></i>Add product</button>
+                                <button type="submit" id="submit_prod" name="submit"><i class="fas fa-plus"></i>Add product</button>
                             </div>
                         </section>
                         <button type="button" id="canc" title="Cancel">

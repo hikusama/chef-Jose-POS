@@ -1,13 +1,14 @@
 <?php
+include '../Connection/dbh.php';
+include '../Model/classModel.php';
+include '../Controller/loginContr.php';
+
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if (isset($_POST['submit'])) {
         // Retrieve form data
-        $username = $_POST['username'];
-        $password = $_POST['password'];
+        $username = htmlspecialchars(strip_tags($_POST['username']));
+        $password = htmlspecialchars(strip_tags($_POST['password']));
 
-        include '../connection/dbh.php';
-        include '/loginModel.php';
-        include 'loginContr.php';
 
         // Initialize login controller
         $login = new Logincontr($username, $password);
@@ -18,8 +19,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         exit();
     } else {
         // Redirect to login page if form is not submitted
-        header("Location: ../index.php");
+        header("Location: /");
         exit();
     }
+
 }
-?>

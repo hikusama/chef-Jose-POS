@@ -1,7 +1,7 @@
 <?php
-require_once 'loginModel.php';
+require_once '../Model/classModel.php';
 
-class Logincontr extends Login {
+class Logincontr extends Model {
     private $username;
     private $password;
     private $errors = array();
@@ -21,4 +21,5 @@ class Logincontr extends Login {
 
         $this->getUser($this->username, $this->password);
     }
+
 }
