@@ -511,7 +511,7 @@ img {
     flex-wrap: wrap;
     gap: .5rem;
     height: fit-content;
-    max-height: 60vh;
+    max-height: 100%;
     overflow-y: scroll;
     scrollbar-width: thin;
     padding-bottom: 15rem;
