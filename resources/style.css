@@ -660,6 +660,9 @@ img {
 
 }
 
+#counter_body ol li>*:nth-child(5){
+    position: relative;
+}
 #counter_body ol li>* {
     display: flex;
     align-items: center;
@@ -738,7 +741,11 @@ img {
 
 
 #counter_body div i {
-    transform: scale(1.1);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    font-size: .9rem;
+    transform:translate(-50%,-50%) rotate(45deg) !important;
     cursor: pointer;
     display: grid;
     border-radius: 50%;

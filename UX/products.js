@@ -82,9 +82,18 @@ $(document).ready(function () {
 
 
 
+    $.ajax({
+        type: "POST",
+        url: "../VIEW.PHP",
+        data: "data",
+        dataType: "dataType",
+        success: function (response) {
+            
+        }
+    });
 
 
-
+    
 
 
 

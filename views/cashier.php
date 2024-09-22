@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="../UX/jquery-3.5.1.min.js"></script>
+    <script src="../UX/cashier.js"></script>
     <script src="../UX/script.js"></script>
     <link rel="stylesheet" href="../resources/style.css">
     <link rel="stylesheet" href="../resources/cashier.css">
@@ -87,62 +88,14 @@
                     </div>
                 </div>
                 <div class="products_content">
-                    <ol>
+                    <!-- <ol>
                         <li><img src="../image/sample.png" alt="item"></li>
                         <li>
                             <h5>Beef patty asfasdewsd sad</h5>
                             <h4><b>₱4544</b></h4>
                         </li>
-                    </ol>
-                    <ol>
-                        <li><img src="../image/sample.png" alt="item"></li>
-                        <li>
-                            <h5>Beef patty</h5>
-                            <h4><b>₱45</b></h4>
-                        </li>
-                    </ol>
-                    <ol>
-                        <li><img src="../image/sample.png" alt="item"></li>
-                        <li>
-                            <h5>Beef patty with vagetables</h5>
-                            <h4><b>₱45</b></h4>
-                        </li>
-                    </ol>
-                    <ol>
-                        <li><img src="../image/sample.png" alt="item"></li>
-                        <li>
-                            <h5>Beef patty</h5>
-                            <h4><b>₱45</b></h4>
-                        </li>
-                    </ol>
-                    <ol>
-                        <li><img src="../image/sample.png" alt="item"></li>
-                        <li>
-                            <h5>Beef patty</h5>
-                            <h4><b>₱45</b></h4>
-                        </li>
-                    </ol>
-                    <ol>
-                        <li><img src="../image/sample.png" alt="item"></li>
-                        <li>
-                            <h5>Beef patty</h5>
-                            <h4><b>₱45</b></h4>
-                        </li>
-                    </ol>
-                    <ol>
-                        <li><img src="../image/sample.png" alt="item"></li>
-                        <li>
-                            <h5>Beef patty with vagetables</h5>
-                            <h4><b>₱45</b></h4>
-                        </li>
-                    </ol>
-                    <ol>
-                        <li><img src="../image/sample.png" alt="item"></li>
-                        <li>
-                            <h5>Beef patty</h5>
-                            <h4><b>₱45</b></h4>
-                        </li>
-                    </ol>
+                    </ol> -->
+
                 </div>
             </div>
             <div class="counting">
