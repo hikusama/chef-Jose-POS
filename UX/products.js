@@ -1,23 +1,14 @@
-
-
-
-
-
 $(document).ready(function () {
     $("#body_Pnav_cat li").click(function (e) {
         e.preventDefault();
         let hasclass = $(this).hasClass("on_nav_select");
 
-        if (hasclass) {
-
-        } else {
-
+        if (!hasclass) {
             $("#body_Pnav_cat li").removeClass("on_nav_select");
             $(this).addClass("on_nav_select");
-
         }
-
     });
+
     let interval = "";
 
     $("#addProduct").click(function (e) {
@@ -36,15 +27,10 @@ $(document).ready(function () {
                 $("#overlay_prod").show();
             }
         }, 800);
-
-
-
     });
 
     $("#addpic").change(function (e) {
-        e.preventDefault();
         const input = $('#addpic')[0];
-
         if (input) {
             imagePick();
         }
@@ -52,44 +38,29 @@ $(document).ready(function () {
 
     $("#canc").click(function (e) {
         e.preventDefault();
-        clearInterval(interval)
+        clearInterval(interval);
         $(".label_style").removeClass("newlabel_style");
         $("#overlay_prod").hide();
         $("#addProductForm").hide();
-
-
-
     });
 
     $("#submit_prod").click(function (e) { 
-        e.preventDefault();
-        
+        $("#submit_form").submit(); 
     });
+
     $(".more_showPane").click(function (e) { 
         e.preventDefault();
-        hasClass = $(this).closest("li").find(".action_selectNew").hasClass("action_selectNew");
+        const hasClass = $(this).closest("li").find(".action_selectNew").hasClass("action_selectNew");
 
         if (!hasClass) {
             console.log("hello");
             $(".action_select").removeClass("action_selectNew");
             $(this).closest("li").find(".action_select").addClass("action_selectNew");
-        }else{
-            
+        } else {
             $(".action_select").removeClass("action_selectNew");
         }
     });
-
-
-
-
-
-
-
-
-
-
 });
-
 
 function imagePick() {
     const profileImage = $('#imgdisplay');
@@ -104,7 +75,5 @@ function imagePick() {
         reader.readAsDataURL(file);
     } else {
         profileImage.attr('src', '../images/sample.png');
-
     }
-
 }
