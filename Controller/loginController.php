@@ -1,7 +1,7 @@
 <?php
 require_once '../Model/classModel.php';
 
-class Logincontr extends Model {
+class Logincontroller extends Model {
     private $username;
     private $password;
     private $errors = array();

@@ -15,7 +15,11 @@ $(document).ready(function () {
     });
 
     $.ajax({
+<<<<<<< HEAD
         url: '../backend/cashier/cashier.products.php',
+=======
+        url: '../Views/cashierProducts.php',
+>>>>>>> og_mark
         method: "POST",
         contentType: false,
         processData: false,
@@ -59,7 +63,11 @@ $(document).ready(function () {
 
         console.log(product_id);
         $.ajax({
+<<<<<<< HEAD
             url: '../backend/cashier/order.php',
+=======
+            url: '../Views/order.php',
+>>>>>>> og_mark
             method: 'POST',
             data: formData,
             contentType: false,
@@ -95,7 +103,11 @@ $(document).ready(function () {
 
 
         $.ajax({
+<<<<<<< HEAD
             url: '../backend/cashier/order.php',
+=======
+            url: '../Views/order.php',
+>>>>>>> og_mark
             method: 'POST',
             data: formData,
             contentType: false,

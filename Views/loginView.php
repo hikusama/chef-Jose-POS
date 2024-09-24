@@ -2,9 +2,9 @@
 session_start();
 include '../Connection/dbh.php';
 include '../Model/classModel.php';
-include '../Controller/loginContr.php';
+include '../Controller/Logincontroller.php';
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['submit'])) {
         // Retrieve form data
         $username = htmlspecialchars(strip_tags($_POST['username']));
@@ -12,7 +12,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 
         // Initialize login controller
-        $login = new Logincontr($username, $password);
+        $login = new Logincontroller($username, $password);
         $login->loginUser();  // Use the controller to handle the login
 
         // Redirect after successful login
