@@ -112,12 +112,12 @@
                 </div>
                 <div class="totaling">
                     <section>
-                        <li>Payment Method</li>
+                        <!-- <li>Payment Method</li>
                         <li>
                             <select name="paymentmethod" id="pm">
                                 <option value="Cash">Cash</option>
                                 <option value="Digital_Payment">Digital Payment</option>
-                            </select>
+                            </select> -->
                         </li>
                     </section>
                     <section>
