@@ -46,15 +46,17 @@ $(document).ready(function () {
         e.stopPropagation();
 
         product_id = $(this).parent().attr("id");
+        console.log(product_id);
+        
 
-        rmitem = $(this).closest('ol').addClass("removeItem");
+        $(this).closest('ol').addClass("removeItem");
         setTimeout(() => {
-            $(rmitem).remove();
+            $(this).closest('ol').remove();
         }, 100);
 
 
         formData = new FormData();
-        formData.append("product_id", product_id);
+        formData.append("product_id", $(this).parent().attr("id"));
         formData.append("transac", "removeToCart");
 
         console.log(product_id);
@@ -68,8 +70,10 @@ $(document).ready(function () {
                 if (!response) {
                     $('#counter_body').html(`<div class="noItem">Cart is empty...</div>`);
 
+                }else{
+
+                    $('#counter_body').html(response);
                 }
-                // $('#counter_body').html(response);
 
             }
         });
@@ -80,11 +84,56 @@ $(document).ready(function () {
 
 
     });
-    $("#refreshCart").click(function (e) { 
+    $("#refreshCart").click(function (e) {
         e.preventDefault();
         refresCart = new FormData();
         refresCart.append("transac", "viewCart");
         addToCart(refresCart);
+    });
+
+    $("#counter_body").on("submit", "#changeqntity", function (e) {
+        e.preventDefault();
+
+        formData = new FormData(this)
+        qntity = $(this).find("input").val();
+        test = $(this).closest("ol").find(".arrow_controll").next().html();
+
+        if (qntity != "") {
+            if (qntity != test) {
+                // console.log("sent");
+
+                $(this).closest("ol").find(".arrow_controll").next().html(qntity);
+                price = $(this).closest("ol").find(".pr").html();
+                price = parseInt(price.substring(1));
+                price = price * qntity;
+                $(this).closest("ol").find(".pr").html("₱" + price);
+                product_id = $(this).closest("ol").find(".edga").attr("id");
+
+
+
+                formData.append("transac", "changeqntity");
+                formData.append("product_id", product_id);
+
+
+                $.ajax({
+                    url: '../backend/cashier/order.php',
+                    method: 'POST',
+                    data: formData,
+                    contentType: false,
+                    processData: false,
+                    success: function (response) {
+
+                    }
+                });
+            } else {
+                // console.log("not sent");
+
+            }
+
+        } else {
+            $(this).find("input").val($(this).closest("ol").find(".arrow_controll").next().html());
+        }
+
     });
 
 

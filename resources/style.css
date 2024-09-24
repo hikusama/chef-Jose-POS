@@ -645,7 +645,7 @@ img {
 }
 
 #counter_body ol:hover {
-    background-color: rgba(216, 216, 216, 0.425);
+    background-color: rgba(179, 179, 179, 0.151) !important;
 }
 .monokai_mode #counter_body ol:hover {
     background-color: rgba(179, 179, 179, 0.151);
@@ -710,7 +710,7 @@ img {
 }
 
 .qntity input {
-    text-align: end;
+    text-align: start;
     padding: 0 1rem;
     height: 1.8rem;
 }
