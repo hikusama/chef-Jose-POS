@@ -35,7 +35,7 @@
 
     // ADD PRODUCT
     public function insertProduct($product_name, $category_name, $price, $quantity, $product_image) {
-        $stmt = $this->connect()->prepare("INSERT INTO products (name, category, price, quantityInStock, product_image) VALUES (?, ?, ?, ?, ?);");
+        $stmt = $this->connect()->prepare("INSERT INTO products (name, category, price, quantityInStock, displayPic) VALUES (?, ?, ?, ?, ?);");
         if ($stmt->execute([$product_name, $category_name, $price, $quantity, $product_image])) {
             echo "Product added successfully.";
         } else {
@@ -45,7 +45,7 @@
 
     // EDIT PRODUCT 
     public function editProduct($product_name, $category_name, $price, $product_image, $quantity){
-        $stmt = $this->connect()->prepare("UPDATE products SET product_name= :name, category_name= :category, price= :price, product_image= :product_image, quantity= :quantity WHERE id = :id" );
+        $stmt = $this->connect()->prepare("UPDATE products SET product_name= :name, category_name= :category, price= :price, displayPic= :displayPic, quantity= :quantity WHERE id = :id" );
         $stmt->bindParam(':name', $product_name);
         $stmt->bindParam(':category', $category_name);
         $stmt->bindParam(':price', $price);
@@ -72,7 +72,7 @@
         $sql = "SELECT * FROM products";    
         $stmt = $this->connect()->prepare($sql);
         $stmt->execute();
-        $rows =  $stmt->fetchAll(); 
+        $rows =  $stmt->fetchAll(PDO::FETCH_ASSOC); 
 
         if ($rows) {
             return $rows;
@@ -81,7 +81,7 @@
         }
     }
 // new
-    public function getAllProducts():array {
+    public function getAllProductss():array {
         $sql = "SELECT * FROM products";
         $pdo = $this->connect();
         $stmt = $pdo->prepare($sql);

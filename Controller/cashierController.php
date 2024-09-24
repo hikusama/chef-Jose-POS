@@ -7,8 +7,7 @@ require_once '../Model/classModel.php';
 class cashierController extends Model{
 
     public function getAllProducts(): array {
-        $rows = parent::getAllProducts(); // Use parent method instead of calling itself
-
+        $rows = $this->getAllProductss(); 
         if ($rows) {
             return $rows;
         } else {

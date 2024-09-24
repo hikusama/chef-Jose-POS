@@ -1,6 +1,4 @@
 <?php
-
-
 session_start();
     include '../Connection/dbh.php';
     include '../Model/classModel.php';
