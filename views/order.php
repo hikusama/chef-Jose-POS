@@ -1,15 +1,16 @@
 <?php
 
-require_once "cashier.controller.php";
+require_once '../controllers/cashierController.php';
 
 
-class order extends cashier_controller
+
+class order extends cashierController
 {
 
 
     public function displayOnCart($product_id): array
     {
-        $pdoTemp = new cashier_controller();
+        $pdoTemp = new cashierController();
         $rows = $pdoTemp->addToCart($product_id);
 
         if ($rows) {

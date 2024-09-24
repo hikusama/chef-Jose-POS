@@ -62,8 +62,7 @@ $(document).ready(function () {
     });
 
     $("#submit_prod").click(function (e) { 
-        e.preventDefault();
-        
+        $("#submit_form").submit(); 
     });
     $(".more_showPane").click(function (e) { 
         e.preventDefault();
