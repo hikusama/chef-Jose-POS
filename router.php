@@ -3,13 +3,17 @@
 $uri = parse_url($_SERVER['REQUEST_URI'])['path'];
 
  $routes = [
-    '/' => 'views/home.php',
-    '/cashier' => 'views/cashier.php',
-    '/history' => 'views/history.php',
-    '/overview' => 'views/overview.php',
-    '/myproducts' => 'views/myproducts.php',
-    '/reports' => 'views/reports.php',
-    '/settings' => 'views/settings.php',
+    '/' => 'pannel/home.php',
+    '/cashier' => 'pannel/cashier.php',
+    '/history' => 'pannel/history.php',
+    '/overview' => 'pannel/overview.php',
+    '/myproducts' => 'pannel/myproducts.php',
+    '/reports' => 'pannel/reports.php',
+    '/settings' => 'pannel/settings.php',
+    '/productView' => 'Views/productView.php',
+
+   
+
 
 ];
 
@@ -25,7 +29,7 @@ function routeToController($uri, $routes) {
 function abort($code = 404) {
     http_response_code($code);
 
-    require "views/{$code}.php";
+    require "pannel/{$code}.php";
 
     die();
 }

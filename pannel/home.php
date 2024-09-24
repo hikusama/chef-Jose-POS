@@ -5,22 +5,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
     <link rel="stylesheet" href="../resources/forntpage.css">
+    <link rel="stylesheet" href="../resources/login.css">
 </head>
 <body>
     <main>
         <section id="login-container">
             <div id="login">
-            <div id="logo">
-                <img src="../image/chefjose.png" alt="Logo">
-            </div>
-                <form action="mvc/loginView.php" method="post">
+                <div id="logo">
+                    <img src="../image/logo.png" alt="Logo">
+                </div>
+                <form action="../Views/loginView.php" method="post" id="form">
                     <div class="form-group">
                         <input type="text" id="username" name="username" placeholder="Username" required>
                     </div>
                     <div class="form-group">
                         <input type="password" id="password" name="password" placeholder="Password" required>
                     </div>
-                    <button type="submit" name="submit">LOGIN</button>
+                    <button type="submit" name="submit" id="btn">LOGIN</button>
                 </form>
             </div>
         </section>

@@ -88,24 +88,6 @@
                         </ol>
                         <div id="content_products">
                             <li class="last" id="addProduct" title="Add Product"><i class="fas fa-plus"></i>Add Product</li>
-
-                            <li>
-                                <div class="dp">
-                                    <img src="../image/sample.png" alt="">
-                                </div>
-                                <p>Beef Patty</p>
-                                <p>Snacks</p>
-                                <p>available</p>
-                                <p>₱50</p>
-                                <p>
-                                    <i class="fas fa-ellipsis-v more_showPane" title="See More"></i>
-                                <div class="action_select">
-                                    <p><i class="fas fa-edit"></i> Edit</p>
-                                    <p><i class="fas fa-trash"></i> Delete</p>
-                                    <p><i class="fas fa-eye"></i> View</p>
-                                </div>
-                                </p>
-                            </li>
                             <li>
                                 <div class="dp">
                                     <img src="../image/sample.png" alt="">
@@ -285,7 +267,7 @@
                     </div>
                 </div>
                 <div id="addProductForm">
-                    <form id="submit_form">
+                    <form id="submit_form" method="post" action="../Views/productView.php" enctype="multipart/form-data">
                         <div class="label_style">
                             <p></p>
                             <h3>Add Products</h3>
@@ -301,7 +283,7 @@
                                     <label for="addpic">
                                         <i class="fas fa-plus"></i>
                                     </label>
-                                    <input type="file" id="addpic" style="visibility: hidden; position: absolute; height: 0; width: 0; ">
+                                    <input type="file" id="addpic" style="visibility: hidden; position: absolute; height: 0; width: 0; " name="product_image">
                                 </li>
                             </ol>
                             <ol>
@@ -312,13 +294,6 @@
                                     </div>
                                     <p>Price</p>
                                 </li>
-                                <li>
-                                    <div>
-                                        <i class="fas fa-book"></i>
-                                        <input type="number" name="invested" placeholder="Invested" id="prod_invested">
-                                    </div>
-                                    <p>Invested</p>
-                                </li>
                             </ol>
                         </section>
                         <section>
@@ -326,7 +301,7 @@
                                 <li>
                                     <div>
                                         <i class="fas fa-book"></i>
-                                        <input type="text" placeholder="Product" id="prod_name" name="product">
+                                        <input type="text" placeholder="Product" id="prod_name" name="name">
                                     </div>
                                     <p>Product</p>
                                 </li>
@@ -335,7 +310,7 @@
                                 <li>
                                     <div>
                                         <i class="fas fa-book"></i>
-                                        <input type="number" placeholder="Stock" id="prod_stock" name="product">
+                                        <input type="number" placeholder="Stock" id="prod_stock" name="quantityInStock">
                                     </div>
                                     <p>Stock</p>
                                 </li>
@@ -344,14 +319,14 @@
                                         <i class="fas fa-book"></i>
                                         <select name="category" id="prod_category">
                                             <option value="">Category</option>
-                                            <option value="snacks">Snacks</option>
+                                            <option value="snacks" name="category">Snacks</option>
                                         </select>
                                     </div>
                                     <p>Category</p>
                                 </li>
                             </ol>
                             <div class="add_cont_button">
-                                <button type="submit" id="submit_prod"><i class="fas fa-plus"></i>Add product</button>
+                                <button type="submit" id="submit_prod" name="submited"><i class="fas fa-plus"></i>Add product</button>
                             </div>
                         </section>
                         <button type="button" id="canc" title="Cancel">
