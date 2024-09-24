@@ -1,18 +1,17 @@
 <?php
 
-require_once "../../connection/dbh.php";
 
-require_once "cashier.model.php";
-
+require_once "cashier.controller.php";
 
 
-class show_products extends cashier_model
+
+class show_products extends cashier_controller
 {
 
     public function response():array 
     {
-        $rows = new cashier_model();
-        $products = $rows->getAllProducts();
+        $pdoTemp = new cashier_controller();
+        $products = $pdoTemp->getAllProducts();
 
         return $products;
     }

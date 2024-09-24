@@ -83,7 +83,7 @@ $(document).ready(function () {
         $(this).addClass("prod_nav")
     });
 
-    $(".counting #counter_body ol li:nth-child(1)").click(function (e) { 
+    $("#counter_body ").on("click","li:nth-child(1)",function (e) { 
         e.preventDefault();
         let hasclass = $(this).next(".qntity").hasClass("quantityShow");
         
