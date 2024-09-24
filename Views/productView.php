@@ -59,7 +59,7 @@
         $addProd->addProducts();
         $delete->deleteProducts($product_id);
         $update->updateProducts();
-        $show->showProducts();
+        $product = $show->showProducts();
 
 
         header("Location: /myproducts");
@@ -71,4 +71,4 @@
     }
 
 
-
+  

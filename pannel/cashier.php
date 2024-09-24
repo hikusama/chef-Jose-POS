@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="../UX/jquery-3.5.1.min.js"></script>
+    <script src="../UX/cashier.js"></script>
     <script src="../UX/script.js"></script>
     <link rel="stylesheet" href="../resources/style.css">
     <link rel="stylesheet" href="../resources/cashier.css">
@@ -87,290 +88,27 @@
                     </div>
                 </div>
                 <div class="products_content">
-                    <ol>
+                    <!-- <ol>
                         <li><img src="../image/sample.png" alt="item"></li>
                         <li>
                             <h5>Beef patty asfasdewsd sad</h5>
                             <h4><b>₱4544</b></h4>
                         </li>
-                    </ol>
-                    <ol>
-                        <li><img src="../image/sample.png" alt="item"></li>
-                        <li>
-                            <h5>Beef patty</h5>
-                            <h4><b>₱45</b></h4>
-                        </li>
-                    </ol>
-                    <ol>
-                        <li><img src="../image/sample.png" alt="item"></li>
-                        <li>
-                            <h5>Beef patty with vagetables</h5>
-                            <h4><b>₱45</b></h4>
-                        </li>
-                    </ol>
-                    <ol>
-                        <li><img src="../image/sample.png" alt="item"></li>
-                        <li>
-                            <h5>Beef patty</h5>
-                            <h4><b>₱45</b></h4>
-                        </li>
-                    </ol>
-                    <ol>
-                        <li><img src="../image/sample.png" alt="item"></li>
-                        <li>
-                            <h5>Beef patty</h5>
-                            <h4><b>₱45</b></h4>
-                        </li>
-                    </ol>
-                    <ol>
-                        <li><img src="../image/sample.png" alt="item"></li>
-                        <li>
-                            <h5>Beef patty</h5>
-                            <h4><b>₱45</b></h4>
-                        </li>
-                    </ol>
-                    <ol>
-                        <li><img src="../image/sample.png" alt="item"></li>
-                        <li>
-                            <h5>Beef patty with vagetables</h5>
-                            <h4><b>₱45</b></h4>
-                        </li>
-                    </ol>
-                    <ol>
-                        <li><img src="../image/sample.png" alt="item"></li>
-                        <li>
-                            <h5>Beef patty</h5>
-                            <h4><b>₱45</b></h4>
-                        </li>
-                    </ol>
+                    </ol> -->
+
                 </div>
             </div>
             <div class="counting">
                 <!-- <div class="counting_header"></div> -->
+                 <div class="counter-header">
+                    <li><div></div>Cart</li>
+                    <li><i id="refreshCart" class="fas fa-sync-alt"></i></li>
+                 </div>
                 <div id="counter_body">
-                    <ol>
-                        <li>
-                            <p class="arrow_controll"><i class="fas fa-arrow-right"></i></p>
-                            <p>455</p>
-                            <p>Beef pattyasd </p>
-                            <p>₱1900</p>
-                            <div><i class="fas fa-plus" style="transform: rotate(45deg);"></i></div>
-                        </li>
-                        <li class="qntity">
-                            <div>
-                                <p>Quantity</p>
-                                <input type="number" name="qntity" id="">
-                            </div>
-                        </li>
-                    </ol>
-                    <ol>
-                        <li>
-                            <p class="arrow_controll"><i class="fas fa-arrow-right"></i></p>
-                            <p>4</p>
-                            <p>Beef patty</p>
-                            <p>₱190</p>
-                            <div><i class="fas fa-plus" style="transform: rotate(45deg);"></i></div>
-                        </li>
-                        <li class="qntity">
-                            <div>
 
-                                <p>Quantity</p>
-                                <input type="number" name="qntity" id="">
-                            </div>
-                        </li>
-                    </ol>
-                    <ol>
-                        <li>
-                            <p class="arrow_controll"><i class="fas fa-arrow-right"></i></p>
-                            <p>4</p>
-                            <p>Beef patty</p>
-                            <p>₱190</p>
-                            <div><i class="fas fa-plus" style="transform: rotate(45deg);"></i></div>
-                        </li>
-                        <li class="qntity">
-                            <div>
-
-                                <p>Quantity</p>
-                                <input type="number" name="qntity" id="">
-                            </div>
-                        </li>
-                    </ol>
-                    <ol>
-                        <li>
-                            <p class="arrow_controll"><i class="fas fa-arrow-right"></i></p>
-                            <p>4</p>
-                            <p>Beef patty</p>
-                            <p>₱190</p>
-                            <div><i class="fas fa-plus" style="transform: rotate(45deg);"></i></div>
-                        </li>
-                        <li class="qntity">
-                            <div>
-
-                                <p>Quantity</p>
-                                <input type="number" name="qntity" id="">
-                            </div>
-                        </li>
-                    </ol>
-                    <ol>
-                        <li>
-                            <p class="arrow_controll"><i class="fas fa-arrow-right"></i></p>
-                            <p>4</p>
-                            <p>Beef patty</p>
-                            <p>₱190</p>
-                            <div><i class="fas fa-plus" style="transform: rotate(45deg);"></i></div>
-                        </li>
-                        <li class="qntity">
-                            <div>
-
-                                <p>Quantity</p>
-                                <input type="number" name="qntity" id="">
-                            </div>
-                        </li>
-                    </ol>
-                    <ol>
-                        <li>
-                            <p class="arrow_controll"><i class="fas fa-arrow-right"></i></p>
-                            <p>4</p>
-                            <p>Beef patty</p>
-                            <p>₱190</p>
-                            <div><i class="fas fa-plus" style="transform: rotate(45deg);"></i></div>
-                        </li>
-                        <li class="qntity">
-                            <div>
-
-                                <p>Quantity</p>
-                                <input type="number" name="qntity" id="">
-                            </div>
-                        </li>
-                    </ol>
-                    <ol>
-                        <li>
-                            <p class="arrow_controll"><i class="fas fa-arrow-right"></i></p>
-                            <p>4</p>
-                            <p>Beef patty</p>
-                            <p>₱190</p>
-                            <div><i class="fas fa-plus" style="transform: rotate(45deg);"></i></div>
-                        </li>
-                        <li class="qntity">
-                            <div>
-
-                                <p>Quantity</p>
-                                <input type="number" name="qntity" id="">
-                            </div>
-                        </li>
-                    </ol>
-                    <ol>
-                        <li>
-                            <p class="arrow_controll"><i class="fas fa-arrow-right"></i></p>
-                            <p>4</p>
-                            <p>Beef patty</p>
-                            <p>₱190</p>
-                            <div><i class="fas fa-plus" style="transform: rotate(45deg);"></i></div>
-                        </li>
-                        <li class="qntity">
-                            <div>
-
-                                <p>Quantity</p>
-                                <input type="number" name="qntity" id="">
-                            </div>
-                        </li>
-                    </ol>
-                    <ol>
-                        <li>
-                            <p class="arrow_controll"><i class="fas fa-arrow-right"></i></p>
-                            <p>4</p>
-                            <p>Beef patty</p>
-                            <p>₱190</p>
-                            <div><i class="fas fa-plus" style="transform: rotate(45deg);"></i></div>
-                        </li>
-                        <li class="qntity">
-                            <div>
-
-                                <p>Quantity</p>
-                                <input type="number" name="qntity" id="">
-                            </div>
-                        </li>
-                    </ol>
-                    <ol>
-                        <li>
-                            <p class="arrow_controll"><i class="fas fa-arrow-right"></i></p>
-                            <p>4</p>
-                            <p>Beef patty</p>
-                            <p>₱190</p>
-                            <div><i class="fas fa-plus" style="transform: rotate(45deg);"></i></div>
-                        </li>
-                        <li class="qntity">
-                            <div>
-
-                                <p>Quantity</p>
-                                <input type="number" name="qntity" id="">
-                            </div>
-                        </li>
-                    </ol>
-                    <ol>
-                        <li>
-                            <p class="arrow_controll"><i class="fas fa-arrow-right"></i></p>
-                            <p>4</p>
-                            <p>Beef patty</p>
-                            <p>₱190</p>
-                            <div><i class="fas fa-plus" style="transform: rotate(45deg);"></i></div>
-                        </li>
-                        <li class="qntity">
-                            <div>
-
-                                <p>Quantity</p>
-                                <input type="number" name="qntity" id="">
-                            </div>
-                        </li>
-                    </ol>
-                    <ol>
-                        <li>
-                            <p class="arrow_controll"><i class="fas fa-arrow-right"></i></p>
-                            <p>4</p>
-                            <p>Beef patty</p>
-                            <p>₱190</p>
-                            <div><i class="fas fa-plus" style="transform: rotate(45deg);"></i></div>
-                        </li>
-                        <li class="qntity">
-                            <div>
-
-                                <p>Quantity</p>
-                                <input type="number" name="qntity" id="">
-                            </div>
-                        </li>
-                    </ol>
-                    <ol>
-                        <li>
-                            <p class="arrow_controll"><i class="fas fa-arrow-right"></i></p>
-                            <p>4</p>
-                            <p>Beef patty</p>
-                            <p>₱190</p>
-                            <div><i class="fas fa-plus" style="transform: rotate(45deg);"></i></div>
-                        </li>
-                        <li class="qntity">
-                            <div>
-
-                                <p>Quantity</p>
-                                <input type="number" name="qntity" id="">
-                            </div>
-                        </li>
-                    </ol>
-                    <ol>
-                        <li>
-                            <p class="arrow_controll"><i class="fas fa-arrow-right"></i></p>
-                            <p>4</p>
-                            <p>Beef patty</p>
-                            <p>₱190</p>
-                            <div><i class="fas fa-plus" style="transform: rotate(45deg);"></i></div>
-                        </li>
-                        <li class="qntity">
-                            <div>
-
-                                <p>Quantity</p>
-                                <input type="number" name="qntity" id="">
-                            </div>
-                        </li>
-                    </ol>
+    
+ 
+                    
                 </div>
                 <div class="totaling">
                     <section>

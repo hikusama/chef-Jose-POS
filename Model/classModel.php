@@ -72,20 +72,49 @@
         $sql = "SELECT * FROM products";    
         $stmt = $this->connect()->prepare($sql);
         $stmt->execute();
-        return $stmt->fetchAll(); 
+        $rows =  $stmt->fetchAll(); 
+
+        if ($rows) {
+            return $rows;
+        }else{
+            return null;
+        }
     }
-    //     if ($stmt->execute()) {
-    //         $row = $stmt->fetchall();
-    //         return $row;
-    //     }
-    //     error_log("Error fetching product: " . implode(", ", $stmt->errorInfo())); // Log error
-    //     return false; 
-    // }
+// new
+    public function getAllProducts():array {
+        $sql = "SELECT * FROM products";
+        $pdo = $this->connect();
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute();
 
-    
+        $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        if ($rows) {
+            return $rows;
+        }else{
+            return null;
+        }
+        
+    }
 
 
 
+    public function itemsForAddToCart($prod_id):array {
+        $sql = "SELECT * FROM products WHERE products.productId = ?";
+        $pdo = $this->connect();
+        $stmt = $pdo->prepare($sql);
+
+        $stmt->execute([$prod_id]);
+
+        $rows = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if ($rows) {
+            return $rows;
+        }else{
+            return null;
+        }
+ 
+    }
 
     }
         

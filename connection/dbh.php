@@ -4,7 +4,7 @@ class Connection {
   private $host = 'localhost';
   private $user = 'root';
   private $pass = '';
-  private $dbname = 'chef_jose_db'; // Correct the database name
+  private $dbname = 'chef_jose_db2'; // Correct the database name
 
   protected function connect() {
       try {

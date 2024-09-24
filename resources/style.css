@@ -344,6 +344,8 @@ color: rgb(199, 199, 199);
     background-color: rgb(255, 255, 255);
     height: 100%;
     border-left: solid rgba(0, 0, 0, 0.233) 2px;
+    position: relative;
+    overflow: hidden;
 }
 .monokai_mode .counting{
     background-color: #1E1F1C;
@@ -660,6 +662,9 @@ img {
 
 }
 
+#counter_body ol li>*:nth-child(5){
+    position: relative;
+}
 #counter_body ol li>* {
     display: flex;
     align-items: center;
@@ -738,21 +743,24 @@ img {
 
 
 #counter_body div i {
-    transform: scale(1.1);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    font-size: .9rem;
+    transform:translate(-50%,-50%) rotate(45deg) !important;
     cursor: pointer;
     display: grid;
     border-radius: 50%;
     place-items: center;
-    padding: .1rem;
-    height: 1rem;
-    width: 1rem;
+    height: 1.2rem;
+    width: 1.2rem;
     outline: solid 1px rgb(161, 161, 161);
     background-color: rgba(161, 161, 161, 0.219);
 }
 
 #counter_body li > *:nth-child(5) i:hover {
     transition: .3s;
-    background-color: rgba(161, 161, 161, 0.568);
+    background-color: rgb(189 5 5 / 85%);
 
 }
 
@@ -843,5 +851,3 @@ img {
     outline: solid 1px #ffbe0a;
     background-color: #A27C12;
 }
-
-
