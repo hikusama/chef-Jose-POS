@@ -1,5 +1,5 @@
     <?php
-    require_once "../connection/dbh.php";
+    require_once "../Connection/dbh.php";
 
     class Model extends Connection {
 
