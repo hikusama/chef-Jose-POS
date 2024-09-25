@@ -248,7 +248,11 @@
                     </div>
                 </div>
                 <div id="addProductForm">
+<<<<<<< HEAD
                     <form id="submit_form" method="post" action="../Views/productView.php" enctype="multipart/form-data">
+=======
+                    <form id="submit_form" method="post" action="../views/productView.php" enctype="multipart/form-data">
+>>>>>>> group_work
                         <div class="label_style">
                             <p></p>
                             <h3>Add Products</h3>

@@ -1,15 +1,16 @@
 <?php
 
-require_once "cashier.controller.php";
+require_once '../controllers/cashierController.php';
 
 
-class order extends cashier_controller
+
+class order extends cashierController
 {
 
 
     public function displayOnCart($product_id): array
     {
-        $pdoTemp = new cashier_controller();
+        $pdoTemp = new cashierController();
         $rows = $pdoTemp->addToCart($product_id);
 
         if ($rows) {
@@ -28,13 +29,15 @@ class order extends cashier_controller
                             <p class="arrow_controll"><i class="fas fa-arrow-right"></i></p>
                             <p>' . $value['qntity'] . '</p>
                             <p>' . $value['product_name'] . '</p>
-                            <p>₱' . $value['price'] . '</p>
-                            <div id="' . $value['product_id'] . '"><i id="rmitem" class="fas fa-plus" title="Remove Item" style="transform: rotate(45deg);"></i></div>
+                            <p class="pr">₱' . $value['price'] . '</p>
+                            <div id="' . $value['product_id'] . '" class="edga"><i id="rmitem" class="fas fa-plus" title="Remove Item" style="transform: rotate(45deg);"></i></div>
                         </li>
                         <li class="qntity">
                             <div>
                                 <p>Quantity</p>
-                                <input type="number" value="' . $value['qntity'] . '" name="qntity" id="">
+                                <form id="changeqntity">
+                                    <input type="number" value="' . $value['qntity'] . '" name="qntity" >
+                                </form>
                             </div>
                         </li>
                     </ol>
@@ -47,7 +50,54 @@ class order extends cashier_controller
 
 
 
-if ($_SERVER["REQUEST_METHOD"] === "POST" &&  $_POST["transac"] === "viewCart") {
+if ($_SERVER["REQUEST_METHOD"] === "POST" &&  $_POST["transac"] === "changeqntity" &&  isset($_POST["qntity"])) {
+
+
+
+    $qntity = $_POST["qntity"];
+    $product_id = $_POST["product_id"];
+
+    $pdoTemp = new order();
+    $ordersSession = array();
+
+    session_start();
+    if (isset($_SESSION['orders'])) {
+        $ordersSession = $_SESSION['orders'];
+    }
+
+    $array_size = count($ordersSession);
+    
+
+    for ($i = 0; $i < $array_size; $i++) {
+        if ($product_id == $ordersSession[$i]["product_id"]) {
+            $tempNewP = $ordersSession[$i]["price"] / $ordersSession[$i]["qntity"];
+            $newP = $tempNewP * $qntity;
+            $ordersSession[$i]["qntity"] = $qntity;
+            $ordersSession[$i]["price"] = $newP;
+            break;
+        }
+    }
+
+    $_SESSION['orders'] = $ordersSession;
+
+
+
+
+
+
+
+
+
+
+
+}
+
+
+
+
+
+
+if ($_SERVER["REQUEST_METHOD"] === "POST" &&  $_POST["transac"] === "viewCart" &&  !isset($_POST["qntity"])) {
     $pdoTemp = new order();
     $ordersSession = array();
 
@@ -57,10 +107,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" &&  $_POST["transac"] === "viewCart") 
     }
 
     $pdoTemp->dpCart($ordersSession);
-
 }
 
-if ($_SERVER["REQUEST_METHOD"] === "POST" &&  $_POST["transac"] === "removeToCart") {
+if ($_SERVER["REQUEST_METHOD"] === "POST" &&  $_POST["transac"] === "removeToCart" &&  !isset($_POST["qntity"])) {
     $product_id = $_POST["product_id"];
 
 
@@ -75,7 +124,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" &&  $_POST["transac"] === "removeToCar
 
 
     for ($i = 0; $i < $array_size; $i++) {
-        if (in_array($product_id, $ordersSession[$i])) {
+        if ($product_id == $ordersSession[$i]["product_id"]) {
             unset($ordersSession[$i]);
             $ordersSession = array_values($ordersSession);
             break;
@@ -87,11 +136,10 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" &&  $_POST["transac"] === "removeToCar
 
     $_SESSION['orders'] = $ordersSession;
     $pdoTemp->dpCart($ordersSession);
-
 }
 
 
-if ($_SERVER["REQUEST_METHOD"] === "POST" &&  $_POST["transac"] === "addToCart") {
+if ($_SERVER["REQUEST_METHOD"] === "POST" &&  $_POST["transac"] === "addToCart" &&  !isset($_POST["qntity"])) {
     // $transac =;
     $product_id = $_POST["product_id"];
 

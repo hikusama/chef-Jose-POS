@@ -1,16 +1,18 @@
 <?php
+session_start();
+include '../connection/dbh.php';
+include '../model/classModel.php';
+include '../controllers/cashierController.php';
+    
 
 
-require_once "cashier.controller.php";
 
-
-
-class show_products extends cashier_controller
+class show_products extends cashierController
 {
 
     public function response():array 
     {
-        $pdoTemp = new cashier_controller();
+        $pdoTemp = new cashierController();
         $products = $pdoTemp->getAllProducts();
 
         return $products;
@@ -18,11 +20,6 @@ class show_products extends cashier_controller
 
 
     // $category = $_POST['category'];
-
-
-
-
-
 
 
 }
@@ -58,9 +55,6 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
 
         
     }
-
-
-
 
 }else{
     echo "No asfafds";

@@ -14,7 +14,11 @@
                 <div id="logo">
                     <img src="../image/logo.png" alt="Logo">
                 </div>
+<<<<<<< HEAD
                 <form action="../Views/loginView.php" method="post" id="form">
+=======
+                <form action="../views/loginView.php" method="post" id="form">
+>>>>>>> group_work
                     <div class="form-group">
                         <input type="text" id="username" name="username" placeholder="Username" required>
                     </div>
