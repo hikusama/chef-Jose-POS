@@ -131,11 +131,15 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" &&  $_POST["transac"] === "removeToCar
         }
     }
 
+    $array_size = count($ordersSession);
 
 
 
     $_SESSION['orders'] = $ordersSession;
-    $pdoTemp->dpCart($ordersSession);
+    // $pdoTemp->dpCart($ordersSession);
+    if ($array_size > 0) {
+        echo "not_empty";
+    }
 }
 
 

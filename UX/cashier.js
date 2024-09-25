@@ -38,7 +38,7 @@ $(document).ready(function () {
         formData = new FormData();
         formData.append("product_id", toAddProduct_id);
 
-        addToCart(formData, "addToCart", toAddProduct_id,product_name, price);
+        addToCart(formData, "addToCart", toAddProduct_id, product_name, price);
 
 
     });
@@ -72,6 +72,8 @@ $(document).ready(function () {
                 response = response.trim()
                 if (!response) {
                     $('#counter_body').html(`<div class="noItem">Cart is empty...</div>`);
+
+                } else {
 
                 }
 
@@ -145,7 +147,7 @@ $(document).ready(function () {
 
 
 
-    function addToCart(formData, tr, p_id,product_name, price) {
+    function addToCart(formData, tr, p_id, product_name, price) {
 
         formData.append("transac", tr);
 
@@ -198,6 +200,29 @@ $(document).ready(function () {
 
                         if (positive < 1) {
 
+                            hs = $('#counter_body > *:nth-child(1)').hasClass("noItem");
+
+                            if (hs) {
+                                $('#counter_body').html(`<ol>
+                                    <li>
+                                        <p class="arrow_controll"><i class="fas fa-arrow-right"></i></p>
+                                        <p>1</p>
+                                        <p>${product_name}</p>
+                                        <p class="pr">₱${price}</p>
+                                        <div id="${p_id}" class="edga"><i id="rmitem" class="fas fa-plus" title="Remove Item" style="transform: rotate(45deg);"></i></div>
+                                    </li>
+                                    <li class="qntity">
+                                        <div>
+                                            <p>Quantity</p>
+                                            <form id="changeqntity">
+                                                <input type="number" value="1" name="qntity" >
+                                            </form>
+                                        </div>
+                                    </li>
+                                </ol>`);
+                            } else {
+
+
                                 $('#counter_body').append(`<ol>
                                 <li>
                                     <p class="arrow_controll"><i class="fas fa-arrow-right"></i></p>
@@ -215,8 +240,9 @@ $(document).ready(function () {
                                     </div>
                                 </li>
                             </ol>`);
-                        }
+                            }
 
+                        }
 
                     }
 
