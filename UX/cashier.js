@@ -52,7 +52,7 @@ $(document).ready(function () {
         $(this).closest('ol').addClass("removeItem");
         setTimeout(() => {
             $(this).closest('ol').remove();
-        }, 100);
+        }, 500);
 
 
         formData = new FormData();
@@ -67,6 +67,7 @@ $(document).ready(function () {
             contentType: false,
             processData: false,
             success: function (response) {
+                response = response.trim()
                 if (!response) {
                     $('#counter_body').html(`<div class="noItem">Cart is empty...</div>`);
 
@@ -150,6 +151,8 @@ $(document).ready(function () {
             contentType: false,
             processData: false,
             success: function (response) {
+                response = response.trim()
+
                 if (!response) {
                     $('#counter_body').html(`<div class="noItem">Cart is empty...</div>`);
 
