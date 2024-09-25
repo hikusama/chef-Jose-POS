@@ -79,10 +79,6 @@ $(document).ready(function () {
             $(".action_select").removeClass("action_selectNew");
         }
     });
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> og_mark
 
 
 
@@ -102,11 +98,6 @@ $(document).ready(function () {
 
 
 
-<<<<<<< HEAD
-=======
->>>>>>> origin/OG_Mark
-=======
->>>>>>> og_mark
 });
 
 
