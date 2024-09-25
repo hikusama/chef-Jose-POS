@@ -10,13 +10,7 @@ $uri = parse_url($_SERVER['REQUEST_URI'])['path'];
     '/myproducts' => 'pannel/myproducts.php',
     '/reports' => 'pannel/reports.php',
     '/settings' => 'pannel/settings.php',
-<<<<<<< HEAD
     '/productView' => 'Views/productView.php',
-
-   
-
-=======
->>>>>>> group_work
 
 ];
 
