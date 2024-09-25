@@ -1,5 +1,5 @@
 <?php
-require_once '../model/classModel.php';
+require_once '../Model/classModel.php';
 
 class Logincontroller extends Model {
     private $username;

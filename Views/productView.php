@@ -5,8 +5,8 @@ include '../Connection/dbh.php';
 include '../Model/classModel.php';
 include '../Controller/productController.php';
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    if (isset($_POST['submited'])) {
+$errors = [];
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['transac']) && $_POST['transac'] == "addProd")  {
     // Retrieve form data
         $product_name = htmlspecialchars(strip_tags($_POST['name']));
         $category_name = htmlspecialchars(strip_tags($_POST['category']));
@@ -20,42 +20,53 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
             $allowed_types = ['jpg', 'png', 'jpeg', 'gif'];
             if (!in_array($image_file_type, $allowed_types)) {
-                header("Location: /myproducts?error=invalidimageformat");
-                exit();
+                $errors["invalid_format"] = 'Invalid format ( <b style="font-size:1rem;">jpg, png, jpeg, gif</b> )';
             }
             $product_image = file_get_contents($_FILES['displayPic']['tmp_name']);
+        }else{
+            $errors["no_img"] = 'Please insert image of product.';
+
         }
 
-        // Handle product deletion
-        if (isset($_POST['id'])) {
-            $product_id = htmlspecialchars(strip_tags($_POST['id']));
-        } else {
-            $product_id = null;
-            error_log("Product ID not set in POST request.");
-        }
 
-        // Instantiate controller and call methods
         $addProd = new ProductController(null, $product_name, $category_name, $price, $quantity, $product_image);
         $delete = new ProductController(null, $product_name, $category_name, $price, $quantity, $product_image);
         $update = new ProductController(null, $product_name, $category_name, $price, $quantity, $product_image);
         $show = new ProductController(null, $product_name, $category_name, $price, $quantity, $product_image);
 
-        // Add the product with the image data
-        $addProd->addProducts();
 
-        if ($product_id !== null) {
-            $delete->deleteProducts($product_id); // Ensure product ID is not null
-        } else {
-            error_log("No product ID provided for deletion.");
+        if ($addProd->is_empty_inputs($product_name, $category_name, $price, $quantity)) {
+            $errors["empty_inputs"] = "Please fill in all fields"; 
+        }
+        if (!$errors) {
+            $addProd->addProducts();
+            echo '<p style="color:green" class="goodText">Added succesfully..</p>';
+        }else{
+            foreach ($errors as $error) {
+                echo '<p style="white-space:nowrap; color:#ff4141;font-size: 1.1rem;" class="errorText">'.$error.'</p>';
+            }
         }
 
-        $update->updateProducts();
-        $product = $show->showProducts();
 
-        header("Location: /myproducts");
-        exit();
-    } else {
-        error_log("Form not submitted: " . print_r($_POST, true)); 
-        exit();
-    }
+
+
+
+}else if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['transac']) && $_POST['transac'] == "editProd") {
+
+
+
+}else if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['transac']) && $_POST['transac'] == "viewProd_info") {
+    
+
+
+}else if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['transac']) && $_POST['transac'] == "removeProd") {
+
+    $delete->deleteProducts($product_id);  
+
+
+}else if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['transac']) && $_POST['transac'] == "showSearchProd") {
+
+
+
+
 }
