@@ -88,7 +88,7 @@
                          <div id="content_products">
                             <li class="last" id="addProduct" title="Add Product"><i class="fas fa-plus"></i>Add Product</li>
                             
-                            <!-- <li>
+                            <li>
                                 <div class="dp">
                                     <img src="../image/sample.png" alt="">
                                 </div>
@@ -106,7 +106,7 @@
                                 </div>
                                 </p>
                             </li>
-                            <li>
+                            <!-- <li>
                                 <div class="dp">
                                     <img src="../image/sample.png" alt="">
                                 </div>
@@ -248,11 +248,7 @@
                     </div>
                 </div>
                 <div id="addProductForm">
-<<<<<<< HEAD
-                    <form id="submit_form" method="post" action="../Views/productView.php" enctype="multipart/form-data">
-=======
-                    <form id="submit_form" method="post" action="../views/productView.php" enctype="multipart/form-data">
->>>>>>> group_work
+                    <form id="submit_form" enctype="multipart/form-data">
                         <div class="label_style">
                             <p></p>
                             <h3>Add Products</h3>
@@ -311,16 +307,13 @@
                                 </li>
                             </ol>
                             <div class="add_cont_button">
-                                <button type="submit" id="submit_prod" name="submited"><i class="fas fa-plus"></i>Add product</button>
+                                <button type="submit" id="submit_prod"  ><i class="fas fa-plus"></i>Add product</button>
                             </div>
                         </section>
                         <button type="button" id="canc" title="Cancel">
                             <i class="fas fa-plus"></i>
                         </button>
                         <div class="response">
-                            <li>Please fill all fields</li>
-                            <li>Please fill all fields</li>
-                            <li>Please fill all fields</li>
                         </div>
                     </form>
                 </div>

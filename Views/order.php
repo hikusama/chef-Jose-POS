@@ -1,6 +1,6 @@
 <?php
 
-require_once '../controllers/cashierController.php';
+require_once '../Controller/cashierController.php';
 
 
 

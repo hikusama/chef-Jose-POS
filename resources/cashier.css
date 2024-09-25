@@ -6,9 +6,9 @@
 
 
 .removeItem{
-    animation-duration: .4s;
+    animation-duration: .6s;
     animation-iteration-count: 1;
-    animation-name: rmitem;
+    animation-name: rmitem !important; 
 
 }
 
@@ -16,7 +16,7 @@
 @keyframes rmitem {
     50%{
         opacity: 0;
-        transform: translateX(-110%);
+        transform: translateX(-10rem);
     }
 }
 
@@ -93,20 +93,16 @@
     }
 }
 
-/* 
 #counter_body > *{
-    animation-duration: .7s;
+    animation-duration: .5s;
     animation-iteration-count: 1;
     animation-name: cartUIOl;
 }
 
+
 @keyframes cartUIOl {
     0%{
-        transform: translate(-2rem);
-        width: fit-content;
+        transform: translate(-3rem);
     }
 }
-
-*/
-
 

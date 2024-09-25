@@ -37,7 +37,7 @@
     public function insertProduct($product_name, $category_name, $price, $quantity, $product_image) {
         $stmt = $this->connect()->prepare("INSERT INTO products (name, category, price, quantityInStock, displayPic) VALUES (?, ?, ?, ?, ?);");
         if ($stmt->execute([$product_name, $category_name, $price, $quantity, $product_image])) {
-            echo "Product added successfully.";
+            return true;
         } else {
             error_log("Error adding product: " . implode(", ", $stmt->errorInfo()));
         }

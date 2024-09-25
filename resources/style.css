@@ -556,6 +556,11 @@ img {
 }
 
 
+.products_content ol li:nth-child(1){
+    width: 7rem;
+    border-radius: 50%;
+    overflow: hidden;
+}
 .products_content ol li {
     width: 100%;
     display: flex;
