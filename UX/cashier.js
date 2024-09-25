@@ -15,7 +15,7 @@ $(document).ready(function () {
     });
 
     $.ajax({
-        url: '../backend/cashier/cashier.products.php',
+        url: '../Views/cashierProducts.php',
         method: "POST",
         contentType: false,
         processData: false,
@@ -61,7 +61,7 @@ $(document).ready(function () {
 
         console.log(product_id);
         $.ajax({
-            url: '../backend/cashier/order.php',
+            url: '../Views/order.php',
             method: 'POST',
             data: formData,
             contentType: false,
@@ -144,7 +144,7 @@ $(document).ready(function () {
 
 
         $.ajax({
-            url: '../backend/cashier/order.php',
+            url: '../Views/order.php',
             method: 'POST',
             data: formData,
             contentType: false,

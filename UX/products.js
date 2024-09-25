@@ -4,6 +4,9 @@
 
 
 $(document).ready(function () {
+    addPorm = $("#addProductForm").detach();
+    // $(".myproducts").detach(addPorm);
+    $("#addProductForm").detach();
     $("#body_Pnav_cat li").click(function (e) {
         e.preventDefault();
         let hasclass = $(this).hasClass("on_nav_select");
@@ -23,7 +26,7 @@ $(document).ready(function () {
     $("#addProduct").click(function (e) {
         e.preventDefault();
         $("#overlay_prod").show();
-        $("#addProductForm").show();
+        $(".myproducts").append(addPorm);
 
         setTimeout(() => {
             console.log("sada");
@@ -50,20 +53,18 @@ $(document).ready(function () {
         }
     });
 
-    $("#canc").click(function (e) {
+    $(".myproducts").on("click","#canc",function (e) {
         e.preventDefault();
         clearInterval(interval)
         $(".label_style").removeClass("newlabel_style");
         $("#overlay_prod").hide();
-        $("#addProductForm").hide();
-
+        $("#addProductForm").detach();
 
 
     });
 
     $("#submit_prod").click(function (e) { 
-        e.preventDefault();
-        
+        $("#submit_form").submit(); 
     });
     $(".more_showPane").click(function (e) { 
         e.preventDefault();
