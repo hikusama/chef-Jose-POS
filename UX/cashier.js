@@ -96,21 +96,29 @@ $(document).ready(function () {
         e.preventDefault();
 
         formData = new FormData(this)
-        qntity = $(this).find("input").val();
+        old_qntity = $(this).closest("ol").find(".arrow_controll").next().html();
+
+        qntity  = $(this).find("input").val();
+        qntity = parseInt(qntity);
         test = $(this).closest("ol").find(".arrow_controll").next().html();
 
-        if (qntity != "") {
+        if (qntity != "" && qntity <= 1000 && qntity != 0) {
             if (qntity != test) {
                 // console.log("sent");
 
-                $(this).closest("ol").find(".arrow_controll").next().html(qntity);
                 price = $(this).closest("ol").find(".pr").html();
                 price = parseInt(price.substring(1));
+                price = price / old_qntity;
                 price = price * qntity;
                 $(this).closest("ol").find(".pr").html("₱" + price);
+
+
                 product_id = $(this).closest("ol").find(".edga").attr("id");
+                $(this).closest("ol").find(".arrow_controll").next().html(qntity);
 
-
+                console.log(qntity);
+                console.log(price);
+                
 
                 formData.append("transac", "changeqntity");
                 formData.append("product_id", product_id);
