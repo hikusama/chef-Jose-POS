@@ -15,15 +15,7 @@ $(document).ready(function () {
     });
 
     $.ajax({
-<<<<<<< HEAD
-<<<<<<< HEAD
-        url: '../backend/cashier/cashier.products.php',
-=======
         url: '../Views/cashierProducts.php',
->>>>>>> og_mark
-=======
-        url: '../Views/cashierProducts.php',
->>>>>>> group_work
         method: "POST",
         contentType: false,
         processData: false,
@@ -69,15 +61,7 @@ $(document).ready(function () {
 
         console.log(product_id);
         $.ajax({
-<<<<<<< HEAD
-<<<<<<< HEAD
-            url: '../backend/cashier/order.php',
-=======
             url: '../Views/order.php',
->>>>>>> og_mark
-=======
-            url: '../Views/order.php',
->>>>>>> group_work
             method: 'POST',
             data: formData,
             contentType: false,
@@ -132,7 +116,7 @@ $(document).ready(function () {
 
 
                 $.ajax({
-                    url: '../backend/cashier/order.php',
+                    url: '../Views/order.php',
                     method: 'POST',
                     data: formData,
                     contentType: false,
@@ -160,15 +144,7 @@ $(document).ready(function () {
 
 
         $.ajax({
-<<<<<<< HEAD
-<<<<<<< HEAD
-            url: '../backend/cashier/order.php',
-=======
             url: '../Views/order.php',
->>>>>>> og_mark
-=======
-            url: '../Views/order.php',
->>>>>>> group_work
             method: 'POST',
             data: formData,
             contentType: false,
