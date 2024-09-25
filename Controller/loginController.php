@@ -1,9 +1,5 @@
 <?php
-<<<<<<<< HEAD:Controller/loginController.php
-require_once '../Model/classModel.php';
-========
 require_once '../model/classModel.php';
->>>>>>>> group_work:controllers/loginController.php
 
 class Logincontroller extends Model {
     private $username;
