@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -66,7 +67,10 @@
         <div class="middle_side">
             <div id="overlay_prod"></div>
             <div class="myproducts">
-
+                <!-- <div class="notification">
+                    <i class="fas fa-check"></i>
+                    <h5>Theme changed successfully...</h5>
+                </div> -->
                 <div class="myprod_container">
                     <div class="find_prod">
                         <div class="find">
@@ -78,34 +82,24 @@
                         </div>
                     </div>
                     <div class="myprod_inner">
-                        <ol>
-                            <h5>DP</h5>
-                            <h5>Product</h5>
-                            <h5>Category</h5>
-                            <h5>Availability</h5>
-                            <h5>Price</h5>
-                        </ol>
-                         <div id="content_products">
-                            <li class="last" id="addProduct" title="Add Product"><i class="fas fa-plus"></i>Add Product</li>
-                            
-                            <li>
-                                <div class="dp">
-                                    <img src="../image/sample.png" alt="">
-                                </div>
-                                <p>Beef Patty</p>
-                                <p>Snacks</p>
-                                <p>available</p>
-                                <p>₱50</p>
-                                <p>
-                                    <i class="fas fa-ellipsis-v more_showPane" title="See More"></i>
+                        <li class="last">
+                            <button type="button" id="addProduct" title="Add Product">
+                                <i class="fas fa-plus"></i>Add Product
+                            </button>
+                            <button type="button" id="addCategory" title="Add Category">
+                                <i class="fas fa-plus"></i>Add Category
+                            </button>
+                        </li>
+                        <div id="content_products">
+                            <ol>
+                                <h5>DP</h5>
+                                <h5>Product</h5>
+                                <h5>Category</h5>
+                                <h5>Availability</h5>
+                                <h5>Price</h5>
+                            </ol>
 
-                                <div class="action_select">
-                                    <p><i class="fas fa-edit"></i> Edit</p>
-                                    <p><i class="fas fa-trash"></i> Delete</p>
-                                    <p><i class="fas fa-eye"></i> View</p>
-                                </div>
-                                </p>
-                            </li>
+
                             <!-- <li>
                                 <div class="dp">
                                     <img src="../image/sample.png" alt="">
@@ -234,7 +228,7 @@
                             </li>-->
                         </div>
                     </div>
-                </div>  
+                </div>
                 <div class="Pnav_category">
                     <div id="body_Pnav_cat">
                         <li id="sample1" class="on_nav_select">All</li>
@@ -259,7 +253,7 @@
                             <ol>
                                 <li>
                                     <div>
-                                        <img src="../image/sample.png" id="imgdisplay" alt="Display pic">
+                                        <img src="../image/dpTemplate.png" id="imgdisplay" alt="Display pic">
                                     </div>
                                     <label for="addpic">
                                         <i class="fas fa-plus"></i>
@@ -299,15 +293,14 @@
                                     <div>
                                         <i class="fas fa-book"></i>
                                         <select name="category" id="prod_category">
-                                            <option value="">Category</option>
-                                            <option value="snacks" name="category">Snacks</option>
+
                                         </select>
                                     </div>
                                     <p>Category</p>
                                 </li>
                             </ol>
                             <div class="add_cont_button">
-                                <button type="submit" id="submit_prod"  ><i class="fas fa-plus"></i>Add product</button>
+                                <button type="submit" id="submit_prod"><i class="fas fa-plus"></i>Add product</button>
                             </div>
                         </section>
                         <button type="button" id="canc" title="Cancel">
@@ -316,6 +309,27 @@
                         <div class="response">
                         </div>
                     </form>
+                </div>
+                <div class="categoryForm-outer">
+
+                    <div id="categoryForm">
+                        <div class="uiInfo">
+                            <p></p>
+                            <h3>Add Category</h3>
+                            <p></p>
+                        </div>
+                        <button id="cancelAddCat"><i class="fas fa-plus" style="transform: rotate(45deg);"></i></button>
+                        <form id="category">
+                            <li>
+                                <i class="fas fa-book"></i>
+                                <input type="text" placeholder="Category" name="category">
+                                <p>Category</p>
+                            </li>
+                            <button id="submitCategory" type="submit"><i class="fas fa-plus"></i>Add Category</button>
+                        </form>
+                        <div class="category-response">
+                        </div>
+                    </div>
                 </div>
             </div>
 

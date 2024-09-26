@@ -6,7 +6,7 @@ require_once '../Model/classModel.php';
 
 class cashierController extends Model{
 
-    public function getAllProducts(): array {
+    public function getAllProducts() {
         $rows = $this->getAllProductss(); 
         if ($rows) {
             return $rows;

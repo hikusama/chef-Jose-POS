@@ -10,10 +10,10 @@ session_start();
 class show_products extends cashierController
 {
 
-    public function response():array 
+    public function response() 
     {
-        $pdoTemp = new cashierController();
-        $products = $pdoTemp->getAllProducts();
+        // $pdoTemp = new cashierController();
+        $products = $this->getAllProducts();
 
         return $products;
     }

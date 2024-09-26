@@ -35,9 +35,20 @@
 
     // ADD PRODUCT
     public function insertProduct($product_name, $category_name, $price, $quantity, $product_image) {
-        $stmt = $this->connect()->prepare("INSERT INTO products (name, category, price, quantityInStock, displayPic) VALUES (?, ?, ?, ?, ?);");
-        if ($stmt->execute([$product_name, $category_name, $price, $quantity, $product_image])) {
-            echo "Product added successfully.";
+        $stmt = $this->connect()->prepare("INSERT INTO products (name,category_id, price, quantityInStock, displayPic) VALUES (?, ?, ?, ?, ?);");
+        if ($stmt->execute([$product_name,$category_name, $price, $quantity, $product_image])) {
+            return true;
+        } else {
+            error_log("Error adding product: " . implode(", ", $stmt->errorInfo()));
+        }
+    }
+
+    // ADD category
+
+    public function insertCategory($Add_category) {
+        $stmt = $this->connect()->prepare("INSERT INTO category (category_name) VALUES (?);");
+        if ($stmt->execute([$Add_category])) {
+            return true;
         } else {
             error_log("Error adding product: " . implode(", ", $stmt->errorInfo()));
         }
@@ -80,11 +91,56 @@
             return null;
         }
     }
+
+
+    public function getCategory() {
+        $sql = "SELECT * FROM category";    
+        $stmt = $this->connect()->prepare($sql);
+        $stmt->execute();
+        $rows =  $stmt->fetchAll(PDO::FETCH_ASSOC); 
+
+        if ($rows) {
+            return $rows;
+        }else{
+            return null;
+        }
+    }
+
 // new
-    public function getAllProductss():array {
+    public function getAllProductss() {
         $sql = "SELECT * FROM products";
         $pdo = $this->connect();
         $stmt = $pdo->prepare($sql);
+        $stmt->execute();
+
+        $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        if ($rows) {
+            return $rows;
+        }else{
+            return null;
+        }
+        
+    }
+
+
+
+    // SEARCH W VIEW
+    public function searchNView($product_name) {
+        $product_name = "%".$product_name."%";
+
+        $sql = "SELECT * FROM products INNER JOIN category ON products.category_id = category.category_id";
+
+        if (!empty($product_name)) {
+            $sql .= " AND products.name LIKE :product_name ;"; 
+        }
+
+        $stmt = $this->connect()->prepare($sql);
+
+        if (!empty($product_name)) {
+            $stmt->bindParam(':product_name', $product_name);
+        } 
+
         $stmt->execute();
 
         $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
