@@ -301,6 +301,7 @@
                             </ol>
                             <div class="add_cont_button">
                                 <button type="submit" id="submit_prod"><i class="fas fa-plus"></i>Add product</button>
+                                <p>Need to remove BG? <a style="color: #00c4ff;" href="https://www.remove.bg/upload" target="blank" >Click here..</a></p>
                             </div>
                         </section>
                         <button type="button" id="canc" title="Cancel">

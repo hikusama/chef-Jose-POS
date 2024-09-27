@@ -748,11 +748,17 @@
 
 .add_cont_button {
     display: flex;
+    flex-direction: column;
     justify-content: center;
     margin-top: 1rem;
+    gap: 1rem;
+    align-items: center;
 }
-
+.add_cont_button a:hover{
+    text-decoration: underline;
+}
 .add_cont_button button {
+    
     padding: .7rem 2rem .7rem 2.5rem;
     border-radius: .4rem;
     border: none;
