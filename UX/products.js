@@ -10,23 +10,10 @@ $(document).ready(function () {
     $("#addProductForm").detach();
     // $(".categoryForm-outer").detach();
     let actionSelect;
-    allProducts("");
+    // allProducts("");
 
     open_Insertion = true;
-    $("#body_Pnav_cat li").click(function (e) {
-        e.preventDefault();
-        let hasclass = $(this).hasClass("on_nav_select");
-
-        if (hasclass) {
-
-        } else {
-
-            $("#body_Pnav_cat li").removeClass("on_nav_select");
-            $(this).addClass("on_nav_select");
-
-        }
-
-    });
+ 
     let interval = "";
 
     $("#addProduct").click(function (e) {
@@ -242,6 +229,15 @@ $(document).ready(function () {
 
         allProducts($(this).val())
 
+    });
+
+
+
+
+
+
+    $("#content_products").on("click","", function () {
+        
     });
 
 

@@ -132,7 +132,7 @@
         $sql = "SELECT * FROM products INNER JOIN category ON products.category_id = category.category_id";
 
         if (!empty($product_name)) {
-            $sql .= " AND products.name LIKE :product_name ;"; 
+            $sql .= " AND products.name LIKE :product_name OR category.category_name LIKE :product_name;"; 
         }
 
         $stmt = $this->connect()->prepare($sql);

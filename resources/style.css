@@ -367,6 +367,11 @@ body {
     border-left: solid rgba(0, 0, 0, 0.233) 2px;
     position: relative;
     overflow: hidden;
+    display: grid;
+    grid-template-rows: 3rem 68% 26%;
+}
+.counting > *{
+    height: 100% !important;
 }
 
 .monokai_mode .counting {
@@ -843,6 +848,7 @@ img {
     display: flex;
     justify-content: space-between;
     padding: 0 1rem;
+    align-items: center;
 }
 
 .totaling section:nth-child(1) {
@@ -858,9 +864,13 @@ img {
 
 .totaling section li {
     list-style: none;
+    height: fit-content;
 }
 
-.totaling section:nth-child(4) {
+.totaling section:nth-child(4) :nth-child(2) {
+    font-size: 1.6rem;
+}
+.totaling section:nth-child(4){
     margin-top: .8rem;
     font-weight: 600;
     font-size: 1.3rem;
@@ -876,7 +886,7 @@ img {
 .totaling section:nth-child(5) button {
     cursor: pointer;
     height: 3rem;
-    width: 8rem;
+    width: 40%;
     border-radius: .2rem;
     border: none;
     color: white;

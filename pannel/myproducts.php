@@ -90,14 +90,39 @@
                                 <i class="fas fa-plus"></i>Add Category
                             </button>
                         </li>
-                        <div id="content_products">
-                            <ol>
-                                <h5>DP</h5>
-                                <h5>Product</h5>
-                                <h5>Category</h5>
-                                <h5>Availability</h5>
-                                <h5>Price</h5>
-                            </ol>
+                        <div id="content_products-cont">
+                            <section>
+                                <ol>
+                                    <h5>DP</h5>
+                                    <h5>Product</h5>
+                                    <h5>Category</h5>
+                                    <h5>Stock</h5>
+                                    <h5>Price</h5>
+                                    <h5></h5>
+                                </ol>
+                            </section>
+                            <div id="content_products">
+                                <div class="loading_sc">
+
+                                    <div>
+                                        <p class="dp"></p>
+                                        <div class="desc"></div>
+
+                                        
+                                    </div>
+                                    <div>
+                                        <p class="dp"></p>
+                                        <div class="desc"></div>
+
+                                        
+                                    </div>
+                                    <div>
+                                        <p class="dp"></p>
+                                        <div class="desc"></div>
+                                    </div>
+
+                                </div>
+                            </div>
 
 
                             <!-- <li>
@@ -229,18 +254,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="Pnav_category">
-                    <div id="body_Pnav_cat">
-                        <li id="sample1" class="on_nav_select">All</li>
-                        <li id="sample1">Snacks</li>
-                        <li id="sample2">Latte & milktea</li>
-                        <li id="sample3">Latte & milktea</li>
-                        <li id="sample4">Latte & milktea</li>
-                        <li id="sample5">Snacks</li>
-                        <li id="sample6">Snacks</li>
-                        <li id="sample7">Snacks</li>
-                    </div>
-                </div>
+
                 <div id="addProductForm">
                     <form id="submit_form" enctype="multipart/form-data">
                         <div class="label_style">
@@ -301,7 +315,7 @@
                             </ol>
                             <div class="add_cont_button">
                                 <button type="submit" id="submit_prod"><i class="fas fa-plus"></i>Add product</button>
-                                <p>Need to remove BG? <a style="color: #00c4ff;" href="https://www.remove.bg/upload" target="blank" >Click here..</a></p>
+                                <p>Need to remove BG? <a style="color: #00c4ff;" href="https://www.remove.bg/upload" target="blank">Click here..</a></p>
                             </div>
                         </section>
                         <button type="button" id="canc" title="Cancel">

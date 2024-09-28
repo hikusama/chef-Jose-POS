@@ -165,13 +165,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['transac']) && $_POST['
 
     $searchShow = new ProductController(null, $product_name, null, null, null, null, null);
     $rows = $searchShow->getProdSearch();
-    echo "<ol>
-    <h5>DP</h5>
-    <h5>Product</h5>
-    <h5>Category</h5>
-    <h5>Stock</h5>
-    <h5>Price</h5>
-</ol>";
+//     echo "<ol>
+//     <h5>DP</h5>
+//     <h5>Product</h5>
+//     <h5>Category</h5>
+//     <h5>Stock</h5>
+//     <h5>Price</h5>
+//     <h5></h5>
+// </ol>";
 
     if ($rows) {
         foreach ($rows as $row) {
@@ -184,15 +185,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['transac']) && $_POST['
                 <p>'. $row['category_name'] .'</p>
                 <p>'. $row['quantityInStock'] .'</p>
                 <p>₱'. $row['price'] .'</p>
-                <p>
                     <i class="fas fa-ellipsis-v more_showPane" title="See More"></i>
-
                     <div class="action_select" id="'. $row['productID'] .'">
                         <p><i class="fas fa-edit"></i> Edit</p>
                         <p><i class="fas fa-trash"></i> Delete</p>
                         <p><i class="fas fa-eye"></i> View</p>
                     </div>
-                    </p>
             </li>';
         }
     

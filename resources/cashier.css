@@ -21,7 +21,6 @@
 }
 
 .counter-header{
-    position: absolute;
     width: 100%;
     display: flex;
     justify-content: space-between;
@@ -106,3 +105,12 @@
     }
 }
 
+
+
+@media screen and (min-width:1024px) {
+
+
+    .counting{
+        grid-template-rows: 3rem 58% 36% ;
+    }
+}
