@@ -12,11 +12,13 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     // PRODUCTS SHOW/SEARCH
 
     if (isset($_POST['transac']) && $_POST["transac"] === "searchNView" ) {
+        session_start();
 
         $searchVal = $_POST["searchVal"];
+        $category_id = $_POST["category_id"];
 
         $pdoTemp = new cashierController(null, $searchVal, null);
-        $allProd = $pdoTemp->getAllProducts();
+        $allProd = $pdoTemp->getAllProducts($category_id);
 
         if ($allProd) {
 
@@ -33,7 +35,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 ';
             }
         } else {
-            echo "No products..";
+            echo '<div class="nopr">No products..</div>';
         }
     }
 
@@ -80,6 +82,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         if (isset($_SESSION['orders'])) {
             $ordersSession = $_SESSION['orders'];
         }
+        if (isset($_POST["fakeTransac"]) && $_POST["fakeTransac"] === 'itsaprank') {
+            unset($ordersSession);
+            unset($_SESSION['orders']);
+        }
+        $ordersSession = array();
 
         dpCart($ordersSession);
     }
@@ -181,11 +188,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $pdoTemp = new cashierController(null, null, null);
         $categories = $pdoTemp->getAllCategory();
 
-        echo '<li>All</li>';
+        echo '<li class="prod_nav" id="">All</li>';
         if ($categories) {
             
             foreach ($categories as $cat) {
-                echo '<li '.$cat['category_id'].'>'.$cat['category_name'].'</li>';
+                echo '<li id="'.$cat['category_id'].'">'.$cat['category_name'].'</li>';
             }
         }
 

@@ -4,8 +4,11 @@ $(document).ready(function () {
 
     setNewBody();
 
+    $(".side_nav2d li").hide()
 
-
+    $(".side_nav2d li").each(function (index) {
+        $(this).delay(index * 200).show(200);
+    });
 
 
     $(".side_nav li").click(function (e) { 

@@ -18,9 +18,9 @@ class cashierController extends Model
         $this->product_id = $product_id;
     }
 
-    public function getAllProducts()
+    public function getAllProducts($category)
     {
-        return $this->getAllProductss($this->product_name);
+        return $this->getAllProductss($this->product_name,$category);
     }
 
     public function addToCart()

@@ -6,7 +6,7 @@ $(document).ready(function () {
     GlobalformData = new FormData();
     GlobalformData.append("transac", "viewCart");
     addToCart(GlobalformData, "viewCart");
-    searchNView("");
+    searchNView("", "");
     getCategory()
 
 
@@ -79,14 +79,16 @@ $(document).ready(function () {
 
 
     $("#search").on("input", function () {
-        searchNView($(this).val());
+        category_id = $('.category_nav_inner').find(".prod_nav").attr('id');
+        searchNView($(this).val(), category_id);
     });
 
 
-    $("#refreshCart").click(function (e) {
+    $("#removeAllFromCart").click(function (e) {
         e.preventDefault();
         refresCart = new FormData();
-        addToCart(refresCart, "viewCart");
+        refresCart.append("fakeTransac", "itsaprank")
+        removeAllFromCart(refresCart, "viewCart");
     });
 
 
@@ -163,16 +165,64 @@ $(document).ready(function () {
     });
 
 
-
     $(".category_nav_inner").on('click', 'li', function (e) {
         e.preventDefault();
-        $(".category_nav_inner li").removeClass("prod_nav");
-        $(this).addClass("prod_nav")
+        hasClass = $(this).hasClass("prod_nav");
+        catId = $(this).attr("id");
+        if (!hasClass) {
+            $(".category_nav_inner li").removeClass("prod_nav");
+            $(this).addClass("prod_nav")
+            console.log(catId);
+            $("#search").val('')
+            searchNView('', catId);
+
+        }
+
     });
+    $("#removeAllFromCart").hover(function () {
+        // over
+        $(this).css('color', "rgba(255, 104, 3, 0.795)")
+        $("#counter_body ol").css("opacity", "50%")
+
+    }, function () {
+        // out
+        $(this).css('color', "rgb(199, 199, 199)")
+        $("#counter_body ol").css("opacity", "100%")
+ 
+
+    }
+    );
 
 
 
 
+    function removeAllFromCart(formData, transac) {
+        formData.append("transac", transac);
+
+
+        $('#counter_body ol').addClass("removeItem");
+        setTimeout(() => {
+            $('#counter_body ol').removeClass("removeItem");
+            $('#counter_body ol').remove();
+        }, 250);
+
+        $.ajax({
+            url: '../Views/cashierView.php',
+            method: 'POST',
+            data: formData,
+            contentType: false,
+            processData: false,
+            success: function (response) {
+                response = response.trim()
+                if (!response) {
+                    $('#counter_body').html(`<div class="noItem">Cart is empty...</div>`);
+
+                } 
+
+            }
+        });
+
+    }
 
 
 
@@ -301,10 +351,11 @@ $(document).ready(function () {
 
     }
 
-    function searchNView(searchVal) {
+    function searchNView(searchVal, category_id) {
         formData = new FormData();
         formData.append("searchVal", searchVal)
         formData.append("transac", "searchNView")
+        formData.append("category_id", category_id)
 
         $.ajax({
             url: '../Views/cashierView.php',
@@ -342,12 +393,12 @@ $(document).ready(function () {
                 });
             },
             complete: function () {
-                $(".category_nav_inner li:nth-child(1)").addClass("prod_nav")
- 
+
+
             }
         });
     }
 
- 
+
 
 });

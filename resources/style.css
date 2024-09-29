@@ -203,6 +203,17 @@ body {
     /* font-variant: small-caps; */
 
 }
+.side_nav2d li{
+    animation-name: li_navs;
+    animation-duration: .7s;
+    animation-iteration-count: 1;
+}
+
+@keyframes li_navs {
+    0%{
+        transform: translateX(-2rem) rotate(-5deg);
+    }
+}
 
 .side_nav2d {
     margin: 4.2rem 0;

@@ -12,7 +12,6 @@
 
 }
 
-
 @keyframes rmitem {
     50%{
         opacity: 0;
@@ -30,11 +29,16 @@
     animation-duration: .7s;
     animation-iteration-count: 1;
     animation-name: cartUIParent1;
+    cursor: pointer;
 }
 .counter-header li:nth-child(2){
     animation-duration: .7s;
     animation-iteration-count: 1;
     animation-name: cartUIParent2;
+}
+.counter-header li:nth-child(2) > *{
+    transform: translateX(0) scale(1.5) rotate(45deg) ;
+
 }
 .counter-header li{
     position: relative;
@@ -60,13 +64,13 @@
 @keyframes cartUIParent1 {
     0%{
         opacity: 0;
-        transform: translate(-3rem);
+        transform: translateX(-3rem);
     }
 }
 @keyframes cartUIParent2 {
     0%{
         opacity: 0;
-        transform: translate(3rem);
+        transform: translateX(3rem) ;
     }
 }
 .counter-header li div::after{
@@ -96,6 +100,17 @@
     animation-duration: .5s;
     animation-iteration-count: 1;
     animation-name: cartUIOl;
+}
+.nopr{
+    width: 100%;
+    text-align: center;
+    transform: translateY(2rem);
+}
+#removeAllFromCart{
+    transition: .4s;
+}
+#removeAllFromCart:hover{
+    transform: rotate(135deg) scale(1.5) ;
 }
 
 

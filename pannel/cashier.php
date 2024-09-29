@@ -4,13 +4,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="../UX/jquery-3.5.1.min.js"></script>
-    <script src="../UX/cashier.js"></script>
-    <script src="../UX/script.js"></script>
+
     <link rel="stylesheet" href="../resources/style.css">
     <link rel="stylesheet" href="../resources/cashier.css">
     <link rel="stylesheet" href="../resources/fontawesome-free-5.15.4-web/css/all.css">
-
+    <script src="../UX/jquery-3.5.1.min.js"></script>
+    <script src="../UX/cashier.js"></script>
+    <script src="../UX/script.js"></script>
     <title>POS</title>
 </head>
 
@@ -94,7 +94,7 @@
                 <!-- <div class="counting_header"></div> -->
                  <div class="counter-header">
                     <li><div></div>Cart</li>
-                    <li><i id="refreshCart" class="fas fa-sync-alt"></i></li>
+                    <li><i id="removeAllFromCart" class="fas fa-plus" title="Remove All"></i></li>
                  </div>
                 <div id="counter_body">
 

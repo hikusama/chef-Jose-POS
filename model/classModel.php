@@ -6,7 +6,7 @@
 
 
 
-    //------------------------- LOGIN-SIGNUP THINGS -----------------------------
+        //------------------------- LOGIN-SIGNUP THINGS -----------------------------
 
         // GET USER
         public function getUser($username, $password)
@@ -43,8 +43,8 @@
 
 
 
-        
-    //------------------------- PRODUCT THINGS -----------------------------
+
+        //------------------------- PRODUCT THINGS -----------------------------
 
 
         // ADD PRODUCT
@@ -155,23 +155,39 @@
 
 
 
-    //------------------------- CASHIER THINGS -----------------------------
+        //------------------------- CASHIER THINGS -----------------------------
 
-        public function getAllProductss($product_name)
+        public function getAllProductss($product_name, $category)
         {
             if (!empty($product_name)) {
                 $product_name = "%" . $product_name . "%";
             }
 
+
             $sql = "SELECT * FROM products";
 
-            if (!empty($product_name)) {
-                $sql .= " WHERE products.name LIKE :product_name GROUP BY products.productID";
+
+            if (!empty($category)) {
+                $sql .= " INNER JOIN category ON category.category_id = products.category_id WHERE category.category_id = :category";
             }
+
+            if (!empty($product_name)) {
+                if (empty($category)) {
+                    $sql .= " WHERE products.name LIKE :product_name GROUP BY products.productID";
+                    
+                }else{
+                    $sql .= " AND products.name LIKE :product_name GROUP BY products.productID";
+
+                }
+            }
+
             $pdo = $this->connect();
             $stmt = $pdo->prepare($sql);
             if (!empty($product_name)) {
                 $stmt->bindParam(':product_name', $product_name);
+            }
+            if (!empty($category)) {
+                $stmt->bindParam(':category', $category);
             }
             $stmt->execute();
 
