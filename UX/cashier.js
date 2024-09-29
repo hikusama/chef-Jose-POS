@@ -6,6 +6,9 @@ $(document).ready(function () {
     GlobalformData = new FormData();
     GlobalformData.append("transac", "viewCart");
     addToCart(GlobalformData, "viewCart");
+    searchNView("");
+    getCategory()
+
 
 
     $(".products_content > *").each(function (index) {
@@ -14,21 +17,7 @@ $(document).ready(function () {
         });
     });
 
-    $.ajax({
-        url: '../Views/cashierProducts.php',
-        method: "POST",
-        contentType: false,
-        processData: false,
-        success: function (response) {
-            $('.products_content').html(response);
-            $('.products_content').children().hide();
 
-
-            $('.products_content').children().each(function (index) {
-                $(this).delay(index * 100).fadeIn(200);
-            });
-        }
-    });
     $(".products_content").on("click", "ol", function (e) {
         e.preventDefault();
         toAddProduct_id = $(this).find("img").attr("id");
@@ -42,6 +31,7 @@ $(document).ready(function () {
 
 
     });
+
 
     $("#counter_body").on("click", "#rmitem", function (e) {
         e.stopPropagation();
@@ -63,7 +53,7 @@ $(document).ready(function () {
 
         console.log(product_id);
         $.ajax({
-            url: '../Views/order.php',
+            url: '../Views/cashierView.php',
             method: 'POST',
             data: formData,
             contentType: false,
@@ -86,11 +76,19 @@ $(document).ready(function () {
 
 
     });
+
+
+    $("#search").on("input", function () {
+        searchNView($(this).val());
+    });
+
+
     $("#refreshCart").click(function (e) {
         e.preventDefault();
         refresCart = new FormData();
         addToCart(refresCart, "viewCart");
     });
+
 
     $("#counter_body").on("submit", "#changeqntity", function (e) {
         e.preventDefault();
@@ -125,7 +123,7 @@ $(document).ready(function () {
 
 
                 $.ajax({
-                    url: '../Views/order.php',
+                    url: '../Views/cashierView.php',
                     method: 'POST',
                     data: formData,
                     contentType: false,
@@ -147,6 +145,37 @@ $(document).ready(function () {
 
 
 
+    let rotatedimg = false;
+    $(".category_nav").on('click', '#allcategory_open', function (e) {
+        e.preventDefault();
+        if (rotatedimg == false) {
+            $("#allcategory_open img").css("transform", "rotate(90deg)")
+            $("#allcategory_open img").css("transition", ".3s")
+            $(".category_nav_inner").addClass("category_nav_new");
+            rotatedimg = true;
+
+        } else {
+
+            $("#allcategory_open img").css("transform", "rotate(0)")
+            $(".category_nav_inner").removeClass("category_nav_new");
+            rotatedimg = false;
+        }
+    });
+
+
+
+    $(".category_nav_inner").on('click', 'li', function (e) {
+        e.preventDefault();
+        $(".category_nav_inner li").removeClass("prod_nav");
+        $(this).addClass("prod_nav")
+    });
+
+
+
+
+
+
+
     function addToCart(formData, tr, p_id, product_name, price) {
 
         formData.append("transac", tr);
@@ -154,7 +183,7 @@ $(document).ready(function () {
 
 
         $.ajax({
-            url: '../Views/order.php',
+            url: '../Views/cashierView.php',
             method: 'POST',
             data: formData,
             contentType: false,
@@ -204,26 +233,6 @@ $(document).ready(function () {
 
                             if (hs) {
                                 $('#counter_body').html(`<ol>
-                                    <li>
-                                        <p class="arrow_controll"><i class="fas fa-arrow-right"></i></p>
-                                        <p>1</p>
-                                        <p>${product_name}</p>
-                                        <p class="pr">₱${price}</p>
-                                        <div id="${p_id}" class="edga"><i id="rmitem" class="fas fa-plus" title="Remove Item" style="transform: rotate(45deg);"></i></div>
-                                    </li>
-                                    <li class="qntity">
-                                        <div>
-                                            <p>Quantity</p>
-                                            <form id="changeqntity">
-                                                <input type="number" value="1" name="qntity" >
-                                            </form>
-                                        </div>
-                                    </li>
-                                </ol>`);
-                            } else {
-
-
-                                $('#counter_body').append(`<ol>
                                 <li>
                                     <p class="arrow_controll"><i class="fas fa-arrow-right"></i></p>
                                     <p>1</p>
@@ -240,6 +249,26 @@ $(document).ready(function () {
                                     </div>
                                 </li>
                             </ol>`);
+                            } else {
+
+
+                                $('#counter_body').append(`<ol>
+                            <li>
+                                <p class="arrow_controll"><i class="fas fa-arrow-right"></i></p>
+                                <p>1</p>
+                                <p>${product_name}</p>
+                                <p class="pr">₱${price}</p>
+                                <div id="${p_id}" class="edga"><i id="rmitem" class="fas fa-plus" title="Remove Item" style="transform: rotate(45deg);"></i></div>
+                            </li>
+                            <li class="qntity">
+                                <div>
+                                    <p>Quantity</p>
+                                    <form id="changeqntity">
+                                        <input type="number" value="1" name="qntity" >
+                                    </form>
+                                </div>
+                            </li>
+                        </ol>`);
                             }
 
                         }
@@ -272,6 +301,53 @@ $(document).ready(function () {
 
     }
 
+    function searchNView(searchVal) {
+        formData = new FormData();
+        formData.append("searchVal", searchVal)
+        formData.append("transac", "searchNView")
 
+        $.ajax({
+            url: '../Views/cashierView.php',
+            method: "POST",
+            data: formData,
+            contentType: false,
+            processData: false,
+            success: function (response) {
+                $('.products_content').html(response);
+                $('.products_content').children().hide();
+
+
+                $('.products_content').children().each(function (index) {
+                    $(this).delay(index * 100).fadeIn(200);
+                });
+            }
+        });
+    }
+
+    function getCategory() {
+        formData = new FormData();
+        formData.append("transac", "getCateguri")
+
+        $.ajax({
+            url: '../Views/cashierView.php',
+            method: 'POST',
+            data: formData,
+            contentType: false,
+            processData: false,
+            success: function (response) {
+                $('.category_nav_inner').html(response);
+                $('.category_nav_inner li').hide();
+                $(".category_nav_inner li").each(function (index) {
+                    $(this).delay(index * 200).fadeIn(250);
+                });
+            },
+            complete: function () {
+                $(".category_nav_inner li:nth-child(1)").addClass("prod_nav")
+ 
+            }
+        });
+    }
+
+ 
 
 });

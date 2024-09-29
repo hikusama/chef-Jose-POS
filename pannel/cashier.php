@@ -73,16 +73,8 @@
                     <div class="category_nav">
                         <div class="category_nav_inner">
 
-                            <li>Combo Meals</li>
-                            <li>Combo Meals</li>
-                            <li>Combo Meals</li>
-                            <li>Combo Meals</li>
-                            <li>Combo Meals</li>
-                            <li>Combo Meals</li>
-                            <li>Combo Meals</li>
-                            <li>Combo Meals</li>
-                            <li>Combo Meals</li>
-                            <li>Combo Meals</li>
+                            <li class="prod_nav">All</li>
+ 
                         </div>
                         <button id="allcategory_open"><img src="../image/seemore.png" alt=""></button>
                     </div>

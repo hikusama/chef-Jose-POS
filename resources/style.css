@@ -403,12 +403,12 @@ body {
 
 .category_cont {
     display: grid;
-    place-items: center;
+    place-items: start;
     padding: 1rem 2rem 0 2rem;
 }
 
 .category_nav {
-    height: fit-content;
+    height: 3.25rem;
     border-radius: .5rem;
     border: solid rgba(136, 136, 136, 0.589) 1px;
     background-color: white;

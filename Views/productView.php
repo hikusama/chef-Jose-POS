@@ -7,87 +7,92 @@ include '../Controller/productController.php';
 
 
 
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
+    // PRODUCT ADD
 
-// PRODUCT ADD
+    if (isset($_POST['transac']) && $_POST['transac'] == "addProd") {
+        $errors = [];
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['transac']) && $_POST['transac'] == "addProd") {
-    $errors = [];
+        $product_name = htmlspecialchars(strip_tags($_POST['name']));
+        $category_name = htmlspecialchars(strip_tags($_POST['category']));
+        $price = htmlspecialchars(strip_tags($_POST['price']));
+        $quantity = htmlspecialchars(strip_tags($_POST['quantityInStock']));
 
-    $product_name = htmlspecialchars(strip_tags($_POST['name']));
-    $category_name = htmlspecialchars(strip_tags($_POST['category']));
-    $price = htmlspecialchars(strip_tags($_POST['price']));
-    $quantity = htmlspecialchars(strip_tags($_POST['quantityInStock']));
+        $product_image = null;
 
-    $product_image = null;
+        if (isset($_FILES['displayPic']) && $_FILES['displayPic']['error'] == 0) {
 
-    if (isset($_FILES['displayPic']) && $_FILES['displayPic']['error'] == 0) {
+            $image_file_type = strtolower(pathinfo($_FILES['displayPic']['name'], PATHINFO_EXTENSION));
+            $fileSize = $_FILES['displayPic']['size'];
 
-        $image_file_type = strtolower(pathinfo($_FILES['displayPic']['name'], PATHINFO_EXTENSION));
-        $fileSize = $_FILES['displayPic']['size'];
-
-        $maxFileSize = 3 * 1024 * 1024;
-        $allowed_types = ['jpg', 'png', 'jpeg', 'gif'];
-        if (!in_array($image_file_type, $allowed_types)) {
-            $errors["invalid_format"] = 'Invalid format ( <b style="font-size:1rem;">jpg, png, jpeg, gif</b> )';
-        } else {
-            if ($fileSize <= $maxFileSize) {
-                $ImageData = file_get_contents($_FILES['displayPic']['tmp_name']);
+            $maxFileSize = 3 * 1024 * 1024;
+            $allowed_types = ['jpg', 'png', 'jpeg', 'gif'];
+            if (!in_array($image_file_type, $allowed_types)) {
+                $errors["invalid_format"] = 'Invalid format ( <b style="font-size:1rem;">jpg, png, jpeg, gif</b> )';
             } else {
-                $errors["pic_error"] = "The file size exceeds the maximum allowed limit (3 MB)!";
+                if ($fileSize <= $maxFileSize) {
+                    $ImageData = file_get_contents($_FILES['displayPic']['tmp_name']);
+                } else {
+                    $errors["pic_error"] = "The file size exceeds the maximum allowed limit (3 MB)!";
+                }
+            }
+            $product_image = file_get_contents($_FILES['displayPic']['tmp_name']);
+        } else {
+            $errors["no_img"] = 'Please insert image of product.';
+        }
+
+
+        $addProd = new ProductController(null, $product_name, $category_name, $price, $quantity, $product_image, null);
+
+
+        if ($addProd->is_empty_inputs($product_name, $category_name, $price, $quantity)) {
+            $errors["empty_inputs"] = "Please fill in all fields";
+        }
+        if (!$errors) {
+            $addProd->addProducts();
+            echo 'productAdded';
+        } else {
+            foreach ($errors as $error) {
+                echo '<p style="white-space:nowrap; color:#ff4141;font-size: 1.1rem;" class="errorText">' . $error . '</p>';
             }
         }
-        $product_image = file_get_contents($_FILES['displayPic']['tmp_name']);
-    } else {
-        $errors["no_img"] = 'Please insert image of product.';
-    }
-
-
-    $addProd = new ProductController(null, $product_name, $category_name, $price, $quantity, $product_image, null);
-
-
-    if ($addProd->is_empty_inputs($product_name, $category_name, $price, $quantity)) {
-        $errors["empty_inputs"] = "Please fill in all fields";
-    }
-    if (!$errors) {
-        $addProd->addProducts();
-        echo 'productAdded';
-    } else {
-        foreach ($errors as $error) {
-            echo '<p style="white-space:nowrap; color:#ff4141;font-size: 1.1rem;" class="errorText">' . $error . '</p>';
-        }
-    }
 
 
 
 
 
+
+        // CATEGORY ADD
+
+    } 
+    
 
     // CATEGORY ADD
-
-} else if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['transac']) && $_POST['transac'] == "addCategory") {
-
-
-    $errors = [];
+    
+    if (isset($_POST['transac']) && $_POST['transac'] == "addCategory") {
 
 
-    $category_name = htmlspecialchars(strip_tags($_POST['category']));
+        $errors = [];
 
-    if (empty($category_name)) {
-        $errors["empty_inputs"] = "Please fill in all fields";
-    }
 
-    $addCategory = new ProductController(null, null, null, null, null, null, $category_name);
+        $category_name = htmlspecialchars(strip_tags($_POST['category']));
 
-    if (!$errors) {
-
-        $addCategory->addCategory();
-        echo 'categoryAdded';
-    } else {
-        foreach ($errors as $error) {
-            echo '<p style="white-space:nowrap; color:#ff4141;font-size: 1.1rem;" class="errorText">' . $error . '</p>';
+        if (empty($category_name)) {
+            $errors["empty_inputs"] = "Please fill in all fields";
         }
-    }
+
+        $addCategory = new ProductController(null, null, null, null, null, null, $category_name);
+
+        if (!$errors) {
+
+            $addCategory->addCategory();
+            echo 'categoryAdded';
+        } else {
+            foreach ($errors as $error) {
+                echo '<p style="white-space:nowrap; color:#ff4141;font-size: 1.1rem;" class="errorText">' . $error . '</p>';
+            }
+        }
 
 
 
@@ -95,76 +100,101 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['transac']) && $_POST['
 
 
 
+
+        // PRODUCT EDIT
+
+    } 
+    
 
     // PRODUCT EDIT
+    
+    if (isset($_POST['transac']) && $_POST['transac'] == "editProd") {
 
-} else if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['transac']) && $_POST['transac'] == "editProd") {
-
-    $update = new ProductController(null, $product_name, $category_name, $price, $quantity, $product_image, null);
-
-
-
-
-
-    // PRODUCT VIEW INFO
-
-} else if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['transac']) && $_POST['transac'] == "viewProd_info") {
+        $update = new ProductController(null, $product_name, $category_name, $price, $quantity, $product_image, null);
 
 
 
 
 
+        // PRODUCT VIEW INFO
 
-    // GET CATEGORY
+    } 
+    
+    
+    // VIEW PROD INFO
 
-} else if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['transac']) && $_POST['transac'] == "getCategory") {
-    $getCategory = new ProductController(null, null, null, null, null, null, null);
-
-    $rowsCat = $getCategory->getCat();
-
-    echo '<option value="">Category</option>';
+    if (isset($_POST['transac']) && $_POST['transac'] == "viewProd_info") {
 
 
-    if ($rowsCat) {
-        foreach ($rowsCat as $row) {
 
-            echo '<option value="' . $row["category_id"] . '" name="category">' . $row["category_name"] . '</option>';
+
+
+
+        // GET CATEGORY
+
+    } 
+    
+    
+    // CATEGORY GET
+    
+    if (isset($_POST['transac']) && $_POST['transac'] == "getCategory") {
+        $getCategory = new ProductController(null, null, null, null, null, null, null);
+
+        $rowsCat = $getCategory->getCat();
+
+        echo '<option value="">Category</option>';
+
+
+        if ($rowsCat) {
+            foreach ($rowsCat as $row) {
+
+                echo '<option value="' . $row["category_id"] . '" name="category">' . $row["category_name"] . '</option>';
+            }
         }
-    }
 
 
 
 
 
-    // PRODUCT DELETE
+        // PRODUCT DELETE
 
-} else if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['transac']) && $_POST['transac'] == "removeProd") {
+    } 
+    
+    
+    // PRODUCT REMOVE
+    
+    if (isset($_POST['transac']) && $_POST['transac'] == "removeProd") {
 
-    $product_id = htmlspecialchars(strip_tags($_POST['product_id']));
-
-
-    $delete = new ProductController($product_id, null, null, null, null, null, null);
-
-    $delete->deleteProducts();
-
-
+        $product_id = htmlspecialchars(strip_tags($_POST['product_id']));
 
 
+        $delete = new ProductController($product_id, null, null, null, null, null, null);
 
-
-    // GET PRODUCT
-
-} else if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['transac']) && $_POST['transac'] == "showSearchProd") {
-
-
-    $product_name = htmlspecialchars(strip_tags($_POST['name']));
+        $delete->deleteProducts();
 
 
 
 
-    $searchShow = new ProductController(null, $product_name, null, null, null, null, null);
-    $rows = $searchShow->getProdSearch();
-    echo '
+
+
+        // GET PRODUCT
+
+    } 
+    
+    
+    // PRODUCTS SHOW/SEARCH
+    
+    if (isset($_POST['transac']) && $_POST['transac'] == "showSearchProd") {
+
+
+        $product_name = htmlspecialchars(strip_tags($_POST['name']));
+
+
+
+
+        $searchShow = new ProductController(null, $product_name, null, null, null, null, null);
+        $rows = $searchShow->getProdSearch();
+        echo '
         <div class="loading_sc">
             <div>
                 <p class="dp"></p>
@@ -180,11 +210,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['transac']) && $_POST['
             </div>
 
         </div>
-    ';
+        ';
 
-    if ($rows) {
-        foreach ($rows as $row) {
-            echo '
+        if ($rows) {
+            foreach ($rows as $row) {
+                echo '
             <li>
                 <div class="dp">
                     <img src="data:image/jpeg;base64, ' . base64_encode($row['displayPic']) . '" alt="">
@@ -200,8 +230,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['transac']) && $_POST['
                         <p><i class="fas fa-eye"></i> View</p>
                     </div>
             </li>';
+            }
+        } else {
+            echo "No products..";
         }
-    } else {
-        echo "No products..";
     }
+
+    
+
+
+
 }

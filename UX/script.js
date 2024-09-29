@@ -54,35 +54,6 @@ $(document).ready(function () {
 
 
 
-    let rotatedimg = false;
-
-    $("#allcategory_open").click(function (e) { 
-        e.preventDefault();
-        if (rotatedimg == false) {
-            $("#allcategory_open img").css("transform","rotate(90deg)")
-            $("#allcategory_open img").css("transition",".3s")
-            $(".category_nav_inner").addClass("category_nav_new");
-            rotatedimg = true;
-            
-        }else{
-            
-            $("#allcategory_open img").css("transform","rotate(0)")
-            $(".category_nav_inner").removeClass("category_nav_new");
-            rotatedimg = false;
-        }
-    });
- 
-    $(".category_nav_inner li:nth-child(1)").addClass("prod_nav")
-
-
-    $(".products .category_nav_inner li").click(function (e) { 
-        e.preventDefault();
-        
-        $(".products .category_nav_inner li").removeClass("prod_nav");
-
-
-        $(this).addClass("prod_nav")
-    });
 
     $("#counter_body ").on("click","li:nth-child(1)",function (e) { 
         e.preventDefault();

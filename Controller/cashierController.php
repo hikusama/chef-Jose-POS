@@ -1,30 +1,37 @@
 <?php
 
 
-require_once '../Model/classModel.php';
+require_once '../model/classModel.php';
 
 
-class cashierController extends Model{
+class cashierController extends Model
+{
 
-    public function getAllProducts() {
-        $rows = $this->getAllProductss(); 
-        if ($rows) {
-            return $rows;
-        } else {
-            return null;
-        }
-    }
-    
-    public function addToCart($prod_id):array{
-        
-        $rows = $this->itemsForAddToCart($prod_id);
-        if ($rows) {
-            return $rows;
-        }else{
-            return null;
-        }
+    private $orders;
+    private $product_name;
+    private $product_id;
+
+    public function __construct($orders,$product_name,$product_id)
+    {
+        $this->orders = $orders;
+        $this->product_name = $product_name;
+        $this->product_id = $product_id;
     }
 
+    public function getAllProducts()
+    {
+        return $this->getAllProductss($this->product_name);
+    }
+
+    public function addToCart()
+    {
+
+        return $this->itemsForAddToCart($this->product_id);
+    }
+
+
+    public function getAllCategory()
+    {
+        return $this->getCategory();
+    }
 }
-
-
