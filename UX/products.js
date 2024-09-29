@@ -6,14 +6,15 @@
 $(document).ready(function () {
     addPorm = $("#addProductForm").detach();
     addCat = $(".categoryForm-outer").detach();
+
     // $(".myproducts").detach(addPorm);
     $("#addProductForm").detach();
     // $(".categoryForm-outer").detach();
     let actionSelect;
-    // allProducts("");
+    allProducts("");
 
     open_Insertion = true;
- 
+
     let interval = "";
 
     $("#addProduct").click(function (e) {
@@ -32,7 +33,6 @@ $(document).ready(function () {
                     $('#prod_category').html(response);
                 }
             });
-
             $("#overlay_prod").show();
             $(".myproducts").append(addPorm);
 
@@ -49,6 +49,7 @@ $(document).ready(function () {
             }, 800);
 
             open_Insertion = false;
+
         }
 
     });
@@ -123,6 +124,8 @@ $(document).ready(function () {
 
         if (!hasClass) {
             console.log("hello");
+            $("#content_products li").css("z-index", "1");
+            $(this).closest("li").css("z-index", "2");
             $("#content_products .action_select").removeClass("action_selectNew");
             $(this).closest("li").find(".action_select").addClass("action_selectNew");
             // $(this).closest("li").append(actionSelect);
@@ -236,8 +239,8 @@ $(document).ready(function () {
 
 
 
-    $("#content_products").on("click","", function () {
-        
+    $("#content_products").on("click", "", function () {
+
     });
 
 
@@ -247,13 +250,25 @@ $(document).ready(function () {
 
 
 
-
+// let loading_sc = "ngiao"; 
 
 function allProducts(searchArg) {
+    // hasClass = $("#content_products").children().hasClass("loading_sc");
+    $('#content_products li').hide();
+    $(".loading_sc").show();
 
     formData = new FormData()
     formData.append("transac", "showSearchProd")
     formData.append("name", searchArg)
+    // if (hasClass) {
+    //     $(".loading_sc").show();
+    // }else{
+    //     console.log("helll");
+
+    //     $('#content_products li').detach();
+    //     $('#content_products').append(loading_sc);
+
+    // }
 
 
     $.ajax({
@@ -264,6 +279,16 @@ function allProducts(searchArg) {
         processData: false,
         success: function (response) {
             $('#content_products').html(response);
+            $('#content_products li').hide();
+            $(".loading_sc").show();
+            // $(".loading_sc").parent().css("overflow-y", "hidden");
+            setTimeout(() => {
+                $(".loading_sc").hide();
+                $("#content_products li").each(function (index) {
+                    $(this).delay(index * 100).fadeIn(200);
+                });
+                // $(".loading_sc").parent().css("overflow-y", "scroll");
+            }, 1500);
 
         }
     });

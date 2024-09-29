@@ -129,7 +129,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['transac']) && $_POST['
         foreach ($rowsCat as $row) {
 
             echo '<option value="' . $row["category_id"] . '" name="category">' . $row["category_name"] . '</option>';
-
         }
     }
 
@@ -165,40 +164,44 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['transac']) && $_POST['
 
     $searchShow = new ProductController(null, $product_name, null, null, null, null, null);
     $rows = $searchShow->getProdSearch();
-//     echo "<ol>
-//     <h5>DP</h5>
-//     <h5>Product</h5>
-//     <h5>Category</h5>
-//     <h5>Stock</h5>
-//     <h5>Price</h5>
-//     <h5></h5>
-// </ol>";
+    echo '
+        <div class="loading_sc">
+            <div>
+                <p class="dp"></p>
+                <div class="desc"></div>                                
+            </div>
+            <div>
+                <p class="dp"></p>
+                <div class="desc"></div>                                
+            </div>
+            <div>
+                <p class="dp"></p>
+                <div class="desc"></div>
+            </div>
+
+        </div>
+    ';
 
     if ($rows) {
         foreach ($rows as $row) {
             echo '
             <li>
                 <div class="dp">
-                    <img src="data:image/jpeg;base64, '. base64_encode($row['displayPic']) .'" alt="">
+                    <img src="data:image/jpeg;base64, ' . base64_encode($row['displayPic']) . '" alt="">
                 </div>
-                <p>'. $row['name'] .'</p>
-                <p>'. $row['category_name'] .'</p>
-                <p>'. $row['quantityInStock'] .'</p>
-                <p>₱'. $row['price'] .'</p>
+                <p>' . $row['name'] . '</p>
+                <p>' . $row['category_name'] . '</p>
+                <p>' . $row['quantityInStock'] . '</p>
+                <p>₱' . $row['price'] . '</p>
                     <i class="fas fa-ellipsis-v more_showPane" title="See More"></i>
-                    <div class="action_select" id="'. $row['productID'] .'">
+                    <div class="action_select" id="' . $row['productID'] . '">
                         <p><i class="fas fa-edit"></i> Edit</p>
                         <p><i class="fas fa-trash"></i> Delete</p>
                         <p><i class="fas fa-eye"></i> View</p>
                     </div>
             </li>';
         }
-    
-    }else{
+    } else {
         echo "No products..";
     }
-
- 
-
-
 }

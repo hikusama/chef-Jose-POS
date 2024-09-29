@@ -25,7 +25,7 @@ $(document).ready(function () {
 
 
             $('.products_content').children().each(function (index) {
-                $(this).delay(index * 200).fadeIn(300);
+                $(this).delay(index * 100).fadeIn(200);
             });
         }
     });
