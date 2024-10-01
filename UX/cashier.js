@@ -8,8 +8,38 @@ $(document).ready(function () {
     addToCart(GlobalformData, "viewCart");
     searchNView("", "");
     getCategory()
+    allTotal(0)
 
 
+    $("#discount").click(function (e) {
+        e.preventDefault();
+        
+        $(".discount-form-cont").show();
+        $("#overlay_cashier").show();
+    });
+
+    
+    $(".middle_side").on("click","#apply", function () {
+        
+        $(".discount-form input").val('');
+        $(".discount-form select").val('');
+        $(".discount-form-cont").hide();
+        $("#overlay_cashier").hide();
+    })
+    $(".middle_side").on("click","#cancelD", function () {
+        $(".discount-form-cont").hide();
+        $("#overlay_cashier").hide();
+    })
+    $(".middle_side").on("click","#discountOpt", function () {
+
+        $(".middle_side #discountType").val($(this).val());
+        
+    });
+
+    $("#proceed").click(function (e) {
+        e.preventDefault();
+        window.open("printPage", "_blank")
+    });
 
     $(".products_content > *").each(function (index) {
         $(this).css({
@@ -60,6 +90,7 @@ $(document).ready(function () {
             processData: false,
             success: function (response) {
                 response = response.trim()
+                allTotal(0)
                 if (!response) {
                     $('#counter_body').html(`<div class="noItem">Cart is empty...</div>`);
 
@@ -69,10 +100,6 @@ $(document).ready(function () {
 
             }
         });
-
-
-
-
 
 
     });
@@ -131,6 +158,7 @@ $(document).ready(function () {
                     contentType: false,
                     processData: false,
                     success: function (response) {
+                        allTotal(0)
 
                     }
                 });
@@ -188,10 +216,9 @@ $(document).ready(function () {
         // out
         $(this).css('color', "rgb(199, 199, 199)")
         $("#counter_body ol").css("opacity", "100%")
- 
 
-    }
-    );
+
+    });
 
 
 
@@ -214,14 +241,41 @@ $(document).ready(function () {
             processData: false,
             success: function (response) {
                 response = response.trim()
+                allTotal(0)
                 if (!response) {
-                    $('#counter_body').html(`<div class="noItem">Cart is empty...</div>`);
+                    setTimeout(() => {
 
-                } 
+                        $('#counter_body').html(`<div class="noItem">Cart is empty...</div>`);
+                    }, 300);
+
+                }
 
             }
         });
 
+    }
+
+    function allTotal(discount,discountType = "") {
+        formData = new FormData()
+        formData.append("discountType", discountType);
+        formData.append("discount", discount);
+        formData.append("transac", "totalShow");
+
+
+
+        $.ajax({
+            url: '../Views/cashierView.php',
+            method: 'POST',
+            data: formData,
+            contentType: false,
+            processData: false,
+            success: function (response) {
+
+                $('#data-orders').html(response);
+
+
+            }
+        });
     }
 
 
@@ -240,6 +294,7 @@ $(document).ready(function () {
             processData: false,
             success: function (response) {
                 response = response.trim()
+                allTotal(0)
 
                 if (!response) {
                     $('#counter_body').html(`<div class="noItem">Cart is empty...</div>`);

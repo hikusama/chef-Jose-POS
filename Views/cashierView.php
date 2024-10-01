@@ -85,8 +85,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         if (isset($_POST["fakeTransac"]) && $_POST["fakeTransac"] === 'itsaprank') {
             unset($ordersSession);
             unset($_SESSION['orders']);
+            unset($_SESSION['discount']);
+            $ordersSession = array();
         }
-        $ordersSession = array();
 
         dpCart($ordersSession);
     }
@@ -123,6 +124,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         dpCart($ordersSession);
         if ($array_size > 0) {
             echo "not_empty";
+        }else{
+            unset($_SESSION['discount']);
         }
     }
 
@@ -197,6 +200,80 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         }
 
 
+    }
+
+
+    if (isset($_POST['transac']) && $_POST['transac'] === "totalShow") {
+        $discountType = $_POST["discountType"];
+        $discount = (int)$_POST["discount"];
+ 
+        session_start();
+
+        if (!isset($_SESSION['orders'])) {
+            echo '
+            <section>
+                <li>Subtotal</li>
+                <li>₱0</li>
+            </section>
+            <section>
+                <li>Discount (%)</li>
+                <li>0</li>
+            </section>
+            <section>
+                <li>Total Amount</li>
+                <li>₱0</li>
+            </section>
+            
+            
+            ';
+        } else {
+
+
+            $orders = $_SESSION['orders'];
+            $array_size = count($orders);
+
+            $subtotal = 0;
+            $total = 0;
+
+            for ($i = 0; $i < $array_size; $i++) {
+                $subtotal += $orders[$i]['price'];
+            }
+
+
+
+            if ($discount = 0) {
+
+                $_SESSION['discount'] = $discount;
+                $Tempdiscount = ($discount / 100) * $subtotal;
+                $total = $subtotal - $Tempdiscount;
+            } else if (isset($_SESSION['discount'])) {
+                $discount = $_SESSION['discount'];
+                $Tempdiscount = ($discount / 100) * $subtotal;
+                $total = $subtotal - $Tempdiscount;
+                
+            } else {
+                $discount = 0;
+                $total = $subtotal;
+            }
+
+            echo '
+            <section>
+                <li>Subtotal</li>
+                <li>₱' . $subtotal . '</li>
+            </section>
+            <section>
+                <li>Discount (%)</li>
+                <li>' . $discount . '</li>
+            </section>
+            <section>
+                <li>Total Amount</li>
+                <li>₱' . $total . '</li>
+            </section>
+            
+            
+            ';
+
+        }
     }
 
 

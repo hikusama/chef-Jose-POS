@@ -203,14 +203,15 @@ body {
     /* font-variant: small-caps; */
 
 }
-.side_nav2d li{
+
+.side_nav2d li {
     animation-name: li_navs;
     animation-duration: .7s;
     animation-iteration-count: 1;
 }
 
 @keyframes li_navs {
-    0%{
+    0% {
         transform: translateX(-2rem) rotate(-5deg);
     }
 }
@@ -381,7 +382,8 @@ body {
     display: grid;
     grid-template-rows: 3rem 68% 26%;
 }
-.counting > *{
+
+.counting>* {
     height: 100% !important;
 }
 
@@ -862,10 +864,7 @@ img {
     align-items: center;
 }
 
-.totaling section:nth-child(1) {
-    align-items: end;
 
-}
 
 .totaling section select {
     height: 1.5rem;
@@ -878,23 +877,24 @@ img {
     height: fit-content;
 }
 
-.totaling section:nth-child(4) :nth-child(2) {
+.totaling section:nth-child(3) :nth-child(2) {
     font-size: 1.6rem;
 }
-.totaling section:nth-child(4){
+
+.totaling section:nth-child(3) {
     margin-top: .8rem;
     font-weight: 600;
     font-size: 1.3rem;
 }
 
-.totaling section:nth-child(5) {
+.totaling>*:nth-child(2) {
     display: flex;
     justify-content: center;
     gap: .5rem;
     margin-top: .5rem;
 }
 
-.totaling section:nth-child(5) button {
+.totaling>*:nth-child(2) button {
     cursor: pointer;
     height: 3rem;
     width: 40%;
@@ -903,12 +903,12 @@ img {
     color: white;
 }
 
-.totaling section:nth-child(5) #discount:hover {
+.totaling>*:nth-child(2) #discount:hover {
     background-color: #d4700bbb;
     transition: .3s;
 }
 
-.totaling section:nth-child(5) #proceed:hover {
+.totaling>*:nth-child(2) #proceed:hover {
     background-color: #a27c12c5;
     transition: .3s;
 }
@@ -937,20 +937,21 @@ img {
     top: 4.5rem;
     overflow: hidden;
     place-items: center;
-    transition: .9s ;
+    transition: .9s;
     animation-name: showNotif;
     animation-duration: .8s;
     animation-iteration-count: 1;
 }
-.notification i{
+
+.notification i {
     animation-name: on_notif;
     animation-duration: 1s;
     animation-iteration-count: infinite;
 }
 
 @keyframes on_notif {
- 50% {
-        transform:scale(1.13);
+    50% {
+        transform: scale(1.13);
     }
 }
 
@@ -985,6 +986,4 @@ img {
     height: 100%;
     background-color: rgb(0, 199, 0);
 }
-
-
 

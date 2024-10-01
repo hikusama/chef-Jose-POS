@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <link rel="stylesheet" href="resources/style.css">
-    <link rel="stylesheet" href="resources/products.css">
+    <link rel="stylesheet" href="resources/cashier.css">
     <link rel="stylesheet" href="resources/fontawesome-free-5.15.4-web/css/all.css">
     <script src="UX/jquery-3.5.1.min.js"></script>
     <!-- <script src="UX/products.js"></script> -->
@@ -25,133 +25,36 @@
             background-color: rgba(199, 199, 199, 0.624);
 
         }
-
-        .main-loader {
-            z-index: 2;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100dvh;
-            width: 100vw;
-            background-color: #181818;
-            /* opacity: 1;
-    background-image: linear-gradient(rgba(160, 160, 160, 0.26),4px,transparent 4px), 
-    linear-gradient(to right, rgba(165, 165, 165, 0.219) 4px , #181818 4px);
-    background-size: px px; */
-            position: fixed;
-
-        }
-
-        .center-things {
-            transform: translateY(-1rem) scale(1.3);
-            transition: .5s;
-            display: grid;
-            place-items: center;
-            gap: .8rem;
-        }
-
-        .main-loader #logo-load {
-            height: 7rem;
-
-        }
-
-        .loader-bar {
-            transform: translateY(19rem);
-            height: .7rem;
-            width: 1rem;
-            border-radius: 2rem;
-            border: solid 1px rgba(255, 255, 255, 0.192);
-            visibility: hidden;
-            transition: .7s;
-        }
-
-        .mubing {
-            height: 100%;
-            width: 1rem;
-            border-radius: 2rem;
-            background-color: rgb(255, 255, 255);
-            position: relative;
-            transition: .5s;
-            display: grid;
-            place-items: end;
-        }
-
-        .mubing .icun {
-            transform: translateY(-1.5rem);
-            font-size: 1rem;
-            background-color: white;
-            color: rgb(255, 104, 3);
-            top: -1rem;
-            height: 1.8rem;
-            border-radius: 50%;
-            display: grid;
-            place-items: center;
-            width: 1.8rem;
-            border: solid 1px gray;
-            position: relative;
-            transition: .5s;
-        }
-
-        .mubing .icun i {
-            z-index: 1;
-        }
-
-        .mubing .icun::after {
-
-            content: "";
-            position: absolute;
-            height: 1.3rem;
-            width: 1.3rem;
-            border-radius: 0 .8rem 0 .8rem;
-            background-color: white;
-            transform: rotate(45deg) translate(50%, 50%);
-            bottom: .8rem;
-        }
     </style>
 
     <title>Document</title>
 </head>
 
 <body>
-    <!-- <button id="addCategory">add</button>
-    <div class="categoryForm-outer">
+    <div class="discount-form-cont">
 
-        <div id="categoryForm">
-            <div class="uiInfo">
-                <p></p>
-                <h3>Add Category</h3>
-                <p></p>
-            </div>
-            <button id="cancelAddCat"><i class="fas fa-plus" style="transform: rotate(45deg);"></i></button>
-            <form id="category">
+        <div class="discount-form">
+            <section>
                 <li>
-                    <i class="fas fa-book"></i>
-                    <input type="text" placeholder="Category" name="category">
-                    <p>Category</p>
+                    <input type="number" id="discount">
+                    <p>Discount (%)</p>
                 </li>
-                <button id="submitCategory" type="button"><i class="fas fa-plus"></i>Add Category</button>
-            </form>
-            <div class="category-response">
-                <li>error asdsald agf</li>
-                <li>error asdsald agf</li>
-                <li>error asdsald agf</li>
-            </div>
+            </section>
+            <section>
+                <li>
+                    <p>Discount Type</p>
+                    <input type="text" id="discountType">
+                </li>
+                <li>
+                    <p>Discount Type options</p>
+                    <select id="discountOpt">
+                        <option value="">Type</option>
+                        <option value="senior cetizens">Senior cetizens</option>
+                        <option value="PWD">PWD</option>
+                    </select>
+                </li>
+            </section>
         </div>
-    </div>
-    <a href="" target="_blank"></a> -->
-    <div class="main-loader">
-        <div class="center-things">
-            <img src="image/logo.png" id="logo-load" alt="">
-            <div class="loader-bar">
-                <div class="mubing">
-                    <div class="icun">
-                        <i class="fas fa-hat"></i>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="myproducts">
     </div>
 </body>
 
