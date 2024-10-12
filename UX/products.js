@@ -6,6 +6,7 @@
 $(document).ready(function () {
     addPorm = $("#addProductForm").detach();
     addCat = $(".categoryForm-outer").detach();
+    let comboAdd = $(".comboAdd-form-cont").detach();
 
     // $(".myproducts").detach(addPorm);
     $("#addProductForm").detach();
@@ -14,9 +15,45 @@ $(document).ready(function () {
     allProducts("");
 
     open_Insertion = true;
-
+    let findPr
+    let viewSel
     let interval = "";
 
+
+    clickedFnd = false
+    $(".myproducts").on("click", "#addRm-combo", function (e) {
+        e.preventDefault();
+        if (!clickedFnd) {
+            $(this).html(`<i class="fas fa-eye"></i>View selected`)
+            console.log(1);
+            clickedFnd = true
+            $(viewSel).detach()
+            $(".action-products").append(findPr)
+
+        } else {
+            $(findPr).detach()
+            $(".action-products").append(viewSel)
+            console.log(2);
+            clickedFnd = false
+            $(this).html(`<i class="fas fa-search"></i>Find producs`)
+        }
+    });
+
+    $("#addCombo").click(function (e) {
+        e.preventDefault();
+        $("#overlay_prod").show();
+        $(".myproducts").append(comboAdd)
+        $(".comboAdd-form-cont").show();
+
+        findPr = $("#findProdController").detach();
+        viewSel = $("#viewSel").detach();
+        $(".action-products").append(viewSel)
+        $(".action-products-outer").show();
+    });
+    $(".myproducts").on("click", ".exit", function () {
+        $(comboAdd).detach()
+        $("#overlay_prod").hide();
+    });
     $("#addProduct").click(function (e) {
         e.preventDefault();
         if (open_Insertion) {

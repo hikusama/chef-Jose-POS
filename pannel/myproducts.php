@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="../resources/style.css">
     <link rel="stylesheet" href="../resources/products.css">
     <script src="../UX/jquery-3.5.1.min.js"></script>
-    <script  src="../UX/products.js"></script>
+    <script src="../UX/products.js"></script>
     <script src="../UX/script.js"></script>
 
     <title>POS</title>
@@ -86,6 +86,9 @@
                             <button type="button" id="addProduct" title="Add Product">
                                 <i class="fas fa-plus"></i>Add Product
                             </button>
+                            <button type="button" id="addCombo" title="Add Combo">
+                                <i class="fas fa-plus"></i>Add Combo
+                            </button>
                             <button type="button" id="addCategory" title="Add Category">
                                 <i class="fas fa-plus"></i>Add Category
                             </button>
@@ -108,13 +111,13 @@
                                         <p class="dp"></p>
                                         <div class="desc"></div>
 
-                                        
+
                                     </div>
                                     <div>
                                         <p class="dp"></p>
                                         <div class="desc"></div>
 
-                                        
+
                                     </div>
                                     <div>
                                         <p class="dp"></p>
@@ -254,7 +257,116 @@
                         </div>
                     </div>
                 </div>
+                <div class="comboAdd-form-cont">
+                    <div class="comboAdd-form-inner">
+                        <div class="exit">
+                            <i class="fas fa-plus"></i>
+                        </div>
+                        <form id="addComboForm">
+                            <section>
+                                <div class="img-wrap-out">
 
+                                    <div class="image-wrap">
+                                        <img src="image/dpTemplate.png" id="comboDP" alt="">
+                                    </div>
+                                    <div>
+                                        <i class="fas fa-plus"></i>
+                                    </div>
+                                </div>
+                            </section>
+                            <section>
+                                <ol>
+                                    <input type="text" placeholder="Combo name..." id="comboName">
+                                    <p>Combo name</p>
+                                </ol>
+                                <ol>
+                                    <li>
+                                        <input type="number" placeholder="Price..." id="comboPrice">
+                                        <p>Price</p>
+                                    </li>
+                                    <li>
+                                        <h3>₱1,850</h3>
+                                        <p>Products in Total</p>
+                                    </li>
+                                    <li>
+                                        <h3>10</h3>
+                                        <p>Item/s</p>
+                                    </li>
+                                </ol>
+                            </section>
+                        </form>
+                        <div class="outer-response">
+                            <section>
+                                <div class="action-products-outer">
+
+                                    <div class="action-products">
+                                        <div id="viewSel">
+
+                                            <h3>Products selected</h3>
+                                            <div class="data-products">
+
+                                                <ol>
+                                                    <li>
+                                                        <div>
+                                                            <img src="image/sample.png" alt="">
+                                                        </div>
+                                                    </li>
+                                                    <li>
+                                                        <p>Beef patty (medium)</p>
+                                                    </li>
+                                                    <li>
+                                                        <div class="action-combo" id="">
+                                                            <i class="fas fa-minus" style="color: rgb(241, 86, 65);"></i>
+                                                        </div>
+                                                    </li>
+                                                </ol>
+                                            </div>
+                                        </div>
+
+                                        <div id="findProdController">
+
+                                            <h3>Find to add</h3>
+                                            <div class="find-prod">
+                                                <li>
+                                                    <i class="fas fa-search"></i>
+                                                    <input type="search" id="findProdInput" autocomplete="off"
+                                                        placeholder="Search for products or category..">
+                                                </li>
+                                            </div>
+                                            <div class="data-products">
+
+                                                <ol>
+                                                    <li>
+                                                        <div>
+                                                            <img src="image/sample.png" alt="">
+                                                        </div>
+                                                    </li>
+                                                    <li>
+                                                        <p>Beef patty (medium)</p>
+                                                    </li>
+                                                    <li>
+                                                        <div class="action-combo" id="">
+                                                            <i class="fas fa-plus" style="color: rgb(107, 252, 107);"></i>
+                                                        </div>
+                                                    </li>
+                                                </ol>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>
+                            <section>
+                                <div class="combo-main-action">
+                                    <button id="addRm-combo" type="button"> <i class="fas fa-search"></i>Find producs</button>
+                                    <button id="submit-combo form" type="button"><i class="fas fa-plus"></i>Submit</button>
+                                </div>
+                                <div class="combo-response">
+                                    ngiao error
+                                </div>
+                            </section>
+                        </div>
+                    </div>
+                </div>
                 <div id="addProductForm">
                     <form id="submit_form" enctype="multipart/form-data">
                         <div class="label_style">
