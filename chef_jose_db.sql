@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 29, 2024 at 06:14 PM
+-- Generation Time: Oct 11, 2024 at 05:29 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -96,11 +96,33 @@ CREATE TABLE `employees` (
 --
 
 CREATE TABLE `orderitems` (
-  `orderID` int(11) DEFAULT NULL,
+  `orderItemId` int(11) NOT NULL,
   `productID` int(11) DEFAULT NULL,
-  `quantity` text DEFAULT NULL,
-  `Unitprice` int(11) DEFAULT NULL
+  `quantity` int(11) DEFAULT NULL,
+  `unitPrice` int(11) DEFAULT NULL,
+  `ref_no` int(25) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `orderitems`
+--
+
+INSERT INTO `orderitems` (`orderItemId`, `productID`, `quantity`, `unitPrice`, `ref_no`) VALUES
+(1, 30, 1, 299, 11067081),
+(2, 29, 1, 105, 11067081),
+(3, 34, 1, 48, 11067081),
+(4, 35, 1, 59, 11067081),
+(5, 33, 1, 30, 11067081),
+(6, 28, 1, 80, 11067081),
+(7, 27, 1, 45, 11067081),
+(8, 32, 1, 150, 11067081),
+(9, 31, 1, 45, 11067081),
+(39, 34, 2, 96, 210670823),
+(40, 32, 2, 300, 210670823),
+(41, 33, 1, 30, 210670823),
+(42, 35, 1, 59, 210670823),
+(43, 34, 1, 48, 2106708240),
+(44, 35, 1, 59, 2106708240);
 
 -- --------------------------------------------------------
 
@@ -110,13 +132,25 @@ CREATE TABLE `orderitems` (
 
 CREATE TABLE `orders` (
   `orderID` int(11) NOT NULL,
-  `orderDate` datetime DEFAULT NULL,
+  `orderDate` datetime DEFAULT current_timestamp(),
   `employeeID` int(11) DEFAULT NULL,
   `totalAmount` double DEFAULT NULL,
-  `paymentMethod` text DEFAULT NULL,
-  `discountType` varchar(250) DEFAULT NULL,
-  `discount` int(11) DEFAULT NULL
+  `paymentMethod` varchar(100) DEFAULT 'Cash',
+  `gcashAccountName` varchar(50) DEFAULT '-----',
+  `gcashAccountNo` varchar(50) DEFAULT '-----',
+  `discountType` varchar(50) DEFAULT '-----',
+  `discount` varchar(10) DEFAULT '-----',
+  `ref_no` int(25) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `orders`
+--
+
+INSERT INTO `orders` (`orderID`, `orderDate`, `employeeID`, `totalAmount`, `paymentMethod`, `discountType`, `discount`, `ref_no`) VALUES
+(1, '2024-10-11 02:20:57', NULL, 861, 'Cash', '-----', '-----', 11067081),
+(7, '2024-10-11 02:57:41', NULL, 242.5, 'Cash', 'PWD', '50', 210670823),
+(8, '2024-10-11 02:59:27', NULL, 21.4, 'Cash', 'PWD', '80', 2106708240);
 
 -- --------------------------------------------------------
 
@@ -209,15 +243,17 @@ ALTER TABLE `employees`
 -- Indexes for table `orderitems`
 --
 ALTER TABLE `orderitems`
+  ADD PRIMARY KEY (`orderItemId`),
   ADD KEY `productID` (`productID`),
-  ADD KEY `orderID` (`orderID`);
+  ADD KEY `ref_no` (`ref_no`);
 
 --
 -- Indexes for table `orders`
 --
 ALTER TABLE `orders`
   ADD PRIMARY KEY (`orderID`),
-  ADD KEY `employeeID` (`employeeID`);
+  ADD KEY `employeeID` (`employeeID`),
+  ADD KEY `ref_ibfk` (`ref_no`);
 
 --
 -- Indexes for table `products`
@@ -256,10 +292,16 @@ ALTER TABLE `employees`
   MODIFY `employeeID` int(11) NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT for table `orderitems`
+--
+ALTER TABLE `orderitems`
+  MODIFY `orderItemId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=45;
+
+--
 -- AUTO_INCREMENT for table `orders`
 --
 ALTER TABLE `orders`
-  MODIFY `orderID` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `orderID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `products`
@@ -293,14 +335,14 @@ ALTER TABLE `combo`
 -- Constraints for table `orderitems`
 --
 ALTER TABLE `orderitems`
-  ADD CONSTRAINT `orderitems_ibfk_1` FOREIGN KEY (`productID`) REFERENCES `products` (`productID`),
-  ADD CONSTRAINT `orderitems_ibfk_2` FOREIGN KEY (`orderID`) REFERENCES `orders` (`orderID`);
+  ADD CONSTRAINT `orderitems_ibfk_1` FOREIGN KEY (`productID`) REFERENCES `products` (`productID`);
 
 --
 -- Constraints for table `orders`
 --
 ALTER TABLE `orders`
-  ADD CONSTRAINT `orders_ibfk_1` FOREIGN KEY (`employeeID`) REFERENCES `employees` (`employeeID`);
+  ADD CONSTRAINT `orders_ibfk_1` FOREIGN KEY (`employeeID`) REFERENCES `employees` (`employeeID`) ON DELETE SET NULL,
+  ADD CONSTRAINT `ref_ibfk` FOREIGN KEY (`ref_no`) REFERENCES `orderitems` (`ref_no`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `products`

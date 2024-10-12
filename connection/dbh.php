@@ -4,8 +4,7 @@ class Connection {
   private $host = 'localhost';
   private $user = 'root';
   private $pass = '';
-  private $dbname = 'chef_jose_db'; // Correct the database name
-
+  private $dbname = 'chef_jose_db'; 
   protected function connect() {
       try {
           $dsn = "mysql:host=" . $this->host . ";dbname=" . $this->dbname;

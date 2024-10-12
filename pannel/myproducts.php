@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="../resources/style.css">
     <link rel="stylesheet" href="../resources/products.css">
     <script src="../UX/jquery-3.5.1.min.js"></script>
-    <script src="../UX/products.js"></script>
+    <script  src="../UX/products.js"></script>
     <script src="../UX/script.js"></script>
 
     <title>POS</title>

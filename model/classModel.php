@@ -174,10 +174,8 @@
             if (!empty($product_name)) {
                 if (empty($category)) {
                     $sql .= " WHERE products.name LIKE :product_name GROUP BY products.productID";
-                    
-                }else{
+                } else {
                     $sql .= " AND products.name LIKE :product_name GROUP BY products.productID";
-
                 }
             }
 
@@ -232,6 +230,64 @@
                 return $rows;
             } else {
                 return null;
+            }
+        }
+
+
+        public function insertOrders($orders)
+        {
+
+            $stmt = $this->connect()->prepare("INSERT INTO orderitems (productID,quantity,unitPrice,ref_no) 
+            VALUES (?, ?, ?, ?)");
+
+            $ngiao = 0;
+            foreach ($orders as $order) {
+                // $stmt->bindParam("iiii",);
+                if ($stmt->execute([$order['product_id'], $order['qntity'], $order['price'], (int)$order['refNo']])) {
+                } else {
+                    $ngiao = $ngiao + 1;
+                }
+            }
+            if ($ngiao > 0) {
+                return false;
+            } else {
+                $this->insertSumOrders($orders[0]['totalAmount'], $orders[0]['discount'], $orders[0]['discountType'],$orders[0]['refNo']);
+            }
+        }
+
+        public function insertSumOrders($totalAmount, $discount, $discountType,$refNo)
+        {
+            
+
+            $stmt = $this->connect()->prepare("INSERT INTO orders (totalAmount,discount,discountType,ref_no) 
+            VALUES (?, ?, ?, ?)");
+
+
+
+            if ($stmt->execute([$totalAmount, $discount, $discountType,$refNo])) {
+            } else {
+                return false;
+            }
+        }
+
+
+        function getOrderItemsLastId(): int
+        {
+            $sql = "SELECT orderID FROM orders ORDER BY orderID DESC LIMIT 1";
+            $stmt = $this->connect()->prepare($sql);
+            $stmt->execute();
+
+            if ($stmt->rowCount() == 0) {
+                $sql2 = "TRUNCATE TABLE orders";
+                $stmt2 = $this->connect()->prepare($sql2);
+                $stmt2->execute();
+                if ($stmt2->execute()) {
+                    return 1;
+                }
+            } else {
+                $row =  $stmt->fetch(PDO::FETCH_ASSOC);
+                $num = intval($row['orderID']);
+                return $num + 1;
             }
         }
     }

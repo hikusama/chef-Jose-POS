@@ -11,7 +11,7 @@ class cashierController extends Model
     private $product_name;
     private $product_id;
 
-    public function __construct($orders,$product_name,$product_id)
+    public function __construct($orders, $product_name, $product_id)
     {
         $this->orders = $orders;
         $this->product_name = $product_name;
@@ -20,7 +20,7 @@ class cashierController extends Model
 
     public function getAllProducts($category)
     {
-        return $this->getAllProductss($this->product_name,$category);
+        return $this->getAllProductss($this->product_name, $category);
     }
 
     public function addToCart()
@@ -28,6 +28,15 @@ class cashierController extends Model
 
         return $this->itemsForAddToCart($this->product_id);
     }
+
+    public function getRefNo():int {
+        return $this->getOrderItemsLastId();
+    }
+    public function submitOrders()
+    {
+        $this->insertOrders($this->orders);
+    }
+
 
 
     public function getAllCategory()

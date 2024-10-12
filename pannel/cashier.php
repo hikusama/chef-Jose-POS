@@ -6,11 +6,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../resources/fontawesome-free-5.15.4-web/css/all.css">
 
-    <link rel="stylesheet" href="../resources/style.css">
-    <link rel="stylesheet" href="../resources/cashier.css">
     <script src="../UX/jquery-3.5.1.min.js"></script>
     <script src="../UX/cashier.js"></script>
     <script src="../UX/script.js"></script>
+    <link rel="stylesheet" href="../resources/style.css">
+    <link rel="stylesheet" href="../resources/cashier.css">
     <title>POS</title>
 </head>
 
@@ -88,6 +88,29 @@
                     </ol> -->
 
                 </div>
+                <div class="pay-cont">
+                    <div>
+
+                        <form id="pay">
+                            <h2>Tender</h2>
+                            <select name="pmethod" id="pmethod">
+                                <option value="Cash">Cash</option>
+                                <option value="G-Cash">G-Cash</option>
+                            </select>
+                            <input type="text" placeholder="G-Cash account name.." id="gcashName" name="gcashName"> 
+                            <input type="number" placeholder="G-Cash account number.." id="gcashNum" name="gcashNum"> 
+                            <input type="number" placeholder="Tender amount.." name="money" id="CMmoney">
+                            <div class="actionPay">
+                                <button type="button" id="cancCM">Cancel</button>
+                                <button type="submit" id="pay_orders">Pay</button>
+                            </div>
+                        </form>
+                        <div class="response">
+                        </div>
+                    </div>
+                </div>
+
+
             </div>
             <div class="counting">
                 <!-- <div class="counting_header"></div> -->
@@ -129,32 +152,7 @@
             </div>
             <div class="discount-form-cont">
 
-                <div class="discount-form">
-                    <section>
-                        <li>
-                            <input type="number" id="discount">
-                            <p>Discount (%)</p>
-                        </li>
-                    </section>
-                    <section>
-                        <li>
-                            <p>Discount Type</p>
-                            <input type="text" id="discountType">
-                        </li>
-                        <li>
-                            <p>Discount Type options</p>
-                            <select id="discountOpt">
-                                <option class="type" value="">Type</option>
-                                <option class="type" value="senior cetizens">Senior cetizens</option>
-                                <option class="type" value="PWD">PWD</option>
-                            </select>
-                        </li>
-                    </section>
-                    <section class="last_dd">
-                        <button id="cancelD">Cancel</button>
-                        <button id="apply">Apply</button>
-                    </section>
-                </div>
+
             </div>
             <div id="overlay_cashier"></div>
 
