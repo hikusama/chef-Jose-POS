@@ -251,20 +251,20 @@
             if ($ngiao > 0) {
                 return false;
             } else {
-                $this->insertSumOrders($orders[0]['totalAmount'], $orders[0]['discount'], $orders[0]['discountType'],$orders[0]['refNo']);
+                $this->insertSumOrders($orders[0]['totalAmount'], $orders[0]['discount'], $orders[0]['discountType'],$orders[0]['refNo'],$orders[0]['pmethod'],$orders[0]['gcashName'],$orders[0]['gcashNum']);
             }
         }
 
-        public function insertSumOrders($totalAmount, $discount, $discountType,$refNo)
+        public function insertSumOrders($totalAmount, $discount, $discountType,$refNo,$pmethod,$gcashName,$gcashNum)
         {
             
 
-            $stmt = $this->connect()->prepare("INSERT INTO orders (totalAmount,discount,discountType,ref_no) 
-            VALUES (?, ?, ?, ?)");
+            $stmt = $this->connect()->prepare("INSERT INTO orders (totalAmount,discount,discountType,ref_no,paymentMethod,gcashAccountName,gcashAccountNo)
+            VALUES (?, ?, ?, ?, ?, ?, ?)");
 
 
 
-            if ($stmt->execute([$totalAmount, $discount, $discountType,$refNo])) {
+            if ($stmt->execute([$totalAmount, $discount, $discountType,$refNo,$pmethod,$gcashName,$gcashNum])) {
             } else {
                 return false;
             }

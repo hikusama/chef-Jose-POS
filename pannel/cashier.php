@@ -71,7 +71,7 @@
 
                     <div class="category_nav">
                         <div class="category_nav_inner">
-
+                            <li class="" id="cmb">Combo's</li>
                             <li class="prod_nav">All</li>
 
                         </div>
@@ -97,7 +97,7 @@
                                 <option value="Cash">Cash</option>
                                 <option value="G-Cash">G-Cash</option>
                             </select>
-                            <input type="text" placeholder="G-Cash account name.." id="gcashName" name="gcashName"> 
+                            <input type="text" placeholder="G-Cash account name.." id="gcashName" autocomplete="off" name="gcashName"> 
                             <input type="number" placeholder="G-Cash account number.." id="gcashNum" name="gcashNum"> 
                             <input type="number" placeholder="Tender amount.." name="money" id="CMmoney">
                             <div class="actionPay">

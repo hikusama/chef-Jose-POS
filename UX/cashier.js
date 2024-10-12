@@ -130,6 +130,7 @@ $(document).ready(function () {
 
                 } else {
                     $('.pay-cont input').val('');
+                    $(".response").html('<p style="white-space:nowrap; color:green;font-size: 1.1rem;" class="errorText">Success..</p>');
                     $('.pay-cont').hide();
                     window.open("printPage", "blank")
 

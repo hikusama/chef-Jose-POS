@@ -220,6 +220,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $pdoTemp = new cashierController(null, null, null);
         $categories = $pdoTemp->getAllCategory();
 
+        echo '<li class="" id="cmb">Combo\'s</li>';
         echo '<li class="prod_nav" id="">All</li>';
         if ($categories) {
 
@@ -626,7 +627,7 @@ function dpCart($ordersSession)
         }
     }
 }
-function submitOrders($refNo, $totalAmount)
+function submitOrders($refNo, $totalAmount, $pmethod,$gcashName,$gcashNum)
 {
     // session_start();
 
@@ -638,6 +639,7 @@ function submitOrders($refNo, $totalAmount)
             $discount = $_SESSION['discount'];
             $discountType = $_SESSION['discountType'];
         }
+
 
 
         $orderList = [];
@@ -654,6 +656,9 @@ function submitOrders($refNo, $totalAmount)
                 "discount" => $discount,
                 "discountType" => $discountType,
                 "totalAmount" => $totalAmount,
+                "pmethod" => $pmethod,
+                "gcashName" => $gcashName,
+                "gcashNum" => $gcashNum,
             ];
         }
 
