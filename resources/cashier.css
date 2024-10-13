@@ -384,7 +384,9 @@ text-align: start;
     z-index: 2;
 }
  
-
+.category_nav_new{
+    height: fit-content;
+}
 .monokai_mode #gcashNum,
 .monokai_mode #pmethod,
 .dark_mode #gcashNum,

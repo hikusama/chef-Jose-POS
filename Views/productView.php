@@ -65,11 +65,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
         // CATEGORY ADD
 
-    } 
-    
+    }
+
 
     // CATEGORY ADD
-    
+
     if (isset($_POST['transac']) && $_POST['transac'] == "addCategory") {
 
 
@@ -103,11 +103,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
         // PRODUCT EDIT
 
-    } 
-    
+    }
+
 
     // PRODUCT EDIT
-    
+
     if (isset($_POST['transac']) && $_POST['transac'] == "editProd") {
 
         $update = new ProductController(null, $product_name, $category_name, $price, $quantity, $product_image, null);
@@ -118,9 +118,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
         // PRODUCT VIEW INFO
 
-    } 
-    
-    
+    }
+
+
     // VIEW PROD INFO
 
     if (isset($_POST['transac']) && $_POST['transac'] == "viewProd_info") {
@@ -132,11 +132,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
         // GET CATEGORY
 
-    } 
-    
-    
+    }
+
+
     // CATEGORY GET
-    
+
     if (isset($_POST['transac']) && $_POST['transac'] == "getCategory") {
         $getCategory = new ProductController(null, null, null, null, null, null, null);
 
@@ -158,11 +158,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
         // PRODUCT DELETE
 
-    } 
-    
-    
+    }
+
+
     // PRODUCT REMOVE
-    
+
     if (isset($_POST['transac']) && $_POST['transac'] == "removeProd") {
 
         $product_id = htmlspecialchars(strip_tags($_POST['product_id']));
@@ -179,11 +179,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
         // GET PRODUCT
 
-    } 
-    
-    
+    }
+
+
     // PRODUCTS SHOW/SEARCH
-    
+
     if (isset($_POST['transac']) && $_POST['transac'] == "showSearchProd") {
 
 
@@ -236,8 +236,77 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         }
     }
 
-    
+
+
+    // PRODUCTS COMBO ADD SHOW/SEARCH
+
+    if (isset($_POST['transac']) && $_POST['transac'] == "comboSectionShowSearchProd") {
+        $product_name = htmlspecialchars(strip_tags($_POST['name']));
 
 
 
+
+        $searchShow = new ProductController(null, $product_name, null, null, null, null, null);
+        $rows = $searchShow->getProdSearch();
+
+
+        if ($rows) {
+            echo '
+            <div class="loadingScComboForm-outer">
+                <div class="loadingScComboForm">
+                    <ol>
+                        <li>
+                            <div>
+
+                            </div>
+                        </li>
+                        <li>
+
+                        </li>
+                    </ol>
+                    <ol>
+                        <li>
+                            <div>
+
+                            </div>
+                        </li>
+                        <li>
+
+                        </li>
+                    </ol>
+                    <ol>
+                        <li>
+                            <div>
+
+                            </div>
+                        </li>
+                        <li>
+
+                        </li>
+                    </ol>
+                </div>
+            </div>        
+    ';
+            foreach ($rows as $row) {
+                echo '
+                <ol>
+                    <li>
+                        <div>
+                            <img src="data:image/jpeg;base64, ' . base64_encode($row['displayPic']) . ' " alt="">
+                        </div>
+                    </li>
+                    <li>
+                        <p>' . $row['name'] . '</p>
+                    </li>
+                    <li>
+                        <div class="action-combo" id="' . $row['productID'] . '">
+                            <i class="fas fa-plus" style="color: rgb(107, 252, 107);"></i>                        
+                        </div>
+                    </li>
+                </ol>';
+            }
+        } else {
+            echo "No products..";
+        }
+    }
 }

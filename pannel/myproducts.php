@@ -303,8 +303,42 @@
                                         <div id="viewSel">
 
                                             <h3>Products selected</h3>
-                                            <div class="data-products">
+                                            <div class="data-products-selected">
+                                                <div class="loadingScComboForm-outer">
 
+                                                    <div class="loadingScComboForm">
+                                                        <ol>
+                                                            <li>
+                                                                <div>
+
+                                                                </div>
+                                                            </li>
+                                                            <li>
+
+                                                            </li>
+                                                        </ol>
+                                                        <ol>
+                                                            <li>
+                                                                <div>
+
+                                                                </div>
+                                                            </li>
+                                                            <li>
+
+                                                            </li>
+                                                        </ol>
+                                                        <ol>
+                                                            <li>
+                                                                <div>
+
+                                                                </div>
+                                                            </li>
+                                                            <li>
+
+                                                            </li>
+                                                        </ol>
+                                                    </div>
+                                                </div>
                                                 <ol>
                                                     <li>
                                                         <div>
@@ -334,7 +368,41 @@
                                                 </li>
                                             </div>
                                             <div class="data-products">
+                                                <div class="loadingScComboForm-outer">
 
+                                                    <div class="loadingScComboForm">
+                                                        <ol>
+                                                            <li>
+                                                                <div>
+
+                                                                </div>
+                                                            </li>
+                                                            <li>
+
+                                                            </li>
+                                                        </ol>
+                                                        <ol>
+                                                            <li>
+                                                                <div>
+
+                                                                </div>
+                                                            </li>
+                                                            <li>
+
+                                                            </li>
+                                                        </ol>
+                                                        <ol>
+                                                            <li>
+                                                                <div>
+
+                                                                </div>
+                                                            </li>
+                                                            <li>
+
+                                                            </li>
+                                                        </ol>
+                                                    </div>
+                                                </div>
                                                 <ol>
                                                     <li>
                                                         <div>

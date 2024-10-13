@@ -19,36 +19,63 @@ $(document).ready(function () {
     let viewSel
     let interval = "";
 
+    
+    $(".myproducts").on("input", "#findProdInput", function (e) {
+        e.preventDefault()
+        comboShowProd($(this).val())
 
-    clickedFnd = false
+
+
+    });
+
+    let clickedFnd = false
     $(".myproducts").on("click", "#addRm-combo", function (e) {
         e.preventDefault();
+
         if (!clickedFnd) {
             $(this).html(`<i class="fas fa-eye"></i>View selected`)
             console.log(1);
             clickedFnd = true
             $(viewSel).detach()
             $(".action-products").append(findPr)
-
+            comboShowProd("")
         } else {
             $(findPr).detach()
             $(".action-products").append(viewSel)
             console.log(2);
             clickedFnd = false
             $(this).html(`<i class="fas fa-search"></i>Find producs`)
+            // $(".data-products ol").removeClass("new-data-products");
+            $('.data-products').html("");
+            
+
         }
     });
-
+    let norun = true
     $("#addCombo").click(function (e) {
         e.preventDefault();
         $("#overlay_prod").show();
         $(".myproducts").append(comboAdd)
-        $(".comboAdd-form-cont").show();
 
-        findPr = $("#findProdController").detach();
-        viewSel = $("#viewSel").detach();
-        $(".action-products").append(viewSel)
+        $(".comboAdd-form-cont").show();
+        if (norun == true) {
+            findPr = $("#findProdController").detach();
+            viewSel = $("#viewSel").detach();
+            norun = false
+        }
+        if (clickedFnd) {
+            $(viewSel).detach()
+            $(".action-products").append(findPr)
+        } else {
+            $(findPr).detach()
+            $(".action-products").append(viewSel)
+        }
+
         $(".action-products-outer").show();
+        loadScCombo("sh")
+        setTimeout(() => {
+            loadScCombo("rm")
+        }, 500);
     });
     $(".myproducts").on("click", ".exit", function () {
         $(comboAdd).detach()
@@ -286,8 +313,59 @@ $(document).ready(function () {
 });
 
 
+function loadScCombo(action) {
 
-// let loading_sc = "ngiao"; 
+    if (action == "sh") {
+        $(".loadingScComboForm").removeClass("newLoadingScComboForm");
+        $(".loadingScComboForm, .data-products").css("height", "10rem");
+    } else {
+        $(".loadingScComboForm").addClass("newLoadingScComboForm");
+        $(".loadingScComboForm, .data-products").css("height", "fit-content");
+    }
+
+}
+
+function comboShowProd(search) {
+    loadScCombo("sh")
+
+    formData = new FormData()
+    formData.append("transac", "comboSectionShowSearchProd")
+    formData.append("name", search)
+
+
+
+    $.ajax({
+        url: '../views/productView.php',
+        method: 'POST',
+        data: formData,
+        contentType: false,
+        processData: false,
+        success: function (response) {
+            $('.data-products').html(response);
+            // $(".data-products ol").addClass("new-data-products");
+
+            // $(".loading_sc").parent().css("overflow-y", "hidden");
+            // setTimeout(() => {
+            //     $(".data-products ol").each(function (index) {
+            //         if (index > 1) {
+            //             $(this).delay(index * 100).fadeIn(200);   
+            //         }
+            //     });
+            //     // $(".loading_sc").parent().css("overflow-y", "scroll");
+            // }, 1500);
+
+        }, complete: function () {
+            setTimeout(() => {
+                loadScCombo("rm")
+            }, 500);
+            $(".data-products ol").addClass("new-data-products");
+        }
+    });
+}
+
+
+
+
 
 function allProducts(searchArg) {
     // hasClass = $("#content_products").children().hasClass("loading_sc");

@@ -336,11 +336,12 @@ $(document).ready(function () {
         if (rotatedimg == false) {
             $("#allcategory_open img").css("transform", "rotate(90deg)")
             $("#allcategory_open img").css("transition", ".3s")
+            $(".category_nav").css("height", "fit-content")
             $(".category_nav_inner").addClass("category_nav_new");
             rotatedimg = true;
 
         } else {
-
+            $(".category_nav").css("height", "3.25rem")
             $("#allcategory_open img").css("transform", "rotate(0)")
             $(".category_nav_inner").removeClass("category_nav_new");
             rotatedimg = false;
