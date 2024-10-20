@@ -7,11 +7,11 @@ include '../Controller/productController.php';
 
 
 
-if ($_SERVER["REQUEST_METHOD"] === "POST") {
+if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['transac'])) {
 
     // PRODUCT ADD
 
-    if (isset($_POST['transac']) && $_POST['transac'] == "addProd") {
+    if ($_POST['transac'] == "addProd") {
         $errors = [];
 
         $product_name = htmlspecialchars(strip_tags($_POST['name']));
@@ -70,7 +70,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     // CATEGORY ADD
 
-    if (isset($_POST['transac']) && $_POST['transac'] == "addCategory") {
+    if ($_POST['transac'] == "addCategory") {
 
 
         $errors = [];
@@ -108,7 +108,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     // PRODUCT EDIT
 
-    if (isset($_POST['transac']) && $_POST['transac'] == "editProd") {
+    if ($_POST['transac'] == "editProd") {
 
         $update = new ProductController(null, $product_name, $category_name, $price, $quantity, $product_image, null);
 
@@ -123,7 +123,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     // VIEW PROD INFO
 
-    if (isset($_POST['transac']) && $_POST['transac'] == "viewProd_info") {
+    if ($_POST['transac'] == "viewProd_info") {
 
 
 
@@ -137,7 +137,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     // CATEGORY GET
 
-    if (isset($_POST['transac']) && $_POST['transac'] == "getCategory") {
+    if ($_POST['transac'] == "getCategory") {
         $getCategory = new ProductController(null, null, null, null, null, null, null);
 
         $rowsCat = $getCategory->getCat();
@@ -163,7 +163,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     // PRODUCT REMOVE
 
-    if (isset($_POST['transac']) && $_POST['transac'] == "removeProd") {
+    if ($_POST['transac'] == "removeProd") {
 
         $product_id = htmlspecialchars(strip_tags($_POST['product_id']));
 
@@ -184,7 +184,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     // PRODUCTS SHOW/SEARCH
 
-    if (isset($_POST['transac']) && $_POST['transac'] == "showSearchProd") {
+    if ($_POST['transac'] == "showSearchProd") {
 
 
         $product_name = htmlspecialchars(strip_tags($_POST['name']));
@@ -240,14 +240,14 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     // PRODUCTS COMBO ADD SHOW/SEARCH
 
-    if (isset($_POST['transac']) && $_POST['transac'] == "comboSectionShowSearchProd") {
+    if ($_POST['transac'] == "comboSectionShowSearchProd") {
         $product_name = htmlspecialchars(strip_tags($_POST['name']));
 
 
 
 
         $searchShow = new ProductController(null, $product_name, null, null, null, null, null);
-        $rows = $searchShow->getProdSearch();
+        $rows = $searchShow->getProdSearchCombo();
 
 
         if ($rows) {
@@ -286,7 +286,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                     </ol>
                 </div>
             </div>        
-    ';
+            ';
             foreach ($rows as $row) {
                 echo '
                 <ol>
@@ -300,7 +300,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                     </li>
                     <li>
                         <div class="action-combo" id="' . $row['productID'] . '">
-                            <i class="fas fa-plus" style="color: rgb(107, 252, 107);"></i>                        
+                            <i class="fas fa-plus" id="selectProd" style="color: rgb(107, 252, 107);"></i>                        
                         </div>
                     </li>
                 </ol>';
@@ -308,5 +308,190 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         } else {
             echo "No products..";
         }
+    }
+
+
+
+
+
+
+
+
+
+    if ($_POST['transac'] == "selectProd") {
+        session_start();
+        $productID = htmlspecialchars(strip_tags($_POST['productID']));
+
+
+        if (empty($productID)) {
+            echo "Empty inputs";
+            return;
+        }
+        $combos = array();
+
+        if (isset($_SESSION['combos'])) {
+            $combos = $_SESSION['combos'];
+        }
+
+        array_push($combos, $product_id);
+
+        $_SESSION['combos'] = $combos;
+    }
+
+
+
+    if ($_POST['transac'] == "rmSelectedProd") {
+        session_start();
+        $productID = htmlspecialchars(strip_tags($_POST['productID']));
+
+
+        
+        if (empty($productID)) {
+            echo "Empty inputs";
+            return;
+        }
+        $combos = array();
+
+        if (isset($_SESSION['combos'])) {
+            $combos = $_SESSION['combos'];
+        }
+
+        $array_size = count($combos);
+
+        if ($array_size == 0) {
+            unset($_SESSION['combos']);
+            echo "No products..";
+            return;
+        }
+
+        foreach ($combos as $combo) {
+            if ($combo == $productID) {
+                unset($combo);
+                $combo = array_values($combo);
+                break;
+            }
+        }
+
+        $_SESSION['combos'] = $combos;
+        getSelected($combos);
+    }
+
+
+
+    if ($_POST['transac'] == "viewSelectedProd") {
+        $combos = array();
+
+        if (isset($_SESSION['combos'])) {
+            $combos = $_SESSION['combos'];
+        } else {
+            echo '            <div class="loadingScComboForm-outer">
+                <div class="loadingScComboForm">
+                    <ol>
+                        <li>
+                            <div>
+
+                            </div>
+                        </li>
+                        <li>
+
+                        </li>
+                    </ol>
+                    <ol>
+                        <li>
+                            <div>
+
+                            </div>
+                        </li>
+                        <li>
+
+                        </li>
+                    </ol>
+                    <ol>
+                        <li>
+                            <div>
+
+                            </div>
+                        </li>
+                        <li>
+
+                        </li>
+                    </ol>
+                </div>
+            </div> ';
+            echo "No selected products..";
+            return;
+        }
+        getSelected($combos);
+
+
+    }
+    
+    
+}
+
+function getSelected($comboIDSelected)
+{
+ 
+    $searchShow = new ProductController(null, $comboIDSelected, null, null, null, null, null);
+    $rows = $searchShow->getProdSearchComboByID();
+
+
+    if ($rows) {
+        echo '
+        <div class="loadingScComboForm-outer">
+            <div class="loadingScComboForm">
+                <ol>
+                    <li>
+                        <div>
+
+                        </div>
+                    </li>
+                    <li>
+
+                    </li>
+                </ol>
+                <ol>
+                    <li>
+                        <div>
+
+                        </div>
+                    </li>
+                    <li>
+
+                    </li>
+                </ol>
+                <ol>
+                    <li>
+                        <div>
+
+                        </div>
+                    </li>
+                    <li>
+
+                    </li>
+                </ol>
+            </div>
+        </div>        
+';
+        foreach ($rows as $row) {
+            echo '
+            <ol>
+                <li>
+                    <div>
+                        <img src="data:image/jpeg;base64, ' . base64_encode($row['displayPic']) . ' " alt="">
+                    </div>
+                </li>
+                <li>
+                    <p>' . $row['name'] . '</p>
+                </li>
+                <li>
+                    <div class="action-combo" id="' . $row['productID'] . '">
+                        <i class="fas fa-minus" id="rmSelectedCombo" style="color: rgb(241, 86, 65);"></i>                        
+                    </div>
+                </li>
+            </ol>';
+        }
+    } else {
+        echo "No selected products..";
     }
 }

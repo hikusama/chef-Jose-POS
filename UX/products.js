@@ -20,12 +20,21 @@ $(document).ready(function () {
     let interval = "";
 
     
+    $(".myproducts").on("click", "#selectProd", function (e) {
+        e.preventDefault()
+        prodIDSel = $(this).parent().attr('id')
+        selectProd(prodIDSel)
+        $(this).closest('ol').detach()
+
+
+
+
+
+
+    });
     $(".myproducts").on("input", "#findProdInput", function (e) {
         e.preventDefault()
         comboShowProd($(this).val())
-
-
-
     });
 
     let clickedFnd = false
@@ -42,6 +51,7 @@ $(document).ready(function () {
         } else {
             $(findPr).detach()
             $(".action-products").append(viewSel)
+            viewSelectedCombo();
             console.log(2);
             clickedFnd = false
             $(this).html(`<i class="fas fa-search"></i>Find producs`)
@@ -69,6 +79,8 @@ $(document).ready(function () {
         } else {
             $(findPr).detach()
             $(".action-products").append(viewSel)
+            viewSelectedCombo();
+            
         }
 
         $(".action-products-outer").show();
@@ -313,6 +325,22 @@ $(document).ready(function () {
 });
 
 
+function selectProd(prodIDSel) {
+    formData = new FormData()
+    formData.append("productID", prodIDSel)
+    formData.append("transac", "selectProd")
+
+    $.ajax({
+        url: '../views/productView.php',
+        method: 'POST',
+        data: formData,
+        contentType: false,
+        processData: false,
+        success: function (response) {
+ 
+        }
+    });
+}
 function loadScCombo(action) {
 
     if (action == "sh") {
@@ -322,6 +350,44 @@ function loadScCombo(action) {
         $(".loadingScComboForm").addClass("newLoadingScComboForm");
         $(".loadingScComboForm, .data-products").css("height", "fit-content");
     }
+
+}
+
+
+function viewSelectedCombo() {
+    loadScCombo("sh")
+
+    formData = new FormData()
+    formData.append("transac", "viewSelectedProd")
+
+    $.ajax({
+        url: '../views/productView.php',
+        method: 'POST',
+        data: formData,
+        contentType: false,
+        processData: false,
+        success: function (response) {
+            $('.data-products-selected').html(response);
+            // $(".data-products ol").addClass("new-data-products");
+
+            // $(".loading_sc").parent().css("overflow-y", "hidden");
+            // setTimeout(() => {
+            //     $(".data-products ol").each(function (index) {
+            //         if (index > 1) {
+            //             $(this).delay(index * 100).fadeIn(200);   
+            //         }
+            //     });
+            //     // $(".loading_sc").parent().css("overflow-y", "scroll");
+            // }, 1500);
+
+        }, complete: function () {
+            setTimeout(() => {
+                loadScCombo("rm")
+            }, 500);
+            $(".data-products-selected ol").addClass("new-data-products");
+        }
+    });
+
 
 }
 

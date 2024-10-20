@@ -563,7 +563,7 @@ img {
     height: fit-content;
     max-height: 100%;
     overflow-y: scroll;
-    scrollbar-width: thin;
+    scrollbar-width: none;
     padding-bottom: 15rem;
 }
 
@@ -652,7 +652,7 @@ img {
     border-bottom: solid 1px rgb(161, 161, 161);
     overflow-y: scroll;
     padding-bottom: 2rem;
-    scrollbar-width: thin;
+    scrollbar-width: none;
     scrollbar-gutter: stable;
 }
 

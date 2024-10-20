@@ -147,6 +147,65 @@
         }
 
 
+
+        // SEARCH W VIEW - COMBO BY ID
+        public function searchNViewForComboByID($productIDArr){
+
+ 
+            $sql = "SELECT name,productID,displayPic FROM products where products.productID = ?";
+
+            $stmt = $this->connect()->prepare($sql);
+
+            foreach ($productIDArr as $productID) {
+                $stmt->execute([':productID' => $productID]);
+            }
+
+            $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+            if ($rows) {
+                return $rows;
+            } else {
+                return null;
+            }
+
+
+        }
+        // SEARCH W VIEW - COMBO
+        public function searchNViewForCombo($product_name)
+        {
+            if (!empty($product_name)) {
+                $product_name = "%" . $product_name . "%";
+            }
+
+            $sql = "SELECT * FROM products INNER JOIN category ON category.category_id = products.category_id where products.productID not in (SELECT productID from comboitems)";
+
+            if (!empty($product_name)) {
+                $sql .= " AND products.name LIKE :product_name OR category.category_name LIKE :product_name GROUP BY category.category_id";
+            } else {
+                $sql .= " GROUP BY products.productID";
+            }
+
+
+
+            $stmt = $this->connect()->prepare($sql);
+
+            if (!empty($product_name)) {
+                // $stmt->bindParam(':product_name', $product_name);
+                $stmt->execute([':product_name' => $product_name]);
+            }
+
+            $stmt->execute();
+
+            $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+            if ($rows) {
+                return $rows;
+            } else {
+                return null;
+            }
+        }
+
+
  
 
 
