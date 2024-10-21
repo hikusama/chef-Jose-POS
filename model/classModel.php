@@ -151,14 +151,13 @@
         // SEARCH W VIEW - COMBO BY ID
         public function searchNViewForComboByID($productIDArr){
 
+            $ids = implode(',',array_fill(0,count($productIDArr),'?'));
  
-            $sql = "SELECT name,productID,displayPic FROM products where products.productID = ?";
+            $sql = "SELECT name,productID,displayPic,price FROM products where products.productID IN ($ids)";
 
             $stmt = $this->connect()->prepare($sql);
 
-            foreach ($productIDArr as $productID) {
-                $stmt->execute([':productID' => $productID]);
-            }
+            $stmt->execute($productIDArr);
 
             $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
@@ -171,38 +170,45 @@
 
         }
         // SEARCH W VIEW - COMBO
-        public function searchNViewForCombo($product_name)
+        public function searchNViewForCombo($product_name,$selected)
         {
+            $selectedKeys = array_keys($selected);
+            $selectedQuery = implode(',', array_map(function($key) {
+                return ":id_$key";
+            }, $selectedKeys));
+        
+            $sql = "SELECT * FROM products 
+                    INNER JOIN category ON category.category_id = products.category_id 
+                    WHERE products.productID NOT IN (SELECT productID FROM comboitems)";
+        
+            if (!empty($selected)) {
+                $sql .= " AND products.productID NOT IN ($selectedQuery)";
+            }
+        
             if (!empty($product_name)) {
                 $product_name = "%" . $product_name . "%";
+                $sql .= " AND (products.name LIKE :product_name OR category.category_name LIKE :product_name)";
             }
-
-            $sql = "SELECT * FROM products INNER JOIN category ON category.category_id = products.category_id where products.productID not in (SELECT productID from comboitems)";
-
-            if (!empty($product_name)) {
-                $sql .= " AND products.name LIKE :product_name OR category.category_name LIKE :product_name GROUP BY category.category_id";
-            } else {
-                $sql .= " GROUP BY products.productID";
-            }
-
-
-
+        
+            $sql .= " GROUP BY products.productID";
+        
             $stmt = $this->connect()->prepare($sql);
-
+        
+            $params = [];
             if (!empty($product_name)) {
-                // $stmt->bindParam(':product_name', $product_name);
-                $stmt->execute([':product_name' => $product_name]);
+                $params[':product_name'] = $product_name;
             }
-
-            $stmt->execute();
-
+        
+            if (!empty($selected)) {
+                foreach ($selectedKeys as $key => $value) {
+                    $params[":id_$key"] = $selected[$value];
+                }
+            }
+        
+            $stmt->execute($params);
             $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-            if ($rows) {
-                return $rows;
-            } else {
-                return null;
-            }
+        
+            return $rows ?: null;
         }
 
 

@@ -1157,7 +1157,9 @@
 .dark_mode .exit {
     background-color: #535353a3;
 
-}.exit {
+}
+
+.exit {
     height: 2.3rem;
     width: 2.3rem;
     border-radius: 0 5rem 5rem 0;
@@ -1211,6 +1213,7 @@
 
     background-color: #2c2c2cc5;
 }
+
 .loadingScComboForm ol>*:nth-child(1) {
     background-color: #5151513d;
 }
@@ -1221,10 +1224,12 @@
 
     background-color: #47493e;
 }
+
 .dark_mode .loadingScComboForm ol>*:nth-child(2) {
     background-color: #2c2c2c81;
-    
+
 }
+
 .loadingScComboForm ol>*:nth-child(2) {
     height: 1.5rem;
     background-color: #2c2c2c2b;
@@ -1282,8 +1287,9 @@
     animation-iteration-count: 1;
     animation-duration: .4s;
 }
+
 @keyframes comboForm {
-    0%{
+    0% {
         transform: translateX(1rem) rotate(3deg);
     }
 }
@@ -1291,16 +1297,18 @@
 
 /* 3232 */
 
-.monokai_mode #addComboForm{
+.monokai_mode #addComboForm {
     background: linear-gradient(-260deg, rgb(54, 54, 54), rgb(54, 54, 54), #47493E, #47493E);
     color: rgb(238, 238, 238);
     outline: solid 1px #3b3b3b;
 }
-.dark_mode #addComboForm{
+
+.dark_mode #addComboForm {
     background: linear-gradient(-260deg, #1E1F1C, #1E1F1C, #747474, #747474);
     color: rgb(238, 238, 238);
     outline: solid 1px #3b3b3b;
 }
+
 #addComboForm {
     position: relative;
     z-index: 1;
@@ -1310,7 +1318,7 @@
     grid-template-columns: 14rem auto;
     height: 14rem;
     background: linear-gradient(90deg, rgb(255, 174, 120), rgb(255, 255, 255), rgb(255, 255, 255));
-outline: solid 1px #979797;
+    outline: solid 1px #979797;
     width: 44rem;
     border-radius: 8rem .4rem .4rem 8rem;
 }
@@ -1322,13 +1330,17 @@ outline: solid 1px #979797;
     justify-content: center;
     gap: 2.7rem;
 }
-
+.data_summary_combo{
+    display: flex;
+    justify-content: start;
+    gap: 1rem;
+}
 #addComboForm>*:nth-child(2) ol:nth-child(2) li,
 #addComboForm>*:nth-child(2) ol:nth-child(1) {
     position: relative;
 }
 
-#addComboForm>*:nth-child(2) ol:nth-child(2) li:nth-child(1) p,
+#addComboForm>*:nth-child(2) ol:nth-child(2) >*:nth-child(1) p,
 #addComboForm>*:nth-child(2) ol:nth-child(1) p {
     position: absolute;
     bottom: -1.5rem;
@@ -1336,13 +1348,14 @@ outline: solid 1px #979797;
 
 }
 
-#addComboForm>*:nth-child(2) ol:nth-child(2) li:nth-child(2) h3,
-#addComboForm>*:nth-child(2) ol:nth-child(2) li:nth-child(3) h3 {
+#addComboForm>*:nth-child(2) ol:nth-child(2) > *:nth-child(2) li:nth-child(1) h3,
+#addComboForm>*:nth-child(2) ol:nth-child(2) > *:nth-child(2) li:nth-child(2) h3 {
     font-size: 1.8rem;
+    text-align: center;
 }
 
-#addComboForm>*:nth-child(2) ol:nth-child(2) li:nth-child(2),
-#addComboForm>*:nth-child(2) ol:nth-child(2) li:nth-child(3) {
+#addComboForm>*:nth-child(2) ol:nth-child(2) >*:nth-child(2) li:nth-child(1),
+#addComboForm>*:nth-child(2) ol:nth-child(2) >*:nth-child(2)li:nth-child(2) {
     display: grid;
     place-items: center;
     gap: .3rem;
@@ -1351,11 +1364,12 @@ outline: solid 1px #979797;
 /* 3232 */
 
 .monokai_mode #addComboForm>*:nth-child(2) input,
-.dark_mode #addComboForm>*:nth-child(2) input{
+.dark_mode #addComboForm>*:nth-child(2) input {
     background: #1e1f1c96;
     outline: solid 1px rgba(255, 255, 255, 0.151);
     color: rgb(238, 238, 238);
 }
+
 #addComboForm>*:nth-child(2) input {
     background: rgba(214, 214, 214, 0.466);
     border: none;
@@ -1364,19 +1378,20 @@ outline: solid 1px #979797;
     height: 2.5rem;
     padding: 0 .8rem;
     font-size: 1rem;
-    outline:solid 1px rgb(0 0 0 / 30%);
+    outline: solid 1px rgb(0 0 0 / 30%);
 }
 
 #comboName {
     width: 20rem;
 }
 
-.monokai_mode #addComboForm>*:nth-child(2) input:focus ,
+.monokai_mode #addComboForm>*:nth-child(2) input:focus,
 .dark_mode #addComboForm>*:nth-child(2) input:focus {
     outline: solid 1px rgba(255, 255, 255, 0.438);
 }
+
 #addComboForm>*:nth-child(2) input:focus {
-    outline:solid 1px rgba(0, 0, 0, 0.664);
+    outline: solid 1px rgba(0, 0, 0, 0.664);
 
 
 }
@@ -1388,8 +1403,9 @@ outline: solid 1px #979797;
 #addComboForm>*:nth-child(2) ol:nth-child(2) {
     display: flex;
     align-items: end;
-    justify-content: center;
+    justify-content: start;
     gap: 1.5rem;
+    width: 100%;
 }
 
 .outer-response {
@@ -1403,10 +1419,12 @@ outline: solid 1px #979797;
     background-color: #47493e;
 
 }
+
 .dark_mode .outer-response>*:nth-child(1) {
     background-color: #181818;
 
 }
+
 .outer-response>*:nth-child(1) {
     transform: translateY(-7rem);
     background-color: #ffffff;
@@ -1420,11 +1438,12 @@ outline: solid 1px #979797;
 
 /* 3232 */
 
-.monokai_mode .action-products ,
+.monokai_mode .action-products,
 .dark_mode .action-products {
     color: rgb(199 199 199);
 
 }
+
 .action-products {
     color: rgb(0, 0, 0);
     display: grid;
@@ -1473,26 +1492,28 @@ outline: solid 1px #979797;
     left: 1.3rem;
     transform: translate(-50%, -50%);
 }
+
 /* 3232 */
 
-.monokai_mode #findProdInput ,
+.monokai_mode #findProdInput,
 .dark_mode #findProdInput {
     outline: solid 1px rgba(192, 192, 192, 0.308);
     color: rgb(199 199 199);
 
     background-color: #1e1f1c96;
 }
+
 #findProdInput {
     background-color: #1e1f1c00;
     border: none;
-    outline:solid 1px rgb(109 109 109 / 93%);
+    outline: solid 1px rgb(109 109 109 / 93%);
     border-radius: .9rem;
     height: 2.5rem;
     width: 17rem;
     padding: 0 1.3rem 0 2.2rem;
     color: rgb(0, 0, 0);
 }
- 
+
 .data-products-selected,
 .loadingScComboForm,
 .data-products {
@@ -1508,15 +1529,18 @@ outline: solid 1px #979797;
     min-height: 10rem;
     text-align: center;
 }
+
 /* 3232 */
 
 .monokai_mode .loadingScComboForm {
     background-color: #47493e;
 }
+
 .dark_mode .loadingScComboForm {
     background-color: #181818;
-    
+
 }
+
 .loadingScComboForm {
     padding: 0;
     position: absolute;
@@ -1527,20 +1551,21 @@ outline: solid 1px #979797;
 /* 3232 */
 
 .monokai_mode .data-products-selected ol,
-.monokai_mode .data-products ol ,
+.monokai_mode .data-products ol,
 .dark_mode .data-products-selected ol,
 .dark_mode .data-products ol {
     background: #080808;
-    outline: solid 1px rgba(255, 255, 255, 0.274);
+    border: solid 1px rgba(255, 255, 255, 0.274);
 
 }
+
 .data-products-selected ol,
 .data-products ol {
     background: #5151513d;
     display: grid;
     padding: .5rem .8rem;
     border-radius: .5rem;
-    outline: solid 1px rgb(55 55 55 / 64%);
+    border: solid 1px rgb(55 55 55 / 64%);
     grid-template-columns: 2rem 11rem auto;
     gap: .6rem;
 }
@@ -1563,13 +1588,15 @@ outline: solid 1px #979797;
     display: grid !important;
 
 }
+
 /* 3232 */
 
-.monokai_mode .loadingScComboForm ol ,
+.monokai_mode .loadingScComboForm ol,
 .dark_mode .loadingScComboForm ol {
     background: #080808;
-    
+
 }
+
 .loadingScComboForm ol {
     display: flex;
     justify-content: center;
@@ -1593,6 +1620,7 @@ outline: solid 1px #979797;
         opacity: 0;
     }
 }
+
 .data-products-selected ol:hover,
 .data-products ol:hover {
     transition: .3s;
@@ -1606,7 +1634,7 @@ outline: solid 1px #979797;
     align-items: center;
 }
 
-.data-products-selected ol li .action-combo ,
+.data-products-selected ol li .action-combo,
 .data-products ol li .action-combo {
     height: 1.5rem;
     width: 1.5rem;
@@ -1616,6 +1644,14 @@ outline: solid 1px #979797;
     background-color: rgba(58, 58, 58, 0.979);
     outline: solid 1px rgba(192, 192, 192, 0.452);
 
+}
+
+.action-combo i {
+    height: 100%;
+    width: 100%;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
 }
 
 .data-products-selected ol li .action-combo:hover,
@@ -1667,10 +1703,12 @@ outline: solid 1px #979797;
 .monokai_mode .combo-main-action {
     background-color: #47493e;
 }
+
 .dark_mode .combo-main-action {
     background-color: #181818;
 
 }
+
 .combo-main-action {
     height: 5rem;
     background-color: #ffffff;
@@ -1683,11 +1721,12 @@ outline: solid 1px #979797;
 
 /* 3232 */
 
-.monokai_mode .combo-main-action button ,
+.monokai_mode .combo-main-action button,
 .dark_mode .combo-main-action button {
     color: rgb(199 199 199);
 
 }
+
 .combo-main-action button {
     width: 7.6rem;
     border-radius: .4rem;
@@ -1734,10 +1773,12 @@ outline: solid 1px #979797;
 .monokai_mode .outer-response .combo-response {
     background-color: #242520;
 }
+
 .dark_mode .outer-response .combo-response {
     background-color: rgb(43, 43, 43);
 
 }
+
 .outer-response .combo-response {
     background-color: rgb(219 219 219);
     height: fit-content;
@@ -1746,10 +1787,43 @@ outline: solid 1px #979797;
     color: rgb(247, 37, 37);
 }
 
+.ol_anim_sel {
+    animation-name: olanima_sel;
+    animation-iteration-count: 1;
+    animation-duration: .5s;
+    background: #0ee220a6;
+}
+
+@keyframes olanima_sel {
+    50% {
+        opacity: 0;
+        transform: scale(0) ;
+        background: #0ee220a6;
+
+    }
+}
+
+.ol_anim_rm {
+    animation-name: olanima_rm;
+    animation-iteration-count: 1;
+    animation-duration: .5s;
+    background: #e20e0ea6;
+}
+
+@keyframes olanima_rm {
+    50% {
+        opacity: 0;
+        transform: translateX(-6rem);
+        background: #e20e0ea6;
+
+    }
+}
 
 
-
-
+.unsd ol:nth-child(1){
+    position: unset !important;
+    display: grid !important;
+}
 
 
 

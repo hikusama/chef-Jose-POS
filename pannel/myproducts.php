@@ -284,14 +284,16 @@
                                         <input type="number" placeholder="Price..." id="comboPrice">
                                         <p>Price</p>
                                     </li>
-                                    <li>
-                                        <h3>₱1,850</h3>
-                                        <p>Products in Total</p>
-                                    </li>
-                                    <li>
-                                        <h3>10</h3>
-                                        <p>Item/s</p>
-                                    </li>
+                                    <div class="data_summary_combo">
+                                        <li>
+                                            <h3>₱0</h3>
+                                            <p>Products in Total</p>
+                                        </li>
+                                        <li>
+                                            <h3>0</h3>
+                                            <p>Item/s</p>
+                                        </li>
+                                    </div>
                                 </ol>
                             </section>
                         </form>
@@ -339,21 +341,7 @@
                                                         </ol>
                                                     </div>
                                                 </div>
-                                                <ol>
-                                                    <li>
-                                                        <div>
-                                                            <img src="image/sample.png" alt="">
-                                                        </div>
-                                                    </li>
-                                                    <li>
-                                                        <p>Beef patty (medium)</p>
-                                                    </li>
-                                                    <li>
-                                                        <div class="action-combo" id="">
-                                                            <i class="fas fa-minus" style="color: rgb(241, 86, 65);"></i>
-                                                        </div>
-                                                    </li>
-                                                </ol>
+ 
                                             </div>
                                         </div>
 
@@ -403,21 +391,7 @@
                                                         </ol>
                                                     </div>
                                                 </div>
-                                                <ol>
-                                                    <li>
-                                                        <div>
-                                                            <img src="image/sample.png" alt="">
-                                                        </div>
-                                                    </li>
-                                                    <li>
-                                                        <p>Beef patty (medium)</p>
-                                                    </li>
-                                                    <li>
-                                                        <div class="action-combo" id="">
-                                                            <i class="fas fa-plus" style="color: rgb(107, 252, 107);"></i>
-                                                        </div>
-                                                    </li>
-                                                </ol>
+ 
                                             </div>
                                         </div>
                                     </div>

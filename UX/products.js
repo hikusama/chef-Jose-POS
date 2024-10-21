@@ -19,18 +19,35 @@ $(document).ready(function () {
     let viewSel
     let interval = "";
 
-    
+
+    $(".myproducts").on("click", "#rmSelectedCombo", function (e) {
+        e.preventDefault()
+        prodIDSel = $(this).parent().attr('id')
+        deselectProd(prodIDSel)
+        $(this).closest('ol').addClass('ol_anim_rm')
+        setTimeout(() => {
+            $(this).closest('ol').detach()
+        }, 220);
+        viewComboSum();
+
+    });
     $(".myproducts").on("click", "#selectProd", function (e) {
         e.preventDefault()
         prodIDSel = $(this).parent().attr('id')
         selectProd(prodIDSel)
-        $(this).closest('ol').detach()
-
-
-
-
-
-
+        $(this).closest('ol').addClass('ol_anim_sel')
+        setTimeout(() => {
+            $(this).closest('ol').detach()
+            T = $(".data-products").html().trim();
+            $(".data-products").addClass('unsd');
+            if (T == "") {
+                console.log(200);
+                $(".data-products").html("No products..");
+            } else {
+                console.log(404);
+            }
+        }, 220);
+        viewComboSum();
     });
     $(".myproducts").on("input", "#findProdInput", function (e) {
         e.preventDefault()
@@ -48,16 +65,18 @@ $(document).ready(function () {
             $(viewSel).detach()
             $(".action-products").append(findPr)
             comboShowProd("")
+
         } else {
             $(findPr).detach()
             $(".action-products").append(viewSel)
             viewSelectedCombo();
+
             console.log(2);
             clickedFnd = false
             $(this).html(`<i class="fas fa-search"></i>Find producs`)
             // $(".data-products ol").removeClass("new-data-products");
             $('.data-products').html("");
-            
+
 
         }
     });
@@ -80,7 +99,7 @@ $(document).ready(function () {
             $(findPr).detach()
             $(".action-products").append(viewSel)
             viewSelectedCombo();
-            
+
         }
 
         $(".action-products-outer").show();
@@ -325,6 +344,26 @@ $(document).ready(function () {
 });
 
 
+function deselectProd(prodIDSel) {
+    formData = new FormData()
+    formData.append("productID", prodIDSel)
+    formData.append("transac", "rmSelectedProd")
+
+    $.ajax({
+        url: '../views/productView.php',
+        method: 'POST',
+        data: formData,
+        contentType: false,
+        processData: false,
+        success: function (response) {
+            response = response.trim()
+            if (response == "No products..") {
+
+                $(".data-products-selected").html(response);
+            }
+        }
+    });
+}
 function selectProd(prodIDSel) {
     formData = new FormData()
     formData.append("productID", prodIDSel)
@@ -337,23 +376,45 @@ function selectProd(prodIDSel) {
         contentType: false,
         processData: false,
         success: function (response) {
- 
+            response = response.trim()
+            $(".data-products .loadingScComboForm-outer").detach();
+
         }
     });
+
+
 }
 function loadScCombo(action) {
 
     if (action == "sh") {
         $(".loadingScComboForm").removeClass("newLoadingScComboForm");
         $(".loadingScComboForm, .data-products").css("height", "10rem");
+        $(".loadingScComboForm, .data-products-selected").css("height", "11rem");
     } else {
         $(".loadingScComboForm").addClass("newLoadingScComboForm");
         $(".loadingScComboForm, .data-products").css("height", "fit-content");
+        $(".loadingScComboForm, .data-products-selected").css("height", "fit-content");
     }
 
 }
 
 
+function viewComboSum() {
+    formData = new FormData()
+    formData.append("transac", "viewComboSummary")
+
+    $.ajax({
+        url: '../views/productView.php',
+        method: 'POST',
+        data: formData,
+        contentType: false,
+        processData: false,
+        success: function (response) {
+            $('.data_summary_combo').html(response);
+        }
+    });
+
+}
 function viewSelectedCombo() {
     loadScCombo("sh")
 
@@ -385,6 +446,8 @@ function viewSelectedCombo() {
                 loadScCombo("rm")
             }, 500);
             $(".data-products-selected ol").addClass("new-data-products");
+            viewComboSum();
+
         }
     });
 
@@ -425,6 +488,8 @@ function comboShowProd(search) {
                 loadScCombo("rm")
             }, 500);
             $(".data-products ol").addClass("new-data-products");
+            viewComboSum();
+
         }
     });
 }

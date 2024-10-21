@@ -242,7 +242,7 @@ body {
 
 .dark_mode .side_nav2d {
     background-color: #181818;
-    border: solid 1px rgba(136, 136, 136, 0.589) !important;
+    border: solid 1px rgb(136 136 136 / 22%) !important;
     /* border: solid #47493e 1px; */
     color: rgb(199, 199, 199);
 

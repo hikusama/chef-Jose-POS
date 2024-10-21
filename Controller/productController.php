@@ -57,9 +57,9 @@ class ProductController extends Model
         return $this->searchNViewForComboByID($this->product_name);
     }
 
-    public function getProdSearchCombo()
+    public function getProdSearchCombo($selected)
     {
-        return $this->searchNViewForCombo($this->product_name);
+        return $this->searchNViewForCombo($this->product_name,$selected);
     }
 
     public function showProducts()

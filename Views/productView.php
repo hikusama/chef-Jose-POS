@@ -242,12 +242,16 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['transac'])) {
 
     if ($_POST['transac'] == "comboSectionShowSearchProd") {
         $product_name = htmlspecialchars(strip_tags($_POST['name']));
+        $combos = array();
 
+        if (isset($_SESSION['combos'])) {
+            $combos = $_SESSION['combos'];
+        }
 
 
 
         $searchShow = new ProductController(null, $product_name, null, null, null, null, null);
-        $rows = $searchShow->getProdSearchCombo();
+        $rows = $searchShow->getProdSearchCombo($combos);
 
 
         if ($rows) {
@@ -319,7 +323,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['transac'])) {
 
 
     if ($_POST['transac'] == "selectProd") {
-        session_start();
         $productID = htmlspecialchars(strip_tags($_POST['productID']));
 
 
@@ -333,19 +336,22 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['transac'])) {
             $combos = $_SESSION['combos'];
         }
 
-        array_push($combos, $product_id);
+        array_push($combos, $productID);
 
+        getSelected($combos,"update");
+
+        // $_SESSION['combo'] = count($combos);
         $_SESSION['combos'] = $combos;
     }
 
 
 
+
     if ($_POST['transac'] == "rmSelectedProd") {
-        session_start();
         $productID = htmlspecialchars(strip_tags($_POST['productID']));
 
 
-        
+
         if (empty($productID)) {
             echo "Empty inputs";
             return;
@@ -358,22 +364,31 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['transac'])) {
 
         $array_size = count($combos);
 
+
+        for ($i = 0; $i < $array_size; $i++) {
+            if ($combos[$i] == $productID) {
+                unset($combos[$i]);
+                $combos = array_values($combos);
+                break;
+            }
+        }
+        // foreach ($combos as $combo) {
+        //     if ($combo == $productID) {
+        //         unset($combo);
+        //         $combos = array_values($combos);
+        //         break;
+        //     }
+        // }
+        $array_size = count($combos);
+
         if ($array_size == 0) {
             unset($_SESSION['combos']);
             echo "No products..";
             return;
         }
 
-        foreach ($combos as $combo) {
-            if ($combo == $productID) {
-                unset($combo);
-                $combo = array_values($combo);
-                break;
-            }
-        }
-
         $_SESSION['combos'] = $combos;
-        getSelected($combos);
+        getSelected($combos,"na");
     }
 
 
@@ -421,23 +436,59 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['transac'])) {
             echo "No selected products..";
             return;
         }
-        getSelected($combos);
 
-
+        getSelected($combos,"na");
     }
-    
-    
+
+    if ($_POST['transac'] == "viewComboSummary") {
+        $totalPriceCombo = 0;
+        $item = 0;
+        if (isset($_SESSION['combos'], $_SESSION['comboSummary'])) {
+            $cmb = $_SESSION['comboSummary'];
+            $totalPriceCombo = $cmb['totalPriceCombo'];
+            $item = $cmb['totalItemCombo'];
+        }
+        $totalPriceComboTmp = number_format($totalPriceCombo, 0, ',');
+
+        echo '
+        <li>
+            <h3>₱' . $totalPriceComboTmp . '</h3>
+            <p>Products in Total</p>
+        </li>
+        <li>
+            <h3>' . $item . '</h3>
+            <p>Item/s</p>
+        </li>
+        ';
+    }
 }
 
-function getSelected($comboIDSelected)
+function getSelected($comboIDSelected, $type)
 {
- 
+
     $searchShow = new ProductController(null, $comboIDSelected, null, null, null, null, null);
     $rows = $searchShow->getProdSearchComboByID();
 
+    $tPrice = 0;
+    $item = 0;
 
     if ($rows) {
-        echo '
+        if ($type == "update") {
+
+            foreach ($rows as $row) {
+                $tPrice += $row['price'];
+                $item = $item +1;
+            }
+            $sum = [
+                "totalPriceCombo" => $tPrice,
+                "totalItemCombo" => $item
+            ];
+            $_SESSION['comboSummary'] = $sum;
+
+        } else {
+
+
+            echo '
         <div class="loadingScComboForm-outer">
             <div class="loadingScComboForm">
                 <ol>
@@ -472,9 +523,9 @@ function getSelected($comboIDSelected)
                 </ol>
             </div>
         </div>        
-';
-        foreach ($rows as $row) {
-            echo '
+        ';
+            foreach ($rows as $row) {
+                echo '
             <ol>
                 <li>
                     <div>
@@ -490,8 +541,17 @@ function getSelected($comboIDSelected)
                     </div>
                 </li>
             </ol>';
+                $tPrice += $row['price'];
+                $item = $item +1;
+            }
+            $sum = [
+                "totalPriceCombo" => $tPrice,
+                "totalItemCombo" => $item
+            ];
+            $_SESSION['comboSummary'] = $sum;
         }
     } else {
+        unset($_SESSION['comboSummary']);
         echo "No selected products..";
     }
 }
