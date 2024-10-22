@@ -28,7 +28,6 @@ $(document).ready(function () {
         setTimeout(() => {
             $(this).closest('ol').detach()
         }, 220);
-        viewComboSum();
 
     });
     $(".myproducts").on("click", "#selectProd", function (e) {
@@ -47,7 +46,6 @@ $(document).ready(function () {
                 console.log(404);
             }
         }, 220);
-        viewComboSum();
     });
     $(".myproducts").on("input", "#findProdInput", function (e) {
         e.preventDefault()
@@ -345,6 +343,8 @@ $(document).ready(function () {
 
 
 function deselectProd(prodIDSel) {
+    viewComboSum();
+
     formData = new FormData()
     formData.append("productID", prodIDSel)
     formData.append("transac", "rmSelectedProd")
@@ -365,6 +365,8 @@ function deselectProd(prodIDSel) {
     });
 }
 function selectProd(prodIDSel) {
+    viewComboSum();
+
     formData = new FormData()
     formData.append("productID", prodIDSel)
     formData.append("transac", "selectProd")
@@ -417,6 +419,7 @@ function viewComboSum() {
 }
 function viewSelectedCombo() {
     loadScCombo("sh")
+    viewComboSum();
 
     formData = new FormData()
     formData.append("transac", "viewSelectedProd")
@@ -446,7 +449,6 @@ function viewSelectedCombo() {
                 loadScCombo("rm")
             }, 500);
             $(".data-products-selected ol").addClass("new-data-products");
-            viewComboSum();
 
         }
     });
@@ -456,6 +458,7 @@ function viewSelectedCombo() {
 
 function comboShowProd(search) {
     loadScCombo("sh")
+    viewComboSum();
 
     formData = new FormData()
     formData.append("transac", "comboSectionShowSearchProd")
@@ -488,7 +491,6 @@ function comboShowProd(search) {
                 loadScCombo("rm")
             }, 500);
             $(".data-products ol").addClass("new-data-products");
-            viewComboSum();
 
         }
     });
