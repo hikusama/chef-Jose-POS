@@ -197,7 +197,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         // $transac =;
         session_start();
         $product_id = $_POST["product_id"];
-        
+        if ($product_id == "cmb") {
+            return;
+        }
 
 
         $pdoTemp = new cashierController(null, null, $product_id);

@@ -447,7 +447,9 @@ $(document).ready(function () {
 
         formData.append("transac", tr);
 
-
+        if (p_id == "cmb") {
+            return
+        }
 
         $.ajax({
             url: '../Views/cashierView.php',
