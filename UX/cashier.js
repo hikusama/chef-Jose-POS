@@ -9,7 +9,7 @@ $(document).ready(function () {
     searchNView("", "");
     getCategory()
     allTotal()
-
+    let reqOpen = true
 
     $("#discount").click(function (e) {
         e.preventDefault();
@@ -47,7 +47,7 @@ $(document).ready(function () {
         if (pmethod == "G-Cash") {
             $('#gcashNum').show();
             $('#gcashName').show();
-        }else{
+        } else {
             $('#gcashName').hide();
             $('#gcashNum').hide();
 
@@ -100,7 +100,7 @@ $(document).ready(function () {
     });
     isPaid = false
 
-    
+
     $("#pay").submit(function (e) {
         e.preventDefault();
         formData = new FormData(this)
@@ -121,9 +121,9 @@ $(document).ready(function () {
                     response == 'No Orders Yet...' ||
                     response == 'G-Cash section must be filled.' ||
                     response == 'Customer money is not enough.' ||
-                    response == 'G-Cash number must be 11Digits.' 
-                    
-                    ) {
+                    response == 'G-Cash number must be 11Digits.'
+
+                ) {
                     let cont = `<p style="white-space:nowrap; color:#ff4141;font-size: 1.1rem;" class="errorText">${response}</p>`;
                     $(".response").html(cont);
                     isPaid = false
@@ -203,16 +203,22 @@ $(document).ready(function () {
 
     $(".products_content").on("click", "ol", function (e) {
         e.preventDefault();
-        toAddProduct_id = $(this).find("img").attr("id");
-        price = parseInt($(this).find("h4 b").html().substring(1));
-        product_name = $(this).find("h5").html();
 
-        formData = new FormData();
-        formData.append("product_id", toAddProduct_id);
+        if (reqOpen == true) {
+            reqOpen = false
+            toAddProduct_id = $(this).find("img").attr("id");
+            price = parseInt($(this).find("h4 b").html().substring(1));
+            product_name = $(this).find("h5").html();
+
+            formData = new FormData();
+            formData.append("product_id", toAddProduct_id);
 
 
-        addToCart(formData, "addToCart", toAddProduct_id, product_name, price);
+            addToCart(formData, "addToCart", toAddProduct_id, product_name, price);
+        } else {
+            console.log("Server busy");
 
+        }
 
     });
 
@@ -353,13 +359,17 @@ $(document).ready(function () {
         e.preventDefault();
         hasClass = $(this).hasClass("prod_nav");
         catId = $(this).attr("id");
-        if (!hasClass) {
+        if (!hasClass && reqOpen == true) {
+            reqOpen = false
             $(".category_nav_inner li").removeClass("prod_nav");
             $(this).addClass("prod_nav")
             console.log(catId);
             $("#search").val('')
             searchNView('', catId);
 
+        }else{
+            console.log("Server busy in category");
+            
         }
 
     });
@@ -447,6 +457,7 @@ $(document).ready(function () {
             processData: false,
             success: function (response) {
                 response = response.trim()
+
                 allTotal()
 
                 if (!response) {
@@ -554,6 +565,10 @@ $(document).ready(function () {
                     // });
 
                 }
+                
+            },complete:function () {
+                
+                return reqOpen = true
             }
         });
 
@@ -564,6 +579,7 @@ $(document).ready(function () {
         formData.append("searchVal", searchVal)
         formData.append("transac", "searchNView")
         formData.append("category_id", category_id)
+        $('.products_content').html("");
 
         $.ajax({
             url: '../Views/cashierView.php',
@@ -572,6 +588,7 @@ $(document).ready(function () {
             contentType: false,
             processData: false,
             success: function (response) {
+
                 $('.products_content').html(response);
                 $('.products_content').children().hide();
 
@@ -579,6 +596,10 @@ $(document).ready(function () {
                 $('.products_content').children().each(function (index) {
                     $(this).delay(index * 100).fadeIn(200);
                 });
+
+            },complete:function () {
+                
+                return reqOpen = true
             }
         });
     }

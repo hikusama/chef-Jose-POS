@@ -102,6 +102,10 @@
                                     <h5>Stock</h5>
                                     <h5>Price</h5>
                                     <h5></h5>
+                                    <div class="showType">
+                                        <button type="button" id="prdType" class="state">Products</button>
+                                        <button type="button" id="cmboType">Combo's</button>
+                                    </div>
                                 </ol>
                             </section>
                             <div id="content_products">
@@ -262,26 +266,36 @@
                         <div class="exit">
                             <i class="fas fa-plus"></i>
                         </div>
-                        <form id="addComboForm">
+                        <form id="addComboForm" enctype="multipart/form-data">
                             <section>
                                 <div class="img-wrap-out">
 
                                     <div class="image-wrap">
                                         <img src="image/dpTemplate.png" id="comboDP" alt="">
+                                        <input type="file" style="visibility: hidden;" id="selectComboPic" name="comboPic">
                                     </div>
-                                    <div>
+                                    <label for="selectComboPic">
                                         <i class="fas fa-plus"></i>
-                                    </div>
+                                    </label>
                                 </div>
                             </section>
                             <section>
                                 <ol>
-                                    <input type="text" placeholder="Combo name..." id="comboName">
-                                    <p>Combo name</p>
+                                    <li>
+                                        <i class="fas fa-book"></i>
+                                        <input type="text" name="comboName" placeholder="Combo name..." id="comboName">
+                                        <p>Combo name</p>
+                                    </li>
+                                    <li>
+                                        <i class="fas fa-book"></i>
+                                        <input type="text" name="comboCode" placeholder="Combo code..." id="comboCode">
+                                        <p>Combo code</p>
+                                    </li>
                                 </ol>
                                 <ol>
                                     <li>
-                                        <input type="number" placeholder="Price..." id="comboPrice">
+                                        <i class="fas fa-book"></i>
+                                        <input type="number" name="comboPrice" placeholder="Price..." id="comboPrice">
                                         <p>Price</p>
                                     </li>
                                     <div class="data_summary_combo">
@@ -295,6 +309,7 @@
                                         </li>
                                     </div>
                                 </ol>
+                                <button id="tg" type="submit"></button>
                             </section>
                         </form>
                         <div class="outer-response">
@@ -341,7 +356,7 @@
                                                         </ol>
                                                     </div>
                                                 </div>
- 
+
                                             </div>
                                         </div>
 
@@ -391,7 +406,7 @@
                                                         </ol>
                                                     </div>
                                                 </div>
- 
+
                                             </div>
                                         </div>
                                     </div>
@@ -400,10 +415,15 @@
                             <section>
                                 <div class="combo-main-action">
                                     <button id="addRm-combo" type="button"> <i class="fas fa-search"></i>Find producs</button>
-                                    <button id="submit-combo form" type="button"><i class="fas fa-plus"></i>Submit</button>
+                                    <button id="submit-combo_form" type="submit"><i class="fas fa-plus"></i>Submit</button>
                                 </div>
                                 <div class="combo-response">
-                                    ngiao error
+                                    <div class="waiting">
+                                        <p></p>
+                                        <p></p>
+                                        <p></p>
+                                        <p></p>
+                                    </div>
                                 </div>
                             </section>
                         </div>

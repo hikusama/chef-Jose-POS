@@ -22,6 +22,10 @@ class cashierController extends Model
     {
         return $this->getAllProductss($this->product_name, $category);
     }
+    public function getAllComboss()
+    {
+        return $this->getAllCombosModel($this->product_name);
+    }
 
     public function addToCart()
     {

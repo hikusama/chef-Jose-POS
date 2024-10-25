@@ -18,12 +18,43 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $category_id = $_POST["category_id"];
 
         $pdoTemp = new cashierController(null, $searchVal, null);
-        $allProd = $pdoTemp->getAllProducts($category_id);
+        $allCombo;
+        $allProd;
+        if ($category_id == "cmb") {
+            $allCombo = $pdoTemp->getAllComboss();
+            $_SESSION['categoryState'] = 'cmb';
+        } else if (is_numeric((int)$category_id)){
+            unset($_SESSION['categoryState']);
+            $allProd = $pdoTemp->getAllProducts($category_id);
+        }else{
+            echo "Something went wrong..";
+            return ;
+        }
 
-        if ($allProd) {
+        if ($category_id == "cmb") {
+            if ($allCombo) {
 
-            foreach ($allProd as $prod) {
-                echo '
+                foreach ($allCombo as $cmb) {
+                    echo '
+                    <ol>
+                        <li><img id="' . $cmb['comboID'] . '" src="data:image/jpeg;base64,' . base64_encode($cmb['displayPic']) . '" alt="item"></li>
+                        <li>
+                            <h5>' . $cmb['comboName'] . '</h5>
+                            <h4><b>₱' . number_format($cmb['comboPrice'], 2, '.', ',') . '</b></h4>
+                        </li>
+                    </ol>
+                
+                ';
+                }
+            } else {
+                echo '<div class="nopr">No products..</div>';
+            }
+        } else {
+
+            if ($allProd) {
+
+                foreach ($allProd as $prod) {
+                    echo '
                     <ol>
                         <li><img id="' . $prod['productID'] . '" src="data:image/jpeg;base64,' . base64_encode($prod['displayPic']) . '" alt="item"></li>
                         <li>
@@ -33,9 +64,10 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                     </ol>
                 
                 ';
+                }
+            } else {
+                echo '<div class="nopr">No products..</div>';
             }
-        } else {
-            echo '<div class="nopr">No products..</div>';
         }
     }
 
@@ -163,11 +195,20 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     if (isset($_POST['transac']) && $_POST["transac"] === "addToCart") {
         // $transac =;
+        session_start();
         $product_id = $_POST["product_id"];
+        
 
 
         $pdoTemp = new cashierController(null, null, $product_id);
         $product_fetch = $pdoTemp->addToCart();
+        
+        if (isset($_SESSION['categoryState'])) {
+            $state = $_SESSION['categoryState'];
+            if ($state == "cmb") {
+                
+            }
+        }
         $price = (int)$product_fetch['price'];
 
         $orderList = array(
@@ -177,7 +218,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             "price" => $price
         );
 
-        session_start();
         $ordersSession = array();
 
         if (isset($_SESSION['orders'])) {
@@ -320,8 +360,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         if (isset($_SESSION['discountT'], $_SESSION['discountTypeT'])) {
             $discountType = $_SESSION['discountTypeT'];
             $discount = $_SESSION['discountT'] . '%';
-        }else{
-
+        } else {
         }
         $ordersSession = array();
         if (isset($_SESSION['ordersT'])) {
@@ -446,13 +485,13 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 $gcashNum = $_POST['gcashNum'];
                 $numSize = $gcashNum;
                 $numSize = strlen($numSize);
-                if (empty($gcashNum) || empty($gcashName)){
+                if (empty($gcashNum) || empty($gcashName)) {
                     echo 'G-Cash section must be filled.';
                     return;
-                }else if (!is_numeric($gcashNum)) {
+                } else if (!is_numeric($gcashNum)) {
                     echo 'G-Cash number must be integer.';
                     return;
-                }else if ($numSize < 11 || $numSize > 11) {
+                } else if ($numSize < 11 || $numSize > 11) {
                     echo 'G-Cash number must be 11Digits.';
                     return;
                 }
@@ -470,7 +509,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 $refNo = intval($refNo);
                 $_SESSION['refNo2'] = $refNo;
 
-                submitOrders($refNo, $total, $pmethod,$gcashName,$gcashNum);
+                submitOrders($refNo, $total, $pmethod, $gcashName, $gcashNum);
 
                 $tempTotal = ($customer_money - $total);
                 $tempTotal = number_format($tempTotal, 2, '.');
@@ -627,7 +666,7 @@ function dpCart($ordersSession)
         }
     }
 }
-function submitOrders($refNo, $totalAmount, $pmethod,$gcashName,$gcashNum)
+function submitOrders($refNo, $totalAmount, $pmethod, $gcashName, $gcashNum)
 {
     // session_start();
 

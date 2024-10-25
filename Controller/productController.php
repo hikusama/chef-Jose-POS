@@ -59,7 +59,7 @@ class ProductController extends Model
 
     public function getProdSearchCombo($selected)
     {
-        return $this->searchNViewForCombo($this->product_name,$selected);
+        return $this->searchNViewForCombo($this->product_name, $selected);
     }
 
     public function showProducts()
@@ -77,8 +77,32 @@ class ProductController extends Model
             empty($quantity)
         ) {
             return true;
-        }else{
+        } else {
             return false;
         }
     }
+
+
+    public function checkCombo($check, $type)
+    {
+        if ($type == "comboName") {
+            return $this->checkComboName($check);
+        } else if ($type == "comboCode") {
+            return $this->checkComboCode($check);
+        }
+    }
+    
+    
+    public function insertCombo($combos,$cimg, $cn, $ccd, $cpr)
+    {
+        return $this->addCombo($combos, $cimg, $cn, $ccd, $cpr);
+    }
+
+
+    public function findComboGt($comboName)
+    {
+        return $this->findCombo($comboName);
+    }
+
+
 }

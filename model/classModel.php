@@ -58,8 +58,8 @@
             }
         }
 
-        // ADD category
 
+        // ADD category
         public function insertCategory($Add_category)
         {
             $stmt = $this->connect()->prepare("INSERT INTO category (category_name) VALUES (?);");
@@ -69,6 +69,7 @@
                 error_log("Error adding product: " . implode(", ", $stmt->errorInfo()));
             }
         }
+
 
         // EDIT PRODUCT 
         public function editProduct($product_name, $category_name, $price, $product_image, $quantity)
@@ -80,6 +81,7 @@
             $stmt->bindParam(':display_pic', $product_image);
             $stmt->bindParam(':quantity', $quantity);
         }
+
 
         //DELETE
         public function product_delete($product_id)
@@ -94,6 +96,7 @@
             error_log("Error deleting product: " . implode(", ", $stmt->errorInfo())); // Log error
             return false;
         }
+
 
         //GET PRODUCT
         public function showProduct()
@@ -147,12 +150,12 @@
         }
 
 
-
         // SEARCH W VIEW - COMBO BY ID
-        public function searchNViewForComboByID($productIDArr){
+        public function searchNViewForComboByID($productIDArr)
+        {
 
-            $ids = implode(',',array_fill(0,count($productIDArr),'?'));
- 
+            $ids = implode(',', array_fill(0, count($productIDArr), '?'));
+
             $sql = "SELECT name,productID,displayPic,price FROM products where products.productID IN ($ids)";
 
             $stmt = $this->connect()->prepare($sql);
@@ -166,53 +169,163 @@
             } else {
                 return null;
             }
-
-
         }
+
+
         // SEARCH W VIEW - COMBO
-        public function searchNViewForCombo($product_name,$selected)
+        public function searchNViewForCombo($product_name, $selected)
         {
             $selectedKeys = array_keys($selected);
-            $selectedQuery = implode(',', array_map(function($key) {
+            $selectedQuery = implode(',', array_map(function ($key) {
                 return ":id_$key";
             }, $selectedKeys));
-        
+
             $sql = "SELECT * FROM products 
-                    INNER JOIN category ON category.category_id = products.category_id 
-                    WHERE products.productID NOT IN (SELECT productID FROM comboitems)";
-        
+                    INNER JOIN category ON category.category_id = products.category_id";
+
+
             if (!empty($selected)) {
-                $sql .= " AND products.productID NOT IN ($selectedQuery)";
+                $sql .= " WHERE products.productID NOT IN ($selectedQuery)";
+                if (!empty($product_name)) {
+                    $sql .= " AND";
+                }
+            } else if (!empty($product_name)) {
+                $sql .= " WHERE";
             }
-        
+
             if (!empty($product_name)) {
                 $product_name = "%" . $product_name . "%";
-                $sql .= " AND (products.name LIKE :product_name OR category.category_name LIKE :product_name)";
+                $sql .= " (products.name LIKE :product_name OR category.category_name LIKE :product_name)";
             }
-        
+
             $sql .= " GROUP BY products.productID";
-        
+
             $stmt = $this->connect()->prepare($sql);
-        
+
             $params = [];
             if (!empty($product_name)) {
                 $params[':product_name'] = $product_name;
             }
-        
+
             if (!empty($selected)) {
                 foreach ($selectedKeys as $key => $value) {
                     $params[":id_$key"] = $selected[$value];
                 }
             }
-        
+
             $stmt->execute($params);
             $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        
+
             return $rows ?: null;
         }
 
 
- 
+        // INSERT COMBO
+        public function addCombo($combos, $comboIMG, $comboName, $comboCode, $comboPrice)
+        {
+            $sql = "INSERT INTO combo(displayPic,comboName,comboCode,comboPrice) values(?, ?, ?, ?)";
+
+            $stmt = $this->connect()->prepare($sql);
+
+            if ($stmt->execute([$comboIMG, $comboName, $comboCode, $comboPrice])) {
+                $comboID = $this->getComboID();
+                if ($this->comboItems($combos, $comboID)) {
+                    return true;
+                } else {
+                    error_log("Error adding comboItems: " . implode(", ", $stmt->errorInfo()));
+                }
+            } else {
+                error_log("Error adding combo: " . implode(", ", $stmt->errorInfo()));
+            }
+        }
+
+
+        public function comboItems($combos, $comboID)
+        {
+            $sql = "INSERT INTO comboitems(comboID,productID) values(?, ?)";
+
+            $stmt = $this->connect()->prepare($sql);
+
+
+            $errorCount = 0;
+            foreach ($combos as $c) {
+
+                if ($stmt->execute([$comboID, $c])) {
+                } else {
+                    $errorCount += 1;
+                }
+            }
+
+            return ($errorCount > 0) ? true : false;
+        }
+
+
+        // CHECKING EXISTENCE   
+        public function checkComboName($check)
+        {
+            $sql = "SELECT comboName FROM combo where comboName = ?";
+            $stmt = $this->connect()->prepare($sql);
+            $stmt->execute([$check]);
+            $row =  $stmt->fetch(PDO::FETCH_ASSOC);
+            return $row ?: null;
+        }
+
+        public function checkComboCode($check)
+        {
+            $sql = "SELECT comboCode FROM combo where comboCode = ?";
+            $stmt = $this->connect()->prepare($sql);
+            $stmt->execute([$check]);
+            $row =  $stmt->fetch(PDO::FETCH_ASSOC);
+            return $row ?: null;
+        }
+
+        public function getComboID()
+        {
+            $sql = "SELECT comboID FROM combo ORDER BY comboID DESC LIMIT 1";
+            $stmt = $this->connect()->prepare($sql);
+            $stmt->execute();
+            $row =  $stmt->fetch(PDO::FETCH_ASSOC);
+            return $row['comboID'] ?: null;
+        }
+
+        // SEARCH COMBO   
+        public function findCombo($comboName)
+        {
+
+            $sql = "SELECT combo.*,COUNT(comboitems.comboID) AS total_comboID FROM combo left join comboitems on combo.comboID = comboitems.comboID";
+
+            if (!empty($comboName)) {
+                $sql .= " WHERE combo.comboName LIKE :comboName OR combo.comboCode LIKE :comboName group by combo.comboID";
+            } else {
+                $sql .= " group by combo.comboID";
+            }
+            $stmt = $this->connect()->prepare($sql);
+
+
+            if (!empty($comboName)) {
+                $comboName = "%" . $comboName . "%";
+
+                $stmt->bindParam(":comboName", $comboName);
+            }
+
+            if ($stmt->execute()) {
+                $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                return $rows;
+            }
+
+
+            error_log("Error adding combo: " . implode(", ", $stmt->errorInfo()));
+        }
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -225,6 +338,35 @@
 
         //------------------------- CASHIER THINGS -----------------------------
 
+        public function getAllCombosModel($comboName)
+        {
+            if (!empty($comboName)) {
+                $comboName = "%" . $comboName . "%";
+            }
+
+
+            $sql = "SELECT * FROM combo";
+
+
+            if (!empty($comboName)) {
+                $sql .= " WHERE combo.comboName LIKE :comboName GROUP BY combo.comboID";
+            }
+
+            $stmt = $this->connect()->prepare($sql);
+            if (!empty($comboName)) {
+                $stmt->bindParam(':comboName', $comboName);
+            }
+
+            $stmt->execute();
+
+            $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+            if ($rows) {
+                return $rows;
+            } else {
+                return null;
+            }
+        }
         public function getAllProductss($product_name, $category)
         {
             if (!empty($product_name)) {
@@ -319,20 +461,20 @@
             if ($ngiao > 0) {
                 return false;
             } else {
-                $this->insertSumOrders($orders[0]['totalAmount'], $orders[0]['discount'], $orders[0]['discountType'],$orders[0]['refNo'],$orders[0]['pmethod'],$orders[0]['gcashName'],$orders[0]['gcashNum']);
+                $this->insertSumOrders($orders[0]['totalAmount'], $orders[0]['discount'], $orders[0]['discountType'], $orders[0]['refNo'], $orders[0]['pmethod'], $orders[0]['gcashName'], $orders[0]['gcashNum']);
             }
         }
 
-        public function insertSumOrders($totalAmount, $discount, $discountType,$refNo,$pmethod,$gcashName,$gcashNum)
+        public function insertSumOrders($totalAmount, $discount, $discountType, $refNo, $pmethod, $gcashName, $gcashNum)
         {
-            
+
 
             $stmt = $this->connect()->prepare("INSERT INTO orders (totalAmount,discount,discountType,ref_no,paymentMethod,gcashAccountName,gcashAccountNo)
             VALUES (?, ?, ?, ?, ?, ?, ?)");
 
 
 
-            if ($stmt->execute([$totalAmount, $discount, $discountType,$refNo,$pmethod,$gcashName,$gcashNum])) {
+            if ($stmt->execute([$totalAmount, $discount, $discountType, $refNo, $pmethod, $gcashName, $gcashNum])) {
             } else {
                 return false;
             }

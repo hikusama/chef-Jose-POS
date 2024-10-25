@@ -32,12 +32,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['transac'])) {
                 $errors["invalid_format"] = 'Invalid format ( <b style="font-size:1rem;">jpg, png, jpeg, gif</b> )';
             } else {
                 if ($fileSize <= $maxFileSize) {
-                    $ImageData = file_get_contents($_FILES['displayPic']['tmp_name']);
+                    $product_image = file_get_contents($_FILES['displayPic']['tmp_name']);
                 } else {
                     $errors["pic_error"] = "The file size exceeds the maximum allowed limit (3 MB)!";
                 }
             }
-            $product_image = file_get_contents($_FILES['displayPic']['tmp_name']);
         } else {
             $errors["no_img"] = 'Please insert image of product.';
         }
@@ -314,16 +313,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['transac'])) {
         }
     }
 
-
-
-
-
-
-
-
-
     if ($_POST['transac'] == "selectProd") {
-        $productID = htmlspecialchars(strip_tags($_POST['productID']));
+        $productID = (int)($_POST['productID']);
 
 
         if (empty($productID)) {
@@ -337,15 +328,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['transac'])) {
         }
 
         array_push($combos, $productID);
-
-        getSelected($combos,"update");
+        getSelected($combos, "update");
 
         // $_SESSION['combo'] = count($combos);
         $_SESSION['combos'] = $combos;
     }
-
-
-
 
     if ($_POST['transac'] == "rmSelectedProd") {
         $productID = htmlspecialchars(strip_tags($_POST['productID']));
@@ -388,10 +375,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['transac'])) {
         }
 
         $_SESSION['combos'] = $combos;
-        getSelected($combos,"na");
+        getSelected($combos, "na");
     }
-
-
 
     if ($_POST['transac'] == "viewSelectedProd") {
         $combos = array();
@@ -437,7 +422,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['transac'])) {
             return;
         }
 
-        getSelected($combos,"na");
+        getSelected($combos, "na");
     }
 
     if ($_POST['transac'] == "viewComboSummary") {
@@ -461,6 +446,144 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['transac'])) {
         </li>
         ';
     }
+
+
+
+
+
+    if ($_POST['transac'] == "insertCombo") {
+
+        $comboName = htmlspecialchars(strip_tags($_POST['comboName']));
+        $comboPrice = intval($_POST['comboPrice']);
+        $comboCode = htmlspecialchars(strip_tags($_POST['comboCode']));
+    
+        $combos = array();
+
+
+        if (empty($comboName) || empty($comboPrice) || empty($comboCode)) {
+            echo "Fill in all fields.";
+            return;
+        }
+        $comboIMG;
+        if (isset($_FILES['comboPic']) && $_FILES['comboPic']['error'] == 0) {
+
+            $image_file_type = strtolower(pathinfo($_FILES['comboPic']['name'], PATHINFO_EXTENSION));
+            $fileSize = $_FILES['comboPic']['size'];
+
+            $maxFileSize = 3 * 1024 * 1024;
+            $allowed_types = ['jpg', 'png', 'jpeg', 'gif'];
+            if (!in_array($image_file_type, $allowed_types)) {
+                echo 'Invalid pic format ( <b style="font-size:1rem;">jpg, png, jpeg, gif</b> )';
+                return;
+            } else {
+                if ($fileSize <= $maxFileSize) {
+                    $comboIMG = file_get_contents($_FILES['comboPic']['tmp_name']);
+                } else {
+                    echo "The file size exceeds the maximum allowed limit (3 MB)!";
+                    return;
+                }
+            }
+        } else {
+            echo 'Please insert image of combo.';
+            return;
+        }
+
+
+
+        if (!isset($_SESSION['combos'])) {
+            echo "No combo selected.";
+            return;
+        }
+        $sz;
+
+        if (isset($_SESSION['combos'])) {
+            $combos = $_SESSION['combos'];
+            $sz = count($combos);
+            if ($sz <= 1) {
+                echo "Selecting combo must be more than 1.";
+                return;
+            }
+        }
+        $prodController = new ProductController(null, null, null, null, null, null, null);
+
+        // var_dump($combos);
+        // $prodController->checkCombo($comboName,"comboName");
+        if ($prodController->checkCombo($comboName,"comboName")) {
+            echo "Combo name already used.";
+            return;
+        }
+        if ($prodController->checkCombo($comboCode,"comboCode")) {
+            echo "Combo code already used.";
+            return;
+        }
+        $prodController->insertCombo($combos,$comboIMG,$comboName,$comboCode,$comboPrice);
+
+        // echo $prodController->checkCombo($comboCode,"comboCode");
+        unset($_SESSION['combos']);
+
+
+        // $prodController->insertCombo($combos,$comboName,$comboCode,$comboPrice);
+        // if (!$prodController) {
+        //     echo "Error Inserting..";
+        // }
+    
+    }
+
+
+    if ($_POST['transac'] == "findCombo") {
+        $comboName = htmlspecialchars(strip_tags($_POST['comboName']));
+
+        $prodController = new ProductController(null, null, null, null, null, null, null);
+        $rows = $prodController->findComboGt($comboName);
+        
+        echo '
+        <div class="loading_sc">
+            <div>
+                <p class="dp"></p>
+                <div class="desc"></div>                                
+            </div>
+            <div>
+                <p class="dp"></p>
+                <div class="desc"></div>                                
+            </div>
+            <div>
+                <p class="dp"></p>
+                <div class="desc"></div>
+            </div>
+
+        </div>
+        ';
+
+        if ($rows) {
+            foreach ($rows as $row) {
+                echo '
+            <li>
+                <div class="dp">
+                    <img src="data:image/jpeg;base64, ' . base64_encode($row['displayPic']) . '" alt="">
+                </div>
+                <p>' . $row['comboName'] . '</p>
+                <p>' . $row['comboCode'] . '</p>
+                <p>' . $row['total_comboID'] . '</p>
+                <p>₱' . $row['comboPrice'] . '</p>
+                    <i class="fas fa-ellipsis-v more_showPane" title="See More"></i>
+                    <div class="action_select" id="' . $row['comboID'] . '">
+                        <p><i class="fas fa-edit combo" ></i> Edit</p>
+                        <p><i class="fas fa-trash combo"></i> Delete</p>
+                        <p><i class="fas fa-eye" combo></i> View</p>
+                    </div>
+            </li>';
+            }
+        } else {
+            echo "No combo..";
+        }
+        
+        
+    }
+
+
+
+
+
 }
 
 function getSelected($comboIDSelected, $type)
@@ -477,14 +600,13 @@ function getSelected($comboIDSelected, $type)
 
             foreach ($rows as $row) {
                 $tPrice += $row['price'];
-                $item = $item +1;
+                $item = $item + 1;
             }
             $sum = [
                 "totalPriceCombo" => $tPrice,
                 "totalItemCombo" => $item
             ];
             $_SESSION['comboSummary'] = $sum;
-
         } else {
 
 
@@ -542,7 +664,7 @@ function getSelected($comboIDSelected, $type)
                 </li>
             </ol>';
                 $tPrice += $row['price'];
-                $item = $item +1;
+                $item = $item + 1;
             }
             $sum = [
                 "totalPriceCombo" => $tPrice,
