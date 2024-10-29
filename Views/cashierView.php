@@ -23,12 +23,12 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         if ($category_id == "cmb") {
             $allCombo = $pdoTemp->getAllComboss();
             $_SESSION['categoryState'] = 'cmb';
-        } else if (is_numeric((int)$category_id)){
+        } else if (is_numeric((int)$category_id)) {
             unset($_SESSION['categoryState']);
             $allProd = $pdoTemp->getAllProducts($category_id);
-        }else{
+        } else {
             echo "Something went wrong..";
-            return ;
+            return;
         }
 
         if ($category_id == "cmb") {
@@ -47,7 +47,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 ';
                 }
             } else {
-                echo '<div class="nopr">No products..</div>';
+                echo '<div class="nopr">No combo\'s..</div>';
             }
         } else {
 
@@ -76,31 +76,63 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     if (isset($_POST['transac']) && $_POST["transac"] === "changeqntity" &&  isset($_POST["qntity"])) {
 
+        session_start();
 
 
         $qntity = $_POST["qntity"];
         $product_id = $_POST["product_id"];
+        $type = $_POST["type"];
 
+        $prodOrder = array();
+        $comboOrder = array();
+        $orderSelected = array();
         $ordersSession = array();
 
-        session_start();
-        if (isset($_SESSION['orders'])) {
-            $ordersSession = $_SESSION['orders'];
+
+        if (isset($_SESSION['comboOrders'])) {
+            $comboOrder = $_SESSION['comboOrders'];
+        }
+        if (isset($_SESSION['prodOrders'])) {
+            $prodOrder = $_SESSION['prodOrders'];
         }
 
-        $array_size = count($ordersSession);
+
+        if ($type == "rmitemCombo") {
+            if (isset($_SESSION['comboOrders'])) {
+                $orderSelected = $_SESSION['comboOrders'];
+            } else {
+                echo "Something went wrong.....";
+            }
+        } else if ($type == "rmitem") {
+            if (isset($_SESSION['prodOrders'])) {
+                $orderSelected = $_SESSION['prodOrders'];
+            } else {
+                echo "Something went wrong.....";
+            }
+        }
+
+        $array_size = count($orderSelected);
 
 
         for ($i = 0; $i < $array_size; $i++) {
-            if ($product_id == $ordersSession[$i]["product_id"]) {
-                $tempNewP = $ordersSession[$i]["price"] / $ordersSession[$i]["qntity"];
+            if ($product_id == $orderSelected[$i]["id"]) {
+                $tempNewP = $orderSelected[$i]["price"] / $orderSelected[$i]["qntity"];
                 $newP = $tempNewP * $qntity;
-                $ordersSession[$i]["qntity"] = $qntity;
-                $ordersSession[$i]["price"] = $newP;
+                $orderSelected[$i]["qntity"] = $qntity;
+                $orderSelected[$i]["price"] = $newP;
                 break;
             }
         }
 
+        if ($type == "rmitemCombo") {
+            $comboOrder = $orderSelected;
+            $_SESSION['comboOrders'] = $comboOrder;
+        } else if ($type == "rmitem") {
+            $prodOrder = $orderSelected;
+            $_SESSION['prodOrders'] = $prodOrder;
+        }
+
+        $ordersSession = array_merge($prodOrder, $comboOrder);
         $_SESSION['orders'] = $ordersSession;
     }
 
@@ -109,10 +141,18 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     if (isset($_POST['transac']) && $_POST["transac"] === "viewCart") {
         $ordersSession = array();
+        $prodOrder = array();
+        $comboOrder = array();
 
         session_start();
         if (isset($_SESSION['orders'])) {
             $ordersSession = $_SESSION['orders'];
+            if (isset($_SESSION['prodOrders'])) {
+                $prodOrder = $_SESSION['prodOrders'];
+            }
+            if (isset($_SESSION['comboOrders'])) {
+                $comboOrder = $_SESSION['comboOrders'];
+            }
         }
         if (isset($_POST["fakeTransac3"]) && $_POST["fakeTransac3"] === 'itsaprank3') {
             unset($_SESSION['ordersT']);
@@ -121,7 +161,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             unset($_SESSION['totalT']);
             unset($_SESSION['subtotalT']);
             unset($_SESSION['refNo2']);
-
+            $prodOrder = array();
+            $comboOrder = array();
             $ordersSession = array();
         }
 
@@ -142,12 +183,15 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             unset($_SESSION['discountType']);
             unset($_SESSION['total']);
             unset($_SESSION['subtotal']);
+            unset($_SESSION['comboOrders']);
+            unset($_SESSION['prodOrders']);
             $ordersSession = array();
+            $prodOrder = array();
+            $comboOrder = array();
         }
 
         if (!isset($_POST["fakeTransac3"])) {
-
-            dpCart($ordersSession);
+            dpCart($prodOrder, $comboOrder);
         }
     }
 
@@ -156,37 +200,71 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     if (isset($_POST['transac']) && $_POST["transac"] === "removeToCart") {
         $product_id = $_POST["product_id"];
-
+        $itemType = $_POST["itemType"];
 
         $ordersSession = array();
+        $prodOrder = array();
+        $comboOrder = array();
+        $orderSelected = array();
 
         session_start();
-        if (isset($_SESSION['orders'])) {
-            $ordersSession = $_SESSION['orders'];
-        }
-        $array_size = count($ordersSession);
 
+        if (isset($_SESSION['comboOrders'])) {
+            $comboOrder = $_SESSION['comboOrders'];
+        }
+        if (isset($_SESSION['prodOrders'])) {
+            $prodOrder = $_SESSION['prodOrders'];
+        }
+
+
+        if ($itemType == "combo") {
+            if (isset($_SESSION['comboOrders'])) {
+                $orderSelected = $_SESSION['comboOrders'];
+            } else {
+                echo "Something went wrong.....";
+            }
+        } else if ($itemType == "prod") {
+            if (isset($_SESSION['prodOrders'])) {
+                $orderSelected = $_SESSION['prodOrders'];
+            } else {
+                echo "Something went wrong.....";
+            }
+        }
+
+
+
+        $array_size = count($orderSelected);
 
         for ($i = 0; $i < $array_size; $i++) {
-            if ($product_id == $ordersSession[$i]["product_id"]) {
-                unset($ordersSession[$i]);
-                $ordersSession = array_values($ordersSession);
+            if ($product_id === $orderSelected[$i]["id"]) {
+                unset($orderSelected[$i]);
+                $orderSelected = array_values($orderSelected);
                 break;
             }
         }
 
-        $array_size = count($ordersSession);
+
+        if ($itemType == "combo") {
+            $comboOrder = $orderSelected;
+            $_SESSION['comboOrders'] = $comboOrder;
+        } else if ($itemType == "prod") {
+            $prodOrder = $orderSelected;
+            $_SESSION['prodOrders'] = $prodOrder;
+        }
 
 
-
+        $ordersSession = array_merge($prodOrder, $comboOrder);
         $_SESSION['orders'] = $ordersSession;
-        dpCart($ordersSession);
-        if (!($array_size != 0 || $array_size)) {
+        dpCart($prodOrder, $comboOrder);
+
+        if (count($ordersSession) == 0) {
             unset($_SESSION['orders']);
             unset($_SESSION['discountType']);
             unset($_SESSION['discount']);
             unset($_SESSION['total']);
             unset($_SESSION['subtotal']);
+            unset($_SESSION['comboOrders']);
+            unset($_SESSION['prodOrders']);
         }
     }
 
@@ -196,62 +274,106 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     if (isset($_POST['transac']) && $_POST["transac"] === "addToCart") {
         // $transac =;
         session_start();
-        $product_id = $_POST["product_id"];
-        if ($product_id == "cmb") {
-            return;
-        }
+        $id = $_POST["product_id"];
 
+        $pdoTemp = new cashierController(null, null, $id);
+        $prodOrder = array();
+        $comboOrder = array();
+        $orders = array();
 
-        $pdoTemp = new cashierController(null, null, $product_id);
-        $product_fetch = $pdoTemp->addToCart();
-        
         if (isset($_SESSION['categoryState'])) {
             $state = $_SESSION['categoryState'];
             if ($state == "cmb") {
-                
+                $fetch = $pdoTemp->addToCart("cmb");
+                $price = (int)$fetch['comboPrice'];
+
+                $orderList = array(
+                    "id" => $id,
+                    "name" => $fetch['comboName'],
+                    "qntity" => 1,
+                    "price" => $price
+                );
+
+                if (isset($_SESSION['comboOrders'])) {
+                    $comboOrder = $_SESSION['comboOrders'];
+                }
+
+                $array_size = count($comboOrder);
+
+                $tempVar = 1;
+
+                for ($i = 0; $i < $array_size; $i++) {
+                    if ($id == $comboOrder[$i]["id"]) {
+                        $comboOrder[$i]["qntity"] += 1;
+                        $comboOrder[$i]["price"] += $price;
+                        $tempVar++;
+                    }
+                }
+
+
+                if ($tempVar === 1) {
+                    array_push($comboOrder, $orderList);
+                }
+
+                $_SESSION['comboOrders'] = $comboOrder;
+            } else {
+                echo "Something went wrong...";
+                return;
             }
-        }
-        $price = (int)$product_fetch['price'];
+        } else {
+            $fetch = $pdoTemp->addToCart("prd");
+            $price = (int)$fetch['price'];
 
-        $orderList = array(
-            "product_id" => $product_id,
-            "product_name" => $product_fetch['name'],
-            "qntity" => 1,
-            "price" => $price
-        );
-
-        $ordersSession = array();
-
-        if (isset($_SESSION['orders'])) {
-            $ordersSession = $_SESSION['orders'];
-        }
+            $orderList = array(
+                "id" => $id,
+                "name" => $fetch['name'],
+                "qntity" => 1,
+                "price" => $price
+            );
 
 
-
-        // array_push($ordersSession, $product_id);
-
-        $array_size = count($ordersSession);
-
-        $tempVar = 1;
-
-        for ($i = 0; $i < $array_size; $i++) {
-            if ($product_id == $ordersSession[$i]["product_id"]) {
-                $ordersSession[$i]["qntity"] += 1;
-                $ordersSession[$i]["price"] += $price;
-                $tempVar++;
+            if (isset($_SESSION['prodOrders'])) {
+                $prodOrder = $_SESSION['prodOrders'];
             }
-        }
 
-        if ($tempVar === 1) {
-            array_push($ordersSession, $orderList);
-        }
-        $product_id = "";
 
-        $_SESSION['orders'] = $ordersSession;
-        // var_dump($ordersSession);
-        $array_size = count($ordersSession);
-        // var_dump($_SESSION['orders']);
-        dpCart($ordersSession);
+
+            // array_push($prodOrder, $product_id);
+
+            $array_size = count($prodOrder);
+
+            $tempVar = 1;
+
+            for ($i = 0; $i < $array_size; $i++) {
+                if ($id == $prodOrder[$i]["id"]) {
+                    $prodOrder[$i]["qntity"] += 1;
+                    $prodOrder[$i]["price"] += $price;
+                    $tempVar++;
+                }
+            }
+
+
+            if ($tempVar === 1) {
+                array_push($prodOrder, $orderList);
+            }
+
+            $_SESSION['prodOrders'] = $prodOrder;
+            // var_dump($ordersSession);
+            // $array_size = count($ordersSession);
+            // var_dump($_SESSION['orders']);
+        }
+        if (isset($_SESSION['comboOrders'])) {
+            $comboOrder = $_SESSION['comboOrders'];
+        }
+        if (isset($_SESSION['prodOrders'])) {
+            $prodOrder = $_SESSION['prodOrders'];
+        }
+        $orders = array_merge($comboOrder, $prodOrder);
+        $_SESSION['orders'] = $orders;
+
+
+        dpCart($prodOrder, $comboOrder);
+        $id = "";
     }
 
 
@@ -321,29 +443,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     }
 
 
-    // INSERT ORDERS INTO DATABASE
-
-    // if (isset($_POST['transac']) && $_POST['transac'] === "submitOrders") {
-    //     session_start();
-
-    //     if (isset($_SESSION['orders'], $_SESSION['confirmation']) && $_SESSION['confirmation'] == true) {
-    //         $orders = $_SESSION['orders'];
-
-    //         $pdoTemp = new cashierController($orders, null, null);
-
-    //         if ($pdoTemp->submitOrders()) {
-    //             unset($_SESSION['confirmation']);
-    //         } else {
-    //             echo "error";
-    //         }
-    //     } else {
-    //         echo "error";
-    //     }
-    // }
-
-
-
-
 
     if (isset($_POST['transac']) && $_POST['transac'] === "print") {
         session_start();
@@ -369,7 +468,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $ordersSession = $_SESSION['ordersT'];
         }
         $array_size = count($ordersSession);
-
+        $date = date('d/m/Y');
+        $time = date('h:i A');
 
 
 
@@ -386,8 +486,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                     <hr>
                     <ol>
                         <li>Date</li>
-                        <li>04/09/04</li>
-                        <li>08:45am</li>
+                        <li>'.$date.'</li>
+                        <li>'.$time.'</li>
                     </ol>
                     <hr>
                     <ol>
@@ -412,12 +512,12 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         if (isset($_SESSION['ordersT'])) {
             foreach ($ordersSession as $order) {
                 echo '
-                                <tr>
-                                    <td>' . $order['qntity'] . '</td>
-                                    <td>' . $order['product_name'] . '</td>
-                                    <td>₱' . $order['price'] . '</td>
-                                </tr>
-                                ';
+                    <tr>
+                        <td>' . $order['qntity'] . '</td>
+                            <td>' . $order['name'] . '</td>
+                            <td>₱' . $order['price'] . '</td>
+                        </tr>
+                     ';
             }
         }
 
@@ -447,11 +547,10 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                     <li>' . $total . '</li>
                 </ol>
             </div>
-    ';
+        ';
         if (isset($_SESSION['refNo2'])) {
             unset($_SESSION['refNo2']);
         }
-        // submitOrders();
         // var_dump($ordersSession);
         // var_dump(implode($ordersSession));
 
@@ -467,7 +566,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     if (isset($_POST['transac']) && $_POST['transac'] === "pay") {
         session_start();
-        $customer_money = $_POST["money"];
+        $customer_money = intval($_POST["money"]);
         if (isset($_SESSION['total'])) {
             $total = $_SESSION['total'];
             $gcashName = "-----";;
@@ -642,18 +741,44 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     }
 }
 
-function dpCart($ordersSession)
+function dpCart($prodArr, $comboArr)
 {
-    if ($ordersSession) {
-        foreach ($ordersSession as $value) {
+    if (!$prodArr && !$comboArr) {
+        return;
+    }
+    if ($comboArr) {
+        foreach ($comboArr as $value) {
             echo '
                     <ol>
                         <li>
                             <p class="arrow_controll"><i class="fas fa-arrow-right"></i></p>
                             <p>' . $value['qntity'] . '</p>
-                            <p>' . $value['product_name'] . '</p>
+                            <p>' . $value['name'] . '</p>
                             <p class="pr">₱' . $value['price'] . '</p>
-                            <div id="' . $value['product_id'] . '" class="edga"><i id="rmitem" class="fas fa-plus" title="Remove Item" style="transform: rotate(45deg);"></i></div>
+                            <div id="' . $value['id'] . '" class="edga"><i id="rmitemCombo" class="fas fa-plus" title="Remove Item" style="transform: rotate(45deg);"></i></div>
+                        </li>
+                        <li class="qntity">
+                            <div>
+                                <p>Quantity</p>
+                                <form id="changeqntity">
+                                    <input type="number" value="' . $value['qntity'] . '" name="qntity" >
+                                </form>
+                            </div>
+                        </li>
+                    </ol>
+        ';
+        }
+    }
+    if ($prodArr) {
+        foreach ($prodArr as $value) {
+            echo '
+                    <ol>
+                        <li>
+                            <p class="arrow_controll"><i class="fas fa-arrow-right"></i></p>
+                            <p>' . $value['qntity'] . '</p>
+                            <p>' . $value['name'] . '</p>
+                            <p class="pr">₱' . $value['price'] . '</p>
+                            <div id="' . $value['id'] . '" class="edga"><i id="rmitem" class="fas fa-plus" title="Remove Item" style="transform: rotate(45deg);"></i></div>
                         </li>
                         <li class="qntity">
                             <div>
@@ -668,12 +793,15 @@ function dpCart($ordersSession)
         }
     }
 }
+
 function submitOrders($refNo, $totalAmount, $pmethod, $gcashName, $gcashNum)
 {
     // session_start();
 
     if (isset($_SESSION['orders'])) {
         $orders = $_SESSION['orders'];
+        $prodOrder = $_SESSION['prodOrders'];
+        $comboOrder = $_SESSION['comboOrders'];
         $discount = "-----";
         $discountType = "-----";
         if (isset($_SESSION['discount'])) {
@@ -684,8 +812,8 @@ function submitOrders($refNo, $totalAmount, $pmethod, $gcashName, $gcashNum)
 
 
         $orderList = [];
-        foreach ($orders as $dd) {
-            $id = $dd['product_id'];
+        foreach ($prodOrder as $dd) {
+            $id = $dd['id'];
             $price = $dd['price'];
             $qntity = $dd['qntity'];
             // array_push($orderList,)
@@ -703,11 +831,33 @@ function submitOrders($refNo, $totalAmount, $pmethod, $gcashName, $gcashNum)
             ];
         }
 
-        // var_dump($orderList);
+        $comboOrderList = [];
+        foreach ($comboOrder as $dd) {
+            $id = $dd['id'];
+            $price = $dd['price'];
+            $qntity = $dd['qntity'];
+            // array_push($orderList,)
+            $comboOrderList[] = [
+                "combo_id" => $id,
+                "price" => $price,
+                "qntity" => $qntity,
+                "refNo" => $refNo,
+                "discount" => $discount,
+                "discountType" => $discountType,
+                "totalAmount" => $totalAmount,
+                "pmethod" => $pmethod,
+                "gcashName" => $gcashName,
+                "gcashNum" => $gcashNum,
+            ];
+        }
+
         $pdoTemp = new cashierController($orderList, null, null);
-        $pdoTemp->submitOrders();
+        $pdoTemp->submitOrdersController($comboOrderList);
         $pdoTemp = new cashierController(null, null, null);
         unset($orders);
+        unset($comboOrderList);
+        unset($prodOrder);
+        unset($comboOrder);
         unset($orderList);
         // unset($_SESSION['refNo']);
 

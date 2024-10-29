@@ -83,6 +83,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['transac'])) {
 
         $addCategory = new ProductController(null, null, null, null, null, null, $category_name);
 
+        if ($addCategory->isCategoryExist($category_name)) {
+            $errors["used"] = "Category name already used";
+        }
         if (!$errors) {
 
             $addCategory->addCategory();

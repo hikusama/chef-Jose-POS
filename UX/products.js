@@ -37,8 +37,8 @@ $(document).ready(function () {
             setTimeout(() => {
                 $("#content_products >*").removeClass("changeComboSec")
                 $("#content_products >*").detach()
-            allProducts("")
-        }, 250);
+                allProducts("")
+            }, 250);
             $("#findComboExec").attr("placeholder", "Seach for products...");
             $("#findComboExec").attr("id", "findExec");
         }
@@ -55,14 +55,14 @@ $(document).ready(function () {
             setTimeout(() => {
                 $("#content_products >*").removeClass("changeComboSec")
                 $("#content_products >*").detach()
-            allCombo("")
+                allCombo("")
 
             }, 250);
             $("#findExec").attr("placeholder", "Seach for combo's or code...");
             $("#findExec").attr("id", "findComboExec");
         }
-            // console.log("prd: ",prdShowState,"\nopen?: ",reqOpen);
-            
+        // console.log("prd: ",prdShowState,"\nopen?: ",reqOpen);
+
     });
 
 
@@ -87,6 +87,11 @@ $(document).ready(function () {
                     $(".myproducts #addComboForm input").val("");
                     $(".combo-response").html("");
                     $(".exit").trigger("click");
+                    if (prdShowState == true) {
+                        $("#cmboType").trigger("click");
+                    }else{
+                        allCombo("")
+                    }
                     notify("Combo added successfully...")
                 }
             }
@@ -296,7 +301,11 @@ $(document).ready(function () {
                     open_Insertion = true;
                     clearInterval(interval)
                     $("#imgdisplay").attr('src', '../image/dpTemplate.png');
-                    allProducts("")
+                    if (prdShowState == false) {
+                        $("#prdType").trigger("click");
+                    }else{
+                        allProducts("")
+                    }
                     $(".label_style").removeClass("newlabel_style");
                     $("#overlay_prod").hide();
                     $("#addProductForm input").val("");
@@ -636,7 +645,7 @@ function allCombo(comboName) {
                     $(this).delay(index * 100).fadeIn(200);
                 });
                 // $(".loading_sc").parent().css("overflow-y", "scroll");
-            return reqOpen = true
+                return reqOpen = true
             }, 1500);
         }
     });
@@ -679,7 +688,7 @@ function allProducts(searchArg) {
                     $(this).delay(index * 100).fadeIn(200);
                 });
                 // $(".loading_sc").parent().css("overflow-y", "scroll");
-            return reqOpen = true
+                return reqOpen = true
             }, 1500);
         }
     });

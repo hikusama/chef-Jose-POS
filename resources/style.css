@@ -579,7 +579,6 @@ img {
     flex-direction: column;
     list-style: none;
     border-radius: .5rem;
-
 }
 
 .monokai_mode .products_content ol {
@@ -595,7 +594,19 @@ img {
     border: solid 1px rgb(189 189 189 / 26%);
 
 }
-
+.dark_mode .products_content .adding{
+    animation-name: addingToCart;
+    animation-iteration-count: 1;
+    animation-duration: .3s;
+}
+@keyframes addingToCart {
+    0%{
+        border: solid 1px rgba(255, 104, 3, 0.856);
+        background-color: rgba(255, 104, 3, 0.212);
+        transform: scale(.8);
+        border-radius: 1rem;
+    }
+}
 .products_content ol:hover {
     border: solid 1px rgba(255, 104, 3, 0.856);
     background-color: rgba(255, 104, 3, 0.329);

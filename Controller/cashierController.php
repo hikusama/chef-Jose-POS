@@ -27,18 +27,18 @@ class cashierController extends Model
         return $this->getAllCombosModel($this->product_name);
     }
 
-    public function addToCart()
+    public function addToCart($type)
     {
 
-        return $this->itemsForAddToCart($this->product_id);
+        return $this->itemsForAddToCart($this->product_id,$type);
     }
 
     public function getRefNo():int {
         return $this->getOrderItemsLastId();
     }
-    public function submitOrders()
+    public function submitOrdersController($comboOrder)
     {
-        $this->insertOrders($this->orders);
+        $this->insertOrders($this->orders,$comboOrder);
     }
 
 

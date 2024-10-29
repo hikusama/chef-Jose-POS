@@ -22,7 +22,7 @@
 
             <section>
                 <li><img src="../image/logo.png" alt="logo" id="logo"></li>
-                <li class="search"><input type="search" name="search" placeholder="Seach products..." id="search"><label for="search"><i class="fas fa-search"></i></label>
+                <li class="search"><input type="search" name="search" placeholder="Search products..." id="search"><label for="search"><i class="fas fa-search"></i></label>
                 </li>
             </section>
             <section>

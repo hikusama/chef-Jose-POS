@@ -2,6 +2,7 @@
 
 $(document).ready(function () {
 
+    let r = false;
 
     GlobalformData = new FormData();
     GlobalformData.append("transac", "viewCart");
@@ -10,6 +11,7 @@ $(document).ready(function () {
     getCategory()
     allTotal()
     let reqOpen = true
+    let isCmbSec = false
 
     $("#discount").click(function (e) {
         e.preventDefault();
@@ -203,13 +205,21 @@ $(document).ready(function () {
 
     $(".products_content").on("click", "ol", function (e) {
         e.preventDefault();
+        $(this).addClass("adding");
+        // $(".products_content ol").removeClass("adding");
+        
+        setTimeout(() => {
+            $(".products_content ol").removeClass("adding");
+        }, 300);
 
         if (reqOpen == true) {
             reqOpen = false
             toAddProduct_id = $(this).find("img").attr("id");
-            price = parseInt($(this).find("h4 b").html().substring(1));
+            price = $(this).find("h4 b").html().substring(1);
+            price = parseInt(price.split(",").join(""));
             product_name = $(this).find("h5").html();
-
+            console.log(price);
+            
             formData = new FormData();
             formData.append("product_id", toAddProduct_id);
 
@@ -223,11 +233,9 @@ $(document).ready(function () {
     });
 
 
-    $("#counter_body").on("click", "#rmitem", function (e) {
+    $("#counter_body").on("click", "#rmitemCombo", function (e) {
         e.stopPropagation();
 
-        product_id = $(this).parent().attr("id");
-        console.log(product_id);
 
 
         $(this).closest('ol').addClass("removeItem");
@@ -240,8 +248,46 @@ $(document).ready(function () {
         formData = new FormData();
         formData.append("product_id", $(this).parent().attr("id"));
         formData.append("transac", "removeToCart");
+        formData.append("itemType", "combo");
 
-        console.log(product_id);
+        $.ajax({
+            url: '../Views/cashierView.php',
+            method: 'POST',
+            data: formData,
+            contentType: false,
+            processData: false,
+            success: function (response) {
+                response = response.trim()
+                allTotal()
+                if (!response) {
+                    $('#counter_body').html(`<div class="noItem">Cart is empty...</div>`);
+
+                } else {
+
+                }
+
+            }
+        });
+
+
+    });
+    $("#counter_body").on("click", "#rmitem", function (e) {
+        e.stopPropagation();
+
+
+
+        $(this).closest('ol').addClass("removeItem");
+        setTimeout(() => {
+            $(this).closest('ol').removeClass("removeItem");
+            $(this).closest('ol').remove();
+        }, 250);
+
+
+        formData = new FormData();
+        formData.append("product_id", $(this).parent().attr("id"));
+        formData.append("transac", "removeToCart");
+        formData.append("itemType", "prod");
+
         $.ajax({
             url: '../Views/cashierView.php',
             method: 'POST',
@@ -278,7 +324,7 @@ $(document).ready(function () {
         removeAllFromCart(refresCart, "viewCart");
     });
 
-
+// errorrrrr
     $("#counter_body").on("submit", "#changeqntity", function (e) {
         e.preventDefault();
 
@@ -298,6 +344,8 @@ $(document).ready(function () {
                 price = price / old_qntity;
                 price = price * qntity;
                 $(this).closest("ol").find(".pr").html("₱" + price);
+                let type = $(this).closest("ol").find(".edga").children().attr("id");
+
 
 
                 product_id = $(this).closest("ol").find(".edga").attr("id");
@@ -309,6 +357,7 @@ $(document).ready(function () {
 
                 formData.append("transac", "changeqntity");
                 formData.append("product_id", product_id);
+                formData.append("type", type);
 
 
                 $.ajax({
@@ -358,18 +407,25 @@ $(document).ready(function () {
     $(".category_nav_inner").on('click', 'li', function (e) {
         e.preventDefault();
         hasClass = $(this).hasClass("prod_nav");
-        catId = $(this).attr("id");
+        let catId = $(this).attr("id");
         if (!hasClass && reqOpen == true) {
             reqOpen = false
+            if (catId == "cmb") {
+                $("#search").attr("placeholder","Search combo\s...")
+                isCmbSec = true;
+            }else{
+                $("#search").attr("placeholder","Search products...")
+                isCmbSec = false;
+            }
             $(".category_nav_inner li").removeClass("prod_nav");
             $(this).addClass("prod_nav")
             console.log(catId);
             $("#search").val('')
             searchNView('', catId);
 
-        }else{
+        } else {
             console.log("Server busy in category");
-            
+
         }
 
     });
@@ -447,9 +503,6 @@ $(document).ready(function () {
 
         formData.append("transac", tr);
 
-        if (p_id == "cmb") {
-            return
-        }
 
         $.ajax({
             url: '../Views/cashierView.php',
@@ -459,8 +512,11 @@ $(document).ready(function () {
             processData: false,
             success: function (response) {
                 response = response.trim()
-
-                allTotal()
+                if (r == false) {
+                    r = true
+                }else{            
+                    allTotal()
+                }
 
                 if (!response) {
                     $('#counter_body').html(`<div class="noItem">Cart is empty...</div>`);
@@ -499,47 +555,53 @@ $(document).ready(function () {
 
 
                         if (positive < 1) {
+                            let type
+                            if (isCmbSec) {
+                                type = "rmitemCombo"
+                            }else{
+                                type = "rmitem"
+                            }
 
                             hs = $('#counter_body > *:nth-child(1)').hasClass("noItem");
 
                             if (hs) {
                                 $('#counter_body').html(`<ol>
-                                <li>
-                                    <p class="arrow_controll"><i class="fas fa-arrow-right"></i></p>
-                                    <p>1</p>
-                                    <p>${product_name}</p>
-                                    <p class="pr">₱${price}</p>
-                                    <div id="${p_id}" class="edga"><i id="rmitem" class="fas fa-plus" title="Remove Item" style="transform: rotate(45deg);"></i></div>
-                                </li>
-                                <li class="qntity">
-                                    <div>
-                                        <p>Quantity</p>
-                                        <form id="changeqntity">
-                                            <input type="number" value="1" name="qntity" >
-                                        </form>
-                                    </div>
-                                </li>
-                            </ol>`);
+                                        <li>
+                                            <p class="arrow_controll"><i class="fas fa-arrow-right"></i></p>
+                                            <p>1</p>
+                                            <p>${product_name}</p>
+                                            <p class="pr">₱${price}</p>
+                                            <div id="${p_id}" class="edga"><i id="${type}" class="fas fa-plus" title="Remove Item" style="transform: rotate(45deg);"></i></div>
+                                        </li>
+                                        <li class="qntity">
+                                            <div>
+                                                <p>Quantity</p>
+                                                <form id="changeqntity">
+                                                    <input type="number" value="1" name="qntity" >
+                                                </form>
+                                            </div>
+                                        </li>
+                                    </ol>`);
                             } else {
 
 
                                 $('#counter_body').append(`<ol>
-                            <li>
-                                <p class="arrow_controll"><i class="fas fa-arrow-right"></i></p>
-                                <p>1</p>
-                                <p>${product_name}</p>
-                                <p class="pr">₱${price}</p>
-                                <div id="${p_id}" class="edga"><i id="rmitem" class="fas fa-plus" title="Remove Item" style="transform: rotate(45deg);"></i></div>
-                            </li>
-                            <li class="qntity">
-                                <div>
-                                    <p>Quantity</p>
-                                    <form id="changeqntity">
-                                        <input type="number" value="1" name="qntity" >
-                                    </form>
-                                </div>
-                            </li>
-                        </ol>`);
+                                    <li>
+                                        <p class="arrow_controll"><i class="fas fa-arrow-right"></i></p>
+                                        <p>1</p>
+                                        <p>${product_name}</p>
+                                        <p class="pr">₱${price}</p>
+                                        <div id="${p_id}" class="edga"><i id="${type}" class="fas fa-plus" title="Remove Item" style="transform: rotate(45deg);"></i></div>
+                                    </li>
+                                    <li class="qntity">
+                                        <div>
+                                            <p>Quantity</p>
+                                            <form id="changeqntity">
+                                                <input type="number" value="1" name="qntity" >
+                                            </form>
+                                        </div>
+                                    </li>
+                                </ol>`);
                             }
 
                         }
@@ -567,13 +629,12 @@ $(document).ready(function () {
                     // });
 
                 }
-                
-            },complete:function () {
-                
+
+            }, complete: function () {
+
                 return reqOpen = true
             }
         });
-
     }
 
     function searchNView(searchVal, category_id) {
@@ -599,8 +660,8 @@ $(document).ready(function () {
                     $(this).delay(index * 100).fadeIn(200);
                 });
 
-            },complete:function () {
-                
+            }, complete: function () {
+
                 return reqOpen = true
             }
         });

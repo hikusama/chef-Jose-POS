@@ -426,9 +426,17 @@
 
 
 
-        public function itemsForAddToCart($prod_id): array
+        public function itemsForAddToCart($prod_id, $type): array
         {
-            $sql = "SELECT * FROM products WHERE products.productId = ?";
+            $sql = "";
+            if ($type == "prd") {
+                $sql = "SELECT * FROM products WHERE productId = ?";
+            } else if ($type == "cmb") {
+                $sql = "SELECT * FROM combo WHERE comboId = ?";
+            } else {
+                echo "Something went wrong...";
+                return null;
+            }
             $pdo = $this->connect();
             $stmt = $pdo->prepare($sql);
 
@@ -444,38 +452,53 @@
         }
 
 
-        public function insertOrders($orders)
+        public function insertOrders($prodOrders, $comboOrder)
         {
+            $orders = array_merge($prodOrders, $comboOrder);
 
-            $stmt = $this->connect()->prepare("INSERT INTO orderitems (productID,quantity,unitPrice,ref_no) 
-            VALUES (?, ?, ?, ?)");
+            $stmt = $this->connect()->prepare("INSERT INTO orderitems (productID,itemType,quantity,unitPrice,ref_no) 
+            VALUES (?, ?, ?, ?, ?)");
+            $stmt2 = $this->connect()->prepare("INSERT INTO orderitems (comboID,itemType,quantity,unitPrice,ref_no) 
+            VALUES (?, ?, ?, ?, ?)");
 
-            $ngiao = 0;
-            foreach ($orders as $order) {
-                // $stmt->bindParam("iiii",);
-                if ($stmt->execute([$order['product_id'], $order['qntity'], $order['price'], (int)$order['refNo']])) {
-                } else {
-                    $ngiao = $ngiao + 1;
-                }
-            }
-            if ($ngiao > 0) {
-                return false;
-            } else {
-                $this->insertSumOrders($orders[0]['totalAmount'], $orders[0]['discount'], $orders[0]['discountType'], $orders[0]['refNo'], $orders[0]['pmethod'], $orders[0]['gcashName'], $orders[0]['gcashNum']);
-            }
-        }
-
-        public function insertSumOrders($totalAmount, $discount, $discountType, $refNo, $pmethod, $gcashName, $gcashNum)
-        {
-
-
-            $stmt = $this->connect()->prepare("INSERT INTO orders (totalAmount,discount,discountType,ref_no,paymentMethod,gcashAccountName,gcashAccountNo)
+            $stmtF = $this->connect()->prepare("INSERT INTO orders (totalAmount,discount,discountType,ref_no,paymentMethod,gcashAccountName,gcashAccountNo)
             VALUES (?, ?, ?, ?, ?, ?, ?)");
 
 
 
-            if ($stmt->execute([$totalAmount, $discount, $discountType, $refNo, $pmethod, $gcashName, $gcashNum])) {
+            if ($stmtF->execute([$orders[0]['totalAmount'], $orders[0]['discount'], $orders[0]['discountType'], $orders[0]['refNo'], $orders[0]['pmethod'], $orders[0]['gcashName'], $orders[0]['gcashNum']])) {
             } else {
+                return false;
+            }
+            $ngiao = 0;
+            if ($prodOrders) {
+                foreach ($prodOrders as $prd) {
+                    // $stmt->bindParam("iiii",);
+                    if (
+                        ($stmt->execute([$prd['product_id'], "product", $prd['qntity'], $prd['price'], (int)$prd['refNo']]))
+                    ) {
+                    } else {
+                        $ngiao = $ngiao + 1;
+                    }
+                }
+            }
+            if ($ngiao > 0) {
+                return false;
+            }
+            if ($comboOrder) {
+                foreach ($comboOrder as $cmb) {
+                    // $stmt->bindParam("iiii",);
+                    if (
+                        ($stmt2->execute([$cmb['combo_id'], "combo", $cmb['qntity'], $cmb['price'], (int)$cmb['refNo']]))
+                    ) {
+                    } else {
+                        $ngiao = $ngiao + 1;
+                    }
+                }
+            }
+
+
+            if ($ngiao > 0) {
                 return false;
             }
         }
@@ -488,10 +511,12 @@
             $stmt->execute();
 
             if ($stmt->rowCount() == 0) {
-                $sql2 = "TRUNCATE TABLE orders";
-                $stmt2 = $this->connect()->prepare($sql2);
-                $stmt2->execute();
-                if ($stmt2->execute()) {
+                $F1 = $this->connect()->prepare(
+                "DELETE FROM comboitems;
+                ALTER TABLE chef_jose_db.orderitems DROP FOREIGN KEY ref_bfk_2;
+                TRUNCATE TABLE orders;
+                ALTER TABLE `orderitems` ADD CONSTRAINT `ref_bfk_2` FOREIGN KEY (`ref_no`) REFERENCES `orders`(`ref_no`) ON DELETE CASCADE ON UPDATE RESTRICT");
+                if ($F1->execute()) {
                     return 1;
                 }
             } else {
@@ -500,4 +525,18 @@
                 return $num + 1;
             }
         }
+
+        public function isCategoryExist($cat){
+            $stmt = $this->connect()->prepare("SELECT category_name FROM category where category_name = ?");
+            $stmt->execute([$cat]);
+            $rows =  $stmt->fetch(PDO::FETCH_ASSOC);
+
+            if ($rows) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+
+
     }
