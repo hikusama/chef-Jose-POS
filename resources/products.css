@@ -25,7 +25,7 @@
     justify-content: center;
     place-items: center;
     margin-bottom: 2rem;
-width: 100%;
+    width: 100%;
 }
 
 #findComboExec,
@@ -46,23 +46,26 @@ width: 100%;
 
 }
 
-.dark_mode #findComboExec ,
+.dark_mode #findComboExec,
 .dark_mode #findExec {
     background-color: #181818;
     color: rgb(199, 199, 199);
     outline: solid 1px rgb(128 127 127 / 26%);
 }
-.changeComboSec{
+
+.changeComboSec {
     animation-name: comboSecShow;
     animation-duration: .7s;
     animation-iteration-count: 1;
 }
+
 @keyframes comboSecShow {
-    50%{
+    50% {
         opacity: 0;
         transform: translateX(-4rem);
     }
 }
+
 .find_prod>*:nth-child(2) {
     position: relative;
 
@@ -102,9 +105,18 @@ width: 100%;
 
 }
 
+.showType button:nth-child(1) {
+    border-radius: 4rem .1rem 0;
+}
+
+.showType button:nth-child(2) {
+    border-radius: .1rem 4rem 0 0;
+
+}
+
 .showType button {
-    border: solid 1px #ffbb00;
-    background: #a27c12;
+    border: solid 1px rgb(247, 100, 1);
+    background: rgba(255, 104, 3, 0.418);
     padding: .5rem 1.8rem;
     font-size: .9rem;
     border-bottom: none;
@@ -114,14 +126,16 @@ width: 100%;
     opacity: 50%;
 
 }
- 
+
 .state {
     opacity: 1 !important;
 }
-.showType button:hover{
+
+.showType button:hover {
     opacity: 1;
     transition: .3s;
 }
+
 .loading_sc {
     z-index: 2;
     padding: 0 .5rem;
@@ -1303,6 +1317,51 @@ width: 100%;
     color: white;
 }
 
+#content_products-cont #page-dir-cont {
+    background: none !important;
+    border: none !important;
+    cursor: default !important;
+}
+
+#content_products-cont #page-dir-cont .main-dir-link {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    width: 100%;
+    max-width: 100% !important;
+}
+
+#content_products-cont #page-dir-cont .main-dir-link button {
+    height: 2rem;
+    width: 3.5rem;
+    display: grid;
+    place-items: center;
+    border-radius: 1rem;
+    font-size: 1rem;
+}
+
+#content_products-cont #page-dir-cont .main-dir-link .data-link:hover {
+    background: rgb(212, 88, 5) !important;
+    transition: .2s;
+    cursor: pointer;
+
+}
+
+
+.dark_mode #content_products-cont #page-dir-cont .main-dir-link #more,
+.dark_mode #content_products-cont #page-dir-cont .main-dir-link #more {
+    background: #3a3939 !important;
+}
+
+#content_products-cont #page-dir-cont .main-dir-link #more {
+    background: #c1c1c1 !important;
+    color: white;
+}
+
+#content_products-cont #pageON {
+    background: rgb(212, 88, 5) !important;
+}
+
 .img-wrap-out>*:nth-child(2):hover {
     background-color: #424242;
     cursor: pointer;
@@ -1915,6 +1974,19 @@ width: 100%;
     visibility: hidden;
 }
 
+
+.delItem{
+    animation-name: delItem;
+    animation-iteration-count: 1;
+    animation-duration: .8s;
+}
+
+@keyframes delItem {
+    50%{
+        opacity: 0;
+        transform: translateX(-6rem);
+    }
+}
 
 
 

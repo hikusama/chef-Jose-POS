@@ -44,6 +44,9 @@
 
 
 
+
+
+
         //------------------------- PRODUCT THINGS -----------------------------
 
 
@@ -84,11 +87,24 @@
 
 
         //DELETE
-        public function product_delete($product_id)
+        public function product_delete($ID)
         {
-            $sql = "DELETE FROM products WHERE id = ?";
+            $sql = "DELETE FROM products WHERE productID = ?";
             $stmt = $this->connect()->prepare($sql);
-            $stmt->bindParam(1, $product_id, PDO::PARAM_INT);
+            $stmt->bindParam(1, $ID, PDO::PARAM_INT);
+
+            if ($stmt->execute()) {
+                return true;
+            }
+            error_log("Error deleting product: " . implode(", ", $stmt->errorInfo())); // Log error
+            return false;
+        }
+
+        public function combo_delete($combo_id)
+        {
+            $sql = "DELETE FROM combo WHERE comboID = ?";
+            $stmt = $this->connect()->prepare($sql);
+            $stmt->bindParam(1, $combo_id, PDO::PARAM_INT);
 
             if ($stmt->execute()) {
                 return true;
@@ -115,8 +131,14 @@
 
 
         // SEARCH W VIEW
-        public function searchNView($product_name)
+
+
+        public function searchNView($product_name, $page = 1)
         {
+            $max_page_per_req = 10;
+
+            $offset = ($page - 1) * $max_page_per_req;
+
             if (!empty($product_name)) {
                 $product_name = "%" . $product_name . "%";
             }
@@ -124,28 +146,61 @@
             $sql = "SELECT * FROM products INNER JOIN category ON category.category_id = products.category_id";
 
             if (!empty($product_name)) {
-                $sql .= " AND products.name LIKE :product_name OR category.category_name LIKE :product_name GROUP BY category.category_id";
-            } else {
-                $sql .= " GROUP BY products.productID";
+                $sql .= " AND products.name LIKE :product_name OR category.category_name LIKE :product_name";
             }
-
+            $sql .= " GROUP BY products.productID LIMIT :limit OFFSET :offset";
 
 
             $stmt = $this->connect()->prepare($sql);
 
             if (!empty($product_name)) {
                 // $stmt->bindParam(':product_name', $product_name);
-                $stmt->execute([':product_name' => $product_name]);
+                $stmt->bindParam(':product_name', $product_name);
             }
+            $stmt->bindParam(':limit', $max_page_per_req, PDO::PARAM_INT);
+            $stmt->bindParam(':offset', $offset, PDO::PARAM_INT);
+
 
             $stmt->execute();
 
             $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
+
+
+
+            $sql2Q = "SELECT COUNT(products.productID) AS total_rows FROM products";
+
+            if (!empty($product_name)) {
+                $sql2Q .= " INNER JOIN category ON category.category_id = products.category_id where products.name LIKE :product_name OR category.category_name LIKE :product_name";
+            }
+            $sql2 = $this->connect()->prepare($sql2Q);
+
+            if (!empty($product_name)) {
+                $sql2->bindParam(':product_name', $product_name);
+            }
+
+            $sql2->execute();
+
+            $rows2 = $sql2->fetch(PDO::FETCH_ASSOC);
+            $total_rows = ($rows2) ? (int)$rows2['total_rows'] : 0;
+
+
+
+            $total_pages = ceil($total_rows / $max_page_per_req);
+
+
             if ($rows) {
-                return $rows;
+                return [
+                    'data' => $rows,
+                    'total_pages' => $total_pages,
+                    'current_page' => $page
+                ];
             } else {
-                return null;
+                return [
+                    'data' => null,
+                    'total_pages' => null,
+                    'current_page' => null
+                ];
             }
         }
 
@@ -260,7 +315,7 @@
         }
 
 
-        // CHECKING EXISTENCE   
+        // CHECKING EXISTENSE   
         public function checkComboName($check)
         {
             $sql = "SELECT comboName FROM combo where comboName = ?";
@@ -289,33 +344,204 @@
         }
 
         // SEARCH COMBO   
-        public function findCombo($comboName)
+        public function findCombo($comboName, $page = 1)
         {
+
+            $max_page_per_req = 10;
+
+            $offset = ($page - 1) * $max_page_per_req;
 
             $sql = "SELECT combo.*,COUNT(comboitems.comboID) AS total_comboID FROM combo left join comboitems on combo.comboID = comboitems.comboID";
 
             if (!empty($comboName)) {
-                $sql .= " WHERE combo.comboName LIKE :comboName OR combo.comboCode LIKE :comboName group by combo.comboID";
-            } else {
-                $sql .= " group by combo.comboID";
+                $sql .= " WHERE combo.comboName LIKE :comboName OR combo.comboCode LIKE :comboName";
             }
+
+            $sql .= " GROUP BY combo.comboID LIMIT :limit OFFSET :offset";
+
             $stmt = $this->connect()->prepare($sql);
 
 
             if (!empty($comboName)) {
                 $comboName = "%" . $comboName . "%";
+                $stmt->bindParam(":comboName", $comboName);
+            }
+            $stmt->bindParam(':limit', $max_page_per_req, PDO::PARAM_INT);
+            $stmt->bindParam(':offset', $offset, PDO::PARAM_INT);
 
+            $stmt->execute();
+
+            $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+
+            $sql2 = "SELECT COUNT(comboitems.comboID) AS total_rows FROM comboitems";
+
+            if (!empty($comboName)) {
+                $sql2 .= " right join combo on combo.comboID = comboitems.comboID WHERE combo.comboName LIKE :comboName OR combo.comboCode LIKE :comboName";
+            }
+
+            $stmt2 = $this->connect()->prepare($sql2);
+
+            if (!empty($comboName)) {
+                $comboName = "%" . $comboName . "%";
                 $stmt->bindParam(":comboName", $comboName);
             }
 
-            if ($stmt->execute()) {
-                $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
-                return $rows;
+            $stmt2->execute();
+
+            $rows2 = $stmt2->fetch(PDO::FETCH_ASSOC);
+            $total_rows = ($rows2) ? (int)$rows2['total_rows'] : 0;
+
+
+            $total_pages = ceil($total_rows / $max_page_per_req);
+
+
+            if ($rows) {
+                return [
+                    'data' => $rows,
+                    'total_pages' => $total_pages,
+                    'current_page' => $page
+                ];
+            } else {
+                return [
+                    'data' => null,
+                    'total_pages' => null,
+                    'current_page' => null
+                ];
             }
 
 
             error_log("Error adding combo: " . implode(", ", $stmt->errorInfo()));
         }
+
+
+
+
+
+
+
+
+
+
+
+
+        //------------------------- HISTORY THINGS -----------------------------
+
+
+
+        public function getOrderRecord($ref){
+            $sql = "SELECT * FROM orderitems 
+            right join orders on orderitems.ref_no = orders.ref_no
+            right join products on products.productID = orderitems.productID
+             where itemType = product";
+            
+            $rows = [];           
+            if ($rows) {
+                return $rows;
+            } else {
+                return null;
+            }
+        }
+
+
+        public function getOrders($ref, $date,$page)
+        {
+
+            $max_page_per_req = 15;
+
+            $offset = ($page - 1) * $max_page_per_req;
+
+
+            $sql = "SELECT orderID,totalAmount,ref_no,orderDate,orderTime FROM orders";
+
+            $sqlTemp = "";
+
+            if (!empty($ref)) {
+                $ref = "%".$ref."%";
+
+                if (!empty($date)) {
+                    $sql .= " WHERE ref_no LIKE :ref and orderDate = ";
+                    $sql .= $date;
+                    $sqlTemp = " WHERE ref_no LIKE :ref and orderDate = ";
+                    $sqlTemp .= $date;
+                } else {
+                    $sql .= " WHERE ref_no LIKE :ref";
+                    $sqlTemp = " WHERE ref_no LIKE :ref";
+                }
+            } else if (!empty($date)) {
+                $sql .= " WHERE orderDate = ";
+                $sql .= $date;
+                $sqlTemp .= " WHERE orderDate = ";
+                $sqlTemp .= $date;
+
+            }
+            $sql .= " GROUP BY orderID LIMIT :limit OFFSET :offset";
+
+            $stmt = $this->connect()->prepare($sql);
+            if (!empty($ref)) {
+                $stmt->bindParam(':ref', $ref);
+            }
+            $stmt->bindParam(':limit', $max_page_per_req, PDO::PARAM_INT);
+            $stmt->bindParam(':offset', $offset, PDO::PARAM_INT);
+
+
+            // if (!empty($date)) {
+            //     $stmt->bindParam(':date', $date);
+            // }
+
+            $stmt->execute();
+
+            $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+
+
+            
+            $sql2 = "SELECT COUNT(orders.orderID) AS total_rows FROM orders";
+
+            
+            if (!empty($ref) || !empty($date)) {
+                $sql2 .= $sqlTemp;
+            }
+
+            $stmt2 = $this->connect()->prepare($sql2);
+
+            if (!empty($ref)) {
+                $stmt2->bindParam(':ref', $ref);
+            }
+
+            $stmt2->execute();
+
+            $rows2 = $stmt2->fetch(PDO::FETCH_ASSOC);
+            $total_rows = ($rows2) ? (int)$rows2['total_rows'] : 0;
+
+
+            $total_pages = ceil($total_rows / $max_page_per_req);
+
+
+            if ($rows) {
+                return [
+                    'data' => $rows,
+                    'total_pages' => $total_pages,
+                    'current_page' => $page
+                ];
+            } else {
+                return [
+                    'data' => null,
+                    'total_pages' => null,
+                    'current_page' => null
+                ];
+            }
+
+
+            error_log("Error adding combo: " . implode(", ", $stmt->errorInfo()));
+ 
+        }
+
+
+
+
+
+
 
 
 
@@ -367,6 +593,8 @@
                 return null;
             }
         }
+
+
         public function getAllProductss($product_name, $category)
         {
             if (!empty($product_name)) {
@@ -409,7 +637,6 @@
         }
 
 
-
         public function getCategory()
         {
             $sql = "SELECT * FROM category";
@@ -423,7 +650,6 @@
                 return null;
             }
         }
-
 
 
         public function itemsForAddToCart($prod_id, $type): array
@@ -512,10 +738,11 @@
 
             if ($stmt->rowCount() == 0) {
                 $F1 = $this->connect()->prepare(
-                "DELETE FROM comboitems;
+                    "DELETE FROM comboitems;
                 ALTER TABLE chef_jose_db.orderitems DROP FOREIGN KEY ref_bfk_2;
                 TRUNCATE TABLE orders;
-                ALTER TABLE `orderitems` ADD CONSTRAINT `ref_bfk_2` FOREIGN KEY (`ref_no`) REFERENCES `orders`(`ref_no`) ON DELETE CASCADE ON UPDATE RESTRICT");
+                ALTER TABLE `orderitems` ADD CONSTRAINT `ref_bfk_2` FOREIGN KEY (`ref_no`) REFERENCES `orders`(`ref_no`) ON DELETE CASCADE ON UPDATE RESTRICT"
+                );
                 if ($F1->execute()) {
                     return 1;
                 }
@@ -526,7 +753,8 @@
             }
         }
 
-        public function isCategoryExist($cat){
+        public function isCategoryExist($cat)
+        {
             $stmt = $this->connect()->prepare("SELECT category_name FROM category where category_name = ?");
             $stmt->execute([$cat]);
             $rows =  $stmt->fetch(PDO::FETCH_ASSOC);
@@ -537,6 +765,4 @@
                 return false;
             }
         }
-
-
     }

@@ -14,6 +14,7 @@ $(document).ready(function () {
     let actionSelect;
     reqOpen = false;
     allProducts("");
+    let prdShowState = true;
 
     open_Insertion = true;
     let findPr
@@ -21,7 +22,41 @@ $(document).ready(function () {
     let interval = "";
     // });
 
-    let prdShowState = true;
+    $(".myproducts").on("click", "#deleteByID", function (e) {
+        e.preventDefault()
+        id = parseInt($(this).parent().attr("id"))
+
+        console.log(id);
+        deleteThings(id)
+        $(".more_showPane").trigger("click");
+        $("#content_products .action_select").removeClass("action_selectNew");
+        $(this).closest('li').addClass('delItem')
+        setTimeout(() => {
+            $(this).closest('li').detach()
+        }, 300);
+
+
+
+    });
+
+
+    $(".myproducts").on("click", ".main-dir-link button", function (e) {
+        e.preventDefault()
+        // console.log($(this).attr("id"));
+        let page = $(this).attr("id")
+        let searchVal
+        if (page != "pageON") {
+
+            if (prdShowState) {
+                searchVal = $("#findExec").val()
+            } else {
+                searchVal = $("#findComboExec").val()
+            }
+            allProducts(searchVal, parseInt($(this).attr("id")))
+        }
+    });
+
+
     $(".myproducts").on("change", "#selectComboPic", function (e) {
         e.preventDefault();
         imagePick("#comboDP", "#selectComboPic");
@@ -39,7 +74,7 @@ $(document).ready(function () {
                 $("#content_products >*").detach()
                 allProducts("")
             }, 250);
-            $("#findComboExec").attr("placeholder", "Seach for products...");
+            $("#findComboExec").attr("placeholder", "Search for products or category...");
             $("#findComboExec").attr("id", "findExec");
         }
         // console.log("prd: ",prdShowState,"\nopen?: ",reqOpen);
@@ -58,7 +93,7 @@ $(document).ready(function () {
                 allCombo("")
 
             }, 250);
-            $("#findExec").attr("placeholder", "Seach for combo's or code...");
+            $("#findExec").attr("placeholder", "Search for combo's or code...");
             $("#findExec").attr("id", "findComboExec");
         }
         // console.log("prd: ",prdShowState,"\nopen?: ",reqOpen);
@@ -89,7 +124,7 @@ $(document).ready(function () {
                     $(".exit").trigger("click");
                     if (prdShowState == true) {
                         $("#cmboType").trigger("click");
-                    }else{
+                    } else {
                         allCombo("")
                     }
                     notify("Combo added successfully...")
@@ -303,7 +338,7 @@ $(document).ready(function () {
                     $("#imgdisplay").attr('src', '../image/dpTemplate.png');
                     if (prdShowState == false) {
                         $("#prdType").trigger("click");
-                    }else{
+                    } else {
                         allProducts("")
                     }
                     $(".label_style").removeClass("newlabel_style");
@@ -446,13 +481,6 @@ $(document).ready(function () {
     });
 
 
-
-
-
-
-    $("#content_products").on("click", "", function () {
-
-    });
 
 
 
@@ -621,10 +649,10 @@ function comboShowProd(search) {
 }
 
 
-
-function allCombo(comboName) {
+function allCombo(comboName, page = 1) {
     formData = new FormData()
     formData.append("transac", "findCombo")
+    formData.append("page", page)
     formData.append("comboName", comboName)
 
     $.ajax({
@@ -651,12 +679,13 @@ function allCombo(comboName) {
     });
 }
 
-function allProducts(searchArg) {
+function allProducts(searchArg, page = 1) {
     // hasClass = $("#content_products").children().hasClass("loading_sc");
     $('#content_products li').hide();
     $(".loading_sc").show();
 
     formData = new FormData()
+    formData.append("page", page)
     formData.append("transac", "showSearchProd")
     formData.append("name", searchArg)
     // if (hasClass) {
@@ -693,6 +722,34 @@ function allProducts(searchArg) {
         }
     });
 }
+
+
+// ACTION
+
+function deleteThings(id) {
+
+    formData = new FormData()
+    formData.append("ID", id)
+    formData.append("transac", "removeProd")
+
+    $.ajax({
+        url: '../views/productView.php',
+        method: 'POST',
+        data: formData,
+        contentType: false,
+        processData: false,
+        success: function (response) {
+            response = response.trim()
+            console.log(response);
+            
+            if (response == "Deleted") {
+                notify("Deleted successfully")
+            }
+        }
+    });
+
+}
+
 
 function notify(msg) {
     notif = `<div class="notification">

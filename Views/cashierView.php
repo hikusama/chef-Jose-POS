@@ -155,6 +155,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             }
         }
         if (isset($_POST["fakeTransac3"]) && $_POST["fakeTransac3"] === 'itsaprank3') {
+            unset($_SESSION['openPrint']);
             unset($_SESSION['ordersT']);
             unset($_SESSION['discountT']);
             unset($_SESSION['discountTypeT']);
@@ -461,13 +462,13 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         if (isset($_SESSION['discountT'], $_SESSION['discountTypeT'])) {
             $discountType = $_SESSION['discountTypeT'];
             $discount = $_SESSION['discountT'] . '%';
-        } else {
         }
         $ordersSession = array();
         if (isset($_SESSION['ordersT'])) {
             $ordersSession = $_SESSION['ordersT'];
         }
         $array_size = count($ordersSession);
+        date_default_timezone_set("Asia/manila");
         $date = date('d/m/Y');
         $time = date('h:i A');
 
@@ -603,6 +604,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             } else if ($total > $customer_money) {
                 echo 'Customer money is not enough.';
             } else if ($total != 0) {
+                $_SESSION['openPrint'] = true;
                 $pdoTemp = new cashierController(null, null, null);
                 $lastId = strval($pdoTemp->getRefNo());
                 $randNo = random_int(10000, 99999);
@@ -800,8 +802,8 @@ function submitOrders($refNo, $totalAmount, $pmethod, $gcashName, $gcashNum)
 
     if (isset($_SESSION['orders'])) {
         $orders = $_SESSION['orders'];
-        $prodOrder = $_SESSION['prodOrders'];
-        $comboOrder = $_SESSION['comboOrders'];
+        $prodOrder = (isset($_SESSION['prodOrders'])) ? $_SESSION['prodOrders'] : [];
+        $comboOrder = (isset($_SESSION['comboOrders'])) ? $_SESSION['comboOrders'] : [];
         $discount = "-----";
         $discountType = "-----";
         if (isset($_SESSION['discount'])) {

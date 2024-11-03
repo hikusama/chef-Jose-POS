@@ -16,7 +16,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['transac'])) {
 
         $product_name = htmlspecialchars(strip_tags($_POST['name']));
         $category_name = htmlspecialchars(strip_tags($_POST['category']));
-        $price = htmlspecialchars(strip_tags($_POST['price']));
+        $price = intval($_POST['price']);
         $quantity = htmlspecialchars(strip_tags($_POST['quantityInStock']));
 
         $product_image = null;
@@ -45,7 +45,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['transac'])) {
         $addProd = new ProductController(null, $product_name, $category_name, $price, $quantity, $product_image, null);
 
 
-        if ($addProd->is_empty_inputs($product_name, $category_name, $price, $quantity)) {
+
+        if ($addProd->is_empty_inputs($product_name, $category_name, $price, $quantity) || $price < 1 || $quantity < 1) {
             $errors["empty_inputs"] = "Please fill in all fields";
         }
         if (!$errors) {
@@ -167,19 +168,25 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['transac'])) {
 
     if ($_POST['transac'] == "removeProd") {
 
-        $product_id = htmlspecialchars(strip_tags($_POST['product_id']));
+        $ID = htmlspecialchars(strip_tags($_POST['ID']));
+        $type = "prd";
+        if (isset($_SESSION['cmbstate'])) {
+            $type = "combo";
+        }
 
+        
+        if (empty($ID)) {
+            return false;
+        }
+        $delete = new ProductController(null, null, null, null, null, null, null);
 
-        $delete = new ProductController($product_id, null, null, null, null, null, null);
+        if($delete->delete_things($ID,$type)){
+            echo "Deleted";
+        }else{
+            echo "Error deleting";
+        }
+        return;
 
-        $delete->deleteProducts();
-
-
-
-
-
-
-        // GET PRODUCT
 
     }
 
@@ -188,14 +195,23 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['transac'])) {
 
     if ($_POST['transac'] == "showSearchProd") {
 
+        if (isset($_SESSION['cmbstate'])) {
+            unset($_SESSION['cmbstate']);
+        }
 
         $product_name = htmlspecialchars(strip_tags($_POST['name']));
+        
+        (int)$selected_page = (intval($_POST['page']) == 0) ? 1 : intval($_POST['page']);
 
 
 
 
         $searchShow = new ProductController(null, $product_name, null, null, null, null, null);
-        $rows = $searchShow->getProdSearch();
+        $obj = $searchShow->getProdSearch($selected_page);
+        $rows = $obj['data'];
+        $total_pages = $obj['total_pages'];
+        $current_page = $obj['current_page'];
+
         echo '
         <div class="loading_sc">
             <div>
@@ -227,12 +243,35 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['transac'])) {
                 <p>₱' . $row['price'] . '</p>
                     <i class="fas fa-ellipsis-v more_showPane" title="See More"></i>
                     <div class="action_select" id="' . $row['productID'] . '">
-                        <p><i class="fas fa-edit"></i> Edit</p>
-                        <p><i class="fas fa-trash"></i> Delete</p>
-                        <p><i class="fas fa-eye"></i> View</p>
+                        <p id="editByID"><i class="fas fa-edit" ></i> Edit</p>
+                        <p id="deleteByID"><i class="fas fa-trash" ></i> Delete</p>
+                        <p id="viewByID"><i class="fas fa-eye"></i> View</p>
                     </div>
             </li>';
             }
+            echo '
+            <li id="page-dir-cont" style="">
+                <div class="main-dir-link">';
+                // $iterate = 1;
+                // $pg =  (51 / 100)  ;
+                // if ($current_page == 7) {
+                    
+                // }
+                for ($i=1; $i <= $total_pages ; $i++) {
+
+                    // if ($i === 8) {
+                    //     echo '<button type="button" id="more">...</button>';
+                    //     break;
+                    // }
+                    $g = ($i === $current_page) ? '<button type="button" id="pageON">' : '<button type="button" class="data-link" id="'.$i.'">' ;
+                    echo $g.$i;
+                    echo '</button>';
+
+                }
+                echo '</div>
+            </li>
+            ';
+
         } else {
             echo "No products..";
         }
@@ -311,6 +350,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['transac'])) {
                     </li>
                 </ol>';
             }
+
         } else {
             echo "No products..";
         }
@@ -534,10 +574,17 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['transac'])) {
 
 
     if ($_POST['transac'] == "findCombo") {
+
+        $_SESSION['cmbstate'] = true;
+
         $comboName = htmlspecialchars(strip_tags($_POST['comboName']));
+        (int)$selected_page = (intval($_POST['page']) == 0) ? 1 : intval($_POST['page']);
 
         $prodController = new ProductController(null, null, null, null, null, null, null);
-        $rows = $prodController->findComboGt($comboName);
+        $obj = $prodController->findComboGt($comboName,$selected_page);
+        $rows = $obj['data'];
+        $total_pages = $obj['total_pages'];
+        $current_page = $obj['current_page'];
         
         echo '
         <div class="loading_sc">
@@ -570,12 +617,28 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['transac'])) {
                 <p>₱' . $row['comboPrice'] . '</p>
                     <i class="fas fa-ellipsis-v more_showPane" title="See More"></i>
                     <div class="action_select" id="' . $row['comboID'] . '">
-                        <p><i class="fas fa-edit combo" ></i> Edit</p>
-                        <p><i class="fas fa-trash combo"></i> Delete</p>
-                        <p><i class="fas fa-eye" combo></i> View</p>
+                        <p id="editByID" ><i class="fas fa-edit"></i> Edit</p>
+                        <p id="deleteByID"><i class="fas fa-trash"></i> Delete</p>
+                        <p id="viewByID"><i class="fas fa-eye" ></i> View</p>
                     </div>
             </li>';
             }
+            echo '
+            <li id="page-dir-cont" style="">
+                <div class="main-dir-link">';
+                for ($i=1; $i <= $total_pages ; $i++) {
+                    // if ($i === 8) {
+                    //     echo '<button type="button" id="more">...</button>';
+                    //     break;
+                    // }
+                    $g = ($i === $current_page) ? '<button type="button" id="pageON">' : '<button type="button" class="data-link" id="'.$i.'">' ;
+                    echo $g.$i;
+                    echo '</button>';
+
+                }
+                echo '</div>
+            </li>
+            ';
         } else {
             echo "No combo..";
         }

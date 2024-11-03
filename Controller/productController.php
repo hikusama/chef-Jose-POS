@@ -9,7 +9,7 @@ class ProductController extends Model
     private $product_image;
     private $quantity;
     public $product_id;
-    public $Add_category;
+    private $Add_category;
 
 
     public function __construct($product_id, $product_name, $category_name, $price,  $product_image, $quantity, $Add_category)
@@ -37,19 +37,14 @@ class ProductController extends Model
         $this->editProduct($this->product_name, $this->category_name, $this->price, $this->product_image, $this->quantity);
     }
 
-    public function deleteProducts()
-    {
-        return $this->product_delete($this->product_id);
-    }
-
     public function getCat()
     {
         return $this->getCategory();
     }
 
-    public function getProdSearch()
+    public function getProdSearch($selected_page)
     {
-        return $this->searchNView($this->product_name);
+        return $this->searchNView($this->product_name,$selected_page);
     }
 
     public function getProdSearchComboByID()
@@ -99,9 +94,18 @@ class ProductController extends Model
     }
 
 
-    public function findComboGt($comboName)
+    public function findComboGt($comboName,$page)
     {
-        return $this->findCombo($comboName);
+        return $this->findCombo($comboName,$page);
+    }
+    
+    public function delete_things($ID,$type){
+        if ($type === "combo") {
+            return $this->combo_delete($ID);
+            
+        }else if($type === "prd"){
+            return $this->product_delete($ID);
+        }
     }
 
 

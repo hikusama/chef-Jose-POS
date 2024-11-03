@@ -1173,3 +1173,11 @@ img {
     margin: 2rem 0;
     text-align: center;
 }
+
+
+@media screen and (max-width:1180px) {
+
+    * {
+        cursor: default !important;
+    }
+}

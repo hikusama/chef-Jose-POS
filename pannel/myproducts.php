@@ -78,7 +78,7 @@
                         </div>
                         <div>
                             <i class="fas fa-search"></i>
-                            <input type="search" placeholder="Seach for products..." name="" id="findExec">
+                            <input type="search" placeholder="Search for products or category..." name="" id="findExec">
                         </div>
                     </div>
                     <div class="myprod_inner">
