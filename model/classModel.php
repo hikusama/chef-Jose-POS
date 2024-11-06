@@ -429,13 +429,23 @@
 
 
 
-        public function getOrderRecord($ref){
-            $sql = "SELECT * FROM orderitems 
-            right join orders on orderitems.ref_no = orders.ref_no
-            right join products on products.productID = orderitems.productID
-             where itemType = product";
-            
-            $rows = [];           
+        public function getOrderRecord($ref)
+        {
+
+
+            $sql = "SELECT ord.*, oi.*, pr.name,c.comboName FROM orders as ord
+            left join orderitems as oi on ord.ref_no = oi.ref_no
+            left join products as pr on oi.productID = pr.productID
+            left join comboitems as ci on pr.productID = ci.productID
+            left join combo as c on oi.comboID = c.comboID
+            where ord.ref_no = :ref";
+
+            $stmt = $this->connect()->prepare($sql);
+            $stmt->bindParam(':ref', $ref);
+            $stmt->execute();
+            $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+
             if ($rows) {
                 return $rows;
             } else {
@@ -444,7 +454,7 @@
         }
 
 
-        public function getOrders($ref, $date,$page)
+        public function getOrders($ref, $date, $page)
         {
 
             $max_page_per_req = 15;
@@ -457,23 +467,22 @@
             $sqlTemp = "";
 
             if (!empty($ref)) {
-                $ref = "%".$ref."%";
+                $ref = "%" . $ref . "%";
 
                 if (!empty($date)) {
-                    $sql .= " WHERE ref_no LIKE :ref and orderDate = ";
+                    $sql .= " WHERE ref_no LIKE :ref and ";
                     $sql .= $date;
-                    $sqlTemp = " WHERE ref_no LIKE :ref and orderDate = ";
+                    $sqlTemp = " WHERE ref_no LIKE :ref and ";
                     $sqlTemp .= $date;
                 } else {
                     $sql .= " WHERE ref_no LIKE :ref";
                     $sqlTemp = " WHERE ref_no LIKE :ref";
                 }
             } else if (!empty($date)) {
-                $sql .= " WHERE orderDate = ";
+                $sql .= " WHERE ";
                 $sql .= $date;
-                $sqlTemp .= " WHERE orderDate = ";
+                $sqlTemp .= " WHERE ";
                 $sqlTemp .= $date;
-
             }
             $sql .= " GROUP BY orderID LIMIT :limit OFFSET :offset";
 
@@ -495,10 +504,10 @@
 
 
 
-            
+
             $sql2 = "SELECT COUNT(orders.orderID) AS total_rows FROM orders";
 
-            
+
             if (!empty($ref) || !empty($date)) {
                 $sql2 .= $sqlTemp;
             }
@@ -534,7 +543,6 @@
 
 
             error_log("Error adding combo: " . implode(", ", $stmt->errorInfo()));
- 
         }
 
 
@@ -687,12 +695,12 @@
             $stmt2 = $this->connect()->prepare("INSERT INTO orderitems (comboID,itemType,quantity,unitPrice,ref_no) 
             VALUES (?, ?, ?, ?, ?)");
 
-            $stmtF = $this->connect()->prepare("INSERT INTO orders (totalAmount,discount,discountType,ref_no,paymentMethod,gcashAccountName,gcashAccountNo)
-            VALUES (?, ?, ?, ?, ?, ?, ?)");
+            $stmtF = $this->connect()->prepare("INSERT INTO orders (totalAmount,discount,discountType,ref_no,paymentMethod,gcashAccountName,gcashAccountNo,subtotal)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
 
 
 
-            if ($stmtF->execute([$orders[0]['totalAmount'], $orders[0]['discount'], $orders[0]['discountType'], $orders[0]['refNo'], $orders[0]['pmethod'], $orders[0]['gcashName'], $orders[0]['gcashNum']])) {
+            if ($stmtF->execute([$orders[0]['totalAmount'], $orders[0]['discount'], $orders[0]['discountType'], $orders[0]['refNo'], $orders[0]['pmethod'], $orders[0]['gcashName'], $orders[0]['gcashNum'],$orders[0]['subtotal']])) {
             } else {
                 return false;
             }

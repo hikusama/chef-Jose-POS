@@ -5,8 +5,29 @@
 $(document).ready(function () {
 
     getFindGroup("", "")
+    // e.preventDefault();
     // });
 
+    $(".history_info").on("click", "#print_receipt", function (e) {
+        e.preventDefault();
+
+        formData = new FormData()
+        formData.append('transac', "print")
+        $.ajax({
+            url: '../views/historyView.php',
+            method: 'POST',
+            data: formData,
+            contentType: false,
+            processData: false,
+            success: function (response) {
+
+            },complete: function () {
+
+                window.open("printPage", "blank")
+            }
+        });
+
+    });
     $(".findHistory").on("input", "#findOrder", function (e) {
         e.preventDefault();
         group = $(".historyOn").attr("id")
@@ -40,10 +61,14 @@ $(document).ready(function () {
 
     $(".data_history_cont").on("click", ".data ol", function (e) {
         e.preventDefault()
-        state = $(this).attr("id")
-        if (state && state == "page-dir-cont") {
+        hasC = $(this).hasClass("onHistoryDp");
+        console.log(hasC);
+        
+        if (!hasC && reqOpen) {
+            $(".data_history_cont .data ol").removeClass("onHistoryDp")
+            $(this).addClass("onHistoryDp")
             let refno = $(this).find(".key").attr("id")
-            // getOrderRecord(refno)
+            getOrderRecord(refno)
         }
     });
 
@@ -66,17 +91,20 @@ $(document).ready(function () {
 
 
     function getOrderRecord(refno) {
+        reqOpen = false;
         formData = new FormData()
         formData.append('transac', "getOrderRecord")
         formData.append('refno', refno)
         $.ajax({
-            url: '../view/historyView.php.php',
+            url: '../views/historyView.php',
             method: 'POST',
             data: formData,
             contentType: false,
             processData: false,
             success: function (response) {
                 $('.history_info').html(response);
+                reqOpen = true;
+
             }
         });
     }

@@ -67,21 +67,7 @@
             });
             window.onafterprint = function() {
                 window.close()
-                formData2 = new FormData()
 
-                formData2.append("fakeTransac3", "itsaprank3")
-                formData2.append("transac", "viewCart")
-                $.ajax({
-                    url: '../Views/cashierView.php',
-                    method: 'POST',
-                    data: formData,
-                    contentType: false,
-                    processData: false,
-                    success: function(response) {
-
-
-                    }
-                });
             }
 
         });

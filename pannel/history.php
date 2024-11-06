@@ -75,6 +75,7 @@
                             <button type="button" id="" class="historyOn">All</button>
                             <button type="button" id="todayH" class="1">Today</button>
                             <button type="button" id="yesterdayH" class="1">Yesterday</button>
+                            <button type="button" id="tweekH" class="1">This week</button>
                             <button type="button" id="weekH" class="1">A week ago</button>
                         </div>
                     </div>
@@ -87,7 +88,6 @@
             </div>
             <div class="history_pane">
                 <div class="history_info">
-                    <!--  
                         <ol>
                             <p>7874445741</p>
                             <h4>Reference No.</h4>
@@ -103,16 +103,28 @@
                         </ol>
                         <ol>
                             <li>
-                                <p>Payment Method</p>
-                                <p>Gcash</p>
-                            </li>
-                            <li>
                                 <p>Subtotal</p>
                                 <p>₱1451</p>
                             </li>
                             <li>
+                                <p>Payment Method</p>
+                                <p>Gcash</p>
+                            </li>
+                            <li>
+                                <p>Gcash Acc. name</p>
+                                <p>hiku</p>
+                            </li>
+                            <li>
+                                <p>Gcash Acc. no.</p>
+                                <p>09856093241</p>
+                            </li>
+                            <li>
                                 <p>Discount (%)</p>
                                 <p>10</p>
+                            </li>
+                            <li>
+                                <p>Discount type</p>
+                                <p>PWD</p>
                             </li>
                             <li>
                                 <p>Total Amount</p>
@@ -125,8 +137,7 @@
                                 <d>Delete</d>
                             </button>
                         </div>
-                    -->
-                    <img src="../image/logo.png" id="dpLogo" alt="logo">
+                    <!-- <img src="../image/logo.png" id="dpLogo" alt="logo"> -->
                 </div>
             </div>
 

@@ -154,18 +154,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 $comboOrder = $_SESSION['comboOrders'];
             }
         }
-        if (isset($_POST["fakeTransac3"]) && $_POST["fakeTransac3"] === 'itsaprank3') {
-            unset($_SESSION['openPrint']);
-            unset($_SESSION['ordersT']);
-            unset($_SESSION['discountT']);
-            unset($_SESSION['discountTypeT']);
-            unset($_SESSION['totalT']);
-            unset($_SESSION['subtotalT']);
-            unset($_SESSION['refNo2']);
-            $prodOrder = array();
-            $comboOrder = array();
-            $ordersSession = array();
-        }
+
 
         if (isset($_POST["fakeTransac2"]) && $_POST["fakeTransac2"] === 'itsaprank2') {
             $_SESSION['ordersT'] = $_SESSION['orders'];
@@ -459,7 +448,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         if (isset($_SESSION['refNo2'])) {
             $refNo = $_SESSION['refNo2'];
         }
-        if (isset($_SESSION['discountT'], $_SESSION['discountTypeT'])) {
+        if (isset($_SESSION['discountT'], $_SESSION['discountTypeT']) && (($_SESSION['discountT'] =! NULL) && ($_SESSION['discountT'] != NULL))) {
             $discountType = $_SESSION['discountTypeT'];
             $discount = $_SESSION['discountT'] . '%';
         }
@@ -487,8 +476,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                     <hr>
                     <ol>
                         <li>Date</li>
-                        <li>'.$date.'</li>
-                        <li>'.$time.'</li>
+                        <li>' . $date . '</li>
+                        <li>' . $time . '</li>
                     </ol>
                     <hr>
                     <ol>
@@ -549,8 +538,14 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 </ol>
             </div>
         ';
-        if (isset($_SESSION['refNo2'])) {
+        if (isset($_SESSION['ordersT'])) {
             unset($_SESSION['refNo2']);
+            unset($_SESSION['openPrint']);
+            unset($_SESSION['ordersT']);
+            unset($_SESSION['discountT']);
+            unset($_SESSION['discountTypeT']);
+            unset($_SESSION['totalT']);
+            unset($_SESSION['subtotalT']);
         }
         // var_dump($ordersSession);
         // var_dump(implode($ordersSession));
@@ -570,13 +565,10 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $customer_money = intval($_POST["money"]);
         if (isset($_SESSION['total'])) {
             $total = $_SESSION['total'];
-            $gcashName = "-----";;
-            $gcashNum = "-----";;
+            $gcashName = NULL;
+            $gcashNum = NULL;
             $pmethod = $_POST['pmethod'];
-            $allowed_pmethod[] = [
-                'Cash',
-                'G-Cash'
-            ];
+
 
             if (!($pmethod == 'Cash' || $pmethod == 'G-Cash')) {
                 echo 'Invalid payment method.';
@@ -711,7 +703,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             //     $total = $subtotal - $Tempdiscount;
             // } else 
             $discount;
-            if (isset($_SESSION['discount']) && $_SESSION['discount'] != 0) {
+            if (isset($_SESSION['discount']) && $_SESSION['discount'] != 0 && $_SESSION['discount'] != NULL) {
                 $discount = $_SESSION['discount'];
                 $Tempdiscount = ($discount / 100) * $subtotal;
                 $total = $subtotal - $Tempdiscount;
@@ -801,11 +793,12 @@ function submitOrders($refNo, $totalAmount, $pmethod, $gcashName, $gcashNum)
     // session_start();
 
     if (isset($_SESSION['orders'])) {
+        $subtotal = $_SESSION['subtotal'];
         $orders = $_SESSION['orders'];
         $prodOrder = (isset($_SESSION['prodOrders'])) ? $_SESSION['prodOrders'] : [];
         $comboOrder = (isset($_SESSION['comboOrders'])) ? $_SESSION['comboOrders'] : [];
-        $discount = "-----";
-        $discountType = "-----";
+        $discount = NULL;
+        $discountType = NULL;
         if (isset($_SESSION['discount'])) {
             $discount = $_SESSION['discount'];
             $discountType = $_SESSION['discountType'];
@@ -830,6 +823,7 @@ function submitOrders($refNo, $totalAmount, $pmethod, $gcashName, $gcashNum)
                 "pmethod" => $pmethod,
                 "gcashName" => $gcashName,
                 "gcashNum" => $gcashNum,
+                "subtotal" => $subtotal,
             ];
         }
 
@@ -850,6 +844,8 @@ function submitOrders($refNo, $totalAmount, $pmethod, $gcashName, $gcashNum)
                 "pmethod" => $pmethod,
                 "gcashName" => $gcashName,
                 "gcashNum" => $gcashNum,
+                "subtotal" => $subtotal,
+
             ];
         }
 

@@ -170,15 +170,14 @@ $(document).ready(function () {
     $(".middle_side").on("click", "#counted", function () {
         notify("Tendered successfully...")
         $("#overlay_cashier").hide();
+        $('#counter_body ol').addClass("removeItem");
+        setTimeout(() => {
+            $('#counter_body ol').removeClass("removeItem");
+            $('#counter_body ol').remove();
+        }, 250);
+
         $(".change-cont").detach();
-        if (isPaid == true) {
 
-            formData2 = new FormData()
-
-            formData2.append("fakeTransac3", "itsaprank3")
-            removeAllFromCart(formData2, "viewCart");
-            isPaid == false
-        }
 
 
 

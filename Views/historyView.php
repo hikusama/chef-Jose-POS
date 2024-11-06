@@ -1,61 +1,237 @@
 <?php
 
 require_once '../Controller/historyController.php';
-
+// require_once 'cashierView.php';
 
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
+    /*
+    if (isset($_POST['transac']) && $_POST['transac'] === "prints") {
+        session_start();
+
+        $ordersSession = array();
+        if (isset($_SESSION['ordersT'])) {
+            $ordersSession = $_SESSION['ordersT'];
+        }
 
 
+        $refNo = '----';
+        $subtotal = '----';
+        $total = '----';
+        $discount = '0';
+        $discountType = 'N/A';
+
+
+        if (isset($_SESSION['subtotalT'], $_SESSION['totalT'])) {
+            $subtotal = '₱' . $_SESSION['subtotalT'];
+            $total = '₱' . $_SESSION['totalT'];
+        }
+        if (isset($_SESSION['refNo2'])) {
+            $refNo = $_SESSION['refNo2'];
+        }
+        if (isset($_SESSION['discountT'], $_SESSION['discountTypeT'])) {
+            $discountType = $_SESSION['discountTypeT'];
+            $discount = $_SESSION['discountT'] . '%';
+        }
+
+        $array_size = count($ordersSession);
+        date_default_timezone_set("Asia/manila");
+        $date = date('d/m/Y');
+        $time = date('h:i A');
+
+
+
+        echo '
+            <div class="details">
+                <section>
+
+                    <hr>
+                    <ol>
+                        <li>Tendered</li>
+                        <li>Hikusama</li>
+                        <li>Employee</li>
+                    </ol>
+                    <hr>
+                    <ol>
+                        <li>Date</li>
+                        <li>' . $date . '</li>
+                        <li>' . $time . '</li>
+                    </ol>
+                    <hr>
+                    <ol>
+                        <li>Ref no.</li>
+                        <li>#' . $refNo . '</li>
+                    </ol>
+                    <hr>
+                </section>
+            </div>
+            <div class="orders-receipt">
+                <h3>Orders</h3>
+                <table border="0" style="border-collapse: collapse;">
+                    <thead>
+                        <tr>
+                            <th>Qty</th>
+                            <th>Description</th>
+                            <th>Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    ';
+        if (isset($_SESSION['ordersT'])) {
+            foreach ($ordersSession as $order) {
+                echo '
+                    <tr>
+                        <td>' . $order['qntity'] . '</td>
+                            <td>' . $order['name'] . '</td>
+                            <td>₱' . $order['price'] . '</td>
+                        </tr>
+                     ';
+            }
+        }
+
+
+
+        echo '
+                    </tbody>
+                </table>
+                <hr>
+            </div>
+            <div class="receipt-summary">
+                <ol>
+                    <li>Sub Total</li>
+                    <li>' . $subtotal . '</li>
+                </ol>
+                <ol>
+                    <li>Discount</li>
+                    <li>' . $discount . '</li>
+                </ol>
+                <ol>
+                    <li>Discount Type</li>
+                    <li>' . $discountType . '</li>
+                </ol>
+                <hr>
+                <ol>
+                    <li>Total</li>
+                    <li>' . $total . '</li>
+                </ol>
+            </div>
+        ';
+        if (isset($_SESSION['ordersT'])) {
+            unset($_SESSION['openPrint']);
+            unset($_SESSION['ordersT']);
+            unset($_SESSION['discount']);
+            unset($_SESSION['discountType']);
+            unset($_SESSION['total']);
+            unset($_SESSION['subtotal']);
+        }
+        // var_dump($ordersSession);
+        // var_dump(implode($ordersSession));
+
+
+        // var_dump(implode(',',$orderList));
+        // var_dump($ordersSession);
+
+
+
+
+    }
+*/
     if (isset($_POST['transac']) && $_POST['transac'] === "getOrderRecord") {
-        $ref = htmlspecialchars(strip_tags($_POST['ref']));
+        session_start();
+
+        $ref = htmlspecialchars(strip_tags($_POST['refno']));
         $historyOBJ = new HistoryController(null, $ref);
+        $_SESSION['openPrint'] = true;
         $rows = $historyOBJ->getOrderRecordControll();
 
 
         if ($rows) {
+            $refNO = $rows[0]["ref_no"];
+            echo '
+            <ol>
+            <p>'. $refNO.'</p>
+            <h4>Reference No.</h4>
+            </ol>
+            <ol class="history_ordered">
+            ';
+            $ordersSession = array();
+            $subtotal = $rows[0]["subtotal"];
+            $gname = ($rows[0]["gcashAccountName"] != NULL) ? $rows[0]["gcashAccountName"] : "N/A";
+            $gno = ($rows[0]["gcashAccountNo"] != NULL) ? $rows[0]["gcashAccountNo"] : "N/A";
+            $dc = ($rows[0]["discount"] != NULL) ? $rows[0]["discount"] : "N/A";
+            $dcT = ($rows[0]["discountType"] != NULL) ? $rows[0]["discountType"] : "N/A";
+            $tA = $rows[0]["totalAmount"];
+            $pM = $rows[0]["paymentMethod"];
             foreach ($rows as $row) {
+                $name = ($row["itemType"] === "product") ? $row["name"] : $row["comboName"];
+                $unitPrice = $row["unitPrice"];
+                $quantity = $row["quantity"];
                 echo '
-                    <ol>
-                    <p>7874445741</p>
-                    <h4>Reference No.</h4>
-                    </ol>
-                    <ol class="history_ordered">
-                        <li>
-                            <p>3</p>
-                            <p>Beef patty sdsadadsd</p>
-                            <p>₱121</p>
-                        </li>
+<li>
+                    <p>'. $quantity.'</p>
+                    <p>'. $name .'</p>
+                    <p>₱'. $unitPrice.'</p>
+</li>
+                ';
 
+            $order = [];
+            $order = [
+                "name" => $name,
+                "price" => $unitPrice,
+                "qntity" => $quantity
+            ];
+            array_push($ordersSession,$order);
+            }
+            echo '
                     </ol>
                     <ol>
-                    <li>
-                        <p>Payment Method</p>
-                        <p>Gcash</p>
-                    </li>
-                    <li>
-                        <p>Subtotal</p>
-                        <p>₱1451</p>
-                    </li>
-                    <li>
-                        <p>Discount (%)</p>
-                        <p>10</p>
-                    </li>
-                    <li>
-                        <p>Total Amount</p>
-                        <p>₱1351</p>
-                    </li>
+                        <li>
+                            <p>Subtotal</p>
+                            <p>₱'. $subtotal.'</p>
+                        </li>
+                        <li>
+                            <p>Payment Method</p>
+                            <p>'. $pM.'</p>
+                        </li>
+                        <li>
+                            <p>Gcash Acc. name</p>
+                            <p>'. $gname .'</p>
+                        </li>
+                        <li>
+                            <p>Gcash Acc. no.</p>
+                            <p>'.$gno .'</p>
+                        </li>
+                        <li>
+                            <p>Discount (%)</p>
+                            <p>'.$dc .'</p>
+                        </li>
+                        <li>
+                            <p>Discount type</p>
+                            <p>'.$dcT .'</p>
+                        </li>
+                        <li>
+                            <p>Total Amount</p>
+                            <p>₱'.$tA.'</p>
+                        </li>
                     </ol>
-                    <div class="askReceipt" id="">
+                    <div class="askReceipt" id="'. $refNO .'">
                         <button type="button" id="print_receipt">Print</button>
                         <button type="button" id="delReceipt" title="Delete receipt">
                             <i class="fas fa-trash"></i>
                             <d>Delete</d>
                         </button>
-                    </div>
-                ';
-            }
+                    </div>';
+                    $_SESSION['ordersT'] = $ordersSession;
+                    $_SESSION['discountT'] =( $dc == "N/A") ? NULL : $dc ;
+                    $_SESSION['discountTypeT'] = ( $dcT == "N/A") ? NULL : $dcT;
+                    $_SESSION['totalT'] = $tA;
+                    $_SESSION['subtotalT'] = $subtotal;
+                    $_SESSION['refNo2'] = $refNO;
+
+
+        }else{
+            echo '<div style="position: absolute;top: 50%;left: 50%;transform: translate(-50%,-50%);">No producs...</div>';
         }
     }
 
@@ -69,7 +245,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $group = htmlspecialchars(strip_tags($_POST['group']));
         $page = htmlspecialchars(strip_tags($_POST['page']));
 
-        $valid_group = ["todayH", "yesterdayH", "weekH"];
+        $valid_group = ["todayH", "yesterdayH", "weekH","tweekH"];
 
         if (!empty($group)) {
             if ((!in_array($group, $valid_group))) {
@@ -80,11 +256,13 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $group_final = $group;
         // $group_final = (!$group) ? : "";
         if ($group == "todayH") {
-            $group_final = " CURDATE()";
+            $group_final = " orderDate = CURDATE()";
         } else if ($group == "yesterdayH") {
-            $group_final = " CURDATE() - INTERVAL 1 DAY";
+            $group_final = " orderDate = CURDATE() - INTERVAL 1 DAY";
+        } else if ($group == "tweekH") {
+            $group_final = " YEARWEEK(orderDate) = YEARWEEK(CURDATE())";
         } else if ($group == "weekH") {
-            $group_final = " CURDATE() - INTERVAL 7 DAY";
+            $group_final = " orderDate = CURDATE() - INTERVAL 7 DAY";
         }
         
 

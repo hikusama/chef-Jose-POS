@@ -40,7 +40,9 @@
 
 .history_info {
     overflow: hidden;
-    height: 70%;
+    height: fit-content;
+    max-height: 70%;
+    padding: 0 0 2rem 0;
     background-color: white;
     position: absolute;
     border-left: solid 1px rgb(189, 189, 189);
@@ -128,8 +130,16 @@
     list-style: none;
 }
 
+.history_info ol:nth-child(3) {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    row-gap: .3rem;
+}
+
 .history_info ol:nth-child(1) {
-    height: 7rem;
+    padding: 2rem 0 1.5rem;
     display: flex;
     justify-content: center;
     flex-direction: column;
@@ -206,7 +216,8 @@
     display: flex;
     justify-content: space-between;
     font-size: .8rem;
-    margin: 0 1rem;
+    padding: 0 8%;
+    width: 100%;
 }
 
 .askReceipt {
@@ -252,7 +263,7 @@
     0% {
         top: 60%;
         opacity: 0;
-        transform:  translate(-50%, -50%) ;
+        transform: translate(-50%, -50%);
     }
 }
 
@@ -356,8 +367,53 @@
     gap: 1rem;
 
 }
-
+.onHistoryDp{
+    background-color: rgba(255, 104, 3, 0.329) !important;
+    border-color: rgba(255, 104, 3, 0.87) !important;
+}
+.history_info ol:nth-child(1){
+    animation-name: rfn;
+    animation-iteration-count: 1;
+    animation-duration: .5s;
+}
+@keyframes rfn {
+    0%{
+        transform: translateY(-3rem);
+    }
+}
+.history_info ol:nth-child(2){
+    animation-name: or;
+    animation-iteration-count: 1;
+    animation-duration: .5s;
+}
+@keyframes or {
+    0%{
+        opacity: 0;
+        transform: translateY(3rem);
+    }
+}
+.history_info ol:nth-child(3) li p:nth-child(1){
+    animation-name: lb;
+    animation-iteration-count: 1;
+    animation-duration: .5s;
+}
+@keyframes lb {
+    0%{
+        transform: translateX(-3rem);
+    }
+}
+.history_info ol:nth-child(3) li p:nth-child(2){
+    animation-name: dt;
+    animation-iteration-count: 1;
+    animation-duration: .5s;
+}
+@keyframes dt {
+    0%{
+        transform: translateX(3rem);
+    }
+}
 .group_type button {
+    flex: none;
     padding: .5rem 1rem;
     border-radius: 2rem;
     border: none;
