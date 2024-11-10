@@ -35,10 +35,20 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             if ($allCombo) {
 
                 foreach ($allCombo as $cmb) {
+                    $availability = $cmb['availability'];
+                    $ntv = "";
+                    $ops = "";
+                    $crs = "";
+                    if($availability === "Not-available"){
+                        
+                        $ntv = '<p class="ntv">Not-available</p>'; 
+                        $ops = ' style="opacity:50%;"';
+                        $crs = ' style="pointer-events:none;"';
+                    } 
                     echo '
-                    <ol>
-                        <li><img id="' . $cmb['comboID'] . '" src="data:image/jpeg;base64,' . base64_encode($cmb['displayPic']) . '" alt="item"></li>
-                        <li>
+                    <ol' . $crs . '>' . $ntv . '
+                        <li' . $ops . '><img id="' . $cmb['comboID'] . '" src="data:image/jpeg;base64,' . base64_encode($cmb['displayPic']) . '" alt="item"></li>
+                        <li' . $ops . '>
                             <h5>' . $cmb['comboName'] . '</h5>
                             <h4><b>₱' . number_format($cmb['comboPrice'], 2, '.', ',') . '</b></h4>
                         </li>
@@ -54,10 +64,19 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             if ($allProd) {
 
                 foreach ($allProd as $prod) {
+                    $availability = $prod['availability'];
+                    $ntv = "";
+                    $ops = "";
+                    $crs = "";
+                    if($availability === "Not-available"){
+                        $ntv = '<p class="ntv">Not-available</p>'; 
+                        $ops = ' style="opacity:50%;"';
+                        $crs = ' style="pointer-events:none;"';
+                    } 
                     echo '
-                    <ol>
-                        <li><img id="' . $prod['productID'] . '" src="data:image/jpeg;base64,' . base64_encode($prod['displayPic']) . '" alt="item"></li>
-                        <li>
+                    <ol' . $crs . '>' . $ntv . '
+                        <li' . $ops . '><img id="' . $prod['productID'] . '" src="data:image/jpeg;base64,' . base64_encode($prod['displayPic']) . '" alt="item"></li>
+                        <li' . $ops . '>
                             <h5>' . $prod['name'] . '</h5>
                             <h4><b>₱' . number_format($prod['price'], 2, '.', ',') . '</b></h4>
                         </li>
@@ -276,7 +295,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             if ($state == "cmb") {
                 $fetch = $pdoTemp->addToCart("cmb");
                 $price = (int)$fetch['comboPrice'];
-
+                $availability = $fetch['availability'];
+                if ($availability == "Not-available") {
+                    echo "notav";
+                    return;
+                }
                 $orderList = array(
                     "id" => $id,
                     "name" => $fetch['comboName'],
@@ -313,7 +336,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         } else {
             $fetch = $pdoTemp->addToCart("prd");
             $price = (int)$fetch['price'];
-
+            $availability = $fetch['availability'];
+            if ($availability === "Not-available") {
+                echo "notav";
+                return;
+            }
             $orderList = array(
                 "id" => $id,
                 "name" => $fetch['name'],
@@ -448,7 +475,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         if (isset($_SESSION['refNo2'])) {
             $refNo = $_SESSION['refNo2'];
         }
-        if (isset($_SESSION['discountT'], $_SESSION['discountTypeT']) && (($_SESSION['discountT'] =! NULL) && ($_SESSION['discountT'] != NULL))) {
+        if (isset($_SESSION['discountT'], $_SESSION['discountTypeT']) && (($_SESSION['discountT'] = ! NULL) && ($_SESSION['discountT'] != NULL))) {
             $discountType = $_SESSION['discountTypeT'];
             $discount = $_SESSION['discountT'] . '%';
         }

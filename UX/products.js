@@ -14,7 +14,7 @@ $(document).ready(function () {
     let actionSelect;
     reqOpen = false;
     allProducts("");
-    let prdShowState = true;
+    let prdShowState = 1;
 
     open_Insertion = true;
     let findPr
@@ -47,12 +47,16 @@ $(document).ready(function () {
         let searchVal
         if (page != "pageON") {
 
-            if (prdShowState) {
+            if (prdShowState == 1) {
                 searchVal = $("#findExec").val()
-            } else {
+                allProducts(searchVal, parseInt($(this).attr("id")))
+            } else if (prdShowState == 2) {
+                searchVal = $("#findCatExec").val()
+                allCat(searchVal,parseInt($(this).attr("id")))
+            } else if (prdShowState == 3) {
                 searchVal = $("#findComboExec").val()
+                allCombo(searchVal,parseInt($(this).attr("id")))
             }
-            allProducts(searchVal, parseInt($(this).attr("id")))
         }
     });
 
@@ -64,28 +68,46 @@ $(document).ready(function () {
     });
     $("#content_products-cont").on("click", "#prdType", function (e) {
         e.preventDefault();
-        if (prdShowState == false && reqOpen == true) {
+        if (prdShowState != 1 && reqOpen == true) {
             reqOpen = false;
-            prdShowState = true;
-            $("#content_products-cont ol").html(`<h5>DP</h5><h5>Product</h5><h5>Category</h5><h5>Stock</h5><h5>Price</h5><h5></h5><div class="showType"><button type="button" id="prdType" class="state">Products</button><button type="button" id="cmboType" >Combo's</button></div>`)
+            prdShowState = 1;
+            $("#content_products-cont ol").html(`<h5>DP</h5><h5>Product</h5><h5>Category</h5><h5>Availability</h5><h5>Price</h5><h5></h5><div class="showType"><button type="button" id="prdType" class="state">Products</button><button type="button" id="catType" >Categories</button><button type="button" id="cmboType" >Combo's</button></div>`)
             $("#content_products >*").addClass("changeComboSec")
             setTimeout(() => {
                 $("#content_products >*").removeClass("changeComboSec")
                 $("#content_products >*").detach()
                 allProducts("")
             }, 250);
-            $("#findComboExec").attr("placeholder", "Search for products or category...");
-            $("#findComboExec").attr("id", "findExec");
+            $(".find_prod input").val("");
+            $(".find_prod input").attr("placeholder", "Search for products or category...");
+            $(".find_prod input").attr("id", "findExec");
         }
-        // console.log("prd: ",prdShowState,"\nopen?: ",reqOpen);
+
+    });
+    $("#content_products-cont").on("click", "#catType", function (e) {
+        e.preventDefault();
+        if (prdShowState != 2 && reqOpen == true) {
+            reqOpen = false;
+            prdShowState = 2;
+            $("#content_products-cont ol").html(`<h5>Products</h5><h5>Category name</h5><h5></h5><h5></h5><h5></h5><h5></h5><div class="showType"><button type="button" id="prdType" >Products</button><button type="button" class="state" id="catType" >Categories</button><button type="button" id="cmboType" >Combo's</button></div>`)
+            $("#content_products >*").addClass("changeComboSec")
+            setTimeout(() => {
+                $("#content_products >*").removeClass("changeComboSec")
+                $("#content_products >*").detach()
+                allCat("")
+            }, 250);
+            $(".find_prod input").val("");
+            $(".find_prod input").attr("placeholder", "Search a category...");
+            $(".find_prod input").attr("id", "findCatExec");
+        }
 
     });
     $("#content_products-cont").on("click", "#cmboType", function (e) {
         e.preventDefault();
-        if (prdShowState == true && reqOpen == true) {
-            prdShowState = false;
+        if (prdShowState != 3 && reqOpen == true) {
+            prdShowState = 3;
             reqOpen = false;
-            $("#content_products-cont ol").html(`<h5>DP</h5><h5>Name</h5><h5>Code</h5><h5>Items</h5><h5>Price</h5><h5></h5><div class="showType"><button type="button" id="prdType" >Products</button><button type="button" id="cmboType" class="state">Combo's</button></div>`)
+            $("#content_products-cont ol").html(`<h5>DP</h5><h5>Name/Code</h5><h5>Items</h5><h5>Availability</h5><h5>Price</h5><h5></h5><div class="showType"><button type="button" id="prdType" >Products</button><button type="button" id="catType" >Categories</button><button type="button" id="cmboType" class="state">Combo's</button></div>`)
             $("#content_products >*").addClass("changeComboSec")
             setTimeout(() => {
                 $("#content_products >*").removeClass("changeComboSec")
@@ -93,8 +115,9 @@ $(document).ready(function () {
                 allCombo("")
 
             }, 250);
-            $("#findExec").attr("placeholder", "Search for combo's or code...");
-            $("#findExec").attr("id", "findComboExec");
+            $(".find_prod input").val("");
+            $(".find_prod input").attr("placeholder", "Search for combo's or code...");
+            $(".find_prod input").attr("id", "findComboExec");
         }
         // console.log("prd: ",prdShowState,"\nopen?: ",reqOpen);
 
@@ -122,7 +145,7 @@ $(document).ready(function () {
                     $(".myproducts #addComboForm input").val("");
                     $(".combo-response").html("");
                     $(".exit").trigger("click");
-                    if (prdShowState == true) {
+                    if (prdShowState != 3) {
                         $("#cmboType").trigger("click");
                     } else {
                         allCombo("")
@@ -336,7 +359,7 @@ $(document).ready(function () {
                     open_Insertion = true;
                     clearInterval(interval)
                     $("#imgdisplay").attr('src', '../image/dpTemplate.png');
-                    if (prdShowState == false) {
+                    if (prdShowState != 1) {
                         $("#prdType").trigger("click");
                     } else {
                         allProducts("")
@@ -469,14 +492,19 @@ $(document).ready(function () {
     });
 
 
-    $(".find_prod").on("input", "#findComboExec", function () {
-
-        allCombo($(this).val())
-
-    });
     $(".find_prod").on("input", "#findExec", function () {
 
         allProducts($(this).val())
+
+    });
+    $(".find_prod").on("input", "#findCatExec", function () {
+        
+        allCat($(this).val())
+        
+    });
+    $(".find_prod").on("input", "#findComboExec", function () {
+
+        allCombo($(this).val())
 
     });
 
@@ -649,6 +677,35 @@ function comboShowProd(search) {
 }
 
 
+function allCat(catName, page = 1) {
+    formData = new FormData()
+    formData.append("transac", "findCat")
+    formData.append("page", page)
+    formData.append("catName", catName)
+
+    $.ajax({
+        url: '../views/productView.php',
+        method: 'POST',
+        data: formData,
+        contentType: false,
+        processData: false,
+        success: function (response) {
+            $('#content_products').html("");
+            $('#content_products').append(response);
+            $('#content_products li').hide();
+            $(".loading_sc").show();
+            // $(".loading_sc").parent().css("overflow-y", "hidden");
+            setTimeout(() => {
+                $(".loading_sc").hide();
+                $("#content_products li").each(function (index) {
+                    $(this).delay(index * 100).fadeIn(200);
+                });
+                // $(".loading_sc").parent().css("overflow-y", "scroll");
+                return reqOpen = true
+            }, 1500);
+        }
+    });
+}
 function allCombo(comboName, page = 1) {
     formData = new FormData()
     formData.append("transac", "findCombo")

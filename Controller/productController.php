@@ -7,25 +7,25 @@ class ProductController extends Model
     private $category_name;
     private $price;
     private $product_image;
-    private $quantity;
+    private $availability;
     public $product_id;
     private $Add_category;
 
 
-    public function __construct($product_id, $product_name, $category_name, $price,  $product_image, $quantity, $Add_category)
+    public function __construct($product_id, $product_name, $category_name, $price,  $product_image, $availability, $Add_category)
     {
         $this->product_id = $product_id;
         $this->product_name = $product_name;
         $this->category_name = $category_name;
         $this->price = $price;
         $this->product_image = $product_image;
-        $this->quantity = $quantity;
+        $this->availability = $availability;
         $this->Add_category = $Add_category;
     }
 
     public function addProducts()
     {
-        $this->insertProduct($this->product_name, $this->category_name, $this->price, $this->product_image, $this->quantity);
+        $this->insertProduct($this->product_name, $this->category_name, $this->price, $this->product_image, $this->availability);
     }
     public function addCategory()
     {
@@ -34,7 +34,7 @@ class ProductController extends Model
 
     public function updateProducts()
     {
-        $this->editProduct($this->product_name, $this->category_name, $this->price, $this->product_image, $this->quantity);
+        $this->editProduct($this->product_name, $this->category_name, $this->price, $this->product_image, $this->availability);
     }
 
     public function getCat()
@@ -62,14 +62,14 @@ class ProductController extends Model
         return $this->showProduct();
     }
 
-    public function is_empty_inputs($product_name, $category_name, $price, $quantity)
+    public function is_empty_inputs($product_name, $category_name, $price, $availability)
     {
 
         if (
             empty($product_name) ||
             empty($category_name) ||
             empty($price) ||
-            empty($quantity)
+            empty($availability)
         ) {
             return true;
         } else {
@@ -88,9 +88,15 @@ class ProductController extends Model
     }
     
     
-    public function insertCombo($combos,$cimg, $cn, $ccd, $cpr)
+    public function insertCombo($combos,$cimg, $cn, $ccd, $cpr,$av)
     {
-        return $this->addCombo($combos, $cimg, $cn, $ccd, $cpr);
+        return $this->addCombo($combos, $cimg, $cn, $ccd, $cpr,$av);
+    }
+
+
+    public function findCatGt($categoryName,$page)
+    {
+        return $this->findCategory($categoryName,$page);
     }
 
 
@@ -99,12 +105,15 @@ class ProductController extends Model
         return $this->findCombo($comboName,$page);
     }
     
-    public function delete_things($ID,$type){
-        if ($type === "combo") {
-            return $this->combo_delete($ID);
-            
-        }else if($type === "prd"){
+    public function delete_things($ID,$state){
+        if ($state === 1) {
             return $this->product_delete($ID);
+            
+        }else if($state === 2){
+            return $this->category_delete($ID);
+
+        }else if($state === 3){
+            return $this->combo_delete($ID);
         }
     }
 

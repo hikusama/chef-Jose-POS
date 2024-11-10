@@ -51,10 +51,10 @@
 
 
         // ADD PRODUCT
-        public function insertProduct($product_name, $category_name, $price, $quantity, $product_image)
+        public function insertProduct($product_name, $category_name, $price, $availability, $product_image)
         {
-            $stmt = $this->connect()->prepare("INSERT INTO products (name,category_id, price, quantityInStock, displayPic) VALUES (?, ?, ?, ?, ?);");
-            if ($stmt->execute([$product_name, $category_name, $price, $quantity, $product_image])) {
+            $stmt = $this->connect()->prepare("INSERT INTO products (name,category_id, price, availability, displayPic) VALUES (?, ?, ?, ?, ?);");
+            if ($stmt->execute([$product_name, $category_name, $price, $availability, $product_image])) {
                 return true;
             } else {
                 error_log("Error adding product: " . implode(", ", $stmt->errorInfo()));
@@ -112,6 +112,18 @@
             error_log("Error deleting product: " . implode(", ", $stmt->errorInfo())); // Log error
             return false;
         }
+        public function category_delete($category_id)
+        {
+            $sql = "DELETE FROM category WHERE category_id = ?";
+            $stmt = $this->connect()->prepare($sql);
+            $stmt->bindParam(1, $category_id, PDO::PARAM_INT);
+
+            if ($stmt->execute()) {
+                return true;
+            }
+            error_log("Error deleting product: " . implode(", ", $stmt->errorInfo())); // Log error
+            return false;
+        }
 
 
         //GET PRODUCT
@@ -148,7 +160,7 @@
             if (!empty($product_name)) {
                 $sql .= " AND products.name LIKE :product_name OR category.category_name LIKE :product_name";
             }
-            $sql .= " GROUP BY products.productID LIMIT :limit OFFSET :offset";
+            $sql .= " GROUP BY products.productID ORDER BY products.productID DESC LIMIT :limit OFFSET :offset";
 
 
             $stmt = $this->connect()->prepare($sql);
@@ -276,13 +288,13 @@
 
 
         // INSERT COMBO
-        public function addCombo($combos, $comboIMG, $comboName, $comboCode, $comboPrice)
+        public function addCombo($combos, $comboIMG, $comboName, $comboCode, $comboPrice,$availability)
         {
-            $sql = "INSERT INTO combo(displayPic,comboName,comboCode,comboPrice) values(?, ?, ?, ?)";
+            $sql = "INSERT INTO combo(displayPic,comboName,comboCode,comboPrice,availability) values(?, ?, ?, ?, ?)";
 
             $stmt = $this->connect()->prepare($sql);
 
-            if ($stmt->execute([$comboIMG, $comboName, $comboCode, $comboPrice])) {
+            if ($stmt->execute([$comboIMG, $comboName, $comboCode, $comboPrice,$availability])) {
                 $comboID = $this->getComboID();
                 if ($this->comboItems($combos, $comboID)) {
                     return true;
@@ -383,8 +395,7 @@
             $stmt2 = $this->connect()->prepare($sql2);
 
             if (!empty($comboName)) {
-                $comboName = "%" . $comboName . "%";
-                $stmt->bindParam(":comboName", $comboName);
+                $stmt2->bindParam(":comboName", $comboName);
             }
 
             $stmt2->execute();
@@ -411,7 +422,76 @@
             }
 
 
-            error_log("Error adding combo: " . implode(", ", $stmt->errorInfo()));
+        }
+
+
+        // SEARCH CATEGORY   
+        public function findCategory($categoryName, $page = 1)
+        {
+
+            $max_page_per_req = 10;
+
+            $offset = ($page - 1) * $max_page_per_req;
+
+            $sql = "SELECT category.*,COUNT(products.productID) as total_prod FROM category left join products on category.category_id = products.category_id";
+
+            if (!empty($categoryName)) {
+                $sql .= " WHERE category.category_name LIKE :categoryName";
+            }
+
+            $sql .= " GROUP BY category.category_id limit :limit OFFSET :offset";
+
+            $stmt = $this->connect()->prepare($sql);
+
+
+            if (!empty($categoryName)) {
+                $categoryName = "%" . $categoryName . "%";
+                $stmt->bindParam(":categoryName", $categoryName);
+            }
+            $stmt->bindParam(':limit', $max_page_per_req, PDO::PARAM_INT);
+            $stmt->bindParam(':offset', $offset, PDO::PARAM_INT);
+
+            $stmt->execute();
+
+            $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+
+            $sql2 = "SELECT COUNT(category.category_id) as total_cat FROM category";
+
+            if (!empty($categoryName)) {
+                $sql2 .= " WHERE category.category_name LIKE :categoryName";
+            }
+
+            $stmt2 = $this->connect()->prepare($sql2);
+
+            if (!empty($categoryName)) {
+                $stmt2->bindParam(":categoryName", $categoryName);
+            }
+
+            $stmt2->execute();
+
+            $rows2 = $stmt2->fetch(PDO::FETCH_ASSOC);
+            $total_rows = ($rows2) ? (int)$rows2['total_cat'] : 0;
+
+
+            $total_pages = ceil($total_rows / $max_page_per_req);
+
+
+            if ($rows) {
+                return [
+                    'data' => $rows,
+                    'total_pages' => $total_pages,
+                    'current_page' => $page
+                ];
+            } else {
+                return [
+                    'data' => null,
+                    'total_pages' => null,
+                    'current_page' => null
+                ];
+            }
+
+
         }
 
 
@@ -619,11 +699,12 @@
 
             if (!empty($product_name)) {
                 if (empty($category)) {
-                    $sql .= " WHERE products.name LIKE :product_name GROUP BY products.productID";
+                    $sql .= " WHERE products.name LIKE :product_name";
                 } else {
-                    $sql .= " AND products.name LIKE :product_name GROUP BY products.productID";
+                    $sql .= " AND products.name LIKE :product_name";
                 }
             }
+            $sql .= " GROUP BY products.productID ORDER BY products.availability = 'Available' DESC";
 
             $pdo = $this->connect();
             $stmt = $pdo->prepare($sql);

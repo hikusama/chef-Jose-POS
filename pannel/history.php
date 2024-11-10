@@ -88,56 +88,8 @@
             </div>
             <div class="history_pane">
                 <div class="history_info">
-                        <ol>
-                            <p>7874445741</p>
-                            <h4>Reference No.</h4>
-                        </ol>
-                        <ol class="history_ordered">
 
-                            <li>
-                                <p>3</p>
-                                <p>Beef patty sdsadadsd</p>
-                                <p>₱121</p>
-                            </li>
-
-                        </ol>
-                        <ol>
-                            <li>
-                                <p>Subtotal</p>
-                                <p>₱1451</p>
-                            </li>
-                            <li>
-                                <p>Payment Method</p>
-                                <p>Gcash</p>
-                            </li>
-                            <li>
-                                <p>Gcash Acc. name</p>
-                                <p>hiku</p>
-                            </li>
-                            <li>
-                                <p>Gcash Acc. no.</p>
-                                <p>09856093241</p>
-                            </li>
-                            <li>
-                                <p>Discount (%)</p>
-                                <p>10</p>
-                            </li>
-                            <li>
-                                <p>Discount type</p>
-                                <p>PWD</p>
-                            </li>
-                            <li>
-                                <p>Total Amount</p>
-                                <p>₱1351</p>
-                            </li>
-                        </ol>
-                        <div class="askReceipt">
-                            <button type="button" id="print_receipt">Print</button>
-                            <button type="button" id="delReceipt" title="Delete receipt"><i class="fas fa-trash"></i>
-                                <d>Delete</d>
-                            </button>
-                        </div>
-                    <!-- <img src="../image/logo.png" id="dpLogo" alt="logo"> -->
+                    <img src="../image/logo.png" id="dpLogo" class="lgu" alt="logo">
                 </div>
             </div>
 

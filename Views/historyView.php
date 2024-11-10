@@ -6,137 +6,6 @@ require_once '../Controller/historyController.php';
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
-    /*
-    if (isset($_POST['transac']) && $_POST['transac'] === "prints") {
-        session_start();
-
-        $ordersSession = array();
-        if (isset($_SESSION['ordersT'])) {
-            $ordersSession = $_SESSION['ordersT'];
-        }
-
-
-        $refNo = '----';
-        $subtotal = '----';
-        $total = '----';
-        $discount = '0';
-        $discountType = 'N/A';
-
-
-        if (isset($_SESSION['subtotalT'], $_SESSION['totalT'])) {
-            $subtotal = '₱' . $_SESSION['subtotalT'];
-            $total = '₱' . $_SESSION['totalT'];
-        }
-        if (isset($_SESSION['refNo2'])) {
-            $refNo = $_SESSION['refNo2'];
-        }
-        if (isset($_SESSION['discountT'], $_SESSION['discountTypeT'])) {
-            $discountType = $_SESSION['discountTypeT'];
-            $discount = $_SESSION['discountT'] . '%';
-        }
-
-        $array_size = count($ordersSession);
-        date_default_timezone_set("Asia/manila");
-        $date = date('d/m/Y');
-        $time = date('h:i A');
-
-
-
-        echo '
-            <div class="details">
-                <section>
-
-                    <hr>
-                    <ol>
-                        <li>Tendered</li>
-                        <li>Hikusama</li>
-                        <li>Employee</li>
-                    </ol>
-                    <hr>
-                    <ol>
-                        <li>Date</li>
-                        <li>' . $date . '</li>
-                        <li>' . $time . '</li>
-                    </ol>
-                    <hr>
-                    <ol>
-                        <li>Ref no.</li>
-                        <li>#' . $refNo . '</li>
-                    </ol>
-                    <hr>
-                </section>
-            </div>
-            <div class="orders-receipt">
-                <h3>Orders</h3>
-                <table border="0" style="border-collapse: collapse;">
-                    <thead>
-                        <tr>
-                            <th>Qty</th>
-                            <th>Description</th>
-                            <th>Amount</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    ';
-        if (isset($_SESSION['ordersT'])) {
-            foreach ($ordersSession as $order) {
-                echo '
-                    <tr>
-                        <td>' . $order['qntity'] . '</td>
-                            <td>' . $order['name'] . '</td>
-                            <td>₱' . $order['price'] . '</td>
-                        </tr>
-                     ';
-            }
-        }
-
-
-
-        echo '
-                    </tbody>
-                </table>
-                <hr>
-            </div>
-            <div class="receipt-summary">
-                <ol>
-                    <li>Sub Total</li>
-                    <li>' . $subtotal . '</li>
-                </ol>
-                <ol>
-                    <li>Discount</li>
-                    <li>' . $discount . '</li>
-                </ol>
-                <ol>
-                    <li>Discount Type</li>
-                    <li>' . $discountType . '</li>
-                </ol>
-                <hr>
-                <ol>
-                    <li>Total</li>
-                    <li>' . $total . '</li>
-                </ol>
-            </div>
-        ';
-        if (isset($_SESSION['ordersT'])) {
-            unset($_SESSION['openPrint']);
-            unset($_SESSION['ordersT']);
-            unset($_SESSION['discount']);
-            unset($_SESSION['discountType']);
-            unset($_SESSION['total']);
-            unset($_SESSION['subtotal']);
-        }
-        // var_dump($ordersSession);
-        // var_dump(implode($ordersSession));
-
-
-        // var_dump(implode(',',$orderList));
-        // var_dump($ordersSession);
-
-
-
-
-    }
-*/
     if (isset($_POST['transac']) && $_POST['transac'] === "getOrderRecord") {
         session_start();
 
@@ -168,11 +37,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 $unitPrice = $row["unitPrice"];
                 $quantity = $row["quantity"];
                 echo '
-<li>
+                <li>
                     <p>'. $quantity.'</p>
                     <p>'. $name .'</p>
                     <p>₱'. $unitPrice.'</p>
-</li>
+                </li>
                 ';
 
             $order = [];

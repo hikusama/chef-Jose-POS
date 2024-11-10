@@ -88,7 +88,7 @@
                     <div>
 
 
-                        <canvas id="myBarChart"></canvas>
+                        <canvas id="myBarChart" style="height: 300px !important;width: 440px;"></canvas>
                         <div class="data_from_graphical">
                             <li>
                                 <div class="summary_cont">
@@ -102,6 +102,11 @@
                                     <h6>Lowest</h6>
                                     <p>₱30,000</p>
                                     <div class="date">Sep,9,2004</div>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="summary_cont">
+                                    <a href="reports" title="Redirect to reports pane"><p>Show more...</p></a>
                                 </div>
                             </li>
                         </div>

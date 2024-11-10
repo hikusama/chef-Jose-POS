@@ -21,8 +21,11 @@ $(document).ready(function () {
             processData: false,
             success: function (response) {
 
-            },complete: function () {
-
+            }, complete: function () {
+                is = $('.history_info >*:nth-child(1)').hasClass('lgu');
+                if (!is) {
+                    clearPane()
+                }
                 window.open("printPage", "blank")
             }
         });
@@ -34,6 +37,10 @@ $(document).ready(function () {
         if (reqOpen == true) {
             reqOpen = false
             getFindGroup($(this).val(), group)
+            is = $('.history_info >*:nth-child(1)').hasClass('lgu');
+            if (!is) {
+                clearPane()
+            }
         }
 
 
@@ -49,6 +56,10 @@ $(document).ready(function () {
 
 
         if (reqOpen == true && classI !== "historyOn") {
+            is = $('.history_info >*:nth-child(1)').hasClass('lgu');
+            if (!is) {
+                clearPane()
+            }
             reqOpen = false
             $(".group_type button").removeClass("historyOn")
             $(this).addClass("historyOn")
@@ -63,7 +74,7 @@ $(document).ready(function () {
         e.preventDefault()
         hasC = $(this).hasClass("onHistoryDp");
         console.log(hasC);
-        
+
         if (!hasC && reqOpen) {
             $(".data_history_cont .data ol").removeClass("onHistoryDp")
             $(this).addClass("onHistoryDp")
@@ -79,6 +90,10 @@ $(document).ready(function () {
         let page = $(this).attr("id")
         let searchVal
         if (page != "pageON" && reqOpen == true) {
+            is = $('.history_info >*:nth-child(1)').hasClass('lgu');
+            if (!is) {
+                clearPane()
+            }
             reqOpen = false
             searchVal = $("#findOrder").val()
             group = $(".historyOn").attr("id")
@@ -107,6 +122,9 @@ $(document).ready(function () {
 
             }
         });
+    }
+    function clearPane() {
+        $('.history_info').html(`<img src="../image/logo.png" class="lgu" id="dpLogo" alt="logo">`);
     }
 
 

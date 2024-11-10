@@ -28,6 +28,7 @@
     width: 100%;
 }
 
+#findCatExec,
 #findComboExec,
 #findExec {
     height: 2.5rem;
@@ -38,6 +39,7 @@
     padding: 0 1rem 0 2rem;
 }
 
+.monokai_mode #findCatExec,
 .monokai_mode #findComboExec,
 .monokai_mode #findExec {
     background-color: #1E1F1C;
@@ -46,6 +48,7 @@
 
 }
 
+.dark_mode #findCatExec,
 .dark_mode #findComboExec,
 .dark_mode #findExec {
     background-color: #181818;
@@ -110,6 +113,11 @@
 }
 
 .showType button:nth-child(2) {
+    border-radius: 0;
+
+}
+
+.showType button:nth-child(3) {
     border-radius: .1rem 4rem 0 0;
 
 }
@@ -1439,7 +1447,7 @@
     align-items: start;
     flex-direction: column;
     justify-content: center;
-    gap: 2.7rem;
+    gap:1.8rem;
 }
 
 .data_summary_combo {
@@ -1448,6 +1456,10 @@
     gap: 1rem;
 }
 
+#addComboForm>*:nth-child(2) ol:nth-child(2) li{
+    height: fit-content;
+}
+#addComboForm>*:nth-child(2) ol:nth-child(3) li,
 #addComboForm>*:nth-child(2) ol:nth-child(2) li,
 #addComboForm>*:nth-child(2) ol:nth-child(1) li {
     position: relative;
@@ -1456,7 +1468,7 @@
 #addComboForm>*:nth-child(2) ol:nth-child(2)>*:nth-child(1) p,
 #addComboForm>*:nth-child(2) ol:nth-child(1) p {
     position: absolute;
-    bottom: -1.5rem;
+    transform: translateY(.4rem);
     padding-left: .8rem;
 
 }
@@ -1476,6 +1488,8 @@
 
 /* 3232 */
 
+.monokai_mode #avail,
+.dark_mode #avail,
 .monokai_mode #addComboForm>*:nth-child(2) input,
 .dark_mode #addComboForm>*:nth-child(2) input {
     background: #1e1f1c96;
@@ -1483,6 +1497,7 @@
     color: rgb(238, 238, 238);
 }
 
+#avail,
 #addComboForm>*:nth-child(2) input {
     background: rgba(214, 214, 214, 0.466);
     border: none;
@@ -1517,10 +1532,13 @@
     list-style-type: none;
 }
 
+#addComboForm>*:nth-child(2) ol:nth-child(2){
+    transform: translateY(.4rem);
+
+}
 #addComboForm>*:nth-child(2) ol,
 #addComboForm>*:nth-child(2) ol:nth-child(2) {
     display: flex;
-    align-items: end;
     justify-content: start;
     gap: 1.5rem;
     width: 100%;
@@ -1975,14 +1993,14 @@
 }
 
 
-.delItem{
+.delItem {
     animation-name: delItem;
     animation-iteration-count: 1;
     animation-duration: .8s;
 }
 
 @keyframes delItem {
-    50%{
+    50% {
         opacity: 0;
         transform: translateX(-6rem);
     }

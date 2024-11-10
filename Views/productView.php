@@ -17,7 +17,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['transac'])) {
         $product_name = htmlspecialchars(strip_tags($_POST['name']));
         $category_name = htmlspecialchars(strip_tags($_POST['category']));
         $price = intval($_POST['price']);
-        $quantity = htmlspecialchars(strip_tags($_POST['quantityInStock']));
+        $availability = htmlspecialchars(strip_tags($_POST['availability']));
 
         $product_image = null;
 
@@ -42,11 +42,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['transac'])) {
         }
 
 
-        $addProd = new ProductController(null, $product_name, $category_name, $price, $quantity, $product_image, null);
+        $addProd = new ProductController(null, $product_name, $category_name, $price, $availability, $product_image, null);
 
 
 
-        if ($addProd->is_empty_inputs($product_name, $category_name, $price, $quantity) || $price < 1 || $quantity < 1) {
+        if ($addProd->is_empty_inputs($product_name, $category_name, $price, $availability) || $price < 1) {
             $errors["empty_inputs"] = "Please fill in all fields";
         }
         if (!$errors) {
@@ -113,7 +113,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['transac'])) {
 
     if ($_POST['transac'] == "editProd") {
 
-        $update = new ProductController(null, $product_name, $category_name, $price, $quantity, $product_image, null);
+        $update = new ProductController(null, $product_name, $category_name, $price, $availability, $product_image, null);
 
 
 
@@ -169,9 +169,14 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['transac'])) {
     if ($_POST['transac'] == "removeProd") {
 
         $ID = htmlspecialchars(strip_tags($_POST['ID']));
-        $type = "prd";
-        if (isset($_SESSION['cmbstate'])) {
-            $type = "combo";
+        $state = 1;
+        if (isset($_SESSION['currstate'])) {
+            $state = $_SESSION['currstate'];
+            if ($state === 2) {
+                $state = 2;
+            }else if ($state === 3) {
+                $state = 3;
+            }
         }
 
         
@@ -180,7 +185,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['transac'])) {
         }
         $delete = new ProductController(null, null, null, null, null, null, null);
 
-        if($delete->delete_things($ID,$type)){
+        if($delete->delete_things($ID,$state)){
             echo "Deleted";
         }else{
             echo "Error deleting";
@@ -195,8 +200,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['transac'])) {
 
     if ($_POST['transac'] == "showSearchProd") {
 
-        if (isset($_SESSION['cmbstate'])) {
-            unset($_SESSION['cmbstate']);
+        if (isset($_SESSION['currstate'])) {
+            unset($_SESSION['currstate']);
         }
 
         $product_name = htmlspecialchars(strip_tags($_POST['name']));
@@ -239,7 +244,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['transac'])) {
                 </div>
                 <p>' . $row['name'] . '</p>
                 <p>' . $row['category_name'] . '</p>
-                <p>' . $row['quantityInStock'] . '</p>
+                <p>' . $row['availability'] . '</p>
                 <p>₱' . $row['price'] . '</p>
                     <i class="fas fa-ellipsis-v more_showPane" title="See More"></i>
                     <div class="action_select" id="' . $row['productID'] . '">
@@ -499,11 +504,12 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['transac'])) {
         $comboName = htmlspecialchars(strip_tags($_POST['comboName']));
         $comboPrice = intval($_POST['comboPrice']);
         $comboCode = htmlspecialchars(strip_tags($_POST['comboCode']));
+        $availability = htmlspecialchars(strip_tags($_POST['availability']));
     
         $combos = array();
 
 
-        if (empty($comboName) || empty($comboPrice) || empty($comboCode)) {
+        if (empty($comboName) || empty($comboPrice)|| empty($availability) || empty($comboCode)) {
             echo "Fill in all fields.";
             return;
         }
@@ -559,7 +565,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['transac'])) {
             echo "Combo code already used.";
             return;
         }
-        $prodController->insertCombo($combos,$comboIMG,$comboName,$comboCode,$comboPrice);
+        $prodController->insertCombo($combos,$comboIMG,$comboName,$comboCode,$comboPrice,$availability);
 
         // echo $prodController->checkCombo($comboCode,"comboCode");
         unset($_SESSION['combos']);
@@ -573,9 +579,82 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['transac'])) {
     }
 
 
+    if ($_POST['transac'] == "findCat") {
+
+        $_SESSION['currstate'] = 2;
+
+        $catName = htmlspecialchars(strip_tags($_POST['catName']));
+        (int)$selected_page = (intval($_POST['page']) == 0) ? 1 : intval($_POST['page']);
+
+        $prodController = new ProductController(null, null, null, null, null, null, null);
+        $obj = $prodController->findCatGt($catName,$selected_page);
+        $rows = $obj['data'];
+        $total_pages = $obj['total_pages'];
+        $current_page = $obj['current_page'];
+        
+        echo '
+        <div class="loading_sc">
+            <div>
+                <p class="dp"></p>
+                <div class="desc"></div>                                
+            </div>
+            <div>
+                <p class="dp"></p>
+                <div class="desc"></div>                                
+            </div>
+            <div>
+                <p class="dp"></p>
+                <div class="desc"></div>
+            </div>
+
+        </div>
+        ';
+
+        if ($rows) {
+            foreach ($rows as $row) {
+                echo '
+            <li>
+                <div class="dp">
+                    <p>' . $row['total_prod'] . '</p>
+                </div>
+                <p>' . $row['category_name'] . '</p>
+                <h5></h5>
+                <h5></h5>
+                <h5></h5>
+                
+                    <i class="fas fa-ellipsis-v more_showPane" title="See More"></i>
+                    <div class="action_select" id="' . $row['category_id'] . '">
+                        <p id="editByID" ><i class="fas fa-edit"></i> Edit</p>
+                        <p id="deleteByID"><i class="fas fa-trash"></i> Delete</p>
+                        <p id="viewByID"><i class="fas fa-eye" ></i> View</p>
+                    </div>
+            </li>';
+            }
+            echo '
+            <li id="page-dir-cont" style="">
+                <div class="main-dir-link">';
+                for ($i=1; $i <= $total_pages ; $i++) {
+                    // if ($i === 8) {
+                    //     echo '<button type="button" id="more">...</button>';
+                    //     break;
+                    // }
+                    $g = ($i === $current_page) ? '<button type="button" id="pageON">' : '<button type="button" class="data-link" id="'.$i.'">' ;
+                    echo $g.$i;
+                    echo '</button>';
+
+                }
+                echo '</div>
+            </li>
+            ';
+        } else {
+            echo "No category..";
+        }
+        
+        
+    }
     if ($_POST['transac'] == "findCombo") {
 
-        $_SESSION['cmbstate'] = true;
+        $_SESSION['currstate'] = 3;
 
         $comboName = htmlspecialchars(strip_tags($_POST['comboName']));
         (int)$selected_page = (intval($_POST['page']) == 0) ? 1 : intval($_POST['page']);
@@ -611,9 +690,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['transac'])) {
                 <div class="dp">
                     <img src="data:image/jpeg;base64, ' . base64_encode($row['displayPic']) . '" alt="">
                 </div>
-                <p>' . $row['comboName'] . '</p>
-                <p>' . $row['comboCode'] . '</p>
+                <p>' . $row['comboName'] . ' (' . $row['comboCode'] . ')</p>
                 <p>' . $row['total_comboID'] . '</p>
+                <p>' . $row['availability'] . '</p>
                 <p>₱' . $row['comboPrice'] . '</p>
                     <i class="fas fa-ellipsis-v more_showPane" title="See More"></i>
                     <div class="action_select" id="' . $row['comboID'] . '">

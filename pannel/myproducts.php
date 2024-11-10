@@ -99,11 +99,12 @@
                                     <h5>DP</h5>
                                     <h5>Product</h5>
                                     <h5>Category</h5>
-                                    <h5>Stock</h5>
+                                    <h5>Availability</h5>
                                     <h5>Price</h5>
                                     <h5></h5>
                                     <div class="showType">
                                         <button type="button" id="prdType" class="state">Products</button>
+                                        <button type="button" id="catType">Categories</button>
                                         <button type="button" id="cmboType">Combo's</button>
                                     </div>
                                 </ol>
@@ -309,6 +310,16 @@
                                         </li>
                                     </div>
                                 </ol>
+                                <ol>
+                                    <li>
+                                        <i class="fas fa-book"></i>
+                                        <select name="availability" id="avail">
+                                            <option value="">Availability</option>
+                                            <option value="available">Available</option>
+                                            <option value="not-available">Not-available</option>
+                                        </select>
+                                    </li>
+                                </ol>
                                 <button id="tg" type="submit"></button>
                             </section>
                         </form>
@@ -473,9 +484,13 @@
                                 <li>
                                     <div>
                                         <i class="fas fa-book"></i>
-                                        <input type="number" placeholder="Stock" id="prod_stock" name="quantityInStock">
+                                        <select name="availability" id="availability">
+                                            <option value="">Availability</option>
+                                            <option value="available">Available</option>
+                                            <option value="not-available">Not-available</option>
+                                        </select>
                                     </div>
-                                    <p>Stock</p>
+                                    <p>Availability</p>
                                 </li>
                                 <li>
                                     <div>

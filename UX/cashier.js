@@ -511,6 +511,9 @@ $(document).ready(function () {
             processData: false,
             success: function (response) {
                 response = response.trim()
+                if (response == "notav") {
+                    return;
+                }
                 if (r == false) {
                     r = true
                 }else{            
