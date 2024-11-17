@@ -129,9 +129,10 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         } else if ($group == "yesterdayH") {
             $group_final = " orderDate = CURDATE() - INTERVAL 1 DAY";
         } else if ($group == "tweekH") {
-            $group_final = " YEARWEEK(orderDate) = YEARWEEK(CURDATE())";
+            // $group_final = " YEARWEEK(orderDate) = YEARWEEK(CURDATE(),3)";
+            $group_final = " YEARWEEK(orderDate,1) = YEARWEEK(CURDATE(),1)";
         } else if ($group == "weekH") {
-            $group_final = " orderDate = CURDATE() - INTERVAL 7 DAY";
+            $group_final = "MONTH(orderDate) = MONTH(CURDATE())";
         }
         
 

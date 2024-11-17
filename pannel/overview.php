@@ -6,8 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="../UX/jquery-3.5.1.min.js"></script>
     <script src="../UX/script.js"></script>
-    <script src="../UX/overview.js"></script>
     <script src="../UX/node_modules/chart.js/dist/chart.umd.js"></script>
+    <script src="../UX/overview.js"></script>
     <link rel="stylesheet" href="../resources/style.css">
     <link rel="stylesheet" href="../resources/overview.css">
     <link rel="stylesheet" href="../resources/fontawesome-free-5.15.4-web/css/all.css">
@@ -67,27 +67,34 @@
                 <div class="summary_show">
                     <li>
                         <div class="summary_cont">
-                            <i class="fas fa-user"></i>
+                            <i class="fas fa-calendar-day"></i>
                             <div class="innerD">
-                                <p>1500</p>
+                                <p class="data-TD">---</p>
                                 <h6>Todays Orders</h6>
                             </div>
                         </div>
-                    </li>
-                    <li>
-                        <div class="summary_cont">
-                            <i class="fas fa-user"></i>
-                            <div class="innerD">
-                                <p>500</p>
-                                <h6>This week Orders</h6>
-                            </div>
+                        <div class="frm">
+                            <p class="data-FLD"><b><i class="fas fa-arrow-up"></i> ---</b> From Last Day</p>
                         </div>
                     </li>
                     <li>
                         <div class="summary_cont">
-                            <i class="fas fa-user"></i>
+                            <i class="fas fa-calendar-week"></i>
                             <div class="innerD">
-                                <p>2000</p>
+                                <p class="data-WK">---</p>
+                                <h6>This week Orders</h6>
+                            </div>
+                        </div>
+                        <div class="frm">
+                            <p class="data-FLW"><b><i class="fas fa-arrow-up"></i> ---</b> From Last Week</p>
+                        </div>
+
+                    </li>
+                    <li>
+                        <div class="summary_cont">
+                            <i class="fas fa-clipboard-list"></i>
+                            <div class="innerD">
+                                <p class="data-A">---</p>
                                 <h6>Total Orders</h6>
                             </div>
                         </div>
@@ -95,18 +102,27 @@
                 </div>
                 <div class="dashboard_body">
                     <div class="wr">
-                        <h2>Monthly sales</h2>
+                        <h2 class="mnt">Monthly sales </h2>
+                        <h4 class="yryr"></h4>
                         <div>
                             <div class="brwrap">
                                 <canvas id="myBarChart" style="height: 300px !important;width: 440px;"></canvas>
                             </div>
 
                             <div class="gp">
-                                <ol>
+                                <ol class="cYY highCur">
                                     <p>₱20,000</p>
                                     <h3>Heighest</h3>
                                 </ol>
-                                <ol>
+                                <ol class="cYY lowCur">
+                                    <p>₱20,000</p>
+                                    <h3>Lowest</h3>
+                                </ol>
+                                <ol class="lastYY highLast">
+                                    <p>₱20,000</p>
+                                    <h3>Heighest</h3>
+                                </ol>
+                                <ol class="lastYY lowLast">
                                     <p>₱20,000</p>
                                     <h3>Lowest</h3>
                                 </ol>
@@ -153,55 +169,35 @@
                                 <div class="data-sales">
                                     <section>
                                         <p>Today</p>
-                                        <p>₱5000</p>
+                                        <p class="tdSales">₱0</p>
                                     </section>
                                     <section>
                                         <p>This month</p>
-                                        <p>₱5000</p>
+                                        <p class="tmSales">₱0</p>
                                     </section>
                                     <section>
                                         <p>Total</p>
-                                        <p>₱5000</p>
+                                        <p class="ttlSales">₱0</p>
                                     </section>
                                 </div>
-                                <a href="reports.php" title="Redirect to reports" class="goto">See more <i class="fas fa-arrow-right"></i></a>
+                                <a href="reports" title="Redirect to reports" class="goto">See more <i class="fas fa-arrow-right"></i></a>
                             </div>
                         </div>
                         <div class="top-prod">
                             <div class="top-prod-inn">
-                                <h3>Top products</h3>
+                                <h3>Top 10 products</h3>
                                 <div class="data-prod">
                                     <div class="lab">
                                         <label for="">Product</label>
                                         <label for="">Orders</label>
                                     </div>
-                                    <section>
-                                        <div class="description-topProd">
-                                            <div class="dpPr">
-                                                <img src="../image/sample.png" alt="">
-                                            </div>
-                                            <p>Beef Patty</p>
-                                        </div>
-                                        <p>
-                                            150
-                                        </p>
-                                    </section>
+                                    <div class="data-top-products">
 
-                                    <section>
-                                        <div class="description-topProd">
 
-                                            <div class="dpPr">
-                                                <img src="../image/sample.png" alt="">
-                                            </div>
-                                            <p>Beef Patty</p>
-                                        </div>
-                                        <p>
-                                            150
-                                        </p>
-                                    </section>
+                                    </div>
 
                                 </div>
-                                <a href="reports.php" title="Redirect to reports" class="goto">See more <i class="fas fa-arrow-right"></i></a>
+                                <a href="reports" title="Redirect to reports" class="goto">See more <i class="fas fa-arrow-right"></i></a>
 
                             </div>
                         </div>

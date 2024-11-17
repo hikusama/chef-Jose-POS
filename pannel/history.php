@@ -76,7 +76,7 @@
                             <button type="button" id="todayH" class="1">Today</button>
                             <button type="button" id="yesterdayH" class="1">Yesterday</button>
                             <button type="button" id="tweekH" class="1">This week</button>
-                            <button type="button" id="weekH" class="1">A week ago</button>
+                            <button type="button" id="weekH" class="1">This month</button>
                         </div>
                     </div>
                     <div class="data_history_cont">

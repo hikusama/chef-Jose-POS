@@ -47,6 +47,144 @@
 
 
 
+        //------------------------- OVERVIEW THINGS -----------------------------
+
+
+
+        public function countOrders()
+        {
+            $sql = "SELECT 
+(SELECT COUNT(*) FROM orders WHERE DATE(orderDate) = CURDATE()) AS today,
+(SELECT COUNT(*) FROM orders WHERE DATE(orderDate) = CURDATE() - INTERVAL 1 DAY) AS lastday,
+(SELECT COUNT(*) FROM orders WHERE YEARWEEK(orderDate,1) = YEARWEEK(CURDATE(),1)) AS thisweek,
+(SELECT COUNT(*) FROM orders WHERE YEARWEEK(orderDate,1) = YEARWEEK(CURDATE() - INTERVAL 1 WEEK,1)) AS lastweek,
+(SELECT COUNT(*) FROM orders) as total
+";
+            $stmt = $this->connect()->prepare($sql);
+            if ($stmt->execute()) {
+                $rws = $stmt->fetch(PDO::FETCH_ASSOC);
+                return $rws;
+            }
+            return null;
+        }
+
+
+
+
+
+        public function graphData()
+        {
+            $sql = "SELECT 
+                    SUM(CASE WHEN MONTH(orderDate) = 1 AND YEAR(orderDate) = YEAR(CURRENT_DATE()) THEN totalAmount ELSE 0 END) AS janT,
+                    SUM(CASE WHEN MONTH(orderDate) = 2 AND YEAR(orderDate) = YEAR(CURRENT_DATE()) THEN totalAmount ELSE 0 END) AS febT,
+                    SUM(CASE WHEN MONTH(orderDate) = 3 AND YEAR(orderDate) = YEAR(CURRENT_DATE()) THEN totalAmount ELSE 0 END) AS marT,
+                    SUM(CASE WHEN MONTH(orderDate) = 4 AND YEAR(orderDate) = YEAR(CURRENT_DATE()) THEN totalAmount ELSE 0 END) AS aprT,
+                    SUM(CASE WHEN MONTH(orderDate) = 5 AND YEAR(orderDate) = YEAR(CURRENT_DATE()) THEN totalAmount ELSE 0 END) AS mayT,
+                    SUM(CASE WHEN MONTH(orderDate) = 6 AND YEAR(orderDate) = YEAR(CURRENT_DATE()) THEN totalAmount ELSE 0 END) AS juneT,
+                    SUM(CASE WHEN MONTH(orderDate) = 7 AND YEAR(orderDate) = YEAR(CURRENT_DATE()) THEN totalAmount ELSE 0 END) AS julT,
+                    SUM(CASE WHEN MONTH(orderDate) = 8 AND YEAR(orderDate) = YEAR(CURRENT_DATE()) THEN totalAmount ELSE 0 END) AS augT,
+                    SUM(CASE WHEN MONTH(orderDate) = 9 AND YEAR(orderDate) = YEAR(CURRENT_DATE()) THEN totalAmount ELSE 0 END) AS septT,
+                    SUM(CASE WHEN MONTH(orderDate) = 10 AND YEAR(orderDate) = YEAR(CURRENT_DATE()) THEN totalAmount ELSE 0 END) AS octT,
+                    SUM(CASE WHEN MONTH(orderDate) = 11 AND YEAR(orderDate) = YEAR(CURRENT_DATE()) THEN totalAmount ELSE 0 END) AS novT,
+                    SUM(CASE WHEN MONTH(orderDate) = 12 AND YEAR(orderDate) = YEAR(CURRENT_DATE()) THEN totalAmount ELSE 0 END) AS decT,
+
+                    SUM(CASE WHEN MONTH(orderDate) = 1 AND YEAR(orderDate) = YEAR(CURRENT_DATE()) - 1 THEN totalAmount ELSE 0 END) AS janL,
+                    SUM(CASE WHEN MONTH(orderDate) = 2 AND YEAR(orderDate) = YEAR(CURRENT_DATE()) - 1 THEN totalAmount ELSE 0 END) AS febL,
+                    SUM(CASE WHEN MONTH(orderDate) = 3 AND YEAR(orderDate) = YEAR(CURRENT_DATE()) - 1 THEN totalAmount ELSE 0 END) AS marL,
+                    SUM(CASE WHEN MONTH(orderDate) = 4 AND YEAR(orderDate) = YEAR(CURRENT_DATE()) - 1 THEN totalAmount ELSE 0 END) AS aprL,
+                    SUM(CASE WHEN MONTH(orderDate) = 5 AND YEAR(orderDate) = YEAR(CURRENT_DATE()) - 1 THEN totalAmount ELSE 0 END) AS mayL,
+                    SUM(CASE WHEN MONTH(orderDate) = 6 AND YEAR(orderDate) = YEAR(CURRENT_DATE()) - 1 THEN totalAmount ELSE 0 END) AS juneL,
+                    SUM(CASE WHEN MONTH(orderDate) = 7 AND YEAR(orderDate) = YEAR(CURRENT_DATE()) - 1 THEN totalAmount ELSE 0 END) AS julL,
+                    SUM(CASE WHEN MONTH(orderDate) = 8 AND YEAR(orderDate) = YEAR(CURRENT_DATE()) - 1 THEN totalAmount ELSE 0 END) AS augL,
+                    SUM(CASE WHEN MONTH(orderDate) = 9 AND YEAR(orderDate) = YEAR(CURRENT_DATE()) - 1 THEN totalAmount ELSE 0 END) AS septL,
+                    SUM(CASE WHEN MONTH(orderDate) = 10 AND YEAR(orderDate) = YEAR(CURRENT_DATE()) - 1 THEN totalAmount ELSE 0 END) AS octL,
+                    SUM(CASE WHEN MONTH(orderDate) = 11 AND YEAR(orderDate) = YEAR(CURRENT_DATE()) - 1 THEN totalAmount ELSE 0 END) AS novL,
+                    SUM(CASE WHEN MONTH(orderDate) = 12 AND YEAR(orderDate) = YEAR(CURRENT_DATE()) - 1 THEN totalAmount ELSE 0 END) AS decL
+                    FROM orders";
+            $stmt = $this->connect()->prepare($sql);
+            if ($stmt->execute()) {
+                $rws = $stmt->fetch(PDO::FETCH_ASSOC);
+                return $rws;
+            }
+            return null;
+        }
+
+
+
+
+
+        public function pieData()
+        {
+            $sql = "SELECT 
+            SUM(CASE WHEN orderDate = CURRENT_DATE THEN totalAmount ELSE 0 END) AS today_total,
+            SUM(CASE WHEN orderDate = CURRENT_DATE - INTERVAL 1 DAY THEN totalAmount ELSE 0 END) AS yesterday_total,
+            SUM(CASE WHEN YEARWEEK(orderDate,1) = YEARWEEK(CURRENT_DATE,1) THEN totalAmount ELSE 0 END) AS thisweek,
+            SUM(CASE WHEN YEARWEEK(orderDate,1) = YEARWEEK(CURRENT_DATE - INTERVAL 1 WEEK,1) THEN totalAmount ELSE 0 END) AS lastweek 
+            FROM orders";
+            $stmt = $this->connect()->prepare($sql);
+            if ($stmt->execute()) {
+                $rws = $stmt->fetch(PDO::FETCH_ASSOC);
+                return $rws;
+            }
+            return null;
+        }
+
+
+        public function salesPackData()
+        {
+            $sql = "SELECT 
+            SUM(totalAmount) AS total,
+            SUM(CASE WHEN orderDate = CURRENT_DATE THEN totalAmount ELSE 0 END) AS today_total,
+            SUM(CASE WHEN MONTH(orderDate) = MONTH(CURRENT_DATE()) THEN totalAmount ELSE 0 END) AS thismonth
+            FROM orders";
+            $stmt = $this->connect()->prepare($sql);
+            if ($stmt->execute()) {
+                $rws = $stmt->fetch(PDO::FETCH_ASSOC);
+                return $rws;
+            }
+            return null;
+        }
+
+        public function topProd()
+        {
+            $sql = "SELECT 
+                prd.displayPic,
+                prd.name,
+                SUM(ord.quantity)  AS total_order FROM products AS prd 
+                LEFT JOIN orderitems AS ord ON ord.productID = prd.productID GROUP BY prd.productID
+                ORDER BY total_order DESC LIMIT 10 OFFSET 0";
+            $stmt = $this->connect()->prepare($sql);
+            if ($stmt->execute()) {
+                $rws = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                return $rws;
+            }
+            return null;
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         //------------------------- PRODUCT THINGS -----------------------------
 
 
@@ -288,13 +426,13 @@
 
 
         // INSERT COMBO
-        public function addCombo($combos, $comboIMG, $comboName, $comboCode, $comboPrice,$availability)
+        public function addCombo($combos, $comboIMG, $comboName, $comboCode, $comboPrice, $availability)
         {
             $sql = "INSERT INTO combo(displayPic,comboName,comboCode,comboPrice,availability) values(?, ?, ?, ?, ?)";
 
             $stmt = $this->connect()->prepare($sql);
 
-            if ($stmt->execute([$comboIMG, $comboName, $comboCode, $comboPrice,$availability])) {
+            if ($stmt->execute([$comboIMG, $comboName, $comboCode, $comboPrice, $availability])) {
                 $comboID = $this->getComboID();
                 if ($this->comboItems($combos, $comboID)) {
                     return true;
@@ -420,8 +558,6 @@
                     'current_page' => null
                 ];
             }
-
-
         }
 
 
@@ -490,8 +626,6 @@
                     'current_page' => null
                 ];
             }
-
-
         }
 
 
@@ -781,7 +915,7 @@
 
 
 
-            if ($stmtF->execute([$orders[0]['totalAmount'], $orders[0]['discount'], $orders[0]['discountType'], $orders[0]['refNo'], $orders[0]['pmethod'], $orders[0]['gcashName'], $orders[0]['gcashNum'],$orders[0]['subtotal']])) {
+            if ($stmtF->execute([$orders[0]['totalAmount'], $orders[0]['discount'], $orders[0]['discountType'], $orders[0]['refNo'], $orders[0]['pmethod'], $orders[0]['gcashName'], $orders[0]['gcashNum'], $orders[0]['subtotal']])) {
             } else {
                 return false;
             }
