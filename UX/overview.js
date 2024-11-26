@@ -2,7 +2,7 @@ $(document).ready(function () {
 
   const currYr = new Date().getFullYear()
 
-  let samp = currYr.toString() + " - " + (currYr - 1).toString()
+  let samp = (currYr - 1).toString() + " - " + currYr.toString()
 
   $(".mnt").next().append(samp);
 
@@ -12,6 +12,7 @@ $(document).ready(function () {
   getPieData()
   getSales()
   getTopProd()
+  getDiscount()
 
   const ctx = document.getElementById('myBarChart');
 
@@ -94,7 +95,6 @@ $(document).ready(function () {
         $(".data-FLW").html(response.fromlastweek);
 
       }, error: function (xhr, status, error) {
-        console.log("error:" + error);
 
       }
     });
@@ -128,7 +128,6 @@ $(document).ready(function () {
         $(".highLast p").html("₱" + response.maxLastYear.toString());
         $(".lowLast p").html("₱" + response.minLastYear.toString());
       }, error: function (xhr, status, error) {
-        console.log("error:" + error);
 
       }
     });
@@ -156,7 +155,6 @@ $(document).ready(function () {
         pieChartWk.update()
         pieChartD.update()
       }, error: function (xhr, status, error) {
-        console.log("error:" + error);
 
       }
     });
@@ -184,7 +182,30 @@ $(document).ready(function () {
         $(".ttlSales").html("₱" + response.total);
 
       }, error: function (xhr, status, error) {
-        console.log("error:" + error);
+
+      }
+    });
+
+  }
+  function getDiscount() {
+
+    formData = new FormData()
+    formData.append('transac', "discountData")
+
+    $.ajax({
+      type: 'POST',
+      url: '../Views/overviewView.php',
+      data: formData,
+      contentType: false,
+      processData: false,
+      dataType: 'json',
+      success: function (response) {
+
+        $(".dstSales").html("₱" + response.today_total);
+        $(".dstmSales").html("₱" + response.thismonth);
+        $(".dsttlSales").html("₱" + response.total);
+
+      }, error: function (xhr, status, error) {
 
       }
     });
@@ -209,7 +230,6 @@ $(document).ready(function () {
         $(".data-top-products").html(response.prod);
 
       }, error: function (xhr, status, error) {
-        console.log("error:" + error);
 
       }
     });

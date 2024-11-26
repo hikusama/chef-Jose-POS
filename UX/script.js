@@ -15,10 +15,9 @@ $(document).ready(function () {
         e.preventDefault();
 
         let clicked_location = $(this).attr("id");
-        console.log(clicked_location);
 
         
-        window.location.href = clicked_location ;
+        window.location.href = clicked_location + ".php";
         
         
     });
@@ -75,7 +74,6 @@ $(document).ready(function () {
             $(this).find(".arrow_controll i").addClass("arrow");
             $(this).next(".qntity").addClass("quantityShow");
         }
-        console.log("hhhh");
 
     });
     //  $(this).closest("qntity") 
@@ -84,21 +82,17 @@ $(document).ready(function () {
         const theme = localStorage.getItem('theme');
 
         if (theme === "light") {
-            console.log("light mode");
             
             document.body.classList.remove("dark_mode")
             document.body.classList.remove("monokai_mode")
         }else if(theme === "monokai"){
-            console.log("monokai mode");
             document.body.classList.remove("dark_mode")
             document.body.classList.add("monokai_mode")
         }else if(theme === "dark_modern"){
-            console.log("dark mode");
             document.body.classList.remove("monokai_mode")
             document.body.classList.add("dark_mode")
             
         }else{
-            console.log("light mode");
             document.body.classList.remove("dark_mode")
             document.body.classList.remove("monokai_mode")
         }

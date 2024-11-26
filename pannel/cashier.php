@@ -4,13 +4,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../resources/fontawesome-free-5.15.4-web/css/all.css">
+    <link rel="stylesheet" href="../resources/fontawesome-free-5.15.4-web/css/all.css?v=<?php echo time();?>">
 
-    <script src="../UX/jquery-3.5.1.min.js"></script>
-    <script src="../UX/cashier.js"></script>
-    <script src="../UX/script.js"></script>
-    <link rel="stylesheet" href="../resources/style.css">
-    <link rel="stylesheet" href="../resources/cashier.css">
+    <script src="../UX/jquery-3.5.1.min.js?v=<?php echo time();?>"></script>
+    <script src="../UX/cashier.js?v=<?php echo time();?>"></script>
+    <script src="../UX/script.js?v=<?php echo time();?>"></script>
+    <link rel="stylesheet" href="../resources/style.css?v=<?php echo time();?>">
+    <link rel="stylesheet" href="../resources/cashier.css?v=<?php echo time();?>">
     <title>POS</title>
 </head>
 

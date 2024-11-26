@@ -17,7 +17,6 @@ $(document).ready(function () {
         $("#" + themeempt).closest("label").addClass("selected_class");
     } else {
         document.getElementById(theme).checked = true;
-        // console.log(theme);
         $(".themes_select label").removeClass("selected_class");
         $("#" + theme).closest("label").addClass("selected_class");
 
@@ -62,7 +61,6 @@ $(document).ready(function () {
             // if (conf) {
 
             //     localStorage.setItem('theme', theme_selected);
-            //     // console.log("good" + theme_selected);
             //     theme_selected = ""
             //     $("#save_theme").removeClass("inv");
 
@@ -73,7 +71,6 @@ $(document).ready(function () {
                 $(".confirm_change").addClass("New_confirm_change");
                 $(".overlay_settings").show();
                 intervalId = setInterval(() => {
-                    console.log("helo");
                     $(".overlay_settings").show();
                     check_ov = $(".overlay_settings").css("display", "none");
                     if (check_ov) {
@@ -90,8 +87,6 @@ $(document).ready(function () {
 
 
         } else {
-            // console.log("error");
-            // console.log("jjjjjjjj" + theme_selected);
 
         }
 
@@ -107,7 +102,6 @@ $(document).ready(function () {
         $(".confirm_change").removeClass("New_confirm_change");
 
         localStorage.setItem('theme', theme_selected);
-        // console.log("good" + theme_selected);
         theme_selected = ""
         $("#save_theme").removeClass("inv");
 
@@ -165,21 +159,17 @@ $(document).ready(function () {
         const theme = localStorage.getItem('theme');
 
         if (theme === "light") {
-            console.log("light mode");
             
             document.body.classList.remove("dark_mode")
             document.body.classList.remove("monokai_mode")
         }else if(theme === "monokai"){
-            console.log("monokai mode");
             document.body.classList.remove("dark_mode")
             document.body.classList.add("monokai_mode")
         }else if(theme === "dark_modern"){
-            console.log("dark mode");
             document.body.classList.remove("monokai_mode")
             document.body.classList.add("dark_mode")
             
         }else{
-            console.log("light mode");
             document.body.classList.remove("dark_mode")
             document.body.classList.remove("monokai_mode")
         }

@@ -8,6 +8,24 @@ $(document).ready(function () {
     // e.preventDefault();
     // });
 
+
+
+    $(".history_info").on("click", "#delReceipt", function (e) {
+        e.preventDefault();
+
+        if (reqOpen == true) {
+            reqOpen = false
+            let rf = $(this).parent().attr('id');
+            $(".data").find("#" + rf).parent().addClass("rmByRf")
+            setTimeout(() => {
+                $(".data").find(".rmByRf").detach()
+            }, 450);
+            delOrder($(this).parent().attr('id'))
+
+        }
+
+
+    });
     $(".history_info").on("click", "#print_receipt", function (e) {
         e.preventDefault();
 
@@ -25,8 +43,10 @@ $(document).ready(function () {
                 is = $('.history_info >*:nth-child(1)').hasClass('lgu');
                 if (!is) {
                     clearPane()
+                    $(".data_history_cont .data ol").removeClass("onHistoryDp")
+
                 }
-                window.open("printPage", "blank")
+                window.open("printPage.php", "blank")
             }
         });
 
@@ -52,7 +72,6 @@ $(document).ready(function () {
         e.preventDefault();
         classI = $(this).attr("class")
         group = $(this).attr("id")
-        console.log(reqOpen);
 
 
         if (reqOpen == true && classI !== "historyOn") {
@@ -64,7 +83,6 @@ $(document).ready(function () {
             $(".group_type button").removeClass("historyOn")
             $(this).addClass("historyOn")
             getFindGroup($("#findOrder").val(), group)
-            console.log(reqOpen);
 
 
         }
@@ -73,7 +91,6 @@ $(document).ready(function () {
     $(".data_history_cont").on("click", ".data ol", function (e) {
         e.preventDefault()
         hasC = $(this).hasClass("onHistoryDp");
-        console.log(hasC);
 
         if (!hasC && reqOpen) {
             $(".data_history_cont .data ol").removeClass("onHistoryDp")
@@ -86,7 +103,6 @@ $(document).ready(function () {
 
     $(".data_history_cont").on("click", ".main-dir-link button", function (e) {
         e.preventDefault()
-        // console.log($(this).attr("id"));
         let page = $(this).attr("id")
         let searchVal
         if (page != "pageON" && reqOpen == true) {
@@ -119,6 +135,24 @@ $(document).ready(function () {
             success: function (response) {
                 $('.history_info').html(response);
                 reqOpen = true;
+
+            }
+        });
+    }
+    function delOrder(refno) {
+        reqOpen = false;
+        formData = new FormData()
+        formData.append('transac', "deleteOrder")
+        formData.append('refno', refno)
+        $.ajax({
+            url: '../views/historyView.php',
+            method: 'POST',
+            data: formData,
+            contentType: false,
+            processData: false,
+            success: function (response) {
+                reqOpen = true;
+                clearPane()
 
             }
         });

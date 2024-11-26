@@ -145,6 +145,21 @@
             return null;
         }
 
+        public function discountData()
+        {
+            $sql = "SELECT 
+            SUM(discount) AS total,
+            SUM(CASE WHEN orderDate = CURRENT_DATE THEN discount ELSE 0 END) AS today_total,
+            SUM(CASE WHEN MONTH(orderDate) = MONTH(CURRENT_DATE()) THEN discount ELSE 0 END) AS thismonth
+            FROM orders";
+            $stmt = $this->connect()->prepare($sql);
+            if ($stmt->execute()) {
+                $rws = $stmt->fetch(PDO::FETCH_ASSOC);
+                return $rws;
+            }
+            return null;
+        }
+
         public function topProd()
         {
             $sql = "SELECT 
@@ -642,12 +657,22 @@
         //------------------------- HISTORY THINGS -----------------------------
 
 
-
+        public function delOrders($ref)
+        {
+            $sql = "DELETE FROM orders WHERE ref_no = ?";
+            $stmt = $this->connect()->prepare($sql);
+            $stmt->bindParam(1, $ref, PDO::PARAM_INT);
+            if ($stmt->execute()) {
+                return true;
+            } else {
+                return false;
+            }
+        }
         public function getOrderRecord($ref)
         {
 
 
-            $sql = "SELECT ord.*, oi.*, pr.name,c.comboName FROM orders as ord
+            $sql = "SELECT ord.*,ord.ref_no as rff, oi.*, pr.name,c.comboName FROM orders as ord
             left join orderitems as oi on ord.ref_no = oi.ref_no
             left join products as pr on oi.productID = pr.productID
             left join comboitems as ci on pr.productID = ci.productID

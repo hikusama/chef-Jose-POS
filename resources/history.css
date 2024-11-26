@@ -20,10 +20,33 @@
     row-gap: 1.3rem;
 }
 
+.monokai_mode .lbb,
+.dark_mode .lbb{
+    background: #3b3b3b;
+    border: solid 1px rgba(255, 255, 255, 0.417);
+    color: white;
+}
+.lbb{
+    background: #d8d8d8;
+    padding: .3rem 0;
+    border-radius: .3rem;
+    pointer-events: none;    
+    border: solid 1px;
+}
 .history_cont h4 {
     padding-left: 1rem;
 }
-
+.rmByRf{
+    animation-name: rmByRf;
+    animation-duration: .9s;
+    animation-iteration-count: 1;
+}
+@keyframes rmByRf {
+    50%{
+        opacity: 0;
+        transform: translateX(-3rem);
+    }
+}
 .history_pane {
     position: relative;
 
@@ -189,7 +212,7 @@
     overflow-y: scroll;
     scrollbar-width: none;
     height: fit-content;
-    max-height: 50%;
+    max-height: 13.5rem;
     padding: 1rem 0;
     row-gap: .3rem;
 }
@@ -349,7 +372,6 @@
 
 .findHistory li input {
     outline: solid rgba(20, 20, 20, 0.568) 1px;
-    background-color: #181818;
     padding-left: 1.8rem;
     width: 22rem;
     height: 2rem;
@@ -357,7 +379,18 @@
     border: none;
     font-size: .9rem;
 }
+.monokai_mode #findOrder {
+    background-color: #1E1F1C;
+    color: rgb(199, 199, 199);
+    outline: solid 1px rgb(128 127 127 / 26%);
 
+}
+
+.dark_mode #findOrder {
+    background-color: #181818;
+    color: rgb(199, 199, 199);
+    outline: solid 1px rgb(128 127 127 / 26%);
+}
 .findHistory li input:focus {
     outline: solid rgba(20, 20, 20, 0.767) 1px;
 }
@@ -450,7 +483,7 @@
     border: none !important;
     cursor: default !important;
     margin-top: 2rem;
-
+    pointer-events: none;
 }
 
 
@@ -501,4 +534,13 @@
 
 .data_history_cont #pageON {
     background: rgb(212, 88, 5) !important;
+}
+
+
+
+@media screen and (max-width:800px) {
+
+    .middle_side {
+        grid-template-columns: auto 30% !important;
+    }
 }

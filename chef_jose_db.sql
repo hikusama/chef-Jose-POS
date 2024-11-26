@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 18, 2024 at 02:58 AM
+-- Generation Time: Nov 25, 2024 at 07:31 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -136,72 +136,10 @@ CREATE TABLE `orderitems` (
 --
 
 INSERT INTO `orderitems` (`orderItemId`, `ref_no`, `itemType`, `productID`, `comboID`, `quantity`, `unitPrice`) VALUES
-(13, 195718, 'product', 48, NULL, 1, 50),
-(14, 195718, 'product', 47, NULL, 1, 25),
-(15, 195718, 'product', 46, NULL, 1, 25),
-(16, 195718, 'product', 42, NULL, 1, 25),
-(17, 215733, 'product', 43, NULL, 1, 35),
-(18, 215733, 'product', 44, NULL, 1, 15),
-(19, 358051, 'product', 46, NULL, 1, 25),
-(20, 358051, 'product', 45, NULL, 1, 55),
-(21, 358051, 'product', 44, NULL, 1, 15),
-(23, 582811, 'product', 44, NULL, 1, 15),
-(25, 654190, 'product', 43, NULL, 1, 35),
-(26, 654190, 'product', 44, NULL, 1, 15),
-(27, 654190, 'combo', NULL, 7, 1, 85),
-(28, 746409, 'product', 43, NULL, 1, 35),
-(29, 746409, 'product', 42, NULL, 1, 25),
-(30, 833857, 'product', 43, NULL, 1, 35),
-(31, 833857, 'product', 44, NULL, 1, 15),
-(32, 833857, 'product', 51, NULL, 3, 75),
-(33, 979382, 'product', 51, NULL, 2, 50),
-(34, 979382, 'combo', NULL, 7, 2, 170),
-(35, 1060347, 'product', 42, NULL, 1, 25),
-(36, 1060347, 'product', 43, NULL, 1, 35),
-(37, 1060347, 'product', 46, NULL, 1, 25),
-(38, 1136866, 'product', 43, NULL, 1, 35),
-(39, 1136866, 'product', 44, NULL, 1, 15),
-(40, 1225659, 'product', 43, NULL, 1, 35),
-(41, 1225659, 'product', 45, NULL, 2, 110),
-(42, 1225659, 'combo', NULL, 7, 2, 170),
-(43, 1366511, 'product', 43, NULL, 1, 35),
-(44, 1366511, 'product', 46, NULL, 1, 25),
-(45, 1366511, 'product', 47, NULL, 1, 25),
-(46, 1445960, 'product', 44, NULL, 2, 30),
-(47, 1445960, 'product', 58, NULL, 1, 69),
-(48, 1445960, 'product', 57, NULL, 1, 39),
-(49, 1445960, 'product', 43, NULL, 1, 35),
-(50, 1445960, 'product', 53, NULL, 2, 60),
-(51, 1445960, 'combo', NULL, 7, 2, 170),
-(52, 1530623, 'product', 58, NULL, 1, 69),
-(53, 1530623, 'product', 57, NULL, 1, 39),
-(54, 1530623, 'product', 55, NULL, 1, 30),
-(56, 1530623, 'product', 53, NULL, 1, 30),
-(57, 1530623, 'product', 51, NULL, 1, 25),
-(58, 1530623, 'product', 61, NULL, 1, 15),
-(59, 1530623, 'product', 42, NULL, 1, 25),
-(60, 1530623, 'product', 43, NULL, 1, 35),
-(61, 1530623, 'product', 44, NULL, 1, 15),
-(62, 1530623, 'product', 45, NULL, 1, 55),
-(63, 1530623, 'product', 46, NULL, 1, 25),
-(64, 1530623, 'product', 47, NULL, 1, 25),
-(65, 1530623, 'product', 48, NULL, 1, 50),
-(66, 1530623, 'product', 60, NULL, 1, 35),
-(67, 1630799, 'product', 51, NULL, 2, 50),
-(68, 1630799, 'product', 46, NULL, 3, 75),
-(69, 1798708, 'product', 51, NULL, 1, 25),
-(70, 1798708, 'product', 46, NULL, 1, 25),
-(71, 1823888, 'product', 51, NULL, 2, 50),
-(72, 1823888, 'product', 46, NULL, 1, 25),
-(73, 1947044, 'product', 51, NULL, 2, 50),
-(74, 2079482, 'product', 51, NULL, 1, 25),
-(75, 2079482, 'product', 46, NULL, 1, 25),
-(76, 2166580, 'product', 46, NULL, 1, 25),
-(77, 2284787, 'product', 46, NULL, 4, 100),
-(78, 2310919, 'product', 51, NULL, 1, 25),
-(79, 2471928, 'product', 51, NULL, 1, 25),
-(80, 2578020, 'product', 51, NULL, 1, 25),
-(81, 2665247, 'product', 58, NULL, 8, 552);
+(91, 3269917, 'product', 51, NULL, 1, 25),
+(92, 3269917, 'product', 46, NULL, 1, 25),
+(95, 3457288, 'product', 58, NULL, 2, 138),
+(96, 3543536, 'product', 58, NULL, 2, 138);
 
 -- --------------------------------------------------------
 
@@ -229,32 +167,9 @@ CREATE TABLE `orders` (
 --
 
 INSERT INTO `orders` (`orderID`, `ref_no`, `orderDate`, `orderTime`, `employeeID`, `subtotal`, `totalAmount`, `paymentMethod`, `gcashAccountName`, `gcashAccountNo`, `discountType`, `discount`) VALUES
-(1, 195718, '2023-10-02', '13:00:38', NULL, 125, 112.5, 'Cash', NULL, NULL, 'PWD', '10'),
-(2, 215733, '2023-11-02', '13:05:26', NULL, 50, 50, 'Cash', NULL, NULL, NULL, NULL),
-(3, 358051, '2024-11-09', '13:07:19', NULL, 95, 95, 'Cash', NULL, NULL, NULL, NULL),
-(4, 417128, '2024-11-09', '09:37:03', NULL, 302, 302, 'Cash', NULL, NULL, NULL, NULL),
-(5, 582811, '2024-11-10', '09:40:12', NULL, 60, 60, 'Cash', NULL, NULL, NULL, NULL),
-(6, 654190, '2024-11-10', '10:08:26', NULL, 135, 135, 'Cash', NULL, NULL, NULL, NULL),
-(7, 746409, '2024-11-10', '10:09:51', NULL, 60, 60, 'Cash', NULL, NULL, NULL, NULL),
-(8, 833857, '2024-11-15', '14:09:04', NULL, 125, 121.25, 'Cash', NULL, NULL, 'kaibigan', '3'),
-(9, 979382, '2024-11-15', '14:25:58', NULL, 220, 220, 'Cash', NULL, NULL, NULL, NULL),
-(10, 1060347, '2024-11-15', '06:05:29', NULL, 85, 85, 'Cash', NULL, NULL, NULL, NULL),
-(11, 1136866, '2024-11-15', '06:11:16', NULL, 50, 50, 'Cash', NULL, NULL, NULL, NULL),
-(12, 1225659, '2024-11-15', '06:12:02', NULL, 315, 315, 'Cash', NULL, NULL, NULL, NULL),
-(13, 1366511, '2024-11-15', '07:48:31', NULL, 85, 72.25, 'Cash', NULL, NULL, 'PWD', '15'),
-(14, 1445960, '2024-11-15', '14:32:05', NULL, 403, 403, 'Cash', NULL, NULL, NULL, NULL),
-(15, 1530623, '2024-11-15', '14:34:26', NULL, 518, 518, 'Cash', NULL, NULL, NULL, NULL),
-(16, 1630799, '2024-11-16', '12:26:21', NULL, 125, 125, 'Cash', NULL, NULL, NULL, NULL),
-(17, 1798708, '2024-11-16', '12:28:45', NULL, 50, 50, 'Cash', NULL, NULL, NULL, NULL),
-(18, 1823888, '2024-11-16', '12:30:28', NULL, 75, 75, 'Cash', NULL, NULL, NULL, NULL),
-(19, 1947044, '2024-11-16', '12:30:38', NULL, 50, 50, 'Cash', NULL, NULL, NULL, NULL),
-(20, 2079482, '2024-11-16', '12:30:49', NULL, 50, 50, 'Cash', NULL, NULL, NULL, NULL),
-(21, 2166580, '2024-11-16', '12:30:58', NULL, 25, 25, 'Cash', NULL, NULL, NULL, NULL),
-(22, 2284787, '2024-11-16', '12:31:08', NULL, 100, 100, 'Cash', NULL, NULL, NULL, NULL),
-(23, 2310919, '2024-11-16', '12:32:51', NULL, 25, 25, 'Cash', NULL, NULL, NULL, NULL),
-(24, 2471928, '2024-11-16', '12:33:24', NULL, 25, 25, 'Cash', NULL, NULL, NULL, NULL),
-(25, 2578020, '2024-11-17', '17:55:33', NULL, 25, 25, 'Cash', NULL, NULL, NULL, NULL),
-(26, 2665247, '2023-11-17', '22:02:18', NULL, 552, 552, 'Cash', NULL, NULL, NULL, NULL);
+(32, 3269917, '2024-10-25', '14:16:29', NULL, 50, 45, 'Cash', NULL, NULL, 'senior cetizens', '5'),
+(34, 3457288, '2024-11-25', '14:19:51', NULL, 138, 124.2, 'Cash', NULL, NULL, 'senior cetizens', '13.8'),
+(35, 3543536, '2023-01-25', '14:22:22', NULL, 138, 124.2, 'Cash', NULL, NULL, 'PWD', '13.8');
 
 -- --------------------------------------------------------
 
@@ -426,13 +341,13 @@ ALTER TABLE `employees`
 -- AUTO_INCREMENT for table `orderitems`
 --
 ALTER TABLE `orderitems`
-  MODIFY `orderItemId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=82;
+  MODIFY `orderItemId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=97;
 
 --
 -- AUTO_INCREMENT for table `orders`
 --
 ALTER TABLE `orders`
-  MODIFY `orderID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
+  MODIFY `orderID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
 
 --
 -- AUTO_INCREMENT for table `products`

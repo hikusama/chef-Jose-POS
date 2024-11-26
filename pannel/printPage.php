@@ -14,8 +14,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="../UX/jquery-3.5.1.min.js"></script>
-    <link rel="stylesheet" href="../resources/style.css">
+    <script src="../UX/jquery-3.5.1.min.js?v=<?php echo time();?>"></script>
+    <link rel="stylesheet" href="../resources/style.css?v=<?php echo time();?>">
     <style>
         * {
             margin: 0;

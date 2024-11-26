@@ -13,7 +13,6 @@
 .myproducts {
     position: relative;
     height: 100dvh;
-    padding-left: 4rem;
 }
 
 #logo_prod {
@@ -195,7 +194,7 @@
     margin-top: .5rem;
     gap: .4rem;
     margin-left: 1.4rem;
-    padding: 1.8rem .5rem 3rem;
+    padding: 1.8rem .5rem 6rem;
     overflow-y: scroll;
     height: 52vh;
     max-height: 60vh;
@@ -554,6 +553,7 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+    display: none;
 }
 
 #canc {
@@ -1040,6 +1040,7 @@
     top: 40%;
     left: 50%;
     transform: translate(-50%, -50%);
+    display: none;
 }
 
 
@@ -1259,7 +1260,7 @@
 
 .comboAdd-form-cont {
     z-index: 5;
-    /* display: none;6 */
+    display: none;
     position: absolute;
     top: 60%;
     left: 50%;
@@ -1382,6 +1383,10 @@
 }
 
 #comboDP {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
     border-radius: 50%;
     height: 10rem;
 }

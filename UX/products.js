@@ -4,6 +4,7 @@
 
 
 $(document).ready(function () {
+
     addPorm = $("#addProductForm").detach();
     addCat = $(".categoryForm-outer").detach();
     let comboAdd = $(".comboAdd-form-cont").detach();
@@ -26,7 +27,6 @@ $(document).ready(function () {
         e.preventDefault()
         id = parseInt($(this).parent().attr("id"))
 
-        console.log(id);
         deleteThings(id)
         $(".more_showPane").trigger("click");
         $("#content_products .action_select").removeClass("action_selectNew");
@@ -42,7 +42,6 @@ $(document).ready(function () {
 
     $(".myproducts").on("click", ".main-dir-link button", function (e) {
         e.preventDefault()
-        // console.log($(this).attr("id"));
         let page = $(this).attr("id")
         let searchVal
         if (page != "pageON") {
@@ -52,10 +51,10 @@ $(document).ready(function () {
                 allProducts(searchVal, parseInt($(this).attr("id")))
             } else if (prdShowState == 2) {
                 searchVal = $("#findCatExec").val()
-                allCat(searchVal,parseInt($(this).attr("id")))
+                allCat(searchVal, parseInt($(this).attr("id")))
             } else if (prdShowState == 3) {
                 searchVal = $("#findComboExec").val()
-                allCombo(searchVal,parseInt($(this).attr("id")))
+                allCombo(searchVal, parseInt($(this).attr("id")))
             }
         }
     });
@@ -119,7 +118,6 @@ $(document).ready(function () {
             $(".find_prod input").attr("placeholder", "Search for combo's or code...");
             $(".find_prod input").attr("id", "findComboExec");
         }
-        // console.log("prd: ",prdShowState,"\nopen?: ",reqOpen);
 
     });
 
@@ -160,7 +158,6 @@ $(document).ready(function () {
 
     $(".myproducts").on("click", "#submit-combo_form", function (e) {
         e.preventDefault()
-        console.log(454545454);
 
         $("#addComboForm").trigger("submit");
     });
@@ -192,10 +189,8 @@ $(document).ready(function () {
             T = $(".data-products").html().trim();
             $(".data-products").addClass('unsd');
             if (T == "") {
-                console.log(200);
                 $(".data-products").html("No products..");
             } else {
-                console.log(404);
             }
         }, 220);
     });
@@ -216,7 +211,6 @@ $(document).ready(function () {
 
         if (!clickedFnd) {
             $(this).html(`<i class="fas fa-eye"></i>View selected`)
-            console.log(1);
             clickedFnd = true
             $(viewSel).detach()
             $(".action-products").append(findPr)
@@ -227,7 +221,6 @@ $(document).ready(function () {
             $(".action-products").append(viewSel)
             viewSelectedCombo();
 
-            console.log(2);
             clickedFnd = false
             $(this).html(`<i class="fas fa-search"></i>Find producs`)
             // $(".data-products ol").removeClass("new-data-products");
@@ -244,6 +237,7 @@ $(document).ready(function () {
         e.preventDefault();
         $("#overlay_prod").show();
         $(".myproducts").append(comboAdd)
+        $(".comboAdd-form-cont").show();
 
         $(".comboAdd-form-cont").show();
         if (norun == true) {
@@ -293,9 +287,10 @@ $(document).ready(function () {
             });
             $("#overlay_prod").show();
             $(".myproducts").append(addPorm);
+            $("#addProductForm").show();
+
 
             setTimeout(() => {
-                console.log("sada");
                 $(".label_style").addClass("newlabel_style");
             }, 600);
 
@@ -316,7 +311,6 @@ $(document).ready(function () {
     $(".myproducts").on("change", "#addpic", function (e) {
         e.preventDefault();
         const input = $('#addpic')[0];
-        console.log("entered111");
 
         if (input) {
             imagePick("#imgdisplay", "#addpic");
@@ -383,11 +377,9 @@ $(document).ready(function () {
 
     $("#content_products").on("click", ".more_showPane", function (e) {
         e.preventDefault();
-        // console.log(54444444444444444);
         hasClass = $(this).closest("li").find(".action_selectNew").hasClass("action_selectNew");
 
         if (!hasClass) {
-            console.log("hello");
             $("#content_products li").css("z-index", "1");
             $(this).closest("li").css("z-index", "2");
             $("#content_products .action_select").removeClass("action_selectNew");
@@ -400,7 +392,6 @@ $(document).ready(function () {
 
         }
         // new_id = $(this).closest("#content_products li").find(".action_select").attr("id");
-        // console.log(new_id);
 
         // if (clicked_count == 2) {
         //     prev_clicked = 1;
@@ -432,6 +423,8 @@ $(document).ready(function () {
 
             $("#overlay_prod").show();
             $(".myproducts").append(addCat);
+            $(".categoryForm-outer").show();
+
             $(".uiInfo").hide();
 
             setTimeout(() => {
@@ -443,7 +436,6 @@ $(document).ready(function () {
                 if (manipulated) {
                     $("#overlay_prod").show();
                 }
-                console.log('ngiao');
 
             }, 800);
             open_Insertion = false;
@@ -498,9 +490,9 @@ $(document).ready(function () {
 
     });
     $(".find_prod").on("input", "#findCatExec", function () {
-        
+
         allCat($(this).val())
-        
+
     });
     $(".find_prod").on("input", "#findComboExec", function () {
 
@@ -748,7 +740,6 @@ function allProducts(searchArg, page = 1) {
     // if (hasClass) {
     //     $(".loading_sc").show();
     // }else{
-    //     console.log("helll");
 
     //     $('#content_products li').detach();
     //     $('#content_products').append(loading_sc);
@@ -797,8 +788,7 @@ function deleteThings(id) {
         processData: false,
         success: function (response) {
             response = response.trim()
-            console.log(response);
-            
+
             if (response == "Deleted") {
                 notify("Deleted successfully")
             }
@@ -833,7 +823,6 @@ function imagePick(dp, inpt) {
     const profileImage = $(dp);
     const input = $(inpt)[0];
     const file = input.files[0];
-    console.log("entered");
 
     if (file) {
         const reader = new FileReader();
@@ -841,11 +830,8 @@ function imagePick(dp, inpt) {
             profileImage.attr('src', reader.result);
         };
         reader.readAsDataURL(file);
-        console.log("readed");
-        console.log(1);
 
     } else {
-        console.log(404);
 
         profileImage.attr('src', '../image/dpTemplate.png');
 

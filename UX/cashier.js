@@ -75,7 +75,6 @@ $(document).ready(function () {
             processData: false,
             success: function (response) {
                 response = response.trim()
-                console.log(response);
 
                 if (response == '') {
                     $(".discount-form input").val('');
@@ -134,7 +133,7 @@ $(document).ready(function () {
                     $('.pay-cont input').val('');
                     $(".response").html('<p style="white-space:nowrap; color:green;font-size: 1.1rem;" class="errorText">Success..</p>');
                     $('.pay-cont').hide();
-                    window.open("printPage", "blank")
+                    window.open("printPage.php", "blank")
 
 
 
@@ -217,7 +216,6 @@ $(document).ready(function () {
             price = $(this).find("h4 b").html().substring(1);
             price = parseInt(price.split(",").join(""));
             product_name = $(this).find("h5").html();
-            console.log(price);
             
             formData = new FormData();
             formData.append("product_id", toAddProduct_id);
@@ -225,7 +223,6 @@ $(document).ready(function () {
 
             addToCart(formData, "addToCart", toAddProduct_id, product_name, price);
         } else {
-            console.log("Server busy");
 
         }
 
@@ -336,7 +333,6 @@ $(document).ready(function () {
 
         if (qntity != "" && qntity <= 1000 && qntity != 0) {
             if (qntity != test) {
-                // console.log("sent");
 
                 price = $(this).closest("ol").find(".pr").html();
                 price = parseInt(price.substring(1));
@@ -350,8 +346,6 @@ $(document).ready(function () {
                 product_id = $(this).closest("ol").find(".edga").attr("id");
                 $(this).closest("ol").find(".arrow_controll").next().html(qntity);
 
-                console.log(qntity);
-                console.log(price);
 
 
                 formData.append("transac", "changeqntity");
@@ -371,7 +365,6 @@ $(document).ready(function () {
                     }
                 });
             } else {
-                // console.log("not sent");
 
             }
 
@@ -418,12 +411,10 @@ $(document).ready(function () {
             }
             $(".category_nav_inner li").removeClass("prod_nav");
             $(this).addClass("prod_nav")
-            console.log(catId);
             $("#search").val('')
             searchNView('', catId);
 
         } else {
-            console.log("Server busy in category");
 
         }
 
@@ -544,7 +535,6 @@ $(document).ready(function () {
                                 qntity = parseInt($(this).find(".arrow_controll").next().html());
                                 pr = parseInt($(this).find(".pr").html().substring(1));
                                 pr = pr / qntity;
-                                console.log(pr);
 
                                 $(this).find(".arrow_controll").next().html(qntity + 1);
                                 pr = pr * (qntity + 1);

@@ -5,11 +5,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
-    <script src="../UX/jquery-3.5.1.min.js"></script>
-    <script src="../UX/script.js"></script>
-    <link rel="stylesheet" href="../resources/style.css">
-    <link rel="stylesheet" href="../resources/reports.css">
-    <link rel="stylesheet" href="../resources/fontawesome-free-5.15.4-web/css/all.css">
+    <script src="../UX/jquery-3.5.1.min.js?v=<?php echo time();?>"></script>
+    <script src="../UX/script.js?v=<?php echo time();?>"></script>
+    <link rel="stylesheet" href="../resources/style.css?v=<?php echo time();?>">
+    <link rel="stylesheet" href="../resources/reports.css?v=<?php echo time();?>">
+    <link rel="stylesheet" href="../resources/fontawesome-free-5.15.4-web/css/all.css?v=<?php echo time();?>">
     <title>POS</title>
 </head>
 

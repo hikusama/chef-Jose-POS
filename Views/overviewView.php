@@ -15,20 +15,20 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $lastWeekPerCent = number_format((($rows['thisweek'] - $lk) / $lk) * 100, 1, ".");
         $dayPr = "";
         if ($lastDayPerCent < 0) {
-            $dayPr = '<b style="color: rgb(215 0 0);"><i class="fas fa-arrow-down" ></i> ' . $lastDayPerCent . '%</b> From Last Day</p>';
+            $dayPr = '<b style="color: rgb(215 0 0);"><i class="fas fa-minus" ></i> ' . $lastDayPerCent . '%</b> From Last Day</p>';
         } else if ($lastDayPerCent > 0) {
-            $dayPr = '<b style="color: rgb(0, 156, 0);"><i class="fas fa-arrow-up"></i> ' . $lastDayPerCent . '%</b> From Last Day</p>';
+            $dayPr = '<b style="color: rgb(0, 156, 0);"><i class="fas fa-plus"></i> ' . $lastDayPerCent . '%</b> From Last Day</p>';
         } else {
-            $dayPr = '<b style=""> ' . $lastDayPerCent . '%</b> From Last Day</p>';
+            $dayPr = '<b style=""></b> Same as the Last Day</p>';
         }
 
         $wkPr = "";
         if ($lastWeekPerCent < 0) {
-            $wkPr = '<b style="color: rgb(215 0 0);"><i class="fas fa-arrow-down" ></i> ' . $lastWeekPerCent . '%</b> From Last Day</p>';
+            $wkPr = '<b style="color: rgb(215 0 0);"><i class="fas fa-minus" ></i> ' . $lastWeekPerCent . '%</b> From Last Day</p>';
         } else if ($lastWeekPerCent > 0) {
-            $wkPr = '<b style="color: rgb(0, 156, 0);"><i class="fas fa-arrow-up"></i> ' . $lastWeekPerCent . '%</b> From Last Day</p>';
+            $wkPr = '<b style="color: rgb(0, 156, 0);"><i class="fas fa-plus"></i> ' . $lastWeekPerCent . '%</b> From Last Day</p>';
         } else {
-            $wkPr = '<b style=""> ' . $lastWeekPerCent . '%</b> From Last Day</p>';
+            $wkPr = '<b style=""></b> Same as the Last Day</p>';
         }
 
         $rows += ["fromlastday" => $dayPr];
@@ -111,6 +111,17 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
         $ovContrGatewayRes = new OverviewController();
         $sales = $ovContrGatewayRes->salesGateWay();
+
+ 
+
+        header("Content-Type: application/json");
+        echo json_encode($sales);
+    }
+
+    if (isset($_POST['transac']) && $_POST['transac'] === 'discountData') {
+
+        $ovContrGatewayRes = new OverviewController();
+        $sales = $ovContrGatewayRes->discountGateWay();
 
  
 
