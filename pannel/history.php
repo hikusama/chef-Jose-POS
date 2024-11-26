@@ -12,6 +12,11 @@
     <link rel="stylesheet" href="../resources/history.css">
     <link rel="stylesheet" href="../resources/fontawesome-free-5.15.4-web/css/all.css">
     <title>POS</title>
+    <style>
+        .middle_side{
+            grid-template-columns: auto 20rem;
+        }
+    </style>
 </head>
 
 <body>

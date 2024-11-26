@@ -272,7 +272,7 @@
                                 <div class="img-wrap-out">
 
                                     <div class="image-wrap">
-                                        <img src="image/dpTemplate.png" id="comboDP" alt="">
+                                        <img src="../image/dpTemplate.png" id="comboDP" alt="">
                                         <input type="file" style="visibility: hidden;" id="selectComboPic" name="comboPic">
                                     </div>
                                     <label for="selectComboPic">

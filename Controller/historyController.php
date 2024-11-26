@@ -19,5 +19,9 @@ class HistoryController extends Model
     public function getOrderRecordControll() {
         return $this->getOrderRecord($this->ref);
     }
+    
+    public function deleteOrderRecordControll() {
+        $this->delOrders($this->ref);
+    }
 
 }

@@ -165,6 +165,26 @@
                         </ol>
                         <div class="sales-sum">
                             <div class="sales-sum-inn">
+                                <h3>Discount</h3>
+                                <div class="data-sales">
+                                    <section>
+                                        <p>Today</p>
+                                        <p class="dstSales">₱0</p>
+                                    </section>
+                                    <section>
+                                        <p>This month</p>
+                                        <p class="dstmSales">₱0</p>
+                                    </section>
+                                    <section>
+                                        <p>Total</p>
+                                        <p class="dsttlSales">₱0</p>
+                                    </section>
+                                </div>
+                                <a href="reports" title="Redirect to reports" class="goto">See more <i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+                        <div class="sales-sum">
+                            <div class="sales-sum-inn">
                                 <h3>Sales</h3>
                                 <div class="data-sales">
                                     <section>

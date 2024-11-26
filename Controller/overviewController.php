@@ -33,6 +33,10 @@ class OverviewController extends Model
     {
         return $this->salesPackData();
     }
+    public function discountGateWay()
+    {
+        return $this->discountData();
+    }
 
 
 }

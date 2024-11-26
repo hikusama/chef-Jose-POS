@@ -70,8 +70,8 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    border: solid 1px rgb(160 160 160 / 35%);
-    background: linear-gradient(145deg, #cacaca, #fcfcfc);
+    border: solid 1px rgb(49 49 49 / 35%);
+    background: white;
     position: relative;
 
 }
@@ -177,8 +177,8 @@
     padding: 1rem;
     width: 40rem;
     border-radius: 1rem;
-    border: solid 1px rgb(160 160 160 / 35%);
-    background: linear-gradient(145deg, #cacaca, #fcfcfc);
+    border: solid 1px rgb(49 49 49 / 35%);
+    background: white;
 
 }
 
@@ -235,7 +235,7 @@
 
 .dashboard_body #pieChartD,
 .dashboard_body #pieChartWk {
-    background: linear-gradient(145deg, #cacaca, #fcfcfc);
+    background: white;
     min-width: 10rem;
     max-width: 20rem;
     max-height: 12rem;
@@ -248,7 +248,7 @@
     max-height: 25rem;
     position: relative;
     border: none;
-    background: linear-gradient(145deg, #cacaca, #fcfcfc);
+    background: white;
 
 }
 
@@ -315,8 +315,8 @@
 .pieSum>*:nth-child(1),
 .pieSum>*:nth-child(2) {
     display: grid;
-    border: solid 1px rgb(160 160 160 / 35%);
-    background: linear-gradient(145deg, #cacaca, #fcfcfc);
+    border: solid 1px rgb(49 49 49 / 35%);
+    background: white;
 
 }
 
@@ -394,8 +394,8 @@
 
 .sales-sum-inn,
 .top-prod-inn {
-    border: solid 1px rgb(160 160 160 / 35%);
-    background: linear-gradient(145deg, #cacaca, #fcfcfc);
+    border: solid 1px rgb(49 49 49 / 35%);
+    background: white;
     border-radius: .7rem;
     padding: 1rem;
     overflow: hidden;

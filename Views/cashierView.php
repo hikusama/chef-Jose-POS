@@ -477,7 +477,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         }
         if (isset($_SESSION['discountT'], $_SESSION['discountTypeT']) && (($_SESSION['discountT'] = ! NULL) && ($_SESSION['discountT'] != NULL))) {
             $discountType = $_SESSION['discountTypeT'];
-            $discount = $_SESSION['discountT'] . '%';
+            // $discount = $_SESSION['discountT'] . '%';
+            $discount = $_SESSION['discountT'] ;
+            $sbt = $_SESSION['subtotalT'];
+            $tt = $_SESSION['totalT'];
+            $discount = (($sbt-$tt)/$sbt)*100 . '%';
         }
         $ordersSession = array();
         if (isset($_SESSION['ordersT'])) {
@@ -827,7 +831,7 @@ function submitOrders($refNo, $totalAmount, $pmethod, $gcashName, $gcashNum)
         $discount = NULL;
         $discountType = NULL;
         if (isset($_SESSION['discount'])) {
-            $discount = $_SESSION['discount'];
+            $discount = $subtotal - $totalAmount;
             $discountType = $_SESSION['discountType'];
         }
 
