@@ -6,7 +6,7 @@ $(document).ready(function () {
     $("#frAnl").attr('max', today);
     $("#toAnl").attr('max', today);
     let bdcontt 
-    let dataPrTypes = $(".dataPrTypes").detach();
+    let data_presentation_wrap = $(".data_presentation_wrap").detach();
 
 
     let start = $(".start");
@@ -165,19 +165,19 @@ $(document).ready(function () {
         let hs = $(this).hasClass("NOL")
 
         if (!hs) {
-            $("#itemAnalyticalData ol .dataPrTypes").detach();
+            $("#itemAnalyticalData ol .data_presentation_wrap").detach();
 
             $("#itemAnalyticalData ol").removeClass("NOL");
             $(this).addClass("NOL");
             bdcontt = $(this).find(".bdcontt").detach();
             $(this).find(".contIn").append(bdcontt);
             
-            $(this).append(dataPrTypes);
+            $(this).append(data_presentation_wrap);
             $("#itemAnalyticalData .btt button").removeClass("onSt");
             $(this).find("#week").addClass("onSt")
 
 
-            $(".dataPrTypes").show();
+            $(".data_presentation_wrap").show();
             let chart = `<canvas id="itemdataweek"></canvas><canvas id="itemdatamonth"></canvas>`
             $("#itemAnalyticalData .dataChartEach").html(chart);
             itemdatamonth = createChart("month");
@@ -228,7 +228,7 @@ $(document).ready(function () {
         console.log(45454);
         
         $("#itemAnalyticalData ol").removeClass("NOL");
-        $("#itemAnalyticalData ol .dataPrTypes").detach();
+        $("#itemAnalyticalData ol .data_presentation_wrap").detach();
         $(this).closest(".ssum").find(".bdcontt").detach();
         $(this).closest(".ssum").append(bdcontt);
 
