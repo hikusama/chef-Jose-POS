@@ -4,12 +4,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
-    <script src="../UX/jquery-3.5.1.min.js?v=<?php echo time();?>"></script>
+
+    <!-- <script src="../UX/jquery-3.5.1.min.js?v=<?php echo time();?>"></script>
     <script src="../UX/script.js?v=<?php echo time();?>"></script>
     <link rel="stylesheet" href="../resources/style.css?v=<?php echo time();?>">
     <link rel="stylesheet" href="../resources/reports.css?v=<?php echo time();?>">
-    <link rel="stylesheet" href="../resources/fontawesome-free-5.15.4-web/css/all.css?v=<?php echo time();?>">
+    <link rel="stylesheet" href="../resources/fontawesome-free-5.15.4-web/css/all.css?v=<?php echo time();?>"> -->
+    <!-- <script src="../UX/node_modules/chart.js/dist/chart.umd.js?v=<?php echo time();?>"></script> -->
+    <script src="../UX/node_modules/chart.js/dist/chart.umd.js"></script>
+    <script src="../UX/jquery-3.5.1.min.js"></script>
+    <script src="../UX/report_js.js"></script>
+    <script src="../UX/reportsChart.js"></script>
+    <script src="../UX/script.js"></script>
+    <link rel="stylesheet" href="../resources/style.css">
+    <link rel="stylesheet" href="../resources/reports.css">
+    <link rel="stylesheet" href="../resources/fontawesome-free-5.15.4-web/css/all.css">
     <title>POS</title>
 </head>
 
@@ -35,7 +44,7 @@
         <div class="side_nav">
             <div class="side_nav2d">
                 <div class="inner_side_nav">
-                    <li id="overview"  >
+                    <li id="overview">
                         <div class="textdp"><i class="fas fa-chart-pie"></i>Overview</div>
                     </li>
                     <li id="cashier">
@@ -63,6 +72,440 @@
         </div>
         <div class="middle_side">
 
+            <div class="todays-report">
+                <div class="hdr">
+                    <h3>Todays Report</h3>
+                    <button id="todayRecordPDF" title="Download as PDF">
+                        <i class="fas fa-book"></i>
+                        Export PDF
+                    </button>
+                </div>
+                <div class="squared-data">
+                    <section class="discount_pie">
+                        <h4>Discount</h4>
+                        <canvas id="discount_pie_ChartD"></canvas>
+                    </section>
+                    <section class="pmethod_pie">
+                        <h4>Payment Method</h4>
+                        <canvas id="pmethod_pie_ChartD"></canvas>
+                    </section>
+                    <section class="todays_sum">
+                        <div class="data-txt">
+
+                            <ol>
+                                <i class="fas fa-home"></i>
+                                <li>
+                                    <b class="orders_line">500</b>
+                                    <p>Today's Orders</p>
+                                </li>
+                            </ol>
+                            <ol>
+                                <i class="fas fa-home"></i>
+                                <li>
+                                    <b class="discount_line">₱500</b>
+                                    <p>Today's Discount</p>
+                                </li>
+                            </ol>
+                            <ol>
+                                <i class="fas fa-home"></i>
+                                <li>
+                                    <b class="sales_line">₱500</b>
+                                    <p>Today's Sales</p>
+                                </li>
+                            </ol>
+                        </div>
+
+                    </section>
+                </div>
+                <div class="major-chart">
+                    <div class="catThings">
+                        <div class="category-bar-chart">
+                            <h4>Category</h4>
+                            <canvas id="todCatBarChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="sales-line-chart">
+                        <h4>Sales</h4>
+                        <canvas id="todSalesLineChart"></canvas>
+                    </div>
+                    <div class="orders-line-chart">
+                        <h4>Orders</h4>
+                        <canvas id="todOrdLineChart"></canvas>
+                    </div>
+                    <div class="discount-line-chart">
+                        <h4>Discount</h4>
+                        <canvas id="todDcLineChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <div class="cstmRp">
+                <div class="hdr">
+                    <h3>Find your reports</h3>
+                    <p class="recordDate">08/12/24<b></b></p>
+                    <button id="traceReport" title="Format">
+                        <i class="fas fa-book"></i> Trace Report
+                    </button>
+                </div>
+                <div class="trace_form">
+                    <form id="tform">
+                        <div id="eksmen">
+                            <i class="fas fa-arrow-left"></i>
+                        </div>
+                        <h4>Range</h4>
+                        <ol class="rangeType">
+                            <li>
+                                <input type="radio" name="dr" class="ch" value="single" id="singleT">
+                                <label for="singleT">Single</label>
+                            </li>
+                            <li>
+                                <input type="radio" name="dr" value="double" id="doubleT">
+                                <label for="doubleT">Double</label>
+                            </li>
+                        </ol>
+                        <section class="dateRangeT">
+                            <li class="start">
+                                <input type="date" name="from" id="frD">
+                                <p>Go to</p>
+                            </li>
+                            <li class="end">
+                                <input type="date" name="to" id="toD">
+                                <p>End</p>
+                            </li>
+                        </section>
+                        <div class="sb">
+                            <button id="upTr" type="submit">
+                                Update
+                            </button>
+                        </div>
+                    </form>
+                </div>
+                <div class="cs-squared-data">
+                    <section class="discount_pie">
+                        <h4>Discount</h4>
+                        <canvas id="cs_discount_pie_ChartD"></canvas>
+                    </section>
+                    <section class="pmethod_pie">
+                        <h4>Payment Method</h4>
+                        <canvas id="cs_pmethod_pie_ChartD"></canvas>
+                    </section>
+                    <section class="todays_sum">
+                        <div class="data-txt">
+                            <ol>
+                                <i class="fas fa-home"></i>
+                                <li>
+                                    <b class="cs_orders_line">500</b>
+                                    <p>Orders</p>
+                                </li>
+                            </ol>
+                            <ol>
+                                <i class="fas fa-home"></i>
+                                <li>
+                                    <b class="cs_discount_line">₱500</b>
+                                    <p>Discount</p>
+                                </li>
+                            </ol>
+                            <ol>
+                                <i class="fas fa-home"></i>
+                                <li>
+                                    <b class="cs_sales_line">₱500</b>
+                                    <p>Sales</p>
+                                </li>
+                            </ol>
+                        </div>
+                    </section>
+                </div>
+                <div class="cs_major-chart">
+                    <div class="catThings">
+                        <div class="cs_category-bar-chart">
+                            <h4>Category</h4>
+                            <canvas id="csCatBarChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="sone">
+                        <h3>Double Range</h3>
+                        <!-- <h3>Single Range</h3> -->
+                    </div>
+                    <div class="charthings">
+                        <section class="findBy">
+                            <li class="onSingleD">Week</li>
+                            <li>Month</li>
+                        </section>
+                        <div class="cs_sales-line-chart">
+                            <h4>Sales</h4>
+                            <canvas id="csSalesLineChart"></canvas>
+                        </div>
+                        <div class="cs_orders-line-chart">
+                            <h4>Orders</h4>
+                            <canvas id="csOrdLineChart"></canvas>
+
+                        </div>
+                        <div class="cs_discount-line-chart">
+                            <h4>Discount</h4>
+                            <canvas id="csDcLineChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="txtbaseddata">
+                        <div class="table-mhen">
+
+                            <table border="1">
+                                <thead>
+                                    <th>
+                                        <tr>
+                                            <td>Day/s</td>
+                                            <td>Date Ranged</td>
+                                            <td>Orders</td>
+                                            <td>Sales</td>
+                                            <td>Discount</td>
+                                        </tr>
+                                    </th>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>15D</td>
+                                        <td>10/15/2020 - 10-18-2025</td>
+                                        <td>1500</td>
+                                        <td>₱250,000</td>
+                                        <td>₱2,000</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+
+
+            <div class="ogCards">
+                <section class="card1">
+                    <h3>Sales</h3>
+                    <ol>
+                        <li>Today</li>
+                        <p class="sttoday">₱1212</p>
+                        <p class="sttrate"><i class="fas fa-plus"></i>10%</p>
+                    </ol>
+                    <ol>
+                        <li>This week</li>
+                        <p class="swweek">₱1212</p>
+                        <p class="swrate"><i class="fas fa-plus"></i>10%</p>
+                    </ol>
+                    <ol>
+                        <li>This month</li>
+                        <p class="smmonth">₱1212</p>
+                        <p class="smrate"><i class="fas fa-plus"></i>10%</p>
+                    </ol>
+                </section>
+                <section class="card2">
+                    <h3>Discount</h3>
+                    <ol>
+                        <li>Today</li>
+                        <p class="dttoday">₱1212</p>
+                        <p class="dttrate"><i class="fas fa-plus"></i>10%</p>
+                    </ol>
+                    <ol>
+                        <li>This week</li>
+                        <p class="dwweek">₱1212</p>
+                        <p class="dwrate"><i class="fas fa-plus"></i>10%</p>
+                    </ol>
+                    <ol>
+                        <li>This month</li>
+                        <p class="dmmonth">₱1212</p>
+                        <p class="dmrate"><i class="fas fa-plus"></i>10%</p>
+                    </ol>
+                </section>
+                <section class="card3">
+                    <h3>Orders</h3>
+                    <ol>
+                        <li>Today</li>
+                        <p class="ottoday">₱1212</p>
+                        <p class="ottrate"><i class="fas fa-plus"></i>10%</p>
+                    </ol>
+                    <ol>
+                        <li>This week</li>
+                        <p class="owweek">₱1212</p>
+                        <p class="owrate"><i class="fas fa-plus"></i>10%</p>
+                    </ol>
+                    <ol>
+                        <li>This month</li>
+                        <p class="ommonth">₱1212</p>
+                        <p class="omrate"><i class="fas fa-plus"></i>10%</p>
+                    </ol>
+                </section>
+            </div>
+
+            <div class="analytics">
+                <div class="hdr">
+                    <h3>Analytics</h3>
+                    <div class="menu">
+                        <i class="fas fa-th"></i>
+                    </div>
+                </div>
+                <div class="menuBodyAsNgiao">
+
+
+                    <div class="menuBody">
+                        <div id="bkAnl">
+                            <i class="fas fa-arrow-left"></i>
+                        </div>
+                        <ol class="rk">
+                            <p>Rank by:</p>
+                            <li>
+                                <button id="proddR" class="onRank">Products</button>
+                                <button id="combbR">Combo</button>
+                            </li>
+                        </ol>
+                        <ol class="orb">
+                            <p>Ordered by:</p>
+                            <li>
+                                <button id="proddR" class="onOrdered">Highest</button>
+                                <button id="combbR">Lowest</button>
+                            </li>
+                        </ol>
+                        <ol class="rt">
+                            <p>Range type:</p>
+                            <li>
+                                <div class="slideEme">
+                                    <input type="radio" name="rTypeAnl" class="selAnl" value="singleAnl" id="singleAnl">
+                                    <label for="singleAnl" class="selP">Single</label>
+                                </div>
+                                <div class="slideEme">
+                                    <input type="radio" name="rTypeAnl" id="doubleAnl" value="doubleAnl">
+                                    <label for="doubleAnl">Double</label>
+                                </div>
+
+                            </li>
+                        </ol>
+                        <section class="dateThings">
+                            <li class="startAnl">
+                                <input type="date" name="fromAnl" id="frAnl">
+                                <p>Go to</p>
+                            </li>
+                            <li class="endAnl">
+                                <input type="date" name="toR" id="toAnl">
+                                <p>End</p>
+                            </li>
+                        </section>
+                        <div class="uptAnl">
+                            <button id="updateAnl">Update</button>
+                        </div>
+                    </div>
+                </div>
+                <div id="itemAnalyticalData">
+                    <ol>
+                        <section class="ssum">
+                            <div class="headAnl">
+
+                                <li>
+                                    <div class="picMhen"><img src="../image/sample.png" alt=""></div>
+                                </li>
+                                <li>
+                                    <div class="contIn">
+                                        <h4>Beef patty sdasdasd sda</h4>
+
+                                    </div>
+                                </li>
+                            </div>
+                            <div class="bdcontt">
+
+                                <div class="tod smm">
+                                    <p>500020</p>
+                                    <p>Today</p>
+                                </div>
+                                <div class="yd smm">
+                                    <p>505550</p>
+                                    <p>Yesterday</p>
+                                </div>
+                                <p class="uiper"><i class="fas fa-plus"></i> 12.5%</p>
+                            </div>
+                            <div class="data_presentation_wrap">
+
+                                <div class="dataPrTypes">
+
+                                    <section class="graphNgiao" style="display: none;">
+                                        <p class="singleRGRP">Single range</p>
+                                        <div class="btt">
+                                            <button id="week" class="onSt">Week</button>
+                                            <button id="month">Month</button>
+                                            <div id="rmX"><i class="fas fa-plus"></i></div>
+                                        </div>
+                                        <div class="dataChartEach">
+                                        </div>
+                                    </section>
+
+                                    <section class="table-data">
+                                        <p class="singleRGRP">Double range</p>
+                                        <table border="1">
+                                            <thead>
+                                                <tr>
+                                                    <td>Day/s</td>
+                                                    <td>Date Ranged</td>
+                                                    <td>Orders</td>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <th>
+                                                    <tr>
+                                                        <td>10D</td>
+                                                        <td>From:<br>10-15-2024 <br>To:<br>10-25-2024</td>
+                                                        <td>1500</td>
+                                                    </tr>
+                                                </th>
+                                            </tbody>
+                                        </table>
+                                    </section>
+
+                                </div>
+                            </div>
+                        </section>
+                    </ol>
+                    <ol>
+                        <section class="ssum">
+                            <div class="headAnl">
+
+                                <li>
+                                    <div class="picMhen"><img src="../image/sample.png" alt=""></div>
+                                </li>
+                                <li>
+                                    <div class="contIn">
+                                        <h4>Beef patty sdasdasd sda</h4>
+
+                                    </div>
+                                </li>
+                            </div>
+                            <div class="bdcontt">
+
+                                <div class="tod smm">
+                                    <p>500020</p>
+                                    <p>Today</p>
+                                </div>
+                                <div class="yd smm">
+                                    <p>505550</p>
+                                    <p>Yesterday</p>
+                                </div>
+                                <p class="uiper"><i class="fas fa-plus"></i> 12.5%</p>
+                            </div>
+                        </section>
+                    </ol>
+                </div>
+
+
+            </div>
+            <div class="loader" style="display: none;">
+                <div class="bar1"></div>
+                <div class="bar2"></div>
+                <div class="bar3"></div>
+                <div class="bar4"></div>
+                <div class="bar5"></div>
+                <div class="bar6"></div>
+                <div class="bar7"></div>
+                <div class="bar8"></div>
+                <div class="bar9"></div>
+                <div class="bar10"></div>
+                <div class="bar11"></div>
+                <div class="bar12"></div>
+            </div>
 
         </div>
 
