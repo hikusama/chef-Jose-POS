@@ -91,8 +91,10 @@ $(document).ready(function () {
     $(".data_history_cont").on("click", ".data ol", function (e) {
         e.preventDefault()
         hasC = $(this).hasClass("onHistoryDp");
+        odo = $(this).attr("id");
 
-        if (!hasC && reqOpen) {
+
+        if (!hasC && reqOpen && odo != "page-dir-cont") {
             $(".data_history_cont .data ol").removeClass("onHistoryDp")
             $(this).addClass("onHistoryDp")
             let refno = $(this).find(".key").attr("id")

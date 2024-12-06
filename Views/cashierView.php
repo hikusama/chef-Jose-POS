@@ -304,6 +304,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                     "id" => $id,
                     "name" => $fetch['comboName'],
                     "qntity" => 1,
+                    "itemprice" => $price,
                     "price" => $price
                 );
 
@@ -345,6 +346,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 "id" => $id,
                 "name" => $fetch['name'],
                 "qntity" => 1,
+                "itemprice" => $price,
                 "price" => $price
             );
 
@@ -535,7 +537,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 echo '
                     <tr>
                         <td>' . $order['qntity'] . '</td>
-                            <td>' . $order['name'] . '</td>
+                            <td>' . $order['name'] .' @'. $order['itemprice']. '</td>
                             <td>₱' . $order['price'] . '</td>
                         </tr>
                      ';

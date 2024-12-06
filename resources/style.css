@@ -42,7 +42,7 @@ body {
 }
 
 #header {
-    z-index: 1;
+    z-index: 2;
     background-color: white;
     width: 100%;
     border-bottom: rgba(0, 0, 0, 0.233) 2px solid;
@@ -1078,7 +1078,7 @@ img {
 .receipt {
     margin-top: 1rem;
     position: absolute;
-    width: 20rem;
+    width: 16rem;
     font-size: .9rem;
 }
 
@@ -1095,7 +1095,15 @@ img {
     display: grid;
     place-items: center;
 }
-
+.desc h3{
+    font-size: .9rem;
+}
+.receipt .orders-receipt table thead tr > * {
+    font-weight: 800;
+}
+.desc p{
+    font-size: .8rem;
+}
 .receipt section {
     margin: 1rem 0 1.3rem;
     padding: 0 1.3rem;

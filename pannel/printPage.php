@@ -24,7 +24,8 @@
 
         @media print {
             @page {
-                size: 3.15in auto;
+                /* size: 3.15in auto; */
+                margin: 0;
             }
         }
     </style>
@@ -34,7 +35,7 @@
 <body>
     <div class="receipt">
         <div class="desc">
-            <img src="../image/logo-receipt.png" id="receipt_logo" alt="">
+            <!-- <img src="../image/logo-receipt.png" id="receipt_logo" alt=""> -->
             <h3>Chef Jose</h3>
             <p>Unit 5, Chef Jose, IGP Commercial HUB, WMSU Gate 1, Infront of R.T Lim Boulevard, Zamboanga City</p>
         </div>

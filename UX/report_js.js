@@ -8,6 +8,16 @@ $(document).ready(function () {
     let bdcontt 
     let data_presentation_wrap = $(".data_presentation_wrap").detach();
 
+    const samp = new Date();
+
+    // let samp = (currYr - 1).toString() + " - " + currYr.toString()
+  
+    $(".recordDate").html(samp.getMonth()+"/"+samp.getDate()+"/"+samp.getFullYear());
+
+
+
+
+
 
     let start = $(".start");
     let end = $(".end").detach();
@@ -61,18 +71,7 @@ $(document).ready(function () {
     });
 
 
-    $(".findBy li").click(function (e) {
-        e.preventDefault();
-        let hs = $(this).hasClass("onSingleD")
 
-        if (!hs) {
-            $(".findBy li").removeClass("onSingleD");
-            $(this).addClass("onSingleD");
-
-        }
-
-
-    });
 
 
 

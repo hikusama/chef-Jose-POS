@@ -182,6 +182,394 @@
 
 
 
+        //------------------------- REPORTS THINGS -----------------------------
+
+        /*               today data                 */
+        public function getSquaredData()
+        {
+
+            $sql = "SELECT 
+                                SUM(CASE WHEN DATE(orderDate) = CURRENT_DATE THEN discount ELSE 0 END) AS today_discount,
+                                SUM(CASE WHEN DATE(orderDate) = CURRENT_DATE - INTERVAL 1 DAY THEN discount ELSE 0 END) AS yesterday_discount,
+                                SUM(CASE WHEN DATE(orderDate) = CURRENT_DATE THEN 1 ELSE 0 END) AS today_orders,
+                                SUM(CASE WHEN DATE(orderDate) = CURRENT_DATE THEN totalAmount ELSE 0 END) AS today_sales,
+                                SUM(CASE WHEN paymentMethod = 'G-Cash' AND DATE(orderDate) = CURRENT_DATE THEN 1 ELSE 0 END) AS gcash_count,
+                                SUM(CASE WHEN paymentMethod = 'Cash' AND DATE(orderDate) = CURRENT_DATE THEN 1 ELSE 0 END) AS cash_count
+                            FROM orders;";
+            $stmt = $this->connect()->prepare($sql);
+            if ($stmt->execute()) {
+                $rw = $stmt->fetch(PDO::FETCH_ASSOC);
+                return $rw;
+            }
+            return null;
+        }
+
+
+        public function todayCatData()
+        {
+
+            $sql = "SELECT 
+                        c.category_name,
+                        SUM(CASE WHEN DATE(o.orderDate) = CURRENT_DATE THEN 1 ELSE 0 END) AS total_sold_today
+                    FROM 
+                        category c
+                    LEFT JOIN 
+                        products p ON c.category_id = p.category_id
+                    LEFT JOIN 
+                        orderitems oi ON p.productID = oi.productID
+                    LEFT JOIN 
+                        orders o ON oi.ref_no = o.ref_no
+                    GROUP BY 
+                        c.category_id, c.category_name
+                    ORDER BY 
+                        total_sold_today DESC;
+                    ";
+            $stmt = $this->connect()->prepare($sql);
+            if ($stmt->execute()) {
+                $rws = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                return $rws;
+            }
+            return null;
+        }
+
+
+
+        public function weekDataTSec()
+        {
+
+            $sql = "SELECT 
+                        SUM(CASE WHEN DAYOFWEEK(orderDate) = 2 AND YEARWEEK(orderDate, 1) = YEARWEEK(CURDATE(), 1) THEN 1 ELSE 0 END) AS tmonOrders,  
+                        SUM(CASE WHEN DAYOFWEEK(orderDate) = 2 AND YEARWEEK(orderDate, 1) = YEARWEEK(CURDATE(), 1) THEN totalAmount ELSE 0 END) AS tmonSales,
+                        SUM(CASE WHEN DAYOFWEEK(orderDate) = 2 AND YEARWEEK(orderDate, 1) = YEARWEEK(CURDATE(), 1) THEN discount ELSE 0 END) AS tmonDiscount,
+
+                        SUM(CASE WHEN DAYOFWEEK(orderDate) = 3 AND YEARWEEK(orderDate, 1) = YEARWEEK(CURDATE(), 1) THEN 1 ELSE 0 END) AS ttueOrders,  
+                        SUM(CASE WHEN DAYOFWEEK(orderDate) = 3 AND YEARWEEK(orderDate, 1) = YEARWEEK(CURDATE(), 1) THEN totalAmount ELSE 0 END) AS ttueSales,
+                        SUM(CASE WHEN DAYOFWEEK(orderDate) = 3 AND YEARWEEK(orderDate, 1) = YEARWEEK(CURDATE(), 1) THEN discount ELSE 0 END) AS ttueDiscount,
+
+                        SUM(CASE WHEN DAYOFWEEK(orderDate) = 4 AND YEARWEEK(orderDate, 1) = YEARWEEK(CURDATE(), 1) THEN 1 ELSE 0 END) AS twedOrders,  
+                        SUM(CASE WHEN DAYOFWEEK(orderDate) = 4 AND YEARWEEK(orderDate, 1) = YEARWEEK(CURDATE(), 1) THEN totalAmount ELSE 0 END) AS twedSales,
+                        SUM(CASE WHEN DAYOFWEEK(orderDate) = 4 AND YEARWEEK(orderDate, 1) = YEARWEEK(CURDATE(), 1) THEN discount ELSE 0 END) AS twedDiscount,
+
+                        SUM(CASE WHEN DAYOFWEEK(orderDate) = 5 AND YEARWEEK(orderDate, 1) = YEARWEEK(CURDATE(), 1) THEN 1 ELSE 0 END) AS tthuOrders,  
+                        SUM(CASE WHEN DAYOFWEEK(orderDate) = 5 AND YEARWEEK(orderDate, 1) = YEARWEEK(CURDATE(), 1) THEN totalAmount ELSE 0 END) AS tthuSales,
+                        SUM(CASE WHEN DAYOFWEEK(orderDate) = 5 AND YEARWEEK(orderDate, 1) = YEARWEEK(CURDATE(), 1) THEN discount ELSE 0 END) AS tthuDiscount,
+
+                        SUM(CASE WHEN DAYOFWEEK(orderDate) = 6 AND YEARWEEK(orderDate, 1) = YEARWEEK(CURDATE(), 1) THEN 1 ELSE 0 END) AS tfriOrders,  
+                        SUM(CASE WHEN DAYOFWEEK(orderDate) = 6 AND YEARWEEK(orderDate, 1) = YEARWEEK(CURDATE(), 1) THEN totalAmount ELSE 0 END) AS tfriSales,
+                        SUM(CASE WHEN DAYOFWEEK(orderDate) = 6 AND YEARWEEK(orderDate, 1) = YEARWEEK(CURDATE(), 1) THEN discount ELSE 0 END) AS tfriDiscount,
+
+                        SUM(CASE WHEN DAYOFWEEK(orderDate) = 7 AND YEARWEEK(orderDate, 1) = YEARWEEK(CURDATE(), 1) THEN 1 ELSE 0 END) AS tsatOrders,  
+                        SUM(CASE WHEN DAYOFWEEK(orderDate) = 7 AND YEARWEEK(orderDate, 1) = YEARWEEK(CURDATE(), 1) THEN totalAmount ELSE 0 END) AS tsatSales,
+                        SUM(CASE WHEN DAYOFWEEK(orderDate) = 7 AND YEARWEEK(orderDate, 1) = YEARWEEK(CURDATE(), 1) THEN discount ELSE 0 END) AS tsatDiscount,
+
+                        SUM(CASE WHEN DAYOFWEEK(orderDate) = 1 AND YEARWEEK(orderDate, 1) = YEARWEEK(CURDATE(), 1) THEN 1 ELSE 0 END) AS tsunOrders,  
+                        SUM(CASE WHEN DAYOFWEEK(orderDate) = 1 AND YEARWEEK(orderDate, 1) = YEARWEEK(CURDATE(), 1) THEN totalAmount ELSE 0 END) AS tsunSales,
+                        SUM(CASE WHEN DAYOFWEEK(orderDate) = 1 AND YEARWEEK(orderDate, 1) = YEARWEEK(CURDATE(), 1) THEN discount ELSE 0 END) AS tsunDiscount,
+
+
+
+                        SUM(CASE WHEN DAYOFWEEK(orderDate) = 2 AND YEARWEEK(orderDate, 1) = YEARWEEK(CURRENT_DATE - INTERVAL 1 WEEK, 1) THEN 1 ELSE 0 END) AS tlmonOrders,  
+                        SUM(CASE WHEN DAYOFWEEK(orderDate) = 2 AND YEARWEEK(orderDate, 1) = YEARWEEK(CURRENT_DATE - INTERVAL 1 WEEK, 1) THEN totalAmount ELSE 0 END) AS tlmonSales,
+                        SUM(CASE WHEN DAYOFWEEK(orderDate) = 2 AND YEARWEEK(orderDate, 1) = YEARWEEK(CURRENT_DATE - INTERVAL 1 WEEK, 1) THEN discount ELSE 0 END) AS tlmonDiscount,
+
+                        SUM(CASE WHEN DAYOFWEEK(orderDate) = 3 AND YEARWEEK(orderDate, 1) = YEARWEEK(CURRENT_DATE - INTERVAL 1 WEEK, 1) THEN 1 ELSE 0 END) AS tltueOrders,  
+                        SUM(CASE WHEN DAYOFWEEK(orderDate) = 3 AND YEARWEEK(orderDate, 1) = YEARWEEK(CURRENT_DATE - INTERVAL 1 WEEK, 1) THEN totalAmount ELSE 0 END) AS tltueSales,
+                        SUM(CASE WHEN DAYOFWEEK(orderDate) = 3 AND YEARWEEK(orderDate, 1) = YEARWEEK(CURRENT_DATE - INTERVAL 1 WEEK, 1) THEN discount ELSE 0 END) AS tltueDiscount,
+
+                        SUM(CASE WHEN DAYOFWEEK(orderDate) = 4 AND YEARWEEK(orderDate, 1) = YEARWEEK(CURRENT_DATE - INTERVAL 1 WEEK, 1) THEN 1 ELSE 0 END) AS tlwedOrders,  
+                        SUM(CASE WHEN DAYOFWEEK(orderDate) = 4 AND YEARWEEK(orderDate, 1) = YEARWEEK(CURRENT_DATE - INTERVAL 1 WEEK, 1) THEN totalAmount ELSE 0 END) AS tlwedSales,
+                        SUM(CASE WHEN DAYOFWEEK(orderDate) = 4 AND YEARWEEK(orderDate, 1) = YEARWEEK(CURRENT_DATE - INTERVAL 1 WEEK, 1) THEN discount ELSE 0 END) AS tlwedDiscount,
+
+                        SUM(CASE WHEN DAYOFWEEK(orderDate) = 5 AND YEARWEEK(orderDate, 1) = YEARWEEK(CURRENT_DATE - INTERVAL 1 WEEK, 1) THEN 1 ELSE 0 END) AS tlthuOrders,  
+                        SUM(CASE WHEN DAYOFWEEK(orderDate) = 5 AND YEARWEEK(orderDate, 1) = YEARWEEK(CURRENT_DATE - INTERVAL 1 WEEK, 1) THEN totalAmount ELSE 0 END) AS tlthuSales,
+                        SUM(CASE WHEN DAYOFWEEK(orderDate) = 5 AND YEARWEEK(orderDate, 1) = YEARWEEK(CURRENT_DATE - INTERVAL 1 WEEK, 1) THEN discount ELSE 0 END) AS tlthuDiscount,
+
+                        SUM(CASE WHEN DAYOFWEEK(orderDate) = 6 AND YEARWEEK(orderDate, 1) = YEARWEEK(CURRENT_DATE - INTERVAL 1 WEEK, 1) THEN 1 ELSE 0 END) AS tlfriOrders,  
+                        SUM(CASE WHEN DAYOFWEEK(orderDate) = 6 AND YEARWEEK(orderDate, 1) = YEARWEEK(CURRENT_DATE - INTERVAL 1 WEEK, 1) THEN totalAmount ELSE 0 END) AS tlfriSales,
+                        SUM(CASE WHEN DAYOFWEEK(orderDate) = 6 AND YEARWEEK(orderDate, 1) = YEARWEEK(CURRENT_DATE - INTERVAL 1 WEEK, 1) THEN discount ELSE 0 END) AS tlfriDiscount,
+
+                        SUM(CASE WHEN DAYOFWEEK(orderDate) = 7 AND YEARWEEK(orderDate, 1) = YEARWEEK(CURRENT_DATE - INTERVAL 1 WEEK, 1) THEN 1 ELSE 0 END) AS tlsatOrders,  
+                        SUM(CASE WHEN DAYOFWEEK(orderDate) = 7 AND YEARWEEK(orderDate, 1) = YEARWEEK(CURRENT_DATE - INTERVAL 1 WEEK, 1) THEN totalAmount ELSE 0 END) AS tlsatSales,
+                        SUM(CASE WHEN DAYOFWEEK(orderDate) = 7 AND YEARWEEK(orderDate, 1) = YEARWEEK(CURRENT_DATE - INTERVAL 1 WEEK, 1) THEN discount ELSE 0 END) AS tlsatDiscount,
+
+                        SUM(CASE WHEN DAYOFWEEK(orderDate) = 1 AND YEARWEEK(orderDate, 1) = YEARWEEK(CURRENT_DATE - INTERVAL 1 WEEK, 1) THEN 1 ELSE 0 END) AS tlsunOrders,  
+                        SUM(CASE WHEN DAYOFWEEK(orderDate) = 1 AND YEARWEEK(orderDate, 1) = YEARWEEK(CURRENT_DATE - INTERVAL 1 WEEK, 1) THEN totalAmount ELSE 0 END) AS tlsunSales,
+                        SUM(CASE WHEN DAYOFWEEK(orderDate) = 1 AND YEARWEEK(orderDate, 1) = YEARWEEK(CURRENT_DATE - INTERVAL 1 WEEK, 1) THEN discount ELSE 0 END) AS tlsunDiscount
+                    FROM 
+                        orders;";
+            $stmt = $this->connect()->prepare($sql);
+            if ($stmt->execute()) {
+                $rws = $stmt->fetch(PDO::FETCH_ASSOC);
+                return $rws;
+            }
+            return null;
+        }
+
+
+
+
+        /*               customize or finding data                 */
+
+        public function getCSSquaredData($starting, $ending)
+        {
+            $sql = "";
+
+            if (!empty($ending)) {
+                $sql = "SELECT 
+                            SUM(CASE WHEN DATE(orderDate) BETWEEN :starting AND :ending  THEN discount ELSE 0 END) AS today_discount,
+                            SUM(CASE WHEN DATE(orderDate) = :starting - INTERVAL 1 DAY THEN discount ELSE 0 END) AS yesterday_discount,
+                            SUM(CASE WHEN DATE(orderDate) BETWEEN :starting AND :ending THEN 1 ELSE 0 END) AS today_orders,
+                            SUM(CASE WHEN DATE(orderDate) BETWEEN :starting AND :ending THEN totalAmount ELSE 0 END) AS today_sales,
+                            SUM(CASE WHEN paymentMethod = 'G-Cash' AND DATE(orderDate) BETWEEN :starting AND :ending THEN 1 ELSE 0 END) AS gcash_count,
+                            SUM(CASE WHEN paymentMethod = 'Cash' AND DATE(orderDate) BETWEEN :starting AND :ending THEN 1 ELSE 0 END) AS cash_count
+                        FROM orders ";
+            } else {
+                $sql = "SELECT 
+                            SUM(CASE WHEN DATE(orderDate) = :starting  THEN discount ELSE 0 END) AS today_discount,
+                            SUM(CASE WHEN DATE(orderDate) = :starting - INTERVAL 1 DAY THEN discount ELSE 0 END) AS yesterday_discount,
+                            SUM(CASE WHEN DATE(orderDate) = :starting THEN 1 ELSE 0 END) AS today_orders,
+                            SUM(CASE WHEN DATE(orderDate) = :starting THEN totalAmount ELSE 0 END) AS today_sales,
+                            SUM(CASE WHEN paymentMethod = 'G-Cash' AND DATE(orderDate) = :starting THEN 1 ELSE 0 END) AS gcash_count,
+                            SUM(CASE WHEN paymentMethod = 'Cash' AND DATE(orderDate) = :starting THEN 1 ELSE 0 END) AS cash_count
+                        FROM orders ";
+            }
+
+
+            $stmt = $this->connect()->prepare($sql);
+
+            if (!empty($starting)) {
+                $stmt->bindParam(":starting", $starting);
+                if (!empty($ending)) {
+                    $stmt->bindParam(":ending", $ending);
+                }
+            }
+
+            if ($stmt->execute()) {
+                $rw = $stmt->fetch(PDO::FETCH_ASSOC);
+                return $rw;
+            }
+            return null;
+        }
+
+
+        public function getCatCSData($starting, $ending)
+        {
+
+            $sql = "SELECT 
+                        c.category_name,";
+            if (!empty($ending)) {
+                $sql .= " SUM(CASE WHEN DATE(o.orderDate) BETWEEN :starting AND :ending THEN 1 ELSE 0 END) AS total_sold_today";
+            } else {
+                $sql .= " SUM(CASE WHEN DATE(o.orderDate) = :starting THEN 1 ELSE 0 END) AS total_sold_today";
+            }
+
+            $sql .= "
+                        
+                    FROM 
+                        category c
+                    LEFT JOIN 
+                        products p ON c.category_id = p.category_id
+                    LEFT JOIN 
+                        orderitems oi ON p.productID = oi.productID
+                    LEFT JOIN 
+                        orders o ON oi.ref_no = o.ref_no
+                    GROUP BY 
+                        c.category_id, c.category_name
+                    ORDER BY 
+                        total_sold_today DESC;
+                    ";
+            $stmt = $this->connect()->prepare($sql);
+            if (!empty($starting)) {
+                $stmt->bindParam(":starting", $starting);
+                if (!empty($ending)) {
+                    $stmt->bindParam(":ending", $ending);
+                }
+            }
+            if ($stmt->execute()) {
+                $rws = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                return $rws;
+            }
+            return null;
+        }
+
+
+
+
+
+        public function csChartQuery($type)
+        {
+            $sql = "";
+
+            if ($type === "weekcs") {
+                $sql = "SELECT 
+                SUM(CASE WHEN DAYOFWEEK(orderDate) = 2 AND YEARWEEK(orderDate, 1) = YEARWEEK(:dateSelected, 1) THEN 1 ELSE 0 END) AS tmonOrders,  
+                SUM(CASE WHEN DAYOFWEEK(orderDate) = 2 AND YEARWEEK(orderDate, 1) = YEARWEEK(:dateSelected, 1) THEN totalAmount ELSE 0 END) AS tmonSales,
+                SUM(CASE WHEN DAYOFWEEK(orderDate) = 2 AND YEARWEEK(orderDate, 1) = YEARWEEK(:dateSelected, 1) THEN discount ELSE 0 END) AS tmonDiscount,
+
+                SUM(CASE WHEN DAYOFWEEK(orderDate) = 3 AND YEARWEEK(orderDate, 1) = YEARWEEK(:dateSelected, 1) THEN 1 ELSE 0 END) AS ttueOrders,  
+                SUM(CASE WHEN DAYOFWEEK(orderDate) = 3 AND YEARWEEK(orderDate, 1) = YEARWEEK(:dateSelected, 1) THEN totalAmount ELSE 0 END) AS ttueSales,
+                SUM(CASE WHEN DAYOFWEEK(orderDate) = 3 AND YEARWEEK(orderDate, 1) = YEARWEEK(:dateSelected, 1) THEN discount ELSE 0 END) AS ttueDiscount,
+
+                SUM(CASE WHEN DAYOFWEEK(orderDate) = 4 AND YEARWEEK(orderDate, 1) = YEARWEEK(:dateSelected, 1) THEN 1 ELSE 0 END) AS twedOrders,  
+                SUM(CASE WHEN DAYOFWEEK(orderDate) = 4 AND YEARWEEK(orderDate, 1) = YEARWEEK(:dateSelected, 1) THEN totalAmount ELSE 0 END) AS twedSales,
+                SUM(CASE WHEN DAYOFWEEK(orderDate) = 4 AND YEARWEEK(orderDate, 1) = YEARWEEK(:dateSelected, 1) THEN discount ELSE 0 END) AS twedDiscount,
+
+                SUM(CASE WHEN DAYOFWEEK(orderDate) = 5 AND YEARWEEK(orderDate, 1) = YEARWEEK(:dateSelected, 1) THEN 1 ELSE 0 END) AS tthuOrders,  
+                SUM(CASE WHEN DAYOFWEEK(orderDate) = 5 AND YEARWEEK(orderDate, 1) = YEARWEEK(:dateSelected, 1) THEN totalAmount ELSE 0 END) AS tthuSales,
+                SUM(CASE WHEN DAYOFWEEK(orderDate) = 5 AND YEARWEEK(orderDate, 1) = YEARWEEK(:dateSelected, 1) THEN discount ELSE 0 END) AS tthuDiscount,
+
+                SUM(CASE WHEN DAYOFWEEK(orderDate) = 6 AND YEARWEEK(orderDate, 1) = YEARWEEK(:dateSelected, 1) THEN 1 ELSE 0 END) AS tfriOrders,  
+                SUM(CASE WHEN DAYOFWEEK(orderDate) = 6 AND YEARWEEK(orderDate, 1) = YEARWEEK(:dateSelected, 1) THEN totalAmount ELSE 0 END) AS tfriSales,
+                SUM(CASE WHEN DAYOFWEEK(orderDate) = 6 AND YEARWEEK(orderDate, 1) = YEARWEEK(:dateSelected, 1) THEN discount ELSE 0 END) AS tfriDiscount,
+
+                SUM(CASE WHEN DAYOFWEEK(orderDate) = 7 AND YEARWEEK(orderDate, 1) = YEARWEEK(:dateSelected, 1) THEN 1 ELSE 0 END) AS tsatOrders,  
+                SUM(CASE WHEN DAYOFWEEK(orderDate) = 7 AND YEARWEEK(orderDate, 1) = YEARWEEK(:dateSelected, 1) THEN totalAmount ELSE 0 END) AS tsatSales,
+                SUM(CASE WHEN DAYOFWEEK(orderDate) = 7 AND YEARWEEK(orderDate, 1) = YEARWEEK(:dateSelected, 1) THEN discount ELSE 0 END) AS tsatDiscount,
+
+                SUM(CASE WHEN DAYOFWEEK(orderDate) = 1 AND YEARWEEK(orderDate, 1) = YEARWEEK(:dateSelected, 1) THEN 1 ELSE 0 END) AS tsunOrders,  
+                SUM(CASE WHEN DAYOFWEEK(orderDate) = 1 AND YEARWEEK(orderDate, 1) = YEARWEEK(:dateSelected, 1) THEN totalAmount ELSE 0 END) AS tsunSales,
+                SUM(CASE WHEN DAYOFWEEK(orderDate) = 1 AND YEARWEEK(orderDate, 1) = YEARWEEK(:dateSelected, 1) THEN discount ELSE 0 END) AS tsunDiscount,
+
+
+
+                SUM(CASE WHEN DAYOFWEEK(orderDate) = 2 AND YEARWEEK(orderDate, 1) = YEARWEEK(:dateSelected - INTERVAL 1 WEEK, 1) THEN 1 ELSE 0 END) AS tlmonOrders,  
+                SUM(CASE WHEN DAYOFWEEK(orderDate) = 2 AND YEARWEEK(orderDate, 1) = YEARWEEK(:dateSelected - INTERVAL 1 WEEK, 1) THEN totalAmount ELSE 0 END) AS tlmonSales,
+                SUM(CASE WHEN DAYOFWEEK(orderDate) = 2 AND YEARWEEK(orderDate, 1) = YEARWEEK(:dateSelected - INTERVAL 1 WEEK, 1) THEN discount ELSE 0 END) AS tlmonDiscount,
+
+                SUM(CASE WHEN DAYOFWEEK(orderDate) = 3 AND YEARWEEK(orderDate, 1) = YEARWEEK(:dateSelected - INTERVAL 1 WEEK, 1) THEN 1 ELSE 0 END) AS tltueOrders,  
+                SUM(CASE WHEN DAYOFWEEK(orderDate) = 3 AND YEARWEEK(orderDate, 1) = YEARWEEK(:dateSelected - INTERVAL 1 WEEK, 1) THEN totalAmount ELSE 0 END) AS tltueSales,
+                SUM(CASE WHEN DAYOFWEEK(orderDate) = 3 AND YEARWEEK(orderDate, 1) = YEARWEEK(:dateSelected - INTERVAL 1 WEEK, 1) THEN discount ELSE 0 END) AS tltueDiscount,
+
+                SUM(CASE WHEN DAYOFWEEK(orderDate) = 4 AND YEARWEEK(orderDate, 1) = YEARWEEK(:dateSelected - INTERVAL 1 WEEK, 1) THEN 1 ELSE 0 END) AS tlwedOrders,  
+                SUM(CASE WHEN DAYOFWEEK(orderDate) = 4 AND YEARWEEK(orderDate, 1) = YEARWEEK(:dateSelected - INTERVAL 1 WEEK, 1) THEN totalAmount ELSE 0 END) AS tlwedSales,
+                SUM(CASE WHEN DAYOFWEEK(orderDate) = 4 AND YEARWEEK(orderDate, 1) = YEARWEEK(:dateSelected - INTERVAL 1 WEEK, 1) THEN discount ELSE 0 END) AS tlwedDiscount,
+
+                SUM(CASE WHEN DAYOFWEEK(orderDate) = 5 AND YEARWEEK(orderDate, 1) = YEARWEEK(:dateSelected - INTERVAL 1 WEEK, 1) THEN 1 ELSE 0 END) AS tlthuOrders,  
+                SUM(CASE WHEN DAYOFWEEK(orderDate) = 5 AND YEARWEEK(orderDate, 1) = YEARWEEK(:dateSelected - INTERVAL 1 WEEK, 1) THEN totalAmount ELSE 0 END) AS tlthuSales,
+                SUM(CASE WHEN DAYOFWEEK(orderDate) = 5 AND YEARWEEK(orderDate, 1) = YEARWEEK(:dateSelected - INTERVAL 1 WEEK, 1) THEN discount ELSE 0 END) AS tlthuDiscount,
+
+                SUM(CASE WHEN DAYOFWEEK(orderDate) = 6 AND YEARWEEK(orderDate, 1) = YEARWEEK(:dateSelected - INTERVAL 1 WEEK, 1) THEN 1 ELSE 0 END) AS tlfriOrders,  
+                SUM(CASE WHEN DAYOFWEEK(orderDate) = 6 AND YEARWEEK(orderDate, 1) = YEARWEEK(:dateSelected - INTERVAL 1 WEEK, 1) THEN totalAmount ELSE 0 END) AS tlfriSales,
+                SUM(CASE WHEN DAYOFWEEK(orderDate) = 6 AND YEARWEEK(orderDate, 1) = YEARWEEK(:dateSelected - INTERVAL 1 WEEK, 1) THEN discount ELSE 0 END) AS tlfriDiscount,
+
+                SUM(CASE WHEN DAYOFWEEK(orderDate) = 7 AND YEARWEEK(orderDate, 1) = YEARWEEK(:dateSelected - INTERVAL 1 WEEK, 1) THEN 1 ELSE 0 END) AS tlsatOrders,  
+                SUM(CASE WHEN DAYOFWEEK(orderDate) = 7 AND YEARWEEK(orderDate, 1) = YEARWEEK(:dateSelected - INTERVAL 1 WEEK, 1) THEN totalAmount ELSE 0 END) AS tlsatSales,
+                SUM(CASE WHEN DAYOFWEEK(orderDate) = 7 AND YEARWEEK(orderDate, 1) = YEARWEEK(:dateSelected - INTERVAL 1 WEEK, 1) THEN discount ELSE 0 END) AS tlsatDiscount,
+
+                SUM(CASE WHEN DAYOFWEEK(orderDate) = 1 AND YEARWEEK(orderDate, 1) = YEARWEEK(:dateSelected - INTERVAL 1 WEEK, 1) THEN 1 ELSE 0 END) AS tlsunOrders,  
+                SUM(CASE WHEN DAYOFWEEK(orderDate) = 1 AND YEARWEEK(orderDate, 1) = YEARWEEK(:dateSelected - INTERVAL 1 WEEK, 1) THEN totalAmount ELSE 0 END) AS tlsunSales,
+                SUM(CASE WHEN DAYOFWEEK(orderDate) = 1 AND YEARWEEK(orderDate, 1) = YEARWEEK(:dateSelected - INTERVAL 1 WEEK, 1) THEN discount ELSE 0 END) AS tlsunDiscount
+                FROM orders";
+            } else if ($type === "monthcs") {
+                $sql = "SELECT 
+                ---- SALES
+                SUM(CASE WHEN MONTH(orderDate) = 1 AND YEAR(orderDate) = YEAR(:dateSelected) THEN totalAmount ELSE 0 END) AS janTS,
+                SUM(CASE WHEN MONTH(orderDate) = 2 AND YEAR(orderDate) = YEAR(:dateSelected) THEN totalAmount ELSE 0 END) AS febTS,
+                SUM(CASE WHEN MONTH(orderDate) = 3 AND YEAR(orderDate) = YEAR(:dateSelected) THEN totalAmount ELSE 0 END) AS marTS,
+                SUM(CASE WHEN MONTH(orderDate) = 4 AND YEAR(orderDate) = YEAR(:dateSelected) THEN totalAmount ELSE 0 END) AS aprTS,
+                SUM(CASE WHEN MONTH(orderDate) = 5 AND YEAR(orderDate) = YEAR(:dateSelected) THEN totalAmount ELSE 0 END) AS mayTS,
+                SUM(CASE WHEN MONTH(orderDate) = 6 AND YEAR(orderDate) = YEAR(:dateSelected) THEN totalAmount ELSE 0 END) AS juneTS,
+                SUM(CASE WHEN MONTH(orderDate) = 7 AND YEAR(orderDate) = YEAR(:dateSelected) THEN totalAmount ELSE 0 END) AS julTS,
+                SUM(CASE WHEN MONTH(orderDate) = 8 AND YEAR(orderDate) = YEAR(:dateSelected) THEN totalAmount ELSE 0 END) AS augTS,
+                SUM(CASE WHEN MONTH(orderDate) = 9 AND YEAR(orderDate) = YEAR(:dateSelected) THEN totalAmount ELSE 0 END) AS septTS,
+                SUM(CASE WHEN MONTH(orderDate) = 10 AND YEAR(orderDate) = YEAR(:dateSelected) THEN totalAmount ELSE 0 END) AS octTS,
+                SUM(CASE WHEN MONTH(orderDate) = 11 AND YEAR(orderDate) = YEAR(:dateSelected) THEN totalAmount ELSE 0 END) AS novTS,
+                SUM(CASE WHEN MONTH(orderDate) = 12 AND YEAR(orderDate) = YEAR(:dateSelected) THEN totalAmount ELSE 0 END) AS decTS,
+
+                SUM(CASE WHEN MONTH(orderDate) = 1 AND YEAR(orderDate) = YEAR(:dateSelected) - 1 THEN totalAmount ELSE 0 END) AS janLS,
+                SUM(CASE WHEN MONTH(orderDate) = 2 AND YEAR(orderDate) = YEAR(:dateSelected) - 1 THEN totalAmount ELSE 0 END) AS febLS,
+                SUM(CASE WHEN MONTH(orderDate) = 3 AND YEAR(orderDate) = YEAR(:dateSelected) - 1 THEN totalAmount ELSE 0 END) AS marLS,
+                SUM(CASE WHEN MONTH(orderDate) = 4 AND YEAR(orderDate) = YEAR(:dateSelected) - 1 THEN totalAmount ELSE 0 END) AS aprLS,
+                SUM(CASE WHEN MONTH(orderDate) = 5 AND YEAR(orderDate) = YEAR(:dateSelected) - 1 THEN totalAmount ELSE 0 END) AS mayLS,
+                SUM(CASE WHEN MONTH(orderDate) = 6 AND YEAR(orderDate) = YEAR(:dateSelected) - 1 THEN totalAmount ELSE 0 END) AS juneLS,
+                SUM(CASE WHEN MONTH(orderDate) = 7 AND YEAR(orderDate) = YEAR(:dateSelected) - 1 THEN totalAmount ELSE 0 END) AS julLS,
+                SUM(CASE WHEN MONTH(orderDate) = 8 AND YEAR(orderDate) = YEAR(:dateSelected) - 1 THEN totalAmount ELSE 0 END) AS augLS,
+                SUM(CASE WHEN MONTH(orderDate) = 9 AND YEAR(orderDate) = YEAR(:dateSelected) - 1 THEN totalAmount ELSE 0 END) AS septLS,
+                SUM(CASE WHEN MONTH(orderDate) = 10 AND YEAR(orderDate) = YEAR(:dateSelected) - 1 THEN totalAmount ELSE 0 END) AS octLS,
+                SUM(CASE WHEN MONTH(orderDate) = 11 AND YEAR(orderDate) = YEAR(:dateSelected) - 1 THEN totalAmount ELSE 0 END) AS novLS,
+                SUM(CASE WHEN MONTH(orderDate) = 12 AND YEAR(orderDate) = YEAR(:dateSelected) - 1 THEN totalAmount ELSE 0 END) AS decLS,
+                
+                ---- DISCOUNT
+                SUM(CASE WHEN MONTH(orderDate) = 1 AND YEAR(orderDate) = YEAR(:dateSelected) THEN discount ELSE 0 END) AS janTD,
+                SUM(CASE WHEN MONTH(orderDate) = 2 AND YEAR(orderDate) = YEAR(:dateSelected) THEN discount ELSE 0 END) AS febTD,
+                SUM(CASE WHEN MONTH(orderDate) = 3 AND YEAR(orderDate) = YEAR(:dateSelected) THEN discount ELSE 0 END) AS marTD,
+                SUM(CASE WHEN MONTH(orderDate) = 4 AND YEAR(orderDate) = YEAR(:dateSelected) THEN discount ELSE 0 END) AS aprTD,
+                SUM(CASE WHEN MONTH(orderDate) = 5 AND YEAR(orderDate) = YEAR(:dateSelected) THEN discount ELSE 0 END) AS mayTD,
+                SUM(CASE WHEN MONTH(orderDate) = 6 AND YEAR(orderDate) = YEAR(:dateSelected) THEN discount ELSE 0 END) AS juneTD,
+                SUM(CASE WHEN MONTH(orderDate) = 7 AND YEAR(orderDate) = YEAR(:dateSelected) THEN discount ELSE 0 END) AS julTD,
+                SUM(CASE WHEN MONTH(orderDate) = 8 AND YEAR(orderDate) = YEAR(:dateSelected) THEN discount ELSE 0 END) AS augTD,
+                SUM(CASE WHEN MONTH(orderDate) = 9 AND YEAR(orderDate) = YEAR(:dateSelected) THEN discount ELSE 0 END) AS septTD,
+                SUM(CASE WHEN MONTH(orderDate) = 10 AND YEAR(orderDate) = YEAR(:dateSelected) THEN discount ELSE 0 END) AS octTD,
+                SUM(CASE WHEN MONTH(orderDate) = 11 AND YEAR(orderDate) = YEAR(:dateSelected) THEN discount ELSE 0 END) AS novTD,
+                SUM(CASE WHEN MONTH(orderDate) = 12 AND YEAR(orderDate) = YEAR(:dateSelected) THEN discount ELSE 0 END) AS decTD,
+
+                SUM(CASE WHEN MONTH(orderDate) = 1 AND YEAR(orderDate) = YEAR(:dateSelected) - 1 THEN discount ELSE 0 END) AS janLD,
+                SUM(CASE WHEN MONTH(orderDate) = 2 AND YEAR(orderDate) = YEAR(:dateSelected) - 1 THEN discount ELSE 0 END) AS febLD,
+                SUM(CASE WHEN MONTH(orderDate) = 3 AND YEAR(orderDate) = YEAR(:dateSelected) - 1 THEN discount ELSE 0 END) AS marLD,
+                SUM(CASE WHEN MONTH(orderDate) = 4 AND YEAR(orderDate) = YEAR(:dateSelected) - 1 THEN discount ELSE 0 END) AS aprLD,
+                SUM(CASE WHEN MONTH(orderDate) = 5 AND YEAR(orderDate) = YEAR(:dateSelected) - 1 THEN discount ELSE 0 END) AS mayLD,
+                SUM(CASE WHEN MONTH(orderDate) = 6 AND YEAR(orderDate) = YEAR(:dateSelected) - 1 THEN discount ELSE 0 END) AS juneLD,
+                SUM(CASE WHEN MONTH(orderDate) = 7 AND YEAR(orderDate) = YEAR(:dateSelected) - 1 THEN discount ELSE 0 END) AS julLD,
+                SUM(CASE WHEN MONTH(orderDate) = 8 AND YEAR(orderDate) = YEAR(:dateSelected) - 1 THEN discount ELSE 0 END) AS augLD,
+                SUM(CASE WHEN MONTH(orderDate) = 9 AND YEAR(orderDate) = YEAR(:dateSelected) - 1 THEN discount ELSE 0 END) AS septLD,
+                SUM(CASE WHEN MONTH(orderDate) = 10 AND YEAR(orderDate) = YEAR(:dateSelected) - 1 THEN discount ELSE 0 END) AS octLD,
+                SUM(CASE WHEN MONTH(orderDate) = 11 AND YEAR(orderDate) = YEAR(:dateSelected) - 1 THEN discount ELSE 0 END) AS novLD,
+                SUM(CASE WHEN MONTH(orderDate) = 12 AND YEAR(orderDate) = YEAR(:dateSelected) - 1 THEN discount ELSE 0 END) AS decLD,
+
+                ---- ORDERS
+                SUM(CASE WHEN MONTH(orderDate) = 1 AND YEAR(orderDate) = YEAR(:dateSelected) THEN 1 ELSE 0 END) AS janTO,
+                SUM(CASE WHEN MONTH(orderDate) = 2 AND YEAR(orderDate) = YEAR(:dateSelected) THEN 1 ELSE 0 END) AS febTO,
+                SUM(CASE WHEN MONTH(orderDate) = 3 AND YEAR(orderDate) = YEAR(:dateSelected) THEN 1 ELSE 0 END) AS marTO,
+                SUM(CASE WHEN MONTH(orderDate) = 4 AND YEAR(orderDate) = YEAR(:dateSelected) THEN 1 ELSE 0 END) AS aprTO,
+                SUM(CASE WHEN MONTH(orderDate) = 5 AND YEAR(orderDate) = YEAR(:dateSelected) THEN 1 ELSE 0 END) AS mayTO,
+                SUM(CASE WHEN MONTH(orderDate) = 6 AND YEAR(orderDate) = YEAR(:dateSelected) THEN 1 ELSE 0 END) AS juneTO,
+                SUM(CASE WHEN MONTH(orderDate) = 7 AND YEAR(orderDate) = YEAR(:dateSelected) THEN 1 ELSE 0 END) AS julTO,
+                SUM(CASE WHEN MONTH(orderDate) = 8 AND YEAR(orderDate) = YEAR(:dateSelected) THEN 1 ELSE 0 END) AS augTO,
+                SUM(CASE WHEN MONTH(orderDate) = 9 AND YEAR(orderDate) = YEAR(:dateSelected) THEN 1 ELSE 0 END) AS septTO,
+                SUM(CASE WHEN MONTH(orderDate) = 10 AND YEAR(orderDate) = YEAR(:dateSelected) THEN 1 ELSE 0 END) AS octTO,
+                SUM(CASE WHEN MONTH(orderDate) = 11 AND YEAR(orderDate) = YEAR(:dateSelected) THEN 1 ELSE 0 END) AS novTO,
+                SUM(CASE WHEN MONTH(orderDate) = 12 AND YEAR(orderDate) = YEAR(:dateSelected) THEN 1 ELSE 0 END) AS decTO,
+
+                SUM(CASE WHEN MONTH(orderDate) = 1 AND YEAR(orderDate) = YEAR(:dateSelected) - 1 THEN 1 ELSE 0 END) AS janLO,
+                SUM(CASE WHEN MONTH(orderDate) = 2 AND YEAR(orderDate) = YEAR(:dateSelected) - 1 THEN 1 ELSE 0 END) AS febLO,
+                SUM(CASE WHEN MONTH(orderDate) = 3 AND YEAR(orderDate) = YEAR(:dateSelected) - 1 THEN 1 ELSE 0 END) AS marLO,
+                SUM(CASE WHEN MONTH(orderDate) = 4 AND YEAR(orderDate) = YEAR(:dateSelected) - 1 THEN 1 ELSE 0 END) AS aprLO,
+                SUM(CASE WHEN MONTH(orderDate) = 5 AND YEAR(orderDate) = YEAR(:dateSelected) - 1 THEN 1 ELSE 0 END) AS mayLO,
+                SUM(CASE WHEN MONTH(orderDate) = 6 AND YEAR(orderDate) = YEAR(:dateSelected) - 1 THEN 1 ELSE 0 END) AS juneLO,
+                SUM(CASE WHEN MONTH(orderDate) = 7 AND YEAR(orderDate) = YEAR(:dateSelected) - 1 THEN 1 ELSE 0 END) AS julLO,
+                SUM(CASE WHEN MONTH(orderDate) = 8 AND YEAR(orderDate) = YEAR(:dateSelected) - 1 THEN 1 ELSE 0 END) AS augLO,
+                SUM(CASE WHEN MONTH(orderDate) = 9 AND YEAR(orderDate) = YEAR(:dateSelected) - 1 THEN 1 ELSE 0 END) AS septLO,
+                SUM(CASE WHEN MONTH(orderDate) = 10 AND YEAR(orderDate) = YEAR(:dateSelected) - 1 THEN 1 ELSE 0 END) AS octLO,
+                SUM(CASE WHEN MONTH(orderDate) = 11 AND YEAR(orderDate) = YEAR(:dateSelected) - 1 THEN 1 ELSE 0 END) AS novLO,
+                SUM(CASE WHEN MONTH(orderDate) = 12 AND YEAR(orderDate) = YEAR(:dateSelected) - 1 THEN 1 ELSE 0 END) AS decLO
+                FROM orders";
+            }
+
+            return $sql;
+        }
+
+
+
+        public function singleRangeDataCS($type, $dateSelected)
+        {
+            $sql = $this->csChartQuery($type);
+
+            $stmt = $this->connect()->prepare($sql);
+            $stmt->bindParam(":dateSelected", $dateSelected);
+            if ($stmt->execute()) {
+                $rws = $stmt->fetch(PDO::FETCH_ASSOC);
+                return $rws;
+            }
+            return null;
+        }
+
+
+
+
+
+
+
+
 
 
 

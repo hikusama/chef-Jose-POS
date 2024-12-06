@@ -5,20 +5,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <!-- <script src="../UX/jquery-3.5.1.min.js?v=<?php echo time();?>"></script>
-    <script src="../UX/script.js?v=<?php echo time();?>"></script>
-    <link rel="stylesheet" href="../resources/style.css?v=<?php echo time();?>">
-    <link rel="stylesheet" href="../resources/reports.css?v=<?php echo time();?>">
-    <link rel="stylesheet" href="../resources/fontawesome-free-5.15.4-web/css/all.css?v=<?php echo time();?>"> -->
-    <!-- <script src="../UX/node_modules/chart.js/dist/chart.umd.js?v=<?php echo time();?>"></script> -->
-    <script src="../UX/node_modules/chart.js/dist/chart.umd.js"></script>
-    <script src="../UX/jquery-3.5.1.min.js"></script>
-    <script src="../UX/report_js.js"></script>
-    <script src="../UX/reportsChart.js"></script>
-    <script src="../UX/script.js"></script>
-    <link rel="stylesheet" href="../resources/style.css">
-    <link rel="stylesheet" href="../resources/reports.css">
-    <link rel="stylesheet" href="../resources/fontawesome-free-5.15.4-web/css/all.css">
+    <script src="../UX/node_modules/chart.js/dist/chart.umd.js?v=<?php echo time(); ?>"></script>
+    <script src="../UX/jquery-3.5.1.min.js?v=<?php echo time(); ?>"></script>
+    <script src="../UX/report_js.js?v=<?php echo time(); ?>"></script>
+    <script src="../UX/reportsChart.js?v=<?php echo time(); ?>"></script>
+    <script src="../UX/script.js?v=<?php echo time(); ?>"></script>
+    <link rel="stylesheet" href="../resources/style.css?v=<?php echo time(); ?>">
+    <link rel="stylesheet" href="../resources/reports.css?v=<?php echo time(); ?>">
+    <link rel="stylesheet" href="../resources/fontawesome-free-5.15.4-web/css/all.css?v=<?php echo time(); ?>">
     <title>POS</title>
 </head>
 
@@ -95,21 +89,21 @@
                             <ol>
                                 <i class="fas fa-home"></i>
                                 <li>
-                                    <b class="orders_line">500</b>
+                                    <b class="orders_line"></b>
                                     <p>Today's Orders</p>
                                 </li>
                             </ol>
                             <ol>
                                 <i class="fas fa-home"></i>
                                 <li>
-                                    <b class="discount_line">₱500</b>
+                                    <b class="discount_line">₱0</b>
                                     <p>Today's Discount</p>
                                 </li>
                             </ol>
                             <ol>
                                 <i class="fas fa-home"></i>
                                 <li>
-                                    <b class="sales_line">₱500</b>
+                                    <b class="sales_line">₱0</b>
                                     <p>Today's Sales</p>
                                 </li>
                             </ol>
@@ -142,7 +136,7 @@
             <div class="cstmRp">
                 <div class="hdr">
                     <h3>Find your reports</h3>
-                    <p class="recordDate">08/12/24<b></b></p>
+                    <p class="recordDate">----<b></b></p>
                     <button id="traceReport" title="Format">
                         <i class="fas fa-book"></i> Trace Report
                     </button>
@@ -174,6 +168,7 @@
                             </li>
                         </section>
                         <div class="sb">
+                            <div class="er33"></div>
                             <button id="upTr" type="submit">
                                 Update
                             </button>
@@ -194,21 +189,21 @@
                             <ol>
                                 <i class="fas fa-home"></i>
                                 <li>
-                                    <b class="cs_orders_line">500</b>
+                                    <b class="cs_orders_line">----</b>
                                     <p>Orders</p>
                                 </li>
                             </ol>
                             <ol>
                                 <i class="fas fa-home"></i>
                                 <li>
-                                    <b class="cs_discount_line">₱500</b>
+                                    <b class="cs_discount_line">----</b>
                                     <p>Discount</p>
                                 </li>
                             </ol>
                             <ol>
                                 <i class="fas fa-home"></i>
                                 <li>
-                                    <b class="cs_sales_line">₱500</b>
+                                    <b class="cs_sales_line">----</b>
                                     <p>Sales</p>
                                 </li>
                             </ol>
@@ -223,53 +218,55 @@
                         </div>
                     </div>
                     <div class="sone">
-                        <h3>Double Range</h3>
-                        <!-- <h3>Single Range</h3> -->
+                        <h3>Single Range</h3>
                     </div>
-                    <div class="charthings">
-                        <section class="findBy">
-                            <li class="onSingleD">Week</li>
-                            <li>Month</li>
-                        </section>
-                        <div class="cs_sales-line-chart">
-                            <h4>Sales</h4>
-                            <canvas id="csSalesLineChart"></canvas>
-                        </div>
-                        <div class="cs_orders-line-chart">
-                            <h4>Orders</h4>
-                            <canvas id="csOrdLineChart"></canvas>
+                    <div class="typer">
 
-                        </div>
-                        <div class="cs_discount-line-chart">
-                            <h4>Discount</h4>
-                            <canvas id="csDcLineChart"></canvas>
-                        </div>
-                    </div>
-                    <div class="txtbaseddata">
-                        <div class="table-mhen">
+                        <div class="charthings">
+                            <section class="findBy">
+                                <li class="onSingleD" id="weekcs">Week</li>
+                                <li id="monthcs">Month</li>
+                            </section>
+                            <div class="cs_sales-line-chart">
+                                <h4>Sales</h4>
+                                <canvas id="csSalesLineChart"></canvas>
+                            </div>
+                            <div class="cs_orders-line-chart">
+                                <h4>Orders</h4>
+                                <canvas id="csOrdLineChart"></canvas>
 
-                            <table border="1">
-                                <thead>
-                                    <th>
+                            </div>
+                            <div class="cs_discount-line-chart">
+                                <h4>Discount</h4>
+                                <canvas id="csDcLineChart"></canvas>
+                            </div>
+                        </div>
+                        <div class="txtbaseddata">
+                            <div class="table-mhen">
+
+                                <table border="1">
+                                    <thead>
+                                        <th>
+                                            <tr>
+                                                <td>Day/s</td>
+                                                <td>Date Ranged</td>
+                                                <td>Orders</td>
+                                                <td>Sales</td>
+                                                <td>Discount</td>
+                                            </tr>
+                                        </th>
+                                    </thead>
+                                    <tbody>
                                         <tr>
-                                            <td>Day/s</td>
-                                            <td>Date Ranged</td>
-                                            <td>Orders</td>
-                                            <td>Sales</td>
-                                            <td>Discount</td>
+                                            <td class="Rd">--</td>
+                                            <td class="Rdr">-----</td>
+                                            <td class="Ror">---</td>
+                                            <td class="Rsl">---</td>
+                                            <td class="Rdc">---</td>
                                         </tr>
-                                    </th>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>15D</td>
-                                        <td>10/15/2020 - 10-18-2025</td>
-                                        <td>1500</td>
-                                        <td>₱250,000</td>
-                                        <td>₱2,000</td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
