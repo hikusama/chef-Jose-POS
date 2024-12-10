@@ -24,7 +24,7 @@
 
         @media print {
             @page {
-                /* size: 3.15in auto; */
+                size: 58mm auto;
                 margin: 0;
             }
         }

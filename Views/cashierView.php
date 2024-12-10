@@ -39,12 +39,12 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                     $ntv = "";
                     $ops = "";
                     $crs = "";
-                    if($availability === "Not-available"){
-                        
-                        $ntv = '<p class="ntv">Not-available</p>'; 
+                    if ($availability === "Not-available") {
+
+                        $ntv = '<p class="ntv">Not-available</p>';
                         $ops = ' style="opacity:50%;"';
                         $crs = ' style="pointer-events:none;"';
-                    } 
+                    }
                     echo '
                     <ol' . $crs . '>' . $ntv . '
                         <li' . $ops . '><img id="' . $cmb['comboID'] . '" src="data:image/jpeg;base64,' . base64_encode($cmb['displayPic']) . '" alt="item"></li>
@@ -68,11 +68,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                     $ntv = "";
                     $ops = "";
                     $crs = "";
-                    if($availability === "Not-available"){
-                        $ntv = '<p class="ntv">Not-available</p>'; 
+                    if ($availability === "Not-available") {
+                        $ntv = '<p class="ntv">Not-available</p>';
                         $ops = ' style="opacity:50%;"';
                         $crs = ' style="pointer-events:none;"';
-                    } 
+                    }
                     echo '
                     <ol' . $crs . '>' . $ntv . '
                         <li' . $ops . '><img id="' . $prod['productID'] . '" src="data:image/jpeg;base64,' . base64_encode($prod['displayPic']) . '" alt="item"></li>
@@ -469,7 +469,15 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $subtotal = '----';
         $total = '----';
         $discount = '0';
+        $change = "₱0";
+        $tendered = "₱";
         $discountType = 'N/A';
+        $dsSection = "";
+        $gcashSection = "";
+        $gcash = [
+            "name" => NULL
+        ];
+
         if (isset($_SESSION['subtotalT'], $_SESSION['totalT'])) {
             $subtotal = '₱' . $_SESSION['subtotalT'];
             $total = '₱' . $_SESSION['totalT'];
@@ -480,20 +488,47 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         if (isset($_SESSION['discountT'], $_SESSION['discountTypeT']) && (($_SESSION['discountT'] = ! NULL) && ($_SESSION['discountT'] != NULL))) {
             $discountType = $_SESSION['discountTypeT'];
             // $discount = $_SESSION['discountT'] . '%';
-            $discount = $_SESSION['discountT'] ;
+            $discount = $_SESSION['discountT'];
             $sbt = $_SESSION['subtotalT'];
             $tt = $_SESSION['totalT'];
-            $discount = (($sbt-$tt)/$sbt)*100 . '%';
+            $discount = (($sbt - $tt) / $sbt) * 100 . '%';
+            $dsSection = '
+            <ol>
+                <li>Discount (%)</li>
+                <li>' . $discount . '</li>
+            </ol>
+            <ol>
+                <li>Discount type</li>
+                <li style="text-align: end;">' . $discountType . '</li>
+            </ol>';
         }
+
         $ordersSession = array();
         if (isset($_SESSION['ordersT'])) {
             $ordersSession = $_SESSION['ordersT'];
+            $tt = $_SESSION['totalT'];
+            $tendered = $_SESSION['tendered'];
+            $change = "₱" . $tendered - $tt;
+        }
+        if (isset($_SESSION['gcash'])) {
+            $gcash = $_SESSION['gcash'];
         }
         $array_size = count($ordersSession);
         date_default_timezone_set("Asia/manila");
         $date = date('d/m/Y');
         $time = date('h:i A');
 
+        if ($gcash['name'] !== NULL) {
+            $gcashSection = '
+                            <ol>
+                                <li>Gcash Acc. Name </li>
+                                <li style="text-align: end;">' . $gcash["name"] . '</li>
+                            </ol>
+                            <ol>
+                                <li>Gcash Acc. No </li>
+                                <li>' . $gcash["no"]  . '</li>
+                            </ol>';
+        }
 
 
         echo '
@@ -537,7 +572,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 echo '
                     <tr>
                         <td>' . $order['qntity'] . '</td>
-                            <td>' . $order['name'] .' @'. $order['itemprice']. '</td>
+                            <td>' . $order['name'] . ' @' . $order['itemprice'] . '</td>
                             <td>₱' . $order['price'] . '</td>
                         </tr>
                      ';
@@ -556,18 +591,20 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                     <li>Sub Total</li>
                     <li>' . $subtotal . '</li>
                 </ol>
+                ' . $gcashSection . $dsSection . '
+
                 <ol>
-                    <li>Discount</li>
-                    <li>' . $discount . '</li>
+                    <li>Tendered</li>
+                    <li>' . $tendered . '</li>
                 </ol>
-                <ol>
-                    <li>Discount Type</li>
-                    <li>' . $discountType . '</li>
-                </ol>
-                <hr>
                 <ol>
                     <li>Total</li>
                     <li>' . $total . '</li>
+                </ol>
+                <hr>
+                <ol class="chg">
+                    <li>Change</li>
+                    <li>' . $change . '</li>
                 </ol>
             </div>
         ';
@@ -579,6 +616,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             unset($_SESSION['discountTypeT']);
             unset($_SESSION['totalT']);
             unset($_SESSION['subtotalT']);
+            unset($_SESSION['tendered']);
+            unset($_SESSION['gcash']);
         }
         // var_dump($ordersSession);
         // var_dump(implode($ordersSession));
@@ -636,8 +675,12 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 $refNo = $lastId . strval($randNo);
                 $refNo = intval($refNo);
                 $_SESSION['refNo2'] = $refNo;
+                $gcash = [
+                    "name" => $gcashName,
+                    "no" => $gcashNum,
+                ];
 
-                submitOrders($refNo, $total, $pmethod, $gcashName, $gcashNum);
+                submitOrders($refNo, $total, $pmethod, $gcashName, $gcashNum, $customer_money);
 
                 $tempTotal = ($customer_money - $total);
                 $tempTotal = number_format($tempTotal, 2, '.');
@@ -651,6 +694,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                         </div>
                     </div>
                 ';
+                $_SESSION['tendered'] = $customer_money;
+                $_SESSION['gcash'] = $gcash;
                 $_SESSION['confirmation'] = true;
             }
         } else {
@@ -821,7 +866,7 @@ function dpCart($prodArr, $comboArr)
     }
 }
 
-function submitOrders($refNo, $totalAmount, $pmethod, $gcashName, $gcashNum)
+function submitOrders($refNo, $totalAmount, $pmethod, $gcashName, $gcashNum, $tendered)
 {
     // session_start();
 
@@ -857,6 +902,7 @@ function submitOrders($refNo, $totalAmount, $pmethod, $gcashName, $gcashNum)
                 "gcashName" => $gcashName,
                 "gcashNum" => $gcashNum,
                 "subtotal" => $subtotal,
+                "tendered" => $tendered,
             ];
         }
 
@@ -878,6 +924,7 @@ function submitOrders($refNo, $totalAmount, $pmethod, $gcashName, $gcashNum)
                 "gcashName" => $gcashName,
                 "gcashNum" => $gcashNum,
                 "subtotal" => $subtotal,
+                "tendered" => $tendered,
 
             ];
         }

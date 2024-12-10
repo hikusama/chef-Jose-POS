@@ -190,9 +190,32 @@
 
             $sql = "SELECT 
                                 SUM(CASE WHEN DATE(orderDate) = CURRENT_DATE THEN discount ELSE 0 END) AS today_discount,
-                                SUM(CASE WHEN DATE(orderDate) = CURRENT_DATE - INTERVAL 1 DAY THEN discount ELSE 0 END) AS yesterday_discount,
                                 SUM(CASE WHEN DATE(orderDate) = CURRENT_DATE THEN 1 ELSE 0 END) AS today_orders,
                                 SUM(CASE WHEN DATE(orderDate) = CURRENT_DATE THEN totalAmount ELSE 0 END) AS today_sales,
+        
+                                SUM(CASE WHEN DATE(orderDate) = CURRENT_DATE - INTERVAL 1 DAY THEN discount ELSE 0 END) AS Ltoday_discount,
+                                SUM(CASE WHEN DATE(orderDate) = CURRENT_DATE - INTERVAL 1 DAY THEN 1 ELSE 0 END) AS Ltoday_orders,
+                                SUM(CASE WHEN DATE(orderDate) = CURRENT_DATE - INTERVAL 1 DAY THEN totalAmount ELSE 0 END) AS Ltoday_sales,
+        
+                            -- current things
+                                SUM(CASE WHEN MONTH(orderDate) = MONTH(CURRENT_DATE()) THEN totalAmount ELSE 0 END) AS salesmonth,
+                                SUM(CASE WHEN MONTH(orderDate) = MONTH(CURRENT_DATE()) THEN discount ELSE 0 END) AS discountmonth,
+                                SUM(CASE WHEN MONTH(orderDate) = MONTH(CURRENT_DATE()) THEN 1 ELSE 0 END) AS ordersmonth,
+
+                                SUM(CASE WHEN YEARWEEK(orderDate, 1) = YEARWEEK(CURDATE(), 1) THEN 1 ELSE 0 END) AS salesweek,  
+                                SUM(CASE WHEN YEARWEEK(orderDate, 1) = YEARWEEK(CURDATE(), 1) THEN 1 ELSE 0 END) AS discountweek,  
+                                SUM(CASE WHEN YEARWEEK(orderDate, 1) = YEARWEEK(CURDATE(), 1) THEN 1 ELSE 0 END) AS ordersweek,  
+
+                            -- last things
+                                SUM(CASE WHEN MONTH(orderDate) = MONTH(CURRENT_DATE()) - 1 THEN totalAmount ELSE 0 END) AS Lsalesmonth,
+                                SUM(CASE WHEN MONTH(orderDate) = MONTH(CURRENT_DATE()) - 1 THEN discount ELSE 0 END) AS Ldiscountmonth,
+                                SUM(CASE WHEN MONTH(orderDate) = MONTH(CURRENT_DATE()) - 1 THEN 1 ELSE 0 END) AS Lordersmonth,
+
+                                SUM(CASE WHEN YEARWEEK(orderDate, 1) = YEARWEEK(CURDATE() - INTERVAL 1 WEEK, 1) THEN 1 ELSE 0 END) AS Lsalesweek,  
+                                SUM(CASE WHEN YEARWEEK(orderDate, 1) = YEARWEEK(CURDATE() - INTERVAL 1 WEEK, 1) THEN 1 ELSE 0 END) AS Ldiscountweek,  
+                                SUM(CASE WHEN YEARWEEK(orderDate, 1) = YEARWEEK(CURDATE() - INTERVAL 1 WEEK, 1) THEN 1 ELSE 0 END) AS Lordersweek,  
+
+
                                 SUM(CASE WHEN paymentMethod = 'G-Cash' AND DATE(orderDate) = CURRENT_DATE THEN 1 ELSE 0 END) AS gcash_count,
                                 SUM(CASE WHEN paymentMethod = 'Cash' AND DATE(orderDate) = CURRENT_DATE THEN 1 ELSE 0 END) AS cash_count
                             FROM orders;";
@@ -562,6 +585,121 @@
             }
             return null;
         }
+
+
+
+
+
+
+
+
+
+
+        /*               analytics data               */
+
+
+
+    
+        public function itemsReport($itemtype, $order, $range, $data) {
+            $select = $itemtype === "products" ? "products" : "combo";
+            $id = $itemtype === "products" ? "productID" : "comboID";
+            $name = $itemtype === "products" ? "name" : "comboName";
+        
+            $sql = "SELECT 
+                pcr.displayPic, 
+                pcr." . $name . " AS item, 
+                pcr." . $id . " AS itemID,
+                SUM(CASE WHEN ";
+        
+            if (count($range) === 1) {
+                $sql .= "DATE(ord.orderDate) = ?"; 
+                $sql .= " THEN $data ELSE 0 END) AS selData,
+                        SUM(CASE WHEN DATE(ord.orderDate) = DATE_SUB(?, INTERVAL 1 DAY) THEN $data ELSE 0 END) AS beforeData";
+            } else {
+                $sql .= "DATE(ord.orderDate) BETWEEN ? AND ?"; 
+                $sql .= " THEN $data ELSE 0 END) AS selData,
+                SUM(CASE WHEN DATE(ord.orderDate) = DATE_SUB(?, INTERVAL 1 DAY) THEN $data ELSE 0 END) AS beforeData";
+            }
+            $sql .= ",SUM(CASE WHEN YEARWEEK(ord.orderDate, 1) = YEARWEEK(?, 1) THEN $data ELSE 0 END) AS TW
+                     ,SUM(CASE WHEN YEARWEEK(ord.orderDate) = YEARWEEK(? - INTERVAL 1 WEEK, 1) THEN $data ELSE 0 END) AS LW"; 
+            
+            $sql .= " FROM 
+                " . $select . " AS pcr
+              LEFT JOIN 
+                orderitems AS oi ON oi." . $id . " = pcr." . $id . "
+              LEFT JOIN 
+                orders AS ord ON ord.ref_no = oi.ref_no
+              GROUP BY 
+                pcr." . $name . "
+              ORDER BY selData " . $order;
+        
+            $stmt = $this->connect()->prepare($sql);
+        
+            if (count($range) === 1) {
+                $stmt->bindValue(1, $range[0], PDO::PARAM_STR);
+                $stmt->bindValue(2, $range[0], PDO::PARAM_STR); 
+                $stmt->bindValue(3, $range[0], PDO::PARAM_STR); 
+                $stmt->bindValue(4, $range[0], PDO::PARAM_STR); 
+            } else {
+                $stmt->bindValue(1, $range[0], PDO::PARAM_STR);
+                $stmt->bindValue(2, $range[1], PDO::PARAM_STR);
+                $stmt->bindValue(3, $range[1], PDO::PARAM_STR);  
+                $stmt->bindValue(4, $range[0], PDO::PARAM_STR);
+                $stmt->bindValue(5, $range[0], PDO::PARAM_STR);
+            }
+        
+            if ($stmt->execute()) {
+                return $stmt->fetchAll(PDO::FETCH_ASSOC);
+            }
+            return null;
+        }
+        
+        // public function itemsReportProd($data, $rtype, $order, $starting, $ending)
+        // {
+        //     $sql = "";
+        //     $sum = "";
+        //     if ($data == "orders") {
+        //         $sum = "1";
+        //     } else {
+        //         $sum = "ord.totalAmount";
+        //     }
+
+        //     $wsome = "";
+
+
+        //     if ($rtype == "single") {
+
+        //         $wsome = " SUM(CASE WHEN DATE(ord.orderDate) = :starting THEN " . $sum . " ELSE 0 END) AS selData, ";
+                
+        //     } else if ($rtype == "double") {
+
+        //         $wsome = " SUM(CASE WHEN DATE(ord.orderDate) BETWEEN :starting AND :ending THEN " . $sum . " ELSE 0 END) AS selData, ";
+
+        //     }
+        //     $sql = "SELECT
+        //                     pr.name, 
+        //                     pr.displayPic, 
+        //                     oi.productID,
+        //                     $wsome
+        //                     SUM(CASE WHEN DATE(ord.orderDate) = :starting - INTERVAL 1 DAY THEN " . $sum . "  ELSE 0 END) AS ydata
+        //                 FROM 
+        //                     products AS pr
+        //                 LEFT JOIN 
+        //                     orderitems AS oi ON oi.productID = pr.productID
+        //                 LEFT JOIN 
+        //                     orders AS ord ON ord.ref_no = oi.ref_no
+        //                 GROUP BY 
+        //                     pr.name 
+        //                 ORDER BY selData ";
+
+
+        //     $stmt = $this->connect()->prepare($sql);
+        //     if ($stmt->execute()) {
+        //         $rws = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        //         return $rws;
+        //     }
+        //     return null;
+        // }
 
 
 
@@ -1323,12 +1461,12 @@
             $stmt2 = $this->connect()->prepare("INSERT INTO orderitems (comboID,itemType,quantity,unitPrice,ref_no) 
             VALUES (?, ?, ?, ?, ?)");
 
-            $stmtF = $this->connect()->prepare("INSERT INTO orders (totalAmount,discount,discountType,ref_no,paymentMethod,gcashAccountName,gcashAccountNo,subtotal)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+            $stmtF = $this->connect()->prepare("INSERT INTO orders (totalAmount,discount,discountType,ref_no,paymentMethod,gcashAccountName,gcashAccountNo,subtotal,tendered)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
 
 
-            if ($stmtF->execute([$orders[0]['totalAmount'], $orders[0]['discount'], $orders[0]['discountType'], $orders[0]['refNo'], $orders[0]['pmethod'], $orders[0]['gcashName'], $orders[0]['gcashNum'], $orders[0]['subtotal']])) {
+            if ($stmtF->execute([$orders[0]['totalAmount'], $orders[0]['discount'], $orders[0]['discountType'], $orders[0]['refNo'], $orders[0]['pmethod'], $orders[0]['gcashName'], $orders[0]['gcashNum'], $orders[0]['subtotal'],$orders[0]['tendered']])) {
             } else {
                 return false;
             }

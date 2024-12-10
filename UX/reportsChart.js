@@ -351,10 +351,52 @@ $(document).ready(function () {
                 }
                 dcPie.update()
                 pmMPie.update()
+
+                $(".sttoday").html("₱" + response.todaySales);
+                $(".dttoday").html("₱" + response.todayDiscount);
+                $(".ottoday").html(response.todayOrders);
+
+                $(".swweek").html("₱" + response.salesweek);
+                $(".dwweek").html("₱" + response.discountweek);
+                $(".owweek").html(response.ordersweek);
+
+                $(".smmonth").html("₱" + response.salesmonth);
+                $(".dmmonth").html("₱" + response.discountmonth);
+                $(".ommonth").html(response.ordersmonth);
+
+
+                let pr = response.rates
+
+                $(".sttrate").html(pr.salesT);
+                $(".dttrate").html(pr.discountT);
+                $(".ottrate").html(pr.ordersT);
+
+                $(".swrate").html(pr.salesW);
+                $(".dwrate").html(pr.discountW);
+                $(".owrate").html(pr.ordersW);
+
+                $(".smrate").html(pr.salesM);
+                $(".dmrate").html(pr.discountM);
+                $(".omrate").html(pr.ordersM);
             }
         });
     }
-
+    /*
+                "salesT" => $Std,
+                "salesM" => $Stm,
+                "salesW" => $Stw,
+    
+                "discountT" => $Dtd,
+                "discountM" => $Dtm,
+                "discountW" => $Dtw,
+    
+                "ordersT" => $Otd,
+                "ordersM" => $Otm,
+                "ordersW" => $Otw,
+            ];
+    
+    
+    */
 
 
     function getTCatData() {
@@ -429,7 +471,7 @@ $(document).ready(function () {
         });
     }
 
-    function checkVal(){
+    function checkVal() {
 
     }
     let txtbaseddata = $(".txtbaseddata");
@@ -485,10 +527,10 @@ $(document).ready(function () {
                         en2 = formData.get("to")
                         rd = (en - st) / (1000 * 60 * 60 * 24);
                         $(".Rd").html(rd);
-                        $(".Rdr").html(st2+" - "+en2);
+                        $(".Rdr").html(st2 + " - " + en2);
                         $(".Ror").html(response.todayOrders);
-                        $(".Rsl").html("₱"+response.todaySales);
-                        $(".Rdc").html("₱"+response.todayDiscount);
+                        $(".Rsl").html("₱" + response.todaySales);
+                        $(".Rdc").html("₱" + response.todayDiscount);
                     }
 
 
@@ -634,8 +676,39 @@ $(document).ready(function () {
     // }
 
 
+    // const today = new Date().toISOString().split('T')[0]
+    // $('#todayRecordPDF').click(function () {
+    //     $(this).hide()
+    //     dcPie.toBase64Image()
+    //     pmMPie.toBase64Image()
+    //     catTodaysSection.toBase64Image()
+    //     salesTodaysSection.toBase64Image()
+    //     dcTodaysSection.toBase64Image()
+    //     ordersTodaysSection.toBase64Image()
+        
+    //     const content = $('.todays-report').html();
+    //     $(this).show()
 
-
+    //     $.ajax({
+    //         url: '../Views/generate_pdf.php',
+    //         type: 'POST',
+    //         data: { html: content },
+    //         xhrFields: {
+    //             responseType: 'blob',
+    //         },
+    //         success: function (data) {
+    //             // Create a download link for the PDF
+    //             const blob = new Blob([data], { type: 'application/pdf' });
+    //             const link = document.createElement('a');
+    //             link.href = window.URL.createObjectURL(blob);
+    //             link.download = 'chefJose' + today + '.pdf';
+    //             link.click();
+    //         },
+    //         error: function () {
+    //             alert('Failed to generate PDF.');
+    //         }
+    //     });
+    // });
 
 
 

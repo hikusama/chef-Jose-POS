@@ -1,20 +1,22 @@
 $(document).ready(function () {
     const today = new Date().toISOString().split('T')[0]
+    
     $("#frD").attr('max', today);
     $("#toD").attr('max', today);
 
     $("#frAnl").attr('max', today);
     $("#toAnl").attr('max', today);
-    let bdcontt 
-    let data_presentation_wrap = $(".data_presentation_wrap").detach();
+    let bdcontt
+    let data_presentation_wrap = $(".analytics .data_presentation_wrap").detach();
 
-    const samp = new Date();
+    // const samp = new Date();
 
-    // let samp = (currYr - 1).toString() + " - " + currYr.toString()
-  
-    $(".recordDate").html(samp.getMonth()+"/"+samp.getDate()+"/"+samp.getFullYear());
+    // // let samp = (currYr - 1).toString() + " - " + currYr.toString()
 
-
+    // $(".recordDate").html(samp.getMonth() + "/" + samp.getDate() + "/" + samp.getFullYear());
+    $(".recordDate").html(today);
+    
+    getItems("proddR", "highest", "singleAnl", "sales-data", today, "")
 
 
 
@@ -105,6 +107,21 @@ $(document).ready(function () {
 
 
 
+    $(".data-type li button").click(function (e) {
+        e.preventDefault();
+        let hs = $(this).hasClass("onDataType")
+
+        if (!hs) {
+            $(".data-type li button").removeClass("onDataType");
+            $(this).addClass("onDataType");
+
+        }
+
+
+    });
+
+
+
 
     let an = $("#singleAnl").attr("id")
     $("#" + an).prop("checked", true)
@@ -164,19 +181,19 @@ $(document).ready(function () {
         let hs = $(this).hasClass("NOL")
 
         if (!hs) {
-            $("#itemAnalyticalData ol .data_presentation_wrap").detach();
+            $(".analytics .data_presentation_wrap").detach();
 
             $("#itemAnalyticalData ol").removeClass("NOL");
             $(this).addClass("NOL");
             bdcontt = $(this).find(".bdcontt").detach();
             $(this).find(".contIn").append(bdcontt);
-            
+
             $(this).append(data_presentation_wrap);
             $("#itemAnalyticalData .btt button").removeClass("onSt");
             $(this).find("#week").addClass("onSt")
 
 
-            $(".data_presentation_wrap").show();
+            $(".analytics .data_presentation_wrap").show();
             let chart = `<canvas id="itemdataweek"></canvas><canvas id="itemdatamonth"></canvas>`
             $("#itemAnalyticalData .dataChartEach").html(chart);
             itemdatamonth = createChart("month");
@@ -216,7 +233,7 @@ $(document).ready(function () {
                 $("#itemdataweek").hide();
 
             }
-            
+
 
         }
 
@@ -225,13 +242,30 @@ $(document).ready(function () {
         e.preventDefault();
         e.stopPropagation();
         console.log(45454);
-        
+
         $("#itemAnalyticalData ol").removeClass("NOL");
-        $("#itemAnalyticalData ol .data_presentation_wrap").detach();
+        $(".analytics .data_presentation_wrap").detach();
         $(this).closest(".ssum").find(".bdcontt").detach();
         $(this).closest(".ssum").append(bdcontt);
 
-        
+
+    });
+
+    $(".menuBody").on("click", "#updateAnl", function (e) {
+        e.preventDefault();
+        let itemtype = $(".onRank").attr("id")
+        let order = $(".onOrdered").attr("id")
+        let rtype = $('.rt input[name="rTypeAnl"]:checked').val()
+
+        let data = $(".onDataType").attr("id")
+        let from = $('.startAnl input[name="fromAnl"]').val()
+
+        let to = ""
+        if (rtype === "doubleAnl") {
+            to = $('.endAnl input[name="toR"]').val()
+        }
+        getItems(itemtype, order, rtype, data, from, to)
+
     });
 
 
@@ -239,10 +273,36 @@ $(document).ready(function () {
 
 
 
+    function getItems(itemtype, order, rTypeAnl, data, from, to) {
+        formData = new FormData()
+        formData.append('transac', 'getItems')
+        formData.append('itemtype', itemtype)
+        formData.append('data', data)
+        formData.append('order', order)
+        formData.append('rTypeAnl', rTypeAnl)
+        formData.append('from', from)
+        formData.append('to', to)
 
-
-
-
+        $.ajax({
+            type: 'POST',
+            url: '../Views/reportsView.php',
+            data: formData,
+            contentType: false,
+            processData: false,
+            dataType: 'json',
+            success: function (response) {
+                $('#itemAnalyticalData').html(response.item);
+                $('#itemAnalyticalData').children().hide();
+                $('#itemAnalyticalData').children().each(function (index) {
+                    $(this).delay(index * 100).fadeIn(200);
+                });
+                $(".anlerr").html("")
+            }, error: function (xhr) {
+                const errorMessage = xhr.responseJSON?.error || '';
+                $(".anlerr").html(errorMessage);
+            }
+        });
+    }
 
 
 

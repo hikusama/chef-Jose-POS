@@ -31,15 +31,51 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             ';
             $ordersSession = array();
             $subtotal = $rows[0]["subtotal"];
-            $gname = ($rows[0]["gcashAccountName"] != NULL) ? $rows[0]["gcashAccountName"] : "N/A";
-            $gno = ($rows[0]["gcashAccountNo"] != NULL) ? $rows[0]["gcashAccountNo"] : "N/A";
-            $dc = ($rows[0]["discount"] != NULL) ? ($rows[0]["discount"]/$subtotal) *100 : "N/A";
-            $dcT = ($rows[0]["discountType"] != NULL) ? $rows[0]["discountType"] : "N/A";
+            $gname = ($rows[0]["gcashAccountName"] != NULL) ? $rows[0]["gcashAccountName"] : NULL;
+            $gno = ($rows[0]["gcashAccountNo"] != NULL) ? $rows[0]["gcashAccountNo"] : NULL;
+            $dc = ($rows[0]["discount"] != NULL) ? ($rows[0]["discount"] / $subtotal) * 100 : NULL;
+            $dcT = ($rows[0]["discountType"] != NULL) ? $rows[0]["discountType"] : NULL;
             $tA = $rows[0]["totalAmount"];
             $pM = $rows[0]["paymentMethod"];
+            $tendered = $rows[0]["tendered"] - $tA ;
+            $dsSection = "";
+            $gcashSection = "";
+            $gcash = NULL;
+            if ($dc !== NULL && $dcT !== NULL) {
+                $dsSection = '
+                                <li>
+                                    <p>Discount (%)</p>
+                                    <p>' . $dc . '</p>
+                                </li>
+                                <li>
+                                    <p>Discount type</p>
+                                    <p>' . $dcT . '</p>
+                                </li>';
+            } else {
+                $dsSection = "
+                    <li>
+                        <p>Discount (%)</p>
+                        <p>0</p>
+                    </li>";
+            }
+            if ($gname !== NULL) {
+                $gcashSection = '
+                                <li>
+                                    <p>Gcash Acc. name</p>
+                                    <p>' . $gname . '</p>
+                                </li>
+                                <li>
+                                    <p>Gcash Acc. no.</p>
+                                    <p>' . $gno . '</p>
+                                </li>';
+                $gcash = [
+                    "name" => $gname,
+                    "no" => $gno,
+                ];
+            }
             foreach ($rows as $row) {
                 $name = ($row["itemType"] === "product") ? $row["name"] : $row["comboName"];
-                $unitPrice = $row["unitPrice"];
+                $unitPrice = isset($row["unitPrice"]) ? $row["unitPrice"] : $row["comboPrice"];
                 $quantity = $row["quantity"];
                 echo '
                 <li>
@@ -53,6 +89,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 $order = [
                     "name" => $name,
                     "price" => $unitPrice,
+                    "itemprice" => $unitPrice / $quantity,
                     "qntity" => $quantity
                 ];
                 array_push($ordersSession, $order);
@@ -68,21 +105,10 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                             <p>Payment Method</p>
                             <p>' . $pM . '</p>
                         </li>
+                        ' . $gcashSection . $dsSection . '
                         <li>
-                            <p>Gcash Acc. name</p>
-                            <p>' . $gname . '</p>
-                        </li>
-                        <li>
-                            <p>Gcash Acc. no.</p>
-                            <p>' . $gno . '</p>
-                        </li>
-                        <li>
-                            <p>Discount (%)</p>
-                            <p>' . $dc . '</p>
-                        </li>
-                        <li>
-                            <p>Discount type</p>
-                            <p>' . $dcT . '</p>
+                            <p>Tendered</p>
+                            <p>' . $tendered . '</p>
                         </li>
                         <li>
                             <p>Total Amount</p>
@@ -102,6 +128,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $_SESSION['totalT'] = $tA;
             $_SESSION['subtotalT'] = $subtotal;
             $_SESSION['refNo2'] = $refNO;
+            $_SESSION['tendered'] = $tendered;
+            $_SESSION['gcash'] = $gcash;
         } else {
             echo '<div style="position: absolute;top: 50%;left: 50%;transform: translate(-50%,-50%);">No producs...</div>';
         }

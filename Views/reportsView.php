@@ -8,11 +8,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     if (isset($_POST['transac']) && $_POST['transac'] === "getTSqData") {
         $reportsOBJ = new ReportstController();
 
-        $row = $reportsOBJ->tsqData("", "");
+        $row = $reportsOBJ->tsqData();
 
         $discount = [
             $row["today_discount"],
-            $row["yesterday_discount"]
+            $row["Ltoday_discount"]
         ];
 
         $pmethod = [
@@ -24,13 +24,94 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $td = $row["today_discount"];
         $to = (int)$row["today_orders"];
 
+        $Lts = $row["Ltoday_sales"];
+        $Ltd = $row["Ltoday_discount"];
+        $Lto = (int)$row["Ltoday_orders"];
 
+        $salesmonth = $row['salesmonth'];
+        $discountmonth = $row['discountmonth'];
+        $ordersmonth = $row['ordersmonth'];
+
+        $Lsalesmonth = $row['Lsalesmonth'];
+        $Ldiscountmonth = $row['Ldiscountmonth'];
+        $Lordersmonth = $row['Lordersmonth'];
+
+        $salesweek = $row['salesweek'];
+        $discountweek = $row['discountweek'];
+        $ordersweek = $row['ordersweek'];
+
+        $Lsalesweek = $row['Lsalesweek'];
+        $Ldiscountweek = $row['Ldiscountweek'];
+        $Lordersweek = $row['Lordersweek'];
+
+        // Sales P
+        $Std = cP($ts, $Lts);
+        $Stm = cP($salesmonth, $Lsalesmonth);
+        $Stw = cP($salesweek, $Lsalesweek);
+
+        // Discount P
+        $Dtd = cP($td, $Ltd);
+        $Dtm = cP($discountmonth, $Ldiscountmonth);
+        $Dtw = cP($discountweek, $Ldiscountweek);
+
+        // Orders P
+        $Otd = cP($to, $Lto);
+        $Otm = cP($ordersmonth, $Lordersmonth);
+        $Otw = cP($ordersweek, $Lordersweek);
+
+        $raise = [
+            "salesT" => $Std,
+            "salesM" => $Stm,
+            "salesW" => $Stw,
+
+            "discountT" => $Dtd,
+            "discountM" => $Dtm,
+            "discountW" => $Dtw,
+
+            "ordersT" => $Otd,
+            "ordersM" => $Otm,
+            "ordersW" => $Otw,
+        ];
+
+
+
+
+        /*
+SUM(CASE WHEN MONTH(orderDate) = MONTH(CURRENT_DATE()) THEN totalAmount ELSE 0 END) AS salesmonth,
+                                SUM(CASE WHEN MONTH(orderDate) = MONTH(CURRENT_DATE()) THEN discount ELSE 0 END) AS discountmonth,
+                                SUM(CASE WHEN MONTH(orderDate) = MONTH(CURRENT_DATE()) THEN 1 ELSE 0 END) AS ordersmonth,
+
+                                SUM(CASE WHEN YEARWEEK(orderDate, 1) = YEARWEEK(CURDATE(), 1) THEN 1 ELSE 0 END) AS salesweek,  
+                                SUM(CASE WHEN YEARWEEK(orderDate, 1) = YEARWEEK(CURDATE(), 1) THEN 1 ELSE 0 END) AS discountweek,  
+                                SUM(CASE WHEN YEARWEEK(orderDate, 1) = YEARWEEK(CURDATE(), 1) THEN 1 ELSE 0 END) AS ordersweek,  
+
+                            -- last things
+                                SUM(CASE WHEN MONTH(orderDate) = MONTH(CURRENT_DATE()) - 1 THEN totalAmount ELSE 0 END) AS Lsalesmonth,
+                                SUM(CASE WHEN MONTH(orderDate) = MONTH(CURRENT_DATE()) - 1 THEN discount ELSE 0 END) AS Ldiscountmonth,
+                                SUM(CASE WHEN MONTH(orderDate) = MONTH(CURRENT_DATE()) - 1 THEN 1 ELSE 0 END) AS Lordersmonth,
+
+                                SUM(CASE WHEN YEARWEEK(orderDate, 1) = YEARWEEK(CURDATE() - INTERVAL 1 WEEK, 1) THEN 1 ELSE 0 END) AS Lsalesweek,  
+                                SUM(CASE WHEN YEARWEEK(orderDate, 1) = YEARWEEK(CURDATE() - INTERVAL 1 WEEK, 1) THEN 1 ELSE 0 END) AS Ldiscountweek,  
+                                SUM(CASE WHEN YEARWEEK(orderDate, 1) = YEARWEEK(CURDATE() - INTERVAL 1 WEEK, 1) THEN 1 ELSE 0 END) AS Lordersweek,  
+
+*/
         $sqaredata = [
             "discount" => $discount,
             "pMethod" => $pmethod,
             "todaySales" => $ts,
             "todayDiscount" => $td,
             "todayOrders" => $to,
+
+            "salesmonth" => $salesmonth,
+            "discountmonth" => $discountmonth,
+            "ordersmonth" => $ordersmonth,
+
+            "salesweek" => $salesweek,
+            "discountweek" => $discountweek,
+            "ordersweek" => $ordersweek,
+            "rates" => $raise,
+
+
         ];
         echo json_encode($sqaredata);
     }
@@ -40,7 +121,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     if (isset($_POST['transac']) && $_POST['transac'] === "getTCatData") {
         $reportsOBJ = new ReportstController();
 
-        $rows = $reportsOBJ->tcatData("", "");
+        $rows = $reportsOBJ->tcatData();
         $name = [];
         $countsold = [];
 
@@ -67,31 +148,31 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $row = $reportsOBJ->twkData();
 
         $tsales = [
-            $row["tmonSales"],
-            $row["ttueSales"],
-            $row["twedSales"],
-            $row["tthuSales"],
-            $row["tfriSales"],
-            $row["tsatSales"],
-            $row["tsunSales"]
+            (float)$row["tmonSales"],
+            (float)$row["ttueSales"],
+            (float)$row["twedSales"],
+            (float)$row["tthuSales"],
+            (float)$row["tfriSales"],
+            (float)$row["tsatSales"],
+            (float)$row["tsunSales"]
         ];
         $torders = [
-            $row["tmonOrders"],
-            $row["ttueOrders"],
-            $row["twedOrders"],
-            $row["tthuOrders"],
-            $row["tfriOrders"],
-            $row["tsatOrders"],
-            $row["tsunOrders"]
+            (float)$row["tmonOrders"],
+            (float)$row["ttueOrders"],
+            (float)$row["twedOrders"],
+            (float)$row["tthuOrders"],
+            (float)$row["tfriOrders"],
+            (float)$row["tsatOrders"],
+            (float)$row["tsunOrders"]
         ];
         $tdiscounts = [
-            $row["tmonDiscount"],
-            $row["ttueDiscount"],
-            $row["twedDiscount"],
-            $row["tthuDiscount"],
-            $row["tfriDiscount"],
-            $row["tsatDiscount"],
-            $row["tsunDiscount"]
+            (float)$row["tmonDiscount"],
+            (float)$row["ttueDiscount"],
+            (float)$row["twedDiscount"],
+            (float)$row["tthuDiscount"],
+            (float)$row["tfriDiscount"],
+            (float)$row["tsatDiscount"],
+            (float)$row["tsunDiscount"]
         ];
 
 
@@ -253,7 +334,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $idr = 7;
         if ($type == "monthcs") {
             $idr = 12;
-        }else{
+        } else {
             $idr = 7;
         }
 
@@ -268,7 +349,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $tsales = [];
         $torders = [];
         $tdiscounts = [];
-        
+
         $temptsales = $row["tsales"];
         $temptorders = $row["torders"];
         $temptdiscounts = $row["tdiscounts"];
@@ -302,6 +383,100 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 "ldiscounts" => $ldiscounts
             ]
         );
+    }
+
+
+
+    if (isset($_POST['transac']) && $_POST['transac'] === "getItems") {
+        $reportsOBJ = new ReportstController();
+
+        $itemtype = htmlspecialchars($_POST['itemtype']);
+        $data = htmlspecialchars($_POST['data']);
+        $order = htmlspecialchars($_POST['order']);
+        $rtype = htmlspecialchars($_POST['rTypeAnl']);
+        $from = htmlspecialchars($_POST['from']);
+        $to = htmlspecialchars($_POST['to']);
+
+        $submitDate = [];
+
+        if ($rtype === "singleAnl") {
+            if (empty($from)) {
+                http_response_code(400);
+                echo json_encode(["error" => "Select a date."]);
+                return;
+            }
+            $submitDate = [$from];
+        } else if ($rtype === "doubleAnl") {
+            if (empty($from) || empty($to)) {
+                http_response_code(400);
+                echo json_encode(["error" => "Select all date ranges."]);
+                return;
+            }
+            $submitDate = [$from, $to];
+        }
+
+        if ($itemtype === "proddR") {
+            $itemtype = "products";
+        } else if ($itemtype === "combbR") {
+            $itemtype = "combo";
+        }
+
+        if ($data === "orders-data") {
+            $data = "oi.quantity";  
+        } else if ($data === "sales-data") {
+            $data = "(oi.unitPrice)";  
+        }
+
+        if ($order === "highest") {
+            $order = "DESC";
+        } else if ($order === "lowest") {
+            $order = "ASC";
+        }
+
+        $rows = $reportsOBJ->getDataItem($itemtype, $order, $submitDate, $data);
+
+        $bulk = "";
+        if ($rows !== null) {
+            $cnt = '';
+            if ($data !== "oi.quantity") {
+                $cnt = '₱';
+            }
+            foreach ($rows as $row) {
+                
+                $rate = RP((int)$row['TW'],(int)$row['LW']);
+
+                
+                $bulk .= '
+                    <ol>
+                        <section class="ssum">
+                            <div class="headAnl">
+                                <li>
+                                    <div class="picMhen"><img id="' . $row['itemID'] . '" src="data:image/jpeg;base64, ' . base64_encode($row['displayPic']) . '" alt=""></div>
+                                </li>
+                                <li>
+                                    <div class="contIn">
+                                        <h4>' . $row['item'] . '</h4>
+                                    </div>
+                                </li>
+                            </div>
+                            <div class="bdcontt">
+                                <div class="tod smm">
+                                    <p>'. $cnt . $row['selData'] . '</p>
+                                    <p>Today</p>
+                                </div>
+                                <div class="yd smm">
+                                    <p>'. $cnt . $row['beforeData'] . '</p>
+                                    <p>Yesterday</p>
+                                </div>' . $rate . '
+                            </div>
+                        </section>
+                    </ol>
+                    ';
+
+            }
+            http_response_code(200);
+            echo json_encode(["item" => $bulk]);
+        }
     }
 }
 
@@ -502,4 +677,62 @@ function rmtrailingzero($arr)
         $arr = array_values($arr);
     }
     return $arr;
+}
+
+function cP($s, $e)
+{
+
+    $ready = "0";
+
+    if ($e == 0) {
+        $ready = $s*100; 
+    }else{
+        $ready = (($s - $e) / $e ) * 100;
+    }
+    $ready = number_format($ready, 1, '.');
+    $rtt = "";
+
+    if ($ready < 0) {
+        $rtt = '<p class="" style="color: rgb(215 0 0); white-space:nowrap;">' . $ready . '%</p>';
+    } else if ($ready > 0) {
+        $rtt = '<p class="" style="white-space:nowrap;">+' . $ready . '%</p>';
+    } else {
+        $rtt = '<p class="" style="white-space:nowrap;color: unset;"><b></b>0.0</p>';
+    }
+
+
+    return $rtt;
+}
+function RP($s, $e)
+{
+
+    $ready = "0";
+
+    if ($e === 0) {
+        $ready = $s*100; 
+    }else{
+        $ready = (($s - $e) / $e ) * 100;
+    }
+    $ready = number_format($ready, 1, '.');
+    $rtt = "";
+
+    if ($ready < 0) {
+        $rtt = '<div class="rpRs" style="color: rgb(215 0 0); white-space:nowrap;">
+                    <p style="">' . $ready . '%</p>
+                    <p> From last week.</p>
+                </div>';
+    } else if ($ready > 0) {
+        $rtt = '<div class="rpRs" style="color: green;white-space:nowrap;">
+                    <p>+' . $ready . '%</p>
+                    <p> From last week.</p>
+                </div>';
+    } else {
+        $rtt = '<div class="rpRs" style="white-space:nowrap;color: unset;">
+                    <p>0.0</p>
+                    <p> From last week.</p>
+                </div>';
+    }
+
+
+    return $rtt;
 }

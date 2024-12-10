@@ -346,8 +346,15 @@
                         <div id="bkAnl">
                             <i class="fas fa-arrow-left"></i>
                         </div>
+                        <ol class="data-type">
+                            <p>Type of Data:</p>
+                            <li>
+                                <button id="sales-data" class="onDataType">Sales</button>
+                                <button id="orders-data">Orders</button>
+                            </li>
+                        </ol>
                         <ol class="rk">
-                            <p>Rank by:</p>
+                            <p>Items:</p>
                             <li>
                                 <button id="proddR" class="onRank">Products</button>
                                 <button id="combbR">Combo</button>
@@ -356,8 +363,8 @@
                         <ol class="orb">
                             <p>Ordered by:</p>
                             <li>
-                                <button id="proddR" class="onOrdered">Highest</button>
-                                <button id="combbR">Lowest</button>
+                                <button id="highest" class="onOrdered">Highest</button>
+                                <button id="lowest">Lowest</button>
                             </li>
                         </ol>
                         <ol class="rt">
@@ -385,79 +392,13 @@
                             </li>
                         </section>
                         <div class="uptAnl">
+                            <div class="anlerr"></div>
                             <button id="updateAnl">Update</button>
                         </div>
                     </div>
                 </div>
                 <div id="itemAnalyticalData">
-                    <ol>
-                        <section class="ssum">
-                            <div class="headAnl">
-
-                                <li>
-                                    <div class="picMhen"><img src="../image/sample.png" alt=""></div>
-                                </li>
-                                <li>
-                                    <div class="contIn">
-                                        <h4>Beef patty sdasdasd sda</h4>
-
-                                    </div>
-                                </li>
-                            </div>
-                            <div class="bdcontt">
-
-                                <div class="tod smm">
-                                    <p>500020</p>
-                                    <p>Today</p>
-                                </div>
-                                <div class="yd smm">
-                                    <p>505550</p>
-                                    <p>Yesterday</p>
-                                </div>
-                                <p class="uiper"><i class="fas fa-plus"></i> 12.5%</p>
-                            </div>
-                            <div class="data_presentation_wrap">
-
-                                <div class="dataPrTypes">
-
-                                    <section class="graphNgiao" style="display: none;">
-                                        <p class="singleRGRP">Single range</p>
-                                        <div class="btt">
-                                            <button id="week" class="onSt">Week</button>
-                                            <button id="month">Month</button>
-                                            <div id="rmX"><i class="fas fa-plus"></i></div>
-                                        </div>
-                                        <div class="dataChartEach">
-                                        </div>
-                                    </section>
-
-                                    <section class="table-data">
-                                        <p class="singleRGRP">Double range</p>
-                                        <table border="1">
-                                            <thead>
-                                                <tr>
-                                                    <td>Day/s</td>
-                                                    <td>Date Ranged</td>
-                                                    <td>Orders</td>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <th>
-                                                    <tr>
-                                                        <td>10D</td>
-                                                        <td>From:<br>10-15-2024 <br>To:<br>10-25-2024</td>
-                                                        <td>1500</td>
-                                                    </tr>
-                                                </th>
-                                            </tbody>
-                                        </table>
-                                    </section>
-
-                                </div>
-                            </div>
-                        </section>
-                    </ol>
-                    <ol>
+                    <!-- <ol>
                         <section class="ssum">
                             <div class="headAnl">
 
@@ -484,9 +425,47 @@
                                 <p class="uiper"><i class="fas fa-plus"></i> 12.5%</p>
                             </div>
                         </section>
-                    </ol>
+                    </ol> -->
                 </div>
+                <div class="data_presentation_wrap">
 
+                    <div class="dataPrTypes">
+
+                        <section class="graphNgiao">
+                            <p class="singleRGRP">Single range</p>
+                            <div class="btt">
+                                <button id="week" class="onSt">Week</button>
+                                <button id="month">Month</button>
+                                <div id="rmX"><i class="fas fa-plus"></i></div>
+                            </div>
+                            <div class="dataChartEach">
+                            </div>
+                        </section>
+
+                        <section class="table-data" style="display: none;">
+                            <p class="singleRGRP">Double range</p>
+                            <table border="1">
+                                <thead>
+                                    <tr>
+                                        <td>Day/s</td>
+                                        <td>Date Ranged</td>
+                                        <td>Orders</td>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <th>
+                                        <tr>
+                                            <td>10D</td>
+                                            <td>From:<br>10-15-2024 <br>To:<br>10-25-2024</td>
+                                            <td>1500</td>
+                                        </tr>
+                                    </th>
+                                </tbody>
+                            </table>
+                        </section>
+
+                    </div>
+                </div>
 
             </div>
             <div class="loader" style="display: none;">

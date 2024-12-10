@@ -43,5 +43,13 @@ class ReportstController extends Model
 
 
 
+    /*               analytics data                 */
+
+    // other func
+    public function getDataItem($itemtype, $order, $range, $data)
+    {
+        return $this->itemsReport($itemtype, $order, $range, $data);
+    }
+
 
 }
