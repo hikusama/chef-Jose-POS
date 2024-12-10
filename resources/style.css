@@ -1217,7 +1217,10 @@ img {
     margin: 2rem 0;
     text-align: center;
 }
-
+#settings{
+    position: absolute;
+    top: -3.5rem;
+}
 
 @media screen and (max-width:999px) {
 

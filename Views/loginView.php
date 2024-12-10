@@ -10,17 +10,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $username = htmlspecialchars(strip_tags($_POST['username']));
         $password = htmlspecialchars(strip_tags($_POST['password']));
 
+        if (empty($username) || empty($password)) {
+            header("Location: ../index.php?error=Empty Inputs.");
+        }
 
-        // Initialize login controller
+
         $login = new Logincontroller($username, $password);
-        $login->loginUser();  // Use the controller to handle the login
+        $role = $login->loginUser(); 
 
-        // Redirect after successful login
-        header("Location: /overview");
+        if ($role === "Admin") {
+            header("Location: /chef-Jose-POS/pannel/overview.php");
+        }else if ($role === "Employee"){
+            header("Location: /chef-Jose-POS/pannel/cashier.php");
+        }else{
+            header("Location: /chef-Jose-POS/pannel/404.php");
+        }
         exit();
     } else {
-        // Redirect to login page if form is not submitted
-        header("Location: /");
+        header("Location: ../index.php");
         exit();
     }
 

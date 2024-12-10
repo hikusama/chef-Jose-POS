@@ -1,16 +1,20 @@
+<?php
+require_once "../function.php";
+$isbaibing = validate($_SERVER['REQUEST_URI']);
+?>
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../resources/fontawesome-free-5.15.4-web/css/all.css?v=<?php echo time();?>">
+    <link rel="stylesheet" href="../resources/fontawesome-free-5.15.4-web/css/all.css?v=<?php echo time(); ?>">
 
-    <link rel="stylesheet" href="../resources/style.css?v=<?php echo time();?>">
-    <link rel="stylesheet" href="../resources/products.css?v=<?php echo time();?>">
-    <script src="../UX/jquery-3.5.1.min.js?v=<?php echo time();?>"></script>
-    <script src="../UX/products.js?v=<?php echo time();?>"></script>
-    <script src="../UX/script.js?v=<?php echo time();?>"></script>
+    <link rel="stylesheet" href="../resources/style.css?v=<?php echo time(); ?>">
+    <link rel="stylesheet" href="../resources/products.css?v=<?php echo time(); ?>">
+    <script src="../UX/jquery-3.5.1.min.js?v=<?php echo time(); ?>"></script>
+    <script src="../UX/products.js?v=<?php echo time(); ?>"></script>
+    <script src="../UX/script.js?v=<?php echo time(); ?>"></script>
 
     <title>POS</title>
 </head>
@@ -38,19 +42,23 @@
         <div class="side_nav">
             <div class="side_nav2d">
                 <div class="inner_side_nav">
-                    <li id="overview">
-                        <div class="textdp"><i class="fas fa-chart-pie"></i>Overview</div>
-                    </li>
+                    <?php if ($isbaibing["ios"] === 485) { ?>
+                        <li id="overview">
+                            <div class="textdp"><i class="fas fa-chart-pie"></i>Overview</div>
+                        </li>
+                    <?php } ?>
                     <li id="cashier">
                         <div class="textdp"><i class="fas fa-home"></i>Cashier</div>
                     </li>
-                    <li id="reports">
-                        <div class="textdp"><i class="fas fa-file-medical-alt"></i>Reports</div>
-                    </li>
-                    <li id="myproducts" class="on_select">
-                        <div class="bgsect"></div>
-                        <div class="textdp"><i class="fas fa-hamburger"></i>Products</div>
-                    </li>
+                    <?php if ($isbaibing["ios"] === 485) { ?>
+                        <li id="reports">
+                            <div class="textdp"><i class="fas fa-file-medical-alt"></i>Reports</div>
+                        </li>
+                        <li id="myproducts" class="on_select">
+                            <div class="bgsect"></div>
+                            <div class="textdp"><i class="fas fa-hamburger"></i>Products</div>
+                        </li>
+                    <?php } ?>
 
                     <li id="history">
                         <div class="textdp"><i class="fas fa-history"></i>History</div>

@@ -1,16 +1,20 @@
+<?php
+require_once "../function.php";
+$isbaibing = validate($_SERVER['REQUEST_URI']);
+?>
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="../UX/jquery-3.5.1.min.js?v=<?php echo time();?>">
+    <script src="../UX/jquery-3.5.1.min.js?v=<?php echo time(); ?>">
     </script>
-    <script src="../UX/script.js?v=<?php echo time();?>"></script>
-    <script src="../UX/settings.js?v=<?php echo time();?>"></script>
-    <link rel="stylesheet" href="../resources/style.css?v=<?php echo time();?>">
-    <link rel="stylesheet" href="../resources/settings.css?v=<?php echo time();?>">
-    <link rel="stylesheet" href="../resources/fontawesome-free-5.15.4-web/css/all.css?v=<?php echo time();?>">
+    <script src="../UX/script.js?v=<?php echo time(); ?>"></script>
+    <script src="../UX/settings.js?v=<?php echo time(); ?>"></script>
+    <link rel="stylesheet" href="../resources/style.css?v=<?php echo time(); ?>">
+    <link rel="stylesheet" href="../resources/settings.css?v=<?php echo time(); ?>">
+    <link rel="stylesheet" href="../resources/fontawesome-free-5.15.4-web/css/all.css?v=<?php echo time(); ?>">
     <title>POS</title>
 </head>
 
@@ -36,18 +40,22 @@
         <div class="side_nav">
             <div class="side_nav2d">
                 <div class="inner_side_nav">
-                    <li id="overview">
-                        <div class="textdp"><i class="fas fa-chart-pie"></i>Overview</div>
-                    </li>
+                    <?php if ($isbaibing["ios"] === 485) { ?>
+                        <li id="overview">
+                            <div class="textdp"><i class="fas fa-chart-pie"></i>Overview</div>
+                        </li>
+                    <?php } ?>
                     <li id="cashier">
                         <div class="textdp"><i class="fas fa-home"></i>Cashier</div>
                     </li>
-                    <li id="reports">
-                        <div class="textdp"><i class="fas fa-file-medical-alt"></i>Reports</div>
-                    </li>
-                    <li id="myproducts">
-                        <div class="textdp"><i class="fas fa-hamburger"></i>Products</div>
-                    </li>
+                    <?php if ($isbaibing["ios"] === 485) { ?>
+                        <li id="reports">
+                            <div class="textdp"><i class="fas fa-file-medical-alt"></i>Reports</div>
+                        </li>
+                        <li id="myproducts">
+                            <div class="textdp"><i class="fas fa-hamburger"></i>Products</div>
+                        </li>
+                    <?php } ?>
 
                     <li id="history">
                         <div class="textdp"><i class="fas fa-history"></i>History</div>
@@ -83,47 +91,47 @@
                 <ol>
                     <h3><i class="fas fa-chart-pie"></i> Themes</h3>
                     <hr>
-                        <div class="themes_select">
-                            <label for="theme1" id="theme1_cont" >
-                                <div>
-                                    <input type="radio" value="light" name="tm" id="light">
-                                </div>
-                                <div class="sample_theme">
-                                    <img src="../image/theme.png" alt="">
+                    <div class="themes_select">
+                        <label for="theme1" id="theme1_cont">
+                            <div>
+                                <input type="radio" value="light" name="tm" id="light">
+                            </div>
+                            <div class="sample_theme">
+                                <img src="../image/theme.png" alt="">
 
-                                </div>
-                                <div class="theme_name">
-                                    <h4>Light</h4>
-                                </div>
-                            </label>
-                            <label for="theme2" id="theme2_cont">
-                                <div>
-                                    <input type="radio" value="monokai" name="tm" id="monokai">
-                                </div>
-                                <div class="sample_theme">
-                                    <img src="../image/theme.png" alt="">
+                            </div>
+                            <div class="theme_name">
+                                <h4>Light</h4>
+                            </div>
+                        </label>
+                        <label for="theme2" id="theme2_cont">
+                            <div>
+                                <input type="radio" value="monokai" name="tm" id="monokai">
+                            </div>
+                            <div class="sample_theme">
+                                <img src="../image/theme.png" alt="">
 
-                                </div>
-                                <div class="theme_name">
-                                    <h4>Monokai</h4>
-                                </div>
-                            </label>
-                            <label for="theme3" id="theme3_cont">
-                                <div>
-                                    <input type="radio" value="dark_modern" name="tm" id="dark_modern">
-                                </div>
-                                <div class="sample_theme">
-                                    <img src="../image/theme.png" alt="">
+                            </div>
+                            <div class="theme_name">
+                                <h4>Monokai</h4>
+                            </div>
+                        </label>
+                        <label for="theme3" id="theme3_cont">
+                            <div>
+                                <input type="radio" value="dark_modern" name="tm" id="dark_modern">
+                            </div>
+                            <div class="sample_theme">
+                                <img src="../image/theme.png" alt="">
 
-                                </div>
-                                <div class="theme_name">
-                                    <h4>Dark Modern</h4>
-                                </div>
-                            </label>
-                        </div>
-                        <div class="savetm">
-                            <button type="button" id="save_theme"><i class="fas fa-save"></i> Save Theme</button>
-                        </div>
+                            </div>
+                            <div class="theme_name">
+                                <h4>Dark Modern</h4>
+                            </div>
+                        </label>
+                    </div>
+                    <div class="savetm">
+                        <button type="button" id="save_theme"><i class="fas fa-save"></i> Save Theme</button>
+                    </div>
                 </ol>
                 <div class="confirm_change">
                     <h5>Are you sure you want to change theme?</h5>

@@ -15,13 +15,13 @@
 
             if (!$stmt->execute(array($username))) {
                 $stmt = null;
-                header("Location: /?error=stmtfailed");
+                header("Location: ../index.php?error=stmtfailed");
                 exit();
             }
 
             if ($stmt->rowCount() == 0) {
                 $stmt = null;
-                header("Location: /?error=usernotfound");
+                header("Location: ../index.php?error=usernotfound");
                 exit();
             }
 
@@ -29,14 +29,17 @@
             $stmt = null;
 
             if (!password_verify($password, $user['password'])) {
-                header("Location: /?error=wrongpassword");
+                header("Location: ../index.php?error=wrongpassword");
                 exit();
             }
 
             session_start();
             $_SESSION["userName"] = $user["userName"];
+            $_SESSION["userID"] = $user["userID"];
+            $_SESSION["userRole"] = $user["userRole"];
 
             $stmt = null;
+            return $user["userRole"];
         }
 
 

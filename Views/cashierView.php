@@ -875,7 +875,7 @@ function submitOrders($refNo, $totalAmount, $pmethod, $gcashName, $gcashNum, $te
         $orders = $_SESSION['orders'];
         $prodOrder = (isset($_SESSION['prodOrders'])) ? $_SESSION['prodOrders'] : [];
         $comboOrder = (isset($_SESSION['comboOrders'])) ? $_SESSION['comboOrders'] : [];
-        $discount = NULL;
+        $discount = 0;
         $discountType = NULL;
         if (isset($_SESSION['discount'])) {
             $discount = $subtotal - $totalAmount;

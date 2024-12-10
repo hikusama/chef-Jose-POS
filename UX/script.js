@@ -11,17 +11,28 @@ $(document).ready(function () {
     });
 
 
-    $(".side_nav li").click(function (e) { 
+    $(".side_nav").on("click","li",function (e) {
         e.preventDefault();
+        he = $(this).hasClass("on_select");
+        id = $(this).attr("id")
+        
+        
+        if (he === false) {
+            console.log(he);
+            $(".side_nav2d li").removeClass("on_select")
+            $(this).addClass("on_select")
+            
+            let clicked_location = $(this).attr("id");
+            if (clicked_location == "logoutMhen") {
+                window.location.href = "../logout.php";
+            } else {
+                window.location.href = clicked_location + ".php";
+            }
 
-        let clicked_location = $(this).attr("id");
+        }
 
-        
-        window.location.href = clicked_location + ".php";
-        
-        
     });
-    $("#screencontroll").click(function (e) { 
+    $("#screencontroll").click(function (e) {
         e.preventDefault();
         if (!document.fullscreenElement) {
             $("#screencontroll img").attr("src", "../image/offscreen.png")
@@ -48,7 +59,7 @@ $(document).ready(function () {
             }
         }
     });
-    $("#refresh").click(function (e) { 
+    $("#refresh").click(function (e) {
         e.preventDefault();
         location.reload()
     });
@@ -57,16 +68,16 @@ $(document).ready(function () {
 
 
 
-    $("#counter_body ").on("click","li:nth-child(1)",function (e) { 
+    $("#counter_body ").on("click", "li:nth-child(1)", function (e) {
         e.preventDefault();
         let hasclass = $(this).next(".qntity").hasClass("quantityShow");
-        
+
         if (hasclass) {
-            
+
             $(this).find(".arrow_controll i").removeClass("arrow");
             $(this).next(".qntity").removeClass("quantityShow");
             $(this).closest("ol").removeClass("bxselected");
-        }else{
+        } else {
             $(".arrow_controll i").removeClass("arrow");
             $(".qntity").removeClass("quantityShow");
             $("#counter_body ol").removeClass("bxselected");
@@ -77,27 +88,27 @@ $(document).ready(function () {
 
     });
     //  $(this).closest("qntity") 
-  
+
     function setNewBody() {
         const theme = localStorage.getItem('theme');
 
         if (theme === "light") {
-            
+
             document.body.classList.remove("dark_mode")
             document.body.classList.remove("monokai_mode")
-        }else if(theme === "monokai"){
+        } else if (theme === "monokai") {
             document.body.classList.remove("dark_mode")
             document.body.classList.add("monokai_mode")
-        }else if(theme === "dark_modern"){
+        } else if (theme === "dark_modern") {
             document.body.classList.remove("monokai_mode")
             document.body.classList.add("dark_mode")
-            
-        }else{
+
+        } else {
             document.body.classList.remove("dark_mode")
             document.body.classList.remove("monokai_mode")
         }
 
-        
+
 
     }
 

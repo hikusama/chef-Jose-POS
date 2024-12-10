@@ -1,3 +1,8 @@
+<?php
+    require_once "../function.php";
+    $isbaibing = validate($_SERVER['REQUEST_URI']);
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -36,19 +41,23 @@
         <div class="side_nav">
             <div class="side_nav2d">
                 <div class="inner_side_nav">
+                <?php if ($isbaibing["ios"] === 485) { ?>
                     <li id="overview" class="on_select">
                         <div class="bgsect"></div>
                         <div class="textdp"><i class="fas fa-chart-pie"></i>Overview</div>
                     </li>
+                    <?php } ?>
                     <li id="cashier">
                         <div class="textdp"><i class="fas fa-home"></i>Cashier</div>
                     </li>
-                    <li id="reports">
-                        <div class="textdp"><i class="fas fa-file-medical-alt"></i>Reports</div>
-                    </li>
-                    <li id="myproducts">
-                        <div class="textdp"><i class="fas fa-hamburger"></i>Products</div>
-                    </li>
+                    <?php if ($isbaibing["ios"] === 485) { ?>
+                        <li id="reports">
+                            <div class="textdp"><i class="fas fa-file-medical-alt"></i>Reports</div>
+                        </li>
+                        <li id="myproducts">
+                            <div class="textdp"><i class="fas fa-hamburger"></i>Products</div>
+                        </li>
+                        <?php } ?>
 
                     <li id="history">
                         <div class="textdp"><i class="fas fa-history"></i>History</div>
