@@ -101,6 +101,7 @@ CREATE TABLE `orders` (
   `ref_no` int(25) NOT NULL,
   `orderDate` date DEFAULT current_timestamp(),
   `orderTime` time NOT NULL DEFAULT current_timestamp(),
+  `tendered` int(11) DEFAULT NULL,
   `employeeID` int(11) DEFAULT NULL,
   `totalAmount` double DEFAULT NULL,
   `paymentMethod` varchar(100) DEFAULT '-----',

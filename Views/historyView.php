@@ -2,12 +2,22 @@
 
 require_once '../Controller/historyController.php';
 // require_once 'cashierView.php';
+require_once "../function.php";
+$role = getRole();
+$btn = "";
+if ($role === "Admin") {
+    $btn = '
+    <button type="button" id="delReceipt" title="Delete receipt">
+        <i class="fas fa-trash"></i>
+        <d>Delete</d>
+    </button>
+    ';
+}
 
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     if (isset($_POST['transac']) && $_POST['transac'] === "getOrderRecord") {
-        session_start();
 
         $ref = htmlspecialchars(strip_tags($_POST['refno']));
         $historyOBJ = new HistoryController(null, $ref);
@@ -117,10 +127,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                     </ol>
                     <div class="askReceipt" id="' . $refNO . '">
                         <button type="button" id="print_receipt">Print</button>
-                        <button type="button" id="delReceipt" title="Delete receipt">
-                            <i class="fas fa-trash"></i>
-                            <d>Delete</d>
-                        </button>
+                        '.$btn.'
                     </div>';
             $_SESSION['ordersT'] = $ordersSession;
             $_SESSION['discountT'] = ($dc == "N/A") ? NULL : $dc;

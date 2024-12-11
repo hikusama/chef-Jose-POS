@@ -66,6 +66,9 @@ $isbaibing = validate($_SERVER['REQUEST_URI']);
                         <div class="bgsect"></div>
                         <div class="textdp"><i class="fas fa-cog"></i>Settings</div>
                     </li>
+                    <li id="logoutMhen">
+                        <div class="textdp"><i class="fas fa-external-link-alt"></i>Logout</div>
+                    </li>
                 </div>
             </div>
         </div>

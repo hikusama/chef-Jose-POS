@@ -102,25 +102,36 @@
 
 }
 
+.cstmRp {
+        border: solid 1px rgba(255, 255, 255, 0.144);
+    background-color: #ffffff;
+}
+.monokai_mode .cstmRp ,
 .dark_mode .cstmRp {
     border: solid 1px rgba(255, 255, 255, 0.144);
     background-color: #2b2b2b;
 
 }
 
+.monokai_mode .todays-report {
+    border: solid 1px rgba(255, 255, 255, 0.144);
+    background-color: #47493e;
+
+}
+.monokai_mode .todays-report ,
 .dark_mode .todays-report {
     border: solid 1px rgba(255, 255, 255, 0.144);
     background-color: #181818;
 
 }
 
-.cstmRp,
-.analytics,
-.ogCards,
-.todays-report 
-{
-    /* display: none !important; */
+.todays-report {
+    border: solid 1px rgba(255, 255, 255, 0.144);
+    background-color: #ffffff;
+
 }
+
+
 
 .ogCards,
 .analytics,
@@ -178,17 +189,22 @@
 
 }
 
-.dark_mode .cs-squared-data section {
-    border: solid 1px rgba(255, 255, 255, 0.144);
-}
 
-.dark_mode .squared-data section {
+.dark_mode .cs-squared-data section,
+.dark_mode .cs-squared-data section,
+.dark_mode .squared-data section ,
+.monokai_mode .cs-squared-data section,
+.monokai_mode .cs-squared-data section,
+.monokai_mode .squared-data section {
     border: solid 1px rgba(255, 255, 255, 0.144);
-}
 
+}
+.cs-squared-data section,
 .cs-squared-data section,
 .squared-data section {
     display: flex;
+    border: solid 1px rgb(0 0 0 / 38%);
+
     justify-content: center;
     width: 20rem;
     height: 17rem;
@@ -282,11 +298,13 @@
     margin-top: 1.5rem !important;
 }
 
-.catThings,
+
+.monokai_mode .cs_major-chart .charthings>* ,
 .dark_mode .cs_major-chart .charthings>* {
     border: solid 1px rgba(255, 255, 255, 0.144);
 }
 
+.monokai_mode .major-chart>*,
 .dark_mode .major-chart>* {
     border: solid 1px rgba(255, 255, 255, 0.144);
 
@@ -300,18 +318,20 @@
     width: 30rem;
     height: fit-content;
     padding: 2.5rem 1.2rem 1.2rem;
+    border: solid 1px rgb(0 0 0 / 38%);
 
 
 }
 
 .catThings {
     width: 100%;
-    border: none !important;
     display: flex;
     justify-content: center;
     padding: 0 !important;
 }
 
+.monokai_mode .cs_category-bar-chart,
+.monokai_mode .category-bar-chart ,
 .dark_mode .cs_category-bar-chart,
 .dark_mode .category-bar-chart {
     border: solid 1px rgba(255, 255, 255, 0.144);
@@ -358,6 +378,10 @@
     transform: translate(-50%, -50%);
 }
 
+.monokai_mode .trace_form {
+    background-color: white;
+    border: solid 1px rgba(255, 255, 255, 0.144);
+}
 .dark_mode .trace_form {
     background-color: #181818;
     border: solid 1px rgba(255, 255, 255, 0.144);
@@ -386,6 +410,11 @@
     gap: 1.5rem;
 }
 
+.monokai_mode #tform {
+    background-color: #1E1F1C;
+    outline: solid 1px rgba(99, 99, 99, 0.411); 
+
+}
 #tform {
     overflow: hidden;
     height: 100%;
@@ -428,6 +457,8 @@
     border-radius: .5rem;
 }
 
+.monokai_mode .dateThings input,
+.monokai_mode .dateRangeT li input ,
 .dark_mode .dateThings input,
 .dark_mode .dateRangeT li input {
     color: white;
@@ -492,6 +523,8 @@
 
 
 
+.monokai_mode #updateAnl,
+.monokai_mode #upTr ,
 .dark_mode #updateAnl,
 .dark_mode #upTr {
     color: white;
@@ -570,6 +603,10 @@
     flex-wrap: wrap;
 }
 
+.monokai_mode .ogCards section {
+    background-color: #1E1F1C;
+    outline: solid 1px rgba(99, 99, 99, 0.411);
+}
 .dark_mode .ogCards section {
     background-color: #181818;
     outline: solid 1px rgba(99, 99, 99, 0.411);
@@ -583,6 +620,7 @@
 }
 
 .ogCards section {
+    outline: solid 1px rgba(99, 99, 99, 0.411);
     position: relative;
     width: 100%;
     max-width: 80%;
@@ -673,6 +711,11 @@
     transition: .3s;
 }
 
+.monokai_mode .menuBody {
+    background-color: #1E1F1C;
+    outline: solid 1px rgba(114, 114, 114, 0.411);
+
+}
 .dark_mode .menuBody {
     background-color: #181818;
     outline: solid 1px rgba(99, 99, 99, 0.411);
@@ -680,6 +723,7 @@
 }
 
 .menuBody {
+    background-color: white;
     border-radius: .6rem;
     width: 20rem;
     padding: 2rem 1rem;
@@ -718,6 +762,8 @@
     text-align: center;
 }
 
+
+.monokai_mode .menuBody button ,
 .dark_mode .menuBody button {
     outline: solid 1px rgba(99, 99, 99, 0.411);
     color: white;
@@ -769,7 +815,19 @@
 
 }
 
+#itemAnalyticalData ol{
+    background-color: white;
+    outline: solid 1px rgba(99, 99, 99, 0.411); 
+
+}
+.monokai_mode #itemAnalyticalData ol{
+       background-color: #1E1F1C;
+    outline: solid 1px rgba(99, 99, 99, 0.411); 
+    color: white;
+}
 .dark_mode #itemAnalyticalData ol {
+    color: white;
+
     background-color: #181818;
     outline: solid 1px rgba(99, 99, 99, 0.411);
     pointer-events: none;
@@ -784,6 +842,7 @@
 }
 
 #itemAnalyticalData ol {
+    color: black;
     cursor: pointer;
     list-style: none;
     width: 21rem;
@@ -801,6 +860,7 @@
     outline: solid 1px rgba(255, 104, 3, 0.856) !important;
 }
 
+.monokai_mode .picMhen,
 .dark_mode .picMhen {
     outline: solid 1px rgba(99, 99, 99, 0.411);
 
@@ -885,7 +945,6 @@
     background-color: rgba(255, 104, 3, 0.856);
     border-radius: .4rem;
     position: absolute;
-    position: absolute;
     bottom: -.9rem;
     left: 50%;
     transform: translate(-50%, -50%);
@@ -899,10 +958,15 @@
     gap: .5rem;
 }
 
+.monokai_mode .contIn h4 ,
+.dark_mode .contIn h4 {
+    color: white;
+
+}
 .contIn h4 {
     width: 10rem;
     font-size: 1.2rem;
-    color: white;
+    color: black;
     text-align: center;
     text-overflow: ellipsis;
     overflow: hidden;
@@ -963,6 +1027,7 @@
     position: relative;
 }
 
+.monokai_mode .graphNgiao .btt button ,
 .dark_mode .graphNgiao .btt button {
     color: white;
 }

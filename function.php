@@ -7,6 +7,13 @@ session_start();
 
 
 
+function getRole(){
+    if (isset($_SESSION["userID"])) {
+        return $_SESSION["userRole"];
+    }else{
+        return NULL;
+    }
+}
 
 
 function validate($uri)
