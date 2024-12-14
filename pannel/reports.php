@@ -31,9 +31,9 @@ $isbaibing = validate($_SERVER['REQUEST_URI']);
                 <li class="title_section">Reports</li>
             </section>
             <section>
-                <li class="first">r</li>
-                <li class="second">f</li>
-                <li class="last">s</li>
+                <li class="first" title="Refresh" id="refresh"><i class="fas fa-sync"></i></li>
+                <li class="second" id="screencontroll" title="View full screen."><i class="fas fa-expand"></i></li>
+                <li class="last"><i class="fas fa-user"></i></li>
             </section>
         </div>
     </div>
@@ -123,7 +123,7 @@ $isbaibing = validate($_SERVER['REQUEST_URI']);
                     </section>
                 </div>
                 <div class="major-chart">
-                    <div class="catThings">
+                    <div class="catThings" style="border: none;">
                         <div class="category-bar-chart">
                             <h4>Category</h4>
                             <canvas id="todCatBarChart"></canvas>
@@ -222,7 +222,7 @@ $isbaibing = validate($_SERVER['REQUEST_URI']);
                     </section>
                 </div>
                 <div class="cs_major-chart">
-                    <div class="catThings">
+                    <div class="catThings"  style="border: none;">
                         <div class="cs_category-bar-chart">
                             <h4>Category</h4>
                             <canvas id="csCatBarChart"></canvas>
@@ -346,6 +346,7 @@ $isbaibing = validate($_SERVER['REQUEST_URI']);
             <div class="analytics">
                 <div class="hdr">
                     <h3>Analytics</h3>
+                    <div class="dateAnalytics"></div>
                     <div class="menu">
                         <i class="fas fa-th"></i>
                     </div>
@@ -453,22 +454,22 @@ $isbaibing = validate($_SERVER['REQUEST_URI']);
                             </div>
                         </section>
 
-                        <section class="table-data" style="display: none;">
+                        <section class="table-data" >
                             <p class="singleRGRP">Double range</p>
                             <table border="1">
                                 <thead>
                                     <tr>
-                                        <td>Day/s</td>
-                                        <td>Date Ranged</td>
-                                        <td>Orders</td>
+                                        <td class="ddit">Day/s</td>
+                                        <td class="ddrit">Date Ranged</td>
+                                        <td class="ddtit">Orders</td>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <th>
                                         <tr>
-                                            <td>10D</td>
-                                            <td>From:<br>10-15-2024 <br>To:<br>10-25-2024</td>
-                                            <td>1500</td>
+                                            <td class="daytd"></td>
+                                            <td class="datertd"></td>
+                                            <td class="datatd"></td>
                                         </tr>
                                     </th>
                                 </tbody>

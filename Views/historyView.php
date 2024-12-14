@@ -148,7 +148,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     if (isset($_POST['transac']) && $_POST['transac'] === "deleteOrder") {
         $ref = htmlspecialchars(strip_tags($_POST['refno']));
-
+        require_once "../function.php";
+        isAdminRole();
         $historyOBJ = new HistoryController(null, $ref);
         $historyOBJ->deleteOrderRecordControll();
     }

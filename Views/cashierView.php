@@ -98,9 +98,21 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         session_start();
 
 
-        $qntity = $_POST["qntity"];
-        $product_id = $_POST["product_id"];
-        $type = $_POST["type"];
+        $qntity = htmlspecialchars($_POST["qntity"]);
+        $product_id = htmlspecialchars($_POST["product_id"]);
+        $type = htmlspecialchars($_POST["type"]);
+
+
+        if (
+            empty($qntity) ||
+            empty($product_id) ||
+            empty($type)
+            ) {
+                return;
+        }
+        if ($qntity < 0) {
+            return;
+        }
 
         $prodOrder = array();
         $comboOrder = array();

@@ -1,7 +1,8 @@
 <?php
 
 require_once '../Controller/reportsController.php';
-
+require_once "../function.php";
+isAdminRole();
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
@@ -11,38 +12,38 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $row = $reportsOBJ->tsqData();
 
         $discount = [
-            $row["today_discount"],
-            $row["Ltoday_discount"]
+            $row["today_discount"] ?? 0,
+            $row["Ltoday_discount"] ?? 0
         ];
 
         $pmethod = [
-            (int)$row["gcash_count"],
-            (int)$row["cash_count"]
+            (int)$row["gcash_count"] ?? 0,
+            (int)$row["cash_count"] ?? 0
         ];
 
-        $ts = $row["today_sales"];
-        $td = $row["today_discount"];
-        $to = (int)$row["today_orders"];
+        $ts = $row["today_sales"] ?? 0;
+        $td = $row["today_discount"] ?? 0;
+        $to = (int)$row["today_orders"] ?? 0;
 
-        $Lts = $row["Ltoday_sales"];
-        $Ltd = $row["Ltoday_discount"];
-        $Lto = (int)$row["Ltoday_orders"];
+        $Lts = $row["Ltoday_sales"] ?? 0;
+        $Ltd = $row["Ltoday_discount"] ?? 0;
+        $Lto = (int)$row["Ltoday_orders"] ?? 0;
 
-        $salesmonth = $row['salesmonth'];
-        $discountmonth = $row['discountmonth'];
-        $ordersmonth = $row['ordersmonth'];
+        $salesmonth = $row['salesmonth'] ?? 0;
+        $discountmonth = $row['discountmonth'] ?? 0;
+        $ordersmonth = $row['ordersmonth'] ?? 0;
 
-        $Lsalesmonth = $row['Lsalesmonth'];
-        $Ldiscountmonth = $row['Ldiscountmonth'];
-        $Lordersmonth = $row['Lordersmonth'];
+        $Lsalesmonth = $row['Lsalesmonth'] ?? 0;
+        $Ldiscountmonth = $row['Ldiscountmonth'] ?? 0;
+        $Lordersmonth = $row['Lordersmonth'] ?? 0;
 
-        $salesweek = $row['salesweek'];
-        $discountweek = $row['discountweek'];
-        $ordersweek = $row['ordersweek'];
+        $salesweek = $row['salesweek'] ?? 0;
+        $discountweek = $row['discountweek'] ?? 0;
+        $ordersweek = $row['ordersweek'] ?? 0;
 
-        $Lsalesweek = $row['Lsalesweek'];
-        $Ldiscountweek = $row['Ldiscountweek'];
-        $Lordersweek = $row['Lordersweek'];
+        $Lsalesweek = $row['Lsalesweek'] ?? 0;
+        $Ldiscountweek = $row['Ldiscountweek'] ?? 0;
+        $Lordersweek = $row['Lordersweek'] ?? 0;
 
         // Sales P
         $Std = cP($ts, $Lts);
@@ -113,6 +114,8 @@ SUM(CASE WHEN MONTH(orderDate) = MONTH(CURRENT_DATE()) THEN totalAmount ELSE 0 E
 
 
         ];
+        header("Content-Type: application/json");
+
         echo json_encode($sqaredata);
     }
 
@@ -136,6 +139,7 @@ SUM(CASE WHEN MONTH(orderDate) = MONTH(CURRENT_DATE()) THEN totalAmount ELSE 0 E
             array_push($countsold, $row["total_sold_today"]);
         }
 
+        header("Content-Type: application/json");
 
         // echo json_encode(["name" => $name, "sold" => $countsold]);
         echo json_encode(["name" => $name, "sold" => $countsold, "conf" => $notempt]);
@@ -148,67 +152,68 @@ SUM(CASE WHEN MONTH(orderDate) = MONTH(CURRENT_DATE()) THEN totalAmount ELSE 0 E
         $row = $reportsOBJ->twkData();
 
         $tsales = [
-            (float)$row["tmonSales"],
-            (float)$row["ttueSales"],
-            (float)$row["twedSales"],
-            (float)$row["tthuSales"],
-            (float)$row["tfriSales"],
-            (float)$row["tsatSales"],
-            (float)$row["tsunSales"]
+            (float)$row["tmonSales"] ?? 0,
+            (float)$row["ttueSales"] ?? 0,
+            (float)$row["twedSales"] ?? 0,
+            (float)$row["tthuSales"] ?? 0,
+            (float)$row["tfriSales"] ?? 0,
+            (float)$row["tsatSales"] ?? 0,
+            (float)$row["tsunSales"] ?? 0
         ];
         $torders = [
-            (float)$row["tmonOrders"],
-            (float)$row["ttueOrders"],
-            (float)$row["twedOrders"],
-            (float)$row["tthuOrders"],
-            (float)$row["tfriOrders"],
-            (float)$row["tsatOrders"],
-            (float)$row["tsunOrders"]
+            (float)$row["tmonOrders"] ?? 0,
+            (float)$row["ttueOrders"] ?? 0,
+            (float)$row["twedOrders"] ?? 0,
+            (float)$row["tthuOrders"] ?? 0,
+            (float)$row["tfriOrders"] ?? 0,
+            (float)$row["tsatOrders"] ?? 0,
+            (float)$row["tsunOrders"] ?? 0
         ];
         $tdiscounts = [
-            (float)$row["tmonDiscount"],
-            (float)$row["ttueDiscount"],
-            (float)$row["twedDiscount"],
-            (float)$row["tthuDiscount"],
-            (float)$row["tfriDiscount"],
-            (float)$row["tsatDiscount"],
-            (float)$row["tsunDiscount"]
+            (float)$row["tmonDiscount"] ?? 0,
+            (float)$row["ttueDiscount"] ?? 0,
+            (float)$row["twedDiscount"] ?? 0,
+            (float)$row["tthuDiscount"] ?? 0,
+            (float)$row["tfriDiscount"] ?? 0,
+            (float)$row["tsatDiscount"] ?? 0,
+            (float)$row["tsunDiscount"] ?? 0
         ];
 
 
 
         $lsales = [
-            $row["tlmonSales"],
-            $row["tltueSales"],
-            $row["tlwedSales"],
-            $row["tlthuSales"],
-            $row["tlfriSales"],
-            $row["tlsatSales"],
-            $row["tlsunSales"]
+            $row["tlmonSales"] ?? 0,
+            $row["tltueSales"] ?? 0,
+            $row["tlwedSales"] ?? 0,
+            $row["tlthuSales"] ?? 0,
+            $row["tlfriSales"] ?? 0,
+            $row["tlsatSales"] ?? 0,
+            $row["tlsunSales"] ?? 0
         ];
         $lorders = [
-            $row["tlmonOrders"],
-            $row["tltueOrders"],
-            $row["tlwedOrders"],
-            $row["tlthuOrders"],
-            $row["tlfriOrders"],
-            $row["tlsatOrders"],
-            $row["tlsunOrders"]
+            $row["tlmonOrders"] ?? 0,
+            $row["tltueOrders"] ?? 0,
+            $row["tlwedOrders"] ?? 0,
+            $row["tlthuOrders"] ?? 0,
+            $row["tlfriOrders"] ?? 0,
+            $row["tlsatOrders"] ?? 0,
+            $row["tlsunOrders"] ?? 0
         ];
         $ldiscounts = [
-            $row["tlmonDiscount"],
-            $row["tltueDiscount"],
-            $row["tlwedDiscount"],
-            $row["tlthuDiscount"],
-            $row["tlfriDiscount"],
-            $row["tlsatDiscount"],
-            $row["tlsunDiscount"]
+            $row["tlmonDiscount"] ?? 0,
+            $row["tltueDiscount"] ?? 0,
+            $row["tlwedDiscount"] ?? 0,
+            $row["tlthuDiscount"] ?? 0,
+            $row["tlfriDiscount"] ?? 0,
+            $row["tlsatDiscount"] ?? 0,
+            $row["tlsunDiscount"] ?? 0
         ];
 
         $torders = rmtrailingzero($torders);
         $tdiscounts = rmtrailingzero($tdiscounts);
         $tsales = rmtrailingzero($tsales);
 
+        header("Content-Type: application/json");
 
 
         echo json_encode([
@@ -250,18 +255,18 @@ SUM(CASE WHEN MONTH(orderDate) = MONTH(CURRENT_DATE()) THEN totalAmount ELSE 0 E
         $row = $reportsOBJ->cssqData($from, $to);
 
         $discount = [
-            $row["today_discount"],
-            $row["yesterday_discount"]
+            $row["today_discount"] ?? 0,
+            $row["yesterday_discount"] ?? 0
         ];
 
         $pmethod = [
-            (int)$row["gcash_count"],
-            (int)$row["cash_count"]
+            (int)$row["gcash_count"] ?? 0,
+            (int)$row["cash_count"] ?? 0
         ];
 
-        $ts = $row["today_sales"];
-        $td = $row["today_discount"];
-        $to = (int)$row["today_orders"];
+        $ts = $row["today_sales"] ?? 0;
+        $td = $row["today_discount"] ?? 0;
+        $to = (int)$row["today_orders"] ?? 0;
 
 
         $sqaredata = [
@@ -271,6 +276,8 @@ SUM(CASE WHEN MONTH(orderDate) = MONTH(CURRENT_DATE()) THEN totalAmount ELSE 0 E
             "todayDiscount" => $td,
             "todayOrders" => $to,
         ];
+        header("Content-Type: application/json");
+
         echo json_encode($sqaredata);
     }
 
@@ -312,6 +319,7 @@ SUM(CASE WHEN MONTH(orderDate) = MONTH(CURRENT_DATE()) THEN totalAmount ELSE 0 E
         }
 
         $notempt = rmtrailingzero($countsold);
+        header("Content-Type: application/json");
 
         // echo json_encode(["name" => $name, "sold" => $countsold]);
         echo json_encode(["name" => $name, "sold" => $countsold, "conf" => $notempt, "date" => $date]);
@@ -350,9 +358,9 @@ SUM(CASE WHEN MONTH(orderDate) = MONTH(CURRENT_DATE()) THEN totalAmount ELSE 0 E
         $torders = [];
         $tdiscounts = [];
 
-        $temptsales = $row["tsales"];
-        $temptorders = $row["torders"];
-        $temptdiscounts = $row["tdiscounts"];
+        $temptsales = $row["tsales"] ?? 0;
+        $temptorders = $row["torders"] ?? 0;
+        $temptdiscounts = $row["tdiscounts"] ?? 0;
 
         for ($i = 0; $i < $idr; $i++) {
             array_push($tsales, (float)$temptsales[$i]);
@@ -368,11 +376,11 @@ SUM(CASE WHEN MONTH(orderDate) = MONTH(CURRENT_DATE()) THEN totalAmount ELSE 0 E
         $tdiscounts = rmtrailingzero($tdiscounts);
 
 
-        $lsales = $row['lsales'];
-        $lorders = $row['lorders'];
-        $ldiscounts = $row['ldiscounts'];
-
-
+        $lsales = $row['lsales'] ?? 0;
+        $lorders = $row['lorders'] ?? 0;
+        $ldiscounts = $row['ldiscounts'] ?? 0;
+        header("Content-Type: application/json");
+        http_response_code(200);
         echo json_encode(
             [
                 "tsales" => $tsales,
@@ -387,12 +395,46 @@ SUM(CASE WHEN MONTH(orderDate) = MONTH(CURRENT_DATE()) THEN totalAmount ELSE 0 E
 
 
 
+    // if (isset($_POST['transac']) && $_POST['transac'] === "getItemAnal") {
+    //     $reportsOBJ = new ReportstController();
+
+    //     $itemtype = htmlspecialchars($_POST['itemtype']);
+    //     $data = htmlspecialchars($_POST['data']);
+    //     $order = htmlspecialchars($_POST['order']);
+    //     $rtype = htmlspecialchars($_POST['rTypeAnl']);
+    //     $from = htmlspecialchars($_POST['from']);
+    //     $to = htmlspecialchars($_POST['to']);
+
+    //     $submitDate = [];
+
+    //     if ($rtype === "singleAnl") {
+    //         if (empty($from)) {
+    //             http_response_code(400);
+    //             echo json_encode(["error" => "Select a date."]);
+    //             return;
+    //         }
+    //         $submitDate = [$from];
+    //     } else if ($rtype === "doubleAnl") {
+    //         if (empty($from) || empty($to)) {
+    //             http_response_code(400);
+    //             echo json_encode(["error" => "Select all date ranges."]);
+    //             return;
+    //         }
+    //         $submitDate = [$from, $to];
+    //     }
+    // }
+
+
+
     if (isset($_POST['transac']) && $_POST['transac'] === "getItems") {
         $reportsOBJ = new ReportstController();
 
+        $itemReqType = htmlspecialchars($_POST['itemReqType']);
+        $spec = isset($_POST['itemID']) ? htmlspecialchars($_POST['itemID']) : 0;
         $itemtype = htmlspecialchars($_POST['itemtype']);
         $data = htmlspecialchars($_POST['data']);
-        $order = htmlspecialchars($_POST['order']);
+        $order = isset($_POST['order']) ? htmlspecialchars($_POST['order']) : 0;
+        $page = isset($_POST['page']) ? htmlspecialchars($_POST['page']) : 0;
         $rtype = htmlspecialchars($_POST['rTypeAnl']);
         $from = htmlspecialchars($_POST['from']);
         $to = htmlspecialchars($_POST['to']);
@@ -422,9 +464,9 @@ SUM(CASE WHEN MONTH(orderDate) = MONTH(CURRENT_DATE()) THEN totalAmount ELSE 0 E
         }
 
         if ($data === "orders-data") {
-            $data = "oi.quantity";  
+            $data = "oi.quantity";
         } else if ($data === "sales-data") {
-            $data = "(oi.unitPrice)";  
+            $data = " oi.unitPrice ";
         }
 
         if ($order === "highest") {
@@ -433,20 +475,113 @@ SUM(CASE WHEN MONTH(orderDate) = MONTH(CURRENT_DATE()) THEN totalAmount ELSE 0 E
             $order = "ASC";
         }
 
-        $rows = $reportsOBJ->getDataItem($itemtype, $order, $submitDate, $data);
+        if ($itemReqType === "itemAnal") {
 
-        $bulk = "";
-        if ($rows !== null) {
-            $cnt = '';
-            if ($data !== "oi.quantity") {
-                $cnt = '₱';
+            $rowData = $reportsOBJ->getDataItemAnalSpec($itemtype, $submitDate, $data, $spec);
+
+            if ($rtype === "singleAnl") {
+                // $rowData .= ["rangeType" => "single"]; 
+                $tw = [
+                    $rowData['mon'] ?? 0 ,
+                    $rowData['tue'] ?? 0 ,
+                    $rowData['wed'] ?? 0 ,
+                    $rowData['thu'] ?? 0 ,
+                    $rowData['fri'] ?? 0 ,
+                    $rowData['sat'] ?? 0 ,
+                    $rowData['sun'] ?? 0 
+                ];
+
+                $lw = [
+                    $rowData['lmon'] ?? 0 ,
+                    $rowData['ltue'] ?? 0 ,
+                    $rowData['lwed'] ?? 0 ,
+                    $rowData['lthu'] ?? 0 ,
+                    $rowData['lfri'] ?? 0 ,
+                    $rowData['lsat'] ?? 0 ,
+                    $rowData['lsun'] ?? 0 
+                ]; 
+
+                $tm = [
+                    $rowData['janT'] ?? 0 ,
+                    $rowData['febT'] ?? 0 ,
+                    $rowData['marT'] ?? 0 ,
+                    $rowData['aprT'] ?? 0 ,
+                    $rowData['mayT'] ?? 0 ,
+                    $rowData['juneT'] ?? 0 ,
+                    $rowData['julT'] ?? 0 ,
+                    $rowData['augT'] ?? 0 ,
+                    $rowData['septT'] ?? 0 ,
+                    $rowData['octT'] ?? 0 ,
+                    $rowData['novT'] ?? 0 ,
+                    $rowData['decT'] ?? 0 
+                ]; 
+
+                $lm = [
+                    $rowData['janL'] ?? 0 ,
+                    $rowData['febL'] ?? 0 ,
+                    $rowData['marL'] ?? 0 ,
+                    $rowData['aprL'] ?? 0 ,
+                    $rowData['mayL'] ?? 0 ,
+                    $rowData['juneL'] ?? 0 ,
+                    $rowData['julL'] ?? 0 ,
+                    $rowData['augL'] ?? 0 ,
+                    $rowData['septL'] ?? 0 ,
+                    $rowData['octL'] ?? 0 ,
+                    $rowData['novL'] ?? 0 ,
+                    $rowData['decL'] ?? 0 
+                ]; 
+                $data = [
+                    "tw" => $tw,
+                    "lw" => $lw,
+                    "tm" => $tm,
+                    "lm" => $lm
+                ];
+                $rowData = $data;
+                $rowData += ["rangeType" => "singleAnl"];
+
+
+            } else if ($rtype === "doubleAnl") {
+                $rowData = ["slsum" => $rowData['slsum'] ?? 0];
+                $dataT = ($data === "oi.quantity") ? "Orders" : "Sales";
+                $rowData += ["dataType" => $dataT];
+                $rowData += ["rangeType" => "doubleAnl"];
+                $rowData += ["range" => "From:<br>".$from."<br>To:<br>".$to];
+                // array_push($rowData,["dataType" => $dataT]);
+                // array_push($rowData,["rangeType" => "doubleAnl"]);
+                // array_push($rowData,["range" => "From:<br>".$from."<br>To:<br>".$to]);
+
             }
-            foreach ($rows as $row) {
-                
-                $rate = RP((int)$row['TW'],(int)$row['LW']);
 
-                
-                $bulk .= '
+            // $(".ddrit").html(response.dataType)
+
+            // $(".daytd").html(response.days)
+            // $(".datertd").html(response.range)
+            // $(".datatd").html(response.dataVal)
+
+
+
+            header("Content-Type: application/json");
+            http_response_code(200);
+            echo json_encode($rowData);
+
+        } else if ($itemReqType === "itemWdata") {
+
+            $rows = $reportsOBJ->getDataItem($itemtype, $order, $submitDate, $data,$page);
+            $rowdata = $rows['data'];
+            $total_pages = (int)$rows['total_pages'];
+            $current_page = (int)$rows['current_page'];
+            $bulk = "";
+            if ($rowdata !== null) {
+                $cnt = '';
+                if ($data !== "oi.quantity") {
+                    $cnt = '₱';
+                }
+                foreach ($rowdata as $row) {
+
+                    $rate = RP((int)$row['TW'], (int)$row['LW']);
+
+
+                    $bulk .= '
                     <ol>
                         <section class="ssum">
                             <div class="headAnl">
@@ -461,21 +596,33 @@ SUM(CASE WHEN MONTH(orderDate) = MONTH(CURRENT_DATE()) THEN totalAmount ELSE 0 E
                             </div>
                             <div class="bdcontt">
                                 <div class="tod smm">
-                                    <p>'. $cnt . $row['selData'] . '</p>
-                                    <p>Today</p>
-                                </div>
-                                <div class="yd smm">
-                                    <p>'. $cnt . $row['beforeData'] . '</p>
-                                    <p>Yesterday</p>
+                                    <p>' . $cnt . $row['selData'] . '</p>
+                                    <p>Selected  day</p>
+                                    </div>
+                                    <div class="yd smm">
+                                    <p>' . $cnt . $row['beforeData'] . '</p>
+                                    <p>Last day</p>
                                 </div>' . $rate . '
                             </div>
                         </section>
                     </ol>
                     ';
+                }
+                $bulk .= '<div class="main-dir-link">';
+                    
+                for ($i=1; $i <= $total_pages ; $i++) {
 
+                    $g = ($i === $current_page) ? '<button type="button" id="pageON">' : '<button type="button" class="data-link" id="'.$i.'">' ;
+                    $bulk .=  $g.$i;
+                    $bulk .=  '</button>';
+
+                }
+                $bulk .=  '</div>
+                ';
+                header("Content-Type: application/json");
+                http_response_code(200);
+                echo json_encode(["item" => $bulk]);
             }
-            http_response_code(200);
-            echo json_encode(["item" => $bulk]);
         }
     }
 }
@@ -497,32 +644,32 @@ function getCSLineData($row, $type)
     if ($type == "monthcs") {
 
         $tsales = [
-            $row["janTS"],
-            $row["febTS"],
-            $row["marTS"],
-            $row["aprTS"],
-            $row["mayTS"],
-            $row["juneTS"],
-            $row["julTS"],
-            $row["augTS"],
-            $row["septTS"],
-            $row["octTS"],
-            $row["novTS"],
-            $row["decTS"]
+            $row["janTS"] ?? 0,
+            $row["febTS"] ?? 0,
+            $row["marTS"] ?? 0,
+            $row["aprTS"] ?? 0,
+            $row["mayTS"] ?? 0,
+            $row["juneTS"] ?? 0,
+            $row["julTS"] ?? 0,
+            $row["augTS"] ?? 0,
+            $row["septTS"] ?? 0,
+            $row["octTS"] ?? 0,
+            $row["novTS"] ?? 0,
+            $row["decTS"] ?? 0
         ];
         $lsales = [
-            $row["janLS"],
-            $row["febLS"],
-            $row["marLS"],
-            $row["aprLS"],
-            $row["mayLS"],
-            $row["juneLS"],
-            $row["julLS"],
-            $row["augLS"],
-            $row["septLS"],
-            $row["octLS"],
-            $row["novLS"],
-            $row["decLS"]
+            $row["janLS"] ?? 0,
+            $row["febLS"] ?? 0,
+            $row["marLS"] ?? 0,
+            $row["aprLS"] ?? 0,
+            $row["mayLS"] ?? 0,
+            $row["juneLS"] ?? 0,
+            $row["julLS"] ?? 0,
+            $row["augLS"] ?? 0,
+            $row["septLS"] ?? 0,
+            $row["octLS"] ?? 0,
+            $row["novLS"] ?? 0,
+            $row["decLS"] ?? 0
         ];
 
 
@@ -531,86 +678,86 @@ function getCSLineData($row, $type)
 
 
         $torders = [
-            $row["janTO"],
-            $row["febTO"],
-            $row["marTO"],
-            $row["aprTO"],
-            $row["mayTO"],
-            $row["juneTO"],
-            $row["julTO"],
-            $row["augTO"],
-            $row["septTO"],
-            $row["octTO"],
-            $row["novTO"],
-            $row["decTO"]
+            $row["janTO"] ?? 0,
+            $row["febTO"] ?? 0,
+            $row["marTO"] ?? 0,
+            $row["aprTO"] ?? 0,
+            $row["mayTO"] ?? 0,
+            $row["juneTO"] ?? 0,
+            $row["julTO"] ?? 0,
+            $row["augTO"] ?? 0,
+            $row["septTO"] ?? 0,
+            $row["octTO"] ?? 0,
+            $row["novTO"] ?? 0,
+            $row["decTO"] ?? 0
         ];
         $lorders = [
-            $row["janLO"],
-            $row["febLO"],
-            $row["marLO"],
-            $row["aprLO"],
-            $row["mayLO"],
-            $row["juneLO"],
-            $row["julLO"],
-            $row["augLO"],
-            $row["septLO"],
-            $row["octLO"],
-            $row["novLO"],
-            $row["decLO"]
+            $row["janLO"] ?? 0,
+            $row["febLO"] ?? 0,
+            $row["marLO"] ?? 0,
+            $row["aprLO"] ?? 0,
+            $row["mayLO"] ?? 0,
+            $row["juneLO"] ?? 0,
+            $row["julLO"] ?? 0,
+            $row["augLO"] ?? 0,
+            $row["septLO"] ?? 0,
+            $row["octLO"] ?? 0,
+            $row["novLO"] ?? 0,
+            $row["decLO"] ?? 0
         ];
 
 
 
 
         $tdiscounts = [
-            $row["janTD"],
-            $row["febTD"],
-            $row["marTD"],
-            $row["aprTD"],
-            $row["mayTD"],
-            $row["juneTD"],
-            $row["julTD"],
-            $row["augTD"],
-            $row["septTD"],
-            $row["octTD"],
-            $row["novTD"],
-            $row["decTD"]
+            $row["janTD"] ?? 0,
+            $row["febTD"] ?? 0,
+            $row["marTD"] ?? 0,
+            $row["aprTD"] ?? 0,
+            $row["mayTD"] ?? 0,
+            $row["juneTD"] ?? 0,
+            $row["julTD"] ?? 0,
+            $row["augTD"] ?? 0,
+            $row["septTD"] ?? 0,
+            $row["octTD"] ?? 0,
+            $row["novTD"] ?? 0,
+            $row["decTD"] ?? 0
         ];
 
         $ldiscounts = [
-            $row["janLD"],
-            $row["febLD"],
-            $row["marLD"],
-            $row["aprLD"],
-            $row["mayLD"],
-            $row["juneLD"],
-            $row["julLD"],
-            $row["augLD"],
-            $row["septLD"],
-            $row["octLD"],
-            $row["novLD"],
-            $row["decLD"]
+            $row["janLD"] ?? 0,
+            $row["febLD"] ?? 0,
+            $row["marLD"] ?? 0,
+            $row["aprLD"] ?? 0,
+            $row["mayLD"] ?? 0,
+            $row["juneLD"] ?? 0,
+            $row["julLD"] ?? 0,
+            $row["augLD"] ?? 0,
+            $row["septLD"] ?? 0,
+            $row["octLD"] ?? 0,
+            $row["novLD"] ?? 0,
+            $row["decLD"] ?? 0
         ];
     } else if ($type == "weekcs") {
 
 
         $tsales = [
-            $row["tmonSales"],
-            $row["ttueSales"],
-            $row["twedSales"],
-            $row["tthuSales"],
-            $row["tfriSales"],
-            $row["tsatSales"],
-            $row["tsunSales"]
+            $row["tmonSales"] ?? 0,
+            $row["ttueSales"] ?? 0,
+            $row["twedSales"] ?? 0,
+            $row["tthuSales"] ?? 0,
+            $row["tfriSales"] ?? 0,
+            $row["tsatSales"] ?? 0,
+            $row["tsunSales"] ?? 0
         ];
         $lsales = [
-            $row["tlmonSales"],
-            $row["tltueSales"],
-            $row["tlwedSales"],
-            $row["tlthuSales"],
-            $row["tlfriSales"],
-            $row["tlsatSales"],
-            $row["tlsunSales"]
+            $row["tlmonSales"] ?? 0,
+            $row["tltueSales"] ?? 0,
+            $row["tlwedSales"] ?? 0,
+            $row["tlthuSales"] ?? 0,
+            $row["tlfriSales"] ?? 0,
+            $row["tlsatSales"] ?? 0,
+            $row["tlsunSales"] ?? 0
         ];
 
 
@@ -619,45 +766,45 @@ function getCSLineData($row, $type)
 
 
         $torders = [
-            $row["tmonOrders"],
-            $row["ttueOrders"],
-            $row["twedOrders"],
-            $row["tthuOrders"],
-            $row["tfriOrders"],
-            $row["tsatOrders"],
-            $row["tsunOrders"]
+            $row["tmonOrders"] ?? 0,
+            $row["ttueOrders"] ?? 0,
+            $row["twedOrders"] ?? 0,
+            $row["tthuOrders"] ?? 0,
+            $row["tfriOrders"] ?? 0,
+            $row["tsatOrders"] ?? 0,
+            $row["tsunOrders"] ?? 0
         ];
         $lorders = [
-            $row["tlmonOrders"],
-            $row["tltueOrders"],
-            $row["tlwedOrders"],
-            $row["tlthuOrders"],
-            $row["tlfriOrders"],
-            $row["tlsatOrders"],
-            $row["tlsunOrders"]
+            $row["tlmonOrders"] ?? 0,
+            $row["tltueOrders"] ?? 0,
+            $row["tlwedOrders"] ?? 0,
+            $row["tlthuOrders"] ?? 0,
+            $row["tlfriOrders"] ?? 0,
+            $row["tlsatOrders"] ?? 0,
+            $row["tlsunOrders"] ?? 0
         ];
 
 
 
 
         $tdiscounts = [
-            $row["tmonDiscount"],
-            $row["ttueDiscount"],
-            $row["twedDiscount"],
-            $row["tthuDiscount"],
-            $row["tfriDiscount"],
-            $row["tsatDiscount"],
-            $row["tsunDiscount"]
+            $row["tmonDiscount"] ?? 0,
+            $row["ttueDiscount"] ?? 0,
+            $row["twedDiscount"] ?? 0,
+            $row["tthuDiscount"] ?? 0,
+            $row["tfriDiscount"] ?? 0,
+            $row["tsatDiscount"] ?? 0,
+            $row["tsunDiscount"] ?? 0
         ];
 
         $ldiscounts = [
-            $row["tlmonDiscount"],
-            $row["tltueDiscount"],
-            $row["tlwedDiscount"],
-            $row["tlthuDiscount"],
-            $row["tlfriDiscount"],
-            $row["tlsatDiscount"],
-            $row["tlsunDiscount"]
+            $row["tlmonDiscount"] ?? 0,
+            $row["tltueDiscount"] ?? 0,
+            $row["tlwedDiscount"] ?? 0,
+            $row["tlthuDiscount"] ?? 0,
+            $row["tlfriDiscount"] ?? 0,
+            $row["tlsatDiscount"] ?? 0,
+            $row["tlsunDiscount"] ?? 0
         ];
     }
     return [
@@ -685,9 +832,9 @@ function cP($s, $e)
     $ready = "0";
 
     if ($e == 0) {
-        $ready = $s*100; 
-    }else{
-        $ready = (($s - $e) / $e ) * 100;
+        $ready = $s * 100;
+    } else {
+        $ready = (($s - $e) / $e) * 100;
     }
     $ready = number_format($ready, 1, '.');
     $rtt = "";
@@ -709,9 +856,9 @@ function RP($s, $e)
     $ready = "0";
 
     if ($e === 0) {
-        $ready = $s*100; 
-    }else{
-        $ready = (($s - $e) / $e ) * 100;
+        $ready = $s * 100;
+    } else {
+        $ready = (($s - $e) / $e) * 100;
     }
     $ready = number_format($ready, 1, '.');
     $rtt = "";

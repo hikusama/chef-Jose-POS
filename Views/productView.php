@@ -1,10 +1,10 @@
 <?php
 
-session_start();
 include '../Connection/dbh.php';
 include '../Model/classModel.php';
 include '../Controller/productController.php';
-
+require_once "../function.php";
+isAdminRole();
 
 
 if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['transac'])) {

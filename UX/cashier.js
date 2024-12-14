@@ -331,7 +331,7 @@ $(document).ready(function () {
         qntity = parseInt(qntity);
         test = $(this).closest("ol").find(".arrow_controll").next().html();
 
-        if (qntity != "" && qntity <= 1000 && qntity != 0) {
+        if (qntity != "" && qntity <= 1000 && qntity >= 1) {
             if (qntity != test) {
 
                 price = $(this).closest("ol").find(".pr").html();

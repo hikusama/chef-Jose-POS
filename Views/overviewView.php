@@ -1,7 +1,8 @@
 <?php
 
 require_once '../Controller/overviewController.php';
-
+require_once "../function.php";
+isAdminRole();
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
@@ -15,18 +16,18 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $lastWeekPerCent = number_format((($rows['thisweek'] - $lk) / $lk) * 100, 1, ".");
         $dayPr = "";
         if ($lastDayPerCent < 0) {
-            $dayPr = '<b style="color: rgb(215 0 0);"><i class="fas fa-minus" ></i> ' . abs($lastDayPerCent) . '%</b> From Last Day</p>';
+            $dayPr = '<b style="color: rgb(215 0 0);"><i class="fas fa-minus" ></i> ' . abs($lastDayPerCent) . '%</b> From last day.</p>';
         } else if ($lastDayPerCent > 0) {
-            $dayPr = '<b style="color: rgb(0, 156, 0);"><i class="fas fa-plus"></i> ' . abs($lastDayPerCent) . '%</b> From Last Day</p>';
+            $dayPr = '<b style="color: rgb(0, 156, 0);"><i class="fas fa-plus"></i> ' . abs($lastDayPerCent) . '%</b> From last day.</p>';
         } else {
             $dayPr = '<b style=""></b> Same as the Last Day</p>';
         }
 
         $wkPr = "";
         if ($lastWeekPerCent < 0) {
-            $wkPr = '<b style="color: rgb(215 0 0);"><i class="fas fa-minus" ></i> ' . abs($lastWeekPerCent) . '%</b> From Last Day</p>';
+            $wkPr = '<b style="color: rgb(215 0 0);"><i class="fas fa-minus" ></i> ' . abs($lastWeekPerCent) . '%</b> From last week.</p>';
         } else if ($lastWeekPerCent > 0) {
-            $wkPr = '<b style="color: rgb(0, 156, 0);"><i class="fas fa-plus"></i> ' . abs($lastWeekPerCent) . '%</b> From Last Day</p>';
+            $wkPr = '<b style="color: rgb(0, 156, 0);"><i class="fas fa-plus"></i> ' . abs($lastWeekPerCent) . '%</b> From last week.</p>';
         } else {
             $wkPr = '<b style=""></b> Same as the Last Day</p>';
         }

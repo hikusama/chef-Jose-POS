@@ -602,30 +602,34 @@
 
 
 
-    
-        public function itemsReport($itemtype, $order, $range, $data) {
+
+        public function itemsReport($itemtype, $order, $range, $data, $page = 1)
+        {
+            $max_page_per_req = 15;
+
+            $offset = ($page - 1) * $max_page_per_req;
             $select = $itemtype === "products" ? "products" : "combo";
             $id = $itemtype === "products" ? "productID" : "comboID";
             $name = $itemtype === "products" ? "name" : "comboName";
-        
+
             $sql = "SELECT 
                 pcr.displayPic, 
                 pcr." . $name . " AS item, 
                 pcr." . $id . " AS itemID,
                 SUM(CASE WHEN ";
-        
+
             if (count($range) === 1) {
-                $sql .= "DATE(ord.orderDate) = ?"; 
+                $sql .= "DATE(ord.orderDate) = ?";
                 $sql .= " THEN $data ELSE 0 END) AS selData,
                         SUM(CASE WHEN DATE(ord.orderDate) = DATE_SUB(?, INTERVAL 1 DAY) THEN $data ELSE 0 END) AS beforeData";
             } else {
-                $sql .= "DATE(ord.orderDate) BETWEEN ? AND ?"; 
+                $sql .= "DATE(ord.orderDate) BETWEEN ? AND ?";
                 $sql .= " THEN $data ELSE 0 END) AS selData,
                 SUM(CASE WHEN DATE(ord.orderDate) = DATE_SUB(?, INTERVAL 1 DAY) THEN $data ELSE 0 END) AS beforeData";
             }
             $sql .= ",SUM(CASE WHEN YEARWEEK(ord.orderDate, 1) = YEARWEEK(?, 1) THEN $data ELSE 0 END) AS TW
-                     ,SUM(CASE WHEN YEARWEEK(ord.orderDate) = YEARWEEK(? - INTERVAL 1 WEEK, 1) THEN $data ELSE 0 END) AS LW"; 
-            
+                     ,SUM(CASE WHEN YEARWEEK(ord.orderDate) = YEARWEEK(? - INTERVAL 1 WEEK, 1) THEN $data ELSE 0 END) AS LW";
+
             $sql .= " FROM 
                 " . $select . " AS pcr
               LEFT JOIN 
@@ -634,29 +638,151 @@
                 orders AS ord ON ord.ref_no = oi.ref_no
               GROUP BY 
                 pcr." . $name . "
-              ORDER BY selData " . $order;
-        
+              ORDER BY selData " . $order . " LIMIT ? OFFSET ?";
+
             $stmt = $this->connect()->prepare($sql);
-        
+
+            $paramIndex = 1;
             if (count($range) === 1) {
-                $stmt->bindValue(1, $range[0], PDO::PARAM_STR);
-                $stmt->bindValue(2, $range[0], PDO::PARAM_STR); 
-                $stmt->bindValue(3, $range[0], PDO::PARAM_STR); 
-                $stmt->bindValue(4, $range[0], PDO::PARAM_STR); 
+                $stmt->bindValue($paramIndex++, $range[0], PDO::PARAM_STR);
+                $stmt->bindValue($paramIndex++, $range[0], PDO::PARAM_STR);
+                $stmt->bindValue($paramIndex++, $range[0], PDO::PARAM_STR);
+                $stmt->bindValue($paramIndex++, $range[0], PDO::PARAM_STR);
             } else {
-                $stmt->bindValue(1, $range[0], PDO::PARAM_STR);
-                $stmt->bindValue(2, $range[1], PDO::PARAM_STR);
-                $stmt->bindValue(3, $range[1], PDO::PARAM_STR);  
-                $stmt->bindValue(4, $range[0], PDO::PARAM_STR);
-                $stmt->bindValue(5, $range[0], PDO::PARAM_STR);
+                $stmt->bindValue($paramIndex++, $range[0], PDO::PARAM_STR);
+                $stmt->bindValue($paramIndex++, $range[1], PDO::PARAM_STR);
+                $stmt->bindValue($paramIndex++, $range[1], PDO::PARAM_STR);
+                $stmt->bindValue($paramIndex++, $range[0], PDO::PARAM_STR);
+                $stmt->bindValue($paramIndex++, $range[0], PDO::PARAM_STR);
             }
-        
+            $stmt->bindValue($paramIndex++, $max_page_per_req, PDO::PARAM_INT);
+            $stmt->bindValue($paramIndex++, $offset, PDO::PARAM_INT);
+
+            // $stmt->bindParam(':limit', $max_page_per_req, PDO::PARAM_INT);
+            // $stmt->bindParam(':offset', $offset, PDO::PARAM_INT);
+            $stmt->execute();
+
+            $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+
+            $sql2Q = "SELECT COUNT(*) AS total_rows FROM $select";
+
+            $sql2 = $this->connect()->prepare($sql2Q);
+
+
+            $sql2->execute();
+
+            $rows2 = $sql2->fetch(PDO::FETCH_ASSOC);
+            $total_rows = ($rows2) ? (int)$rows2['total_rows'] : 0;
+
+
+
+            $total_pages = ceil($total_rows / $max_page_per_req);
+
+
+            if ($rows) {
+                return [
+                    'data' => $rows,
+                    'total_pages' => $total_pages,
+                    'current_page' => $page
+                ];
+            } else {
+                return [
+                    'data' => NULL,
+                    'total_pages' => NULL,
+                    'current_page' => NULL
+                ];
+            }
+
+
+            return null;
+        }
+
+        public function itemsReportDataAnalytics($itemtype, $range, $data, $spec)
+        {
+            $select = $itemtype === "products" ? "products" : "combo";
+            $id = $itemtype === "products" ? "productID" : "comboID";
+
+            $sql = "";
+            if (count($range) === 1) {
+
+                $sql = "SELECT 
+                    SUM(CASE WHEN DAYOFWEEK(ord.orderDate) = 2 AND YEARWEEK(ord.orderDate,1) = YEARWEEK(:date_selected, 1) THEN $data ELSE 0 END) AS mon,
+                    SUM(CASE WHEN DAYOFWEEK(ord.orderDate) = 3 AND YEARWEEK(ord.orderDate,1) = YEARWEEK(:date_selected, 1) THEN $data ELSE 0 END) AS tue,
+                    SUM(CASE WHEN DAYOFWEEK(ord.orderDate) = 4 AND YEARWEEK(ord.orderDate,1) = YEARWEEK(:date_selected, 1) THEN $data ELSE 0 END) AS wed,
+                    SUM(CASE WHEN DAYOFWEEK(ord.orderDate) = 5 AND YEARWEEK(ord.orderDate,1) = YEARWEEK(:date_selected, 1) THEN $data ELSE 0 END) AS thu,
+                    SUM(CASE WHEN DAYOFWEEK(ord.orderDate) = 6 AND YEARWEEK(ord.orderDate,1) = YEARWEEK(:date_selected, 1) THEN $data ELSE 0 END) AS fri,
+                    SUM(CASE WHEN DAYOFWEEK(ord.orderDate) = 7 AND YEARWEEK(ord.orderDate,1) = YEARWEEK(:date_selected, 1) THEN $data ELSE 0 END) AS sat,
+                    SUM(CASE WHEN DAYOFWEEK(ord.orderDate) = 1 AND YEARWEEK(ord.orderDate,1) = YEARWEEK(:date_selected, 1) THEN $data ELSE 0 END) AS sun,
+
+                    SUM(CASE WHEN DAYOFWEEK(ord.orderDate) = 2 AND YEARWEEK(ord.orderDate,1) = YEARWEEK(:date_selected - INTERVAL 1 WEEK, 1) THEN $data ELSE 0 END) AS lmon,
+                    SUM(CASE WHEN DAYOFWEEK(ord.orderDate) = 3 AND YEARWEEK(ord.orderDate,1) = YEARWEEK(:date_selected - INTERVAL 1 WEEK, 1) THEN $data ELSE 0 END) AS ltue,
+                    SUM(CASE WHEN DAYOFWEEK(ord.orderDate) = 4 AND YEARWEEK(ord.orderDate,1) = YEARWEEK(:date_selected - INTERVAL 1 WEEK, 1) THEN $data ELSE 0 END) AS lwed,
+                    SUM(CASE WHEN DAYOFWEEK(ord.orderDate) = 5 AND YEARWEEK(ord.orderDate,1) = YEARWEEK(:date_selected - INTERVAL 1 WEEK, 1) THEN $data ELSE 0 END) AS lthu,
+                    SUM(CASE WHEN DAYOFWEEK(ord.orderDate) = 6 AND YEARWEEK(ord.orderDate,1) = YEARWEEK(:date_selected - INTERVAL 1 WEEK, 1) THEN $data ELSE 0 END) AS lfri,
+                    SUM(CASE WHEN DAYOFWEEK(ord.orderDate) = 7 AND YEARWEEK(ord.orderDate,1) = YEARWEEK(:date_selected - INTERVAL 1 WEEK, 1) THEN $data ELSE 0 END) AS lsat,
+                    SUM(CASE WHEN DAYOFWEEK(ord.orderDate) = 1 AND YEARWEEK(ord.orderDate,1) = YEARWEEK(:date_selected - INTERVAL 1 WEEK, 1) THEN $data ELSE 0 END) AS lsun,
+                
+
+                    SUM(CASE WHEN MONTH(ord.orderDate) = 1 AND YEAR(ord.orderDate) = YEAR(:date_selected) THEN $data ELSE 0 END) AS janT,
+                    SUM(CASE WHEN MONTH(ord.orderDate) = 2 AND YEAR(ord.orderDate) = YEAR(:date_selected) THEN $data ELSE 0 END) AS febT,
+                    SUM(CASE WHEN MONTH(ord.orderDate) = 3 AND YEAR(ord.orderDate) = YEAR(:date_selected) THEN $data ELSE 0 END) AS marT,
+                    SUM(CASE WHEN MONTH(ord.orderDate) = 4 AND YEAR(ord.orderDate) = YEAR(:date_selected) THEN $data ELSE 0 END) AS aprT,
+                    SUM(CASE WHEN MONTH(ord.orderDate) = 5 AND YEAR(ord.orderDate) = YEAR(:date_selected) THEN $data ELSE 0 END) AS mayT,
+                    SUM(CASE WHEN MONTH(ord.orderDate) = 6 AND YEAR(ord.orderDate) = YEAR(:date_selected) THEN $data ELSE 0 END) AS juneT,
+                    SUM(CASE WHEN MONTH(ord.orderDate) = 7 AND YEAR(ord.orderDate) = YEAR(:date_selected) THEN $data ELSE 0 END) AS julT,
+                    SUM(CASE WHEN MONTH(ord.orderDate) = 8 AND YEAR(ord.orderDate) = YEAR(:date_selected) THEN $data ELSE 0 END) AS augT,
+                    SUM(CASE WHEN MONTH(ord.orderDate) = 9 AND YEAR(ord.orderDate) = YEAR(:date_selected) THEN $data ELSE 0 END) AS septT,
+                    SUM(CASE WHEN MONTH(ord.orderDate) = 10 AND YEAR(ord.orderDate) = YEAR(:date_selected) THEN $data ELSE 0 END) AS octT,
+                    SUM(CASE WHEN MONTH(ord.orderDate) = 11 AND YEAR(ord.orderDate) = YEAR(:date_selected) THEN $data ELSE 0 END) AS novT,
+                    SUM(CASE WHEN MONTH(ord.orderDate) = 12 AND YEAR(ord.orderDate) = YEAR(:date_selected) THEN $data ELSE 0 END) AS decT,
+
+                    SUM(CASE WHEN MONTH(ord.orderDate) = 1 AND YEAR(ord.orderDate) = YEAR(:date_selected) - 1 THEN $data ELSE 0 END) AS janL,
+                    SUM(CASE WHEN MONTH(ord.orderDate) = 2 AND YEAR(ord.orderDate) = YEAR(:date_selected) - 1 THEN $data ELSE 0 END) AS febL,
+                    SUM(CASE WHEN MONTH(ord.orderDate) = 3 AND YEAR(ord.orderDate) = YEAR(:date_selected) - 1 THEN $data ELSE 0 END) AS marL,
+                    SUM(CASE WHEN MONTH(ord.orderDate) = 4 AND YEAR(ord.orderDate) = YEAR(:date_selected) - 1 THEN $data ELSE 0 END) AS aprL,
+                    SUM(CASE WHEN MONTH(ord.orderDate) = 5 AND YEAR(ord.orderDate) = YEAR(:date_selected) - 1 THEN $data ELSE 0 END) AS mayL,
+                    SUM(CASE WHEN MONTH(ord.orderDate) = 6 AND YEAR(ord.orderDate) = YEAR(:date_selected) - 1 THEN $data ELSE 0 END) AS juneL,
+                    SUM(CASE WHEN MONTH(ord.orderDate) = 7 AND YEAR(ord.orderDate) = YEAR(:date_selected) - 1 THEN $data ELSE 0 END) AS julL,
+                    SUM(CASE WHEN MONTH(ord.orderDate) = 8 AND YEAR(ord.orderDate) = YEAR(:date_selected) - 1 THEN $data ELSE 0 END) AS augL,
+                    SUM(CASE WHEN MONTH(ord.orderDate) = 9 AND YEAR(ord.orderDate) = YEAR(:date_selected) - 1 THEN $data ELSE 0 END) AS septL,
+                    SUM(CASE WHEN MONTH(ord.orderDate) = 10 AND YEAR(ord.orderDate) = YEAR(:date_selected) - 1 THEN $data ELSE 0 END) AS octL,
+                    SUM(CASE WHEN MONTH(ord.orderDate) = 11 AND YEAR(ord.orderDate) = YEAR(:date_selected) - 1 THEN $data ELSE 0 END) AS novL,
+                    SUM(CASE WHEN MONTH(ord.orderDate) = 12 AND YEAR(ord.orderDate) = YEAR(:date_selected) - 1 THEN $data ELSE 0 END) AS decL
+                ";
+            } else {
+                $sql = "SELECT SUM(CASE WHEN DATE(ord.orderDate) BETWEEN :date_selected AND :date_selected2 THEN $data ELSE 0 END) AS slsum";
+            }
+            $sql .= " FROM  $select AS pcr
+            LEFT JOIN 
+                orderitems AS oi ON oi.$id = pcr.$id
+            LEFT JOIN 
+                orders AS ord ON ord.ref_no = oi.ref_no
+            WHERE oi.$id = :item";
+
+            $stmt = $this->connect()->prepare($sql);
+
+            if (count($range) === 1) {
+
+                $stmt->bindParam(":item", $spec, PDO::PARAM_INT);
+                $stmt->bindParam(":date_selected", $range[0], PDO::PARAM_STR);
+            } else {
+                $stmt->bindParam(":item", $spec, PDO::PARAM_INT);
+                $stmt->bindParam(":date_selected", $range[0], PDO::PARAM_STR);
+                $stmt->bindParam(":date_selected2", $range[1], PDO::PARAM_STR);
+                // $stmt->bindValue(39, $spec, PDO::PARAM_INT);
+
+            }
+
+
             if ($stmt->execute()) {
-                return $stmt->fetchAll(PDO::FETCH_ASSOC);
+                return $stmt->fetch(PDO::FETCH_ASSOC);
             }
             return null;
         }
-        
+
+
+
         // public function itemsReportProd($data, $rtype, $order, $starting, $ending)
         // {
         //     $sql = "";
@@ -673,7 +799,7 @@
         //     if ($rtype == "single") {
 
         //         $wsome = " SUM(CASE WHEN DATE(ord.orderDate) = :starting THEN " . $sum . " ELSE 0 END) AS selData, ";
-                
+
         //     } else if ($rtype == "double") {
 
         //         $wsome = " SUM(CASE WHEN DATE(ord.orderDate) BETWEEN :starting AND :ending THEN " . $sum . " ELSE 0 END) AS selData, ";
@@ -1469,7 +1595,7 @@
 
 
 
-            if ($stmtF->execute([$orders[0]['totalAmount'], $orders[0]['discount'], $orders[0]['discountType'], $orders[0]['refNo'], $orders[0]['pmethod'], $orders[0]['gcashName'], $orders[0]['gcashNum'], $orders[0]['subtotal'],$orders[0]['tendered']])) {
+            if ($stmtF->execute([$orders[0]['totalAmount'], $orders[0]['discount'], $orders[0]['discountType'], $orders[0]['refNo'], $orders[0]['pmethod'], $orders[0]['gcashName'], $orders[0]['gcashNum'], $orders[0]['subtotal'], $orders[0]['tendered']])) {
             } else {
                 return false;
             }

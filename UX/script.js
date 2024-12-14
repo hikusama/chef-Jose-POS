@@ -32,10 +32,12 @@ $(document).ready(function () {
         }
 
     });
-    $("#screencontroll").click(function (e) {
+    $(".header_inner").on("click","#screencontroll",function (e) {
         e.preventDefault();
         if (!document.fullscreenElement) {
-            $("#screencontroll img").attr("src", "../image/offscreen.png")
+            $("#screencontroll").html(`<i class="fas fa-compress"></i>`);
+            $("#screencontroll").attr("title","Exit full screen.");
+
             if (document.documentElement.requestFullscreen) {
                 document.documentElement.requestFullscreen();
             } else if (document.documentElement.mozRequestFullScreen) { // Firefox
@@ -46,7 +48,8 @@ $(document).ready(function () {
                 document.documentElement.msRequestFullscreen();
             }
         } else {
-            $("#screencontroll img").attr("src", "../image/fullscreen.png")
+            $("#screencontroll").html(`<i class="fas fa-expand"></i>`);
+            $("#screencontroll").attr("title","View full screen.");
 
             if (document.exitFullscreen) {
                 document.exitFullscreen();

@@ -161,9 +161,11 @@ $(document).ready(function () {
         getCSSQD(formData, dr);
         getCSCatData(formData);
         let rtype = $(".ch").attr("value")
-        getCSLineChartData(rtype, "weekcs");
-        $(".findBy li").removeClass("onSingleD");
-        $("#weekcs").addClass("onSingleD");
+        if (rtype === "single") {
+            getCSLineChartData(rtype, "weekcs");
+            $("#weekcs").addClass("onSingleD");
+        }
+        // $(".findBy li").removeClass("onSingleD");
     });
 
     $("#upTr").click(function (e) {

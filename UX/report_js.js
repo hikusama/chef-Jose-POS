@@ -1,6 +1,7 @@
 $(document).ready(function () {
     const today = new Date().toISOString().split('T')[0]
-    
+    let isReqItemAnalOpen = false;
+
     $("#frD").attr('max', today);
     $("#toD").attr('max', today);
 
@@ -15,10 +16,13 @@ $(document).ready(function () {
 
     // $(".recordDate").html(samp.getMonth() + "/" + samp.getDate() + "/" + samp.getFullYear());
     $(".recordDate").html(today);
-    
-    getItems("proddR", "highest", "singleAnl", "sales-data", today, "")
+    $(".dateAnalytics").html(today);
+
+    getItems("proddR", "highest", "singleAnl", "sales-data", today, "", 1)
 
 
+    // let graphPitem = $(".graphNgiao");
+    // let tablePitem = $(".table-data").detach();
 
 
     let start = $(".start");
@@ -164,7 +168,7 @@ $(document).ready(function () {
 
 
     let month = ['   Jan', 'Feb', 'Mar', 'Apr', 'May', 'June', 'Jul', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec   '];
-    let week = ['   Mon', 'Tue', 'Wed', 'Thu', 'Selected', 'Sat', 'Sun   '];
+    let week = ['   Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun   '];
 
 
 
@@ -176,7 +180,15 @@ $(document).ready(function () {
     $("#itemAnalyticalData").on("click", "ol", function (e) {
         e.preventDefault();
 
+        let rtype = $('.rt input[name="rTypeAnl"]:checked').val()
 
+
+        if (rtype === "doubleAnl") {
+            to = $('.endAnl input[name="toR"]').val()
+            if (!to) {
+                return;
+            }
+        }
 
         let hs = $(this).hasClass("NOL")
 
@@ -193,12 +205,21 @@ $(document).ready(function () {
             $(this).find("#week").addClass("onSt")
 
 
-            $(".analytics .data_presentation_wrap").show();
-            let chart = `<canvas id="itemdataweek"></canvas><canvas id="itemdatamonth"></canvas>`
-            $("#itemAnalyticalData .dataChartEach").html(chart);
-            itemdatamonth = createChart("month");
-            $("#itemdatamonth").hide();
-            itemdataweek = createChart("week");
+
+            //pass
+            let itemtype = $(".onRank").attr("id")
+            let rtype = $('.rt input[name="rTypeAnl"]:checked').val()
+
+            let data = $(".onDataType").attr("id")
+            let from = $('.startAnl input[name="fromAnl"]').val()
+            from = (from) ? from : today
+            let id = $(this).find(".picMhen img").attr("id")
+            let to = ""
+            if (rtype === "doubleAnl") {
+                to = $('.endAnl input[name="toR"]').val()
+            }
+
+            getItemAnal(id, itemtype, rtype, data, from, to)
 
 
         }
@@ -209,6 +230,28 @@ $(document).ready(function () {
     });
 
 
+    $("#itemAnalyticalData").on("click", ".main-dir-link button", function (e) {
+        let page = $(this).attr("id")
+
+        let itemtype = $(".onRank").attr("id")
+        let order = $(".onOrdered").attr("id")
+        let rtype = $('.rt input[name="rTypeAnl"]:checked').val()
+
+        let data = $(".onDataType").attr("id")
+        let from = $('.startAnl input[name="fromAnl"]').val()
+        if (!from) {
+            from = today
+        }
+
+        let to = ""
+        if (rtype === "doubleAnl") {
+            to = $('.endAnl input[name="toR"]').val()
+        }
+        if (page != "pageON") {
+            getItems(itemtype, order, rtype, data, from, to, page)
+
+        }
+    });
 
     $(".analytics").on("click", ".btt button", function (e) {
         e.preventDefault();
@@ -256,15 +299,23 @@ $(document).ready(function () {
         let itemtype = $(".onRank").attr("id")
         let order = $(".onOrdered").attr("id")
         let rtype = $('.rt input[name="rTypeAnl"]:checked').val()
-
+        
         let data = $(".onDataType").attr("id")
         let from = $('.startAnl input[name="fromAnl"]').val()
 
         let to = ""
         if (rtype === "doubleAnl") {
             to = $('.endAnl input[name="toR"]').val()
+            dateNg = from + " - " + to
+            $(".dateAnalytics").html(dateNg);
+        }else{
+            $(".dateAnalytics").html(from);
+
         }
-        getItems(itemtype, order, rtype, data, from, to)
+
+
+        getItems(itemtype, order, rtype, data, from, to, 1)
+
 
     });
 
@@ -273,9 +324,30 @@ $(document).ready(function () {
 
 
 
-    function getItems(itemtype, order, rTypeAnl, data, from, to) {
+    function rtype(t) {
+
+        if (t === "singleAnl") {
+            $(".graphNgiao").show();
+            $(".table-data").hide();
+            let chart = `<canvas id="itemdataweek"></canvas><canvas id="itemdatamonth"></canvas>`
+            $("#itemAnalyticalData .dataChartEach").html(chart);
+            itemdatamonth = createChart("month");
+            $("#itemdatamonth").hide();
+            itemdataweek = createChart("week");
+        } else {
+
+            $(".graphNgiao").hide();
+            $(".table-data").show();
+        }
+        $(".analytics .data_presentation_wrap").show();
+
+    }
+    function getItems(itemtype, order, rTypeAnl, data, from, to, page) {
+        isReqItemAnalOpen = false;
         formData = new FormData()
         formData.append('transac', 'getItems')
+        formData.append('itemReqType', 'itemWdata')
+        formData.append('page', page)
         formData.append('itemtype', itemtype)
         formData.append('data', data)
         formData.append('order', order)
@@ -291,6 +363,9 @@ $(document).ready(function () {
             processData: false,
             dataType: 'json',
             success: function (response) {
+
+                isReqItemAnalOpen = true;
+                $("#bkAnl").trigger("click");
                 $('#itemAnalyticalData').html(response.item);
                 $('#itemAnalyticalData').children().hide();
                 $('#itemAnalyticalData').children().each(function (index) {
@@ -305,9 +380,70 @@ $(document).ready(function () {
     }
 
 
+    function getItemAnal(id, itemtype, rTypeAnl, data, from, to) {
+
+        if (isReqItemAnalOpen) {
+
+            isReqItemAnalOpen = false;
+            formData = new FormData()
+            formData.append('transac', 'getItems')
+            formData.append('itemReqType', 'itemAnal')
+            formData.append('itemtype', itemtype)
+            formData.append('data', data)
+            formData.append('rTypeAnl', rTypeAnl)
+            formData.append('from', from)
+            formData.append('to', to)
+            formData.append('itemID', id)
+            $.ajax({
+                type: 'POST',
+                url: '../Views/reportsView.php',
+                data: formData,
+                contentType: false,
+                processData: false,
+                dataType: 'json',
+                success: function (response) {
+                    isReqItemAnalOpen = true;
+                    if (response.rangeType == "singleAnl") {
+                        rtype("singleAnl")
+
+                        itemdataweek.data.datasets[0].data = response.tw
+                        itemdataweek.data.datasets[1].data = response.lw
+
+                        itemdatamonth.data.datasets[0].data = response.tm
+                        itemdatamonth.data.datasets[1].data = response.lm
+
+                        itemdataweek.update()
+                        itemdatamonth.update()
+                    } else {
+
+                        rtype("doubleAnl")
+                        $(".ddtit").html(response.dataType)
+                        st = new Date(from)
+                        en = new Date(to)
+                        rd = (en - st) / (1000 * 60 * 60 * 24);
+
+                        $(".daytd").html(rd + "D")
+                        $(".datertd").html(response.range)
+                        if (response.dataType === "Orders") {
+                            $(".datatd").html(response.slsum)
+                        } else {
+                            $(".datatd").html("₱" + response.slsum)
+                        }
+
+                    }
+                }, error: function (xhr) {
+                    const errorMessage = xhr.responseJSON?.error || '';
+                    // $(".anlerr").html(errorMessage);
+                }
+            });
+
+
+        }
+
+    }
+
 
     function createChart(range) {
-        let chartNgiao;
 
         if (range === "week") {
             return new Chart("itemdataweek", {
@@ -316,14 +452,14 @@ $(document).ready(function () {
                 data: {
                     labels: week,
                     datasets: [{
-                        label: 'This week',
-                        data: [30, 20, 600, 250, 250, 82, 10],
+                        label: 'Selected week',
+                        data: [0, 0, 0, 0, 0, 0, 0],
                         //   data: [],
                         borderColor: "rgb(0 226 255 / 80%)",
                         fill: false
                     }, {
-                        label: 'Last week',
-                        data: [45, 500, 230, 105, 180, 495, 840],
+                        label: 'Week before',
+                        data: [0, 0, 0, 0, 0, 0, 0],
                         //   data: [],
                         borderColor: "rgb(255 0 89 / 80%)",
                         fill: false
@@ -342,14 +478,14 @@ $(document).ready(function () {
                 data: {
                     labels: month,
                     datasets: [{
-                        label: 'This year',
-                        data: [30, 20, 600, 250, 250, 82, 10, 55, 600, 200, 360, 2500],
+                        label: 'Selected year',
+                        data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
                         //   data: [],
                         borderColor: "rgb(0 226 255 / 80%)",
                         fill: false
                     }, {
-                        label: 'Last year',
-                        data: [45, 500, 230, 105, 180, 495, 800, 1230, 600, 845, 950, 67],
+                        label: 'Year before',
+                        data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
                         //   data: [],
                         borderColor: "rgb(255 0 89 / 80%)",
                         fill: false
@@ -365,7 +501,6 @@ $(document).ready(function () {
 
 
 
-        // return chartNgiao;
     }
 
 

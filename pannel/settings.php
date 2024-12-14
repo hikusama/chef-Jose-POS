@@ -29,9 +29,9 @@ $isbaibing = validate($_SERVER['REQUEST_URI']);
                 <li class="title_section">Settings</li>
             </section>
             <section>
-                <li class="first">r</li>
-                <li class="second">f</li>
-                <li class="last">s</li>
+                <li class="first" title="Refresh" id="refresh"><i class="fas fa-sync"></i></li>
+                <li class="second" id="screencontroll" title="View full screen."><i class="fas fa-expand"></i></li>
+                <li class="last"><i class="fas fa-user"></i></li>
             </section>
         </div>
     </div>
@@ -90,6 +90,14 @@ $isbaibing = validate($_SERVER['REQUEST_URI']);
                         <p><i class="fas fa-key"></i> Change password</p>
                         <button type="button" id="change_pw"><i class="fas fa-key"></i>Change password</button>
                     </li>
+                    <?php if ($isbaibing["ios"] === 485) { ?>
+
+                    <li class="addm" >
+                        <p><i class="fas fa-key"></i> Create Employee or Cashier account</p>
+                        <button type="button" id="creatempacc"><i class="fas fa-key"></i>Create</button>
+                    </li>
+                    <?php }?>
+
                 </ol>
                 <ol>
                     <h3><i class="fas fa-chart-pie"></i> Themes</h3>

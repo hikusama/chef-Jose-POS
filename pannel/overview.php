@@ -1,6 +1,7 @@
 <?php
     require_once "../function.php";
     $isbaibing = validate($_SERVER['REQUEST_URI']);
+    
 ?>
 
 <!DOCTYPE html>
@@ -21,6 +22,7 @@
 
 <body>
 
+<!--  Assalamu'alaykum akh, I hope this message finds you in the best of health and iman. I just wanted to share a gentle reminder, and I pray you receive it with the sincerity in sha allah, I encourage you to take a moment to reflect on a few things, in sha Allah. regarding on a fatwa u shared to our friends sometimes thoughts comes to ur mind can mislead us  dont let this deceive you because as we know, shayttan does not rest in his attempts to misguide us until our soul departed from our body from this we understand that shayttan comes to us because he knows we have laailaha illaha in our hearts we have value in our hearts. if this kind of thoughts come to our mind like the ruling about women or islam comes from arabs i ask u please dont make a fatwa or theory of our own and share it to others and like labeling as authentic because they are ready to take this as true yeah because they are curious about our religion and perhaps this can earn some hate from their hearts towards islam. if this kind of thoughts comes to us pls make a search for it islam solves all kinds of problem if you were to search the most influential person on earth it gives you first list the Muhammad S.A.W. But, This is normal thieves dont break into empty houses wallahi you are one of my known adaptable in knowledge and i recommend you to watch dawahwise or ustadz nouman ali-khan. oohhhhhhh akh i dont judge you by this if i said something that feels you bad please forgive me iam just a reminder we are muslims we have purpose in our lives alhamdullilah, this february is nxt ramadhan we need to revive our imaan, ramadhan mubarak in advance wallah  i love our team for the sake of allah and dont worry ai dont expect any reply from this. Assalamu'alaykum warahmatullahi wabarakatu. -->
 
     <div id="header">
         <div class="header_inner">
@@ -30,9 +32,9 @@
                 <li class="title_section">Overview</li>
             </section>
             <section>
-                <li class="first">r</li>
-                <li class="second">f</li>
-                <li class="last">s</li>
+                <li class="first" title="Refresh" id="refresh"><i class="fas fa-sync"></i></li>
+                <li class="second" id="screencontroll" title="View full screen."><i class="fas fa-expand"></i></li>
+                <li class="last"><i class="fas fa-user"></i></li>
             </section>
         </div>
     </div>
@@ -123,19 +125,19 @@
 
                             <div class="gp">
                                 <ol class="cYY highCur">
-                                    <p>₱20,000</p>
+                                    <p>₱0</p>
                                     <h3>Heighest</h3>
                                 </ol>
                                 <ol class="cYY lowCur">
-                                    <p>₱20,000</p>
+                                    <p>₱0</p>
                                     <h3>Lowest</h3>
                                 </ol>
                                 <ol class="lastYY highLast">
-                                    <p>₱20,000</p>
+                                    <p>₱0</p>
                                     <h3>Heighest</h3>
                                 </ol>
                                 <ol class="lastYY lowLast">
-                                    <p>₱20,000</p>
+                                    <p>₱0</p>
                                     <h3>Lowest</h3>
                                 </ol>
                             </div>
@@ -192,7 +194,7 @@
                                         <p class="dsttlSales">₱0</p>
                                     </section>
                                 </div>
-                                <a href="reports" title="Redirect to reports" class="goto">See more <i class="fas fa-arrow-right"></i></a>
+                                <a href="reports.php" title="Redirect to reports" class="goto">See more <i class="fas fa-arrow-right"></i></a>
                             </div>
                         </div>
                         <div class="sales-sum">
@@ -212,7 +214,7 @@
                                         <p class="ttlSales">₱0</p>
                                     </section>
                                 </div>
-                                <a href="reports" title="Redirect to reports" class="goto">See more <i class="fas fa-arrow-right"></i></a>
+                                <a href="reports.php" title="Redirect to reports" class="goto">See more <i class="fas fa-arrow-right"></i></a>
                             </div>
                         </div>
                         <div class="top-prod">
@@ -229,7 +231,7 @@
                                     </div>
 
                                 </div>
-                                <a href="reports" title="Redirect to reports" class="goto">See more <i class="fas fa-arrow-right"></i></a>
+                                <a href="reports.php" title="Redirect to reports" class="goto">See more <i class="fas fa-arrow-right"></i></a>
 
                             </div>
                         </div>

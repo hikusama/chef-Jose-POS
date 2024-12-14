@@ -31,9 +31,9 @@ $isbaibing = validate($_SERVER['REQUEST_URI']);
                 </li>
             </section>
             <section>
-                <li class="first" id="refresh"><img src="../image/refresh.png" alt="refresh"></li>
-                <li class="second" id="screencontroll"><img src="../image/fullscreen.png" alt="refresh"></li>
-                <li class="last">s</li>
+                <li class="first" title="Refresh" id="refresh"><i class="fas fa-sync"></i></li>
+                <li class="second" id="screencontroll" title="View full screen."><i class="fas fa-expand"></i></li>
+                <li class="last"><i class="fas fa-user"></i></li>
             </section>
         </div>
     </div>

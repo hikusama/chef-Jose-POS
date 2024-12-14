@@ -7,11 +7,24 @@ session_start();
 
 
 
-function getRole(){
+function getRole()
+{
     if (isset($_SESSION["userID"])) {
         return $_SESSION["userRole"];
-    }else{
+    } else {
         return NULL;
+    }
+}
+
+function isAdminRole()
+{
+    if (isset($_SESSION["userID"])) {
+        if ($_SESSION["userRole"] === "Admin") {
+            return true;
+        } else {
+            http_response_code(400);
+            echo json_encode(["error" => "Cant access."]);    
+        }
     }
 }
 
@@ -31,6 +44,8 @@ function validate($uri)
         } else {
             // header("Location: 404.php?popo=1" . $_SESSION["userRole"] . "45");
         }
+    } else {
+        header("Location: ../index.php");
     }
 }
 
@@ -100,3 +115,18 @@ function checkUri($uri, $routes)
         header("Location: 404.php?route=denied");
     }
 }
+
+/*
+
+    $val = 0;
+    foreach ($routes as $route) {
+        if ($route === $uri) {
+            $val += 1;
+        }
+    }
+    if ($val > 0) {
+        return true;
+    } else {
+        header("Location: 404.php?route=denied");
+    }
+*/
