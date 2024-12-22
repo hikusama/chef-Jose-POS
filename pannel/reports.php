@@ -63,6 +63,12 @@ $isbaibing = validate($_SERVER['REQUEST_URI']);
                     <li id="history">
                         <div class="textdp"><i class="fas fa-history"></i>History</div>
                     </li>
+                    <?php if ($isbaibing["ios"] === 485) { ?>
+                        <li id="cashiers">
+                            <div class="textdp"><i class="fas fa-users"></i>Cashiers</div>
+                        </li>
+
+                    <?php } ?>
                 </div>
                 <div class="inner_side_nav_settings">
                     <li id="settings">

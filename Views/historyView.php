@@ -19,7 +19,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     if (isset($_POST['transac']) && $_POST['transac'] === "getOrderRecord") {
 
-        $ref = htmlspecialchars(strip_tags($_POST['refno']));
+        $ref = htmlspecialchars(trim($_POST['refno']));
         $historyOBJ = new HistoryController(null, $ref);
         $_SESSION['openPrint'] = true;
         $rows = $historyOBJ->getOrderRecordControll();
@@ -147,7 +147,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
 
     if (isset($_POST['transac']) && $_POST['transac'] === "deleteOrder") {
-        $ref = htmlspecialchars(strip_tags($_POST['refno']));
+        $ref = htmlspecialchars(trim($_POST['refno']));
         require_once "../function.php";
         isAdminRole();
         $historyOBJ = new HistoryController(null, $ref);
@@ -155,9 +155,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     }
     if (isset($_POST['transac']) && $_POST['transac'] === "getFindGroup") {
 
-        $ref = htmlspecialchars(strip_tags($_POST['searchVal']));
-        $group = htmlspecialchars(strip_tags($_POST['group']));
-        $page = htmlspecialchars(strip_tags($_POST['page']));
+        $ref = htmlspecialchars(trim($_POST['searchVal']));
+        $group = htmlspecialchars(trim($_POST['group']));
+        $page = htmlspecialchars(trim($_POST['page']));
 
         $valid_group = ["todayH", "yesterdayH", "weekH", "tweekH"];
 

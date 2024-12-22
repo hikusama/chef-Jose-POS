@@ -57,12 +57,12 @@
         public function countOrders()
         {
             $sql = "SELECT 
-(SELECT COUNT(*) FROM orders WHERE DATE(orderDate) = CURDATE()) AS today,
-(SELECT COUNT(*) FROM orders WHERE DATE(orderDate) = CURDATE() - INTERVAL 1 DAY) AS lastday,
-(SELECT COUNT(*) FROM orders WHERE YEARWEEK(orderDate,1) = YEARWEEK(CURDATE(),1)) AS thisweek,
-(SELECT COUNT(*) FROM orders WHERE YEARWEEK(orderDate,1) = YEARWEEK(CURDATE() - INTERVAL 1 WEEK,1)) AS lastweek,
-(SELECT COUNT(*) FROM orders) as total
-";
+        (SELECT COUNT(*) FROM orders WHERE DATE(orderDate) = CURDATE()) AS today,
+        (SELECT COUNT(*) FROM orders WHERE DATE(orderDate) = CURDATE() - INTERVAL 1 DAY) AS lastday,
+        (SELECT COUNT(*) FROM orders WHERE YEARWEEK(orderDate,1) = YEARWEEK(CURDATE(),1)) AS thisweek,
+        (SELECT COUNT(*) FROM orders WHERE YEARWEEK(orderDate,1) = YEARWEEK(CURDATE() - INTERVAL 1 WEEK,1)) AS lastweek,
+        (SELECT COUNT(*) FROM orders) as total
+        ";
             $stmt = $this->connect()->prepare($sql);
             if ($stmt->execute()) {
                 $rws = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -1668,4 +1668,119 @@
                 return false;
             }
         }
+
+
+
+
+
+
+
+
+
+
+
+
+        //------------------------- EMPLOYEES THINGS -----------------------------
+
+        public function unExist($un)
+        {
+            $stmt = $this->connect()->prepare('SELECT userName FROM user WHERE userName = ?;');
+
+            if ($stmt->execute([$un])) {
+                if ($stmt->rowCount() == 0) {
+                    return false;
+                } else {
+                    return true;
+                }
+            }
+        }
+
+        public function emailExist($em)
+        {
+            $stmt = $this->connect()->prepare("SELECT email FROM user WHERE email = ?");
+            if ($stmt->execute([$em])) {
+                if ($stmt->rowCount() == 0) {
+                    return false;
+                } else {
+                    return true;
+                }
+            }
+
+        }
+        
+        public function delCahierAccount($uid){
+            $sql = "DELETE FROM user WHERE userID = ?";
+            $stmt = $this->connect()->prepare($sql);
+            if ($stmt->execute([$uid])) {
+                return true;
+            }else{
+                return false;
+            }
+        }
+
+
+
+        public function addCahier($info){
+
+            $sql = "INSERT INTO user(userRole,userName,email,password) VALUES(?, ?, ?, ?);";
+
+            $options = [
+                'cost' => 12
+            ];
+            $password = password_hash($info['pw'], PASSWORD_BCRYPT, $options);
+
+            $obj = $this->connect();
+            $stmt = $obj->prepare($sql);
+
+            if ($stmt->execute(["Employee",$info['un'],$info['em'],$password])) {
+                (int)$uid = $obj->lastInsertId();
+                if($this->addCahierInfo($info,$uid)){
+                    return true;
+                }else{
+                    return !$this->delCahierAccount($uid);
+                }
+
+            }else{
+                return false;
+            }
+            
+        }
+
+        public function addCahierInfo($info,$uid){
+
+            $sql = "INSERT INTO 
+                    employees(userID,profilePic,fName,mName,lName,age,birthdate,address,contactno) 
+                    VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?);";
+
+            $stmt = $this->connect()->prepare($sql);
+            if ($stmt->execute([
+                $uid,
+                $info['pf'],
+                $info['fn'],
+                $info['mn'],
+                $info['ln'],
+                $info['age'],
+                $info['bd'],
+                $info['addr'],
+                $info['cn']
+            ])) {
+                
+                return true;
+            }else{
+                return false;
+            }
+            
+        }
+
+
+
+
+
+
+
+
+
+
+
+
     }

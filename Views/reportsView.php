@@ -237,9 +237,9 @@ SUM(CASE WHEN MONTH(orderDate) = MONTH(CURRENT_DATE()) THEN totalAmount ELSE 0 E
 
     if (isset($_POST['transac']) && $_POST['transac'] === "getCSSQD") {
         $reportsOBJ = new ReportstController();
-        $from = ($_POST['from']) ? htmlspecialchars($_POST['from']) : "";
-        $to =  (isset($_POST['to'])) ? htmlspecialchars($_POST['to']) : "";
-        $Rtype =   htmlspecialchars($_POST['dr']);
+        $from = ($_POST['from']) ? htmlspecialchars(trim($_POST['from'])) : "";
+        $to =  (isset($_POST['to'])) ? htmlspecialchars(trim($_POST['to'])) : "";
+        $Rtype =   htmlspecialchars(trim($_POST['dr']));
 
         if ($Rtype == "single") {
             if (empty($from)) {
@@ -286,9 +286,9 @@ SUM(CASE WHEN MONTH(orderDate) = MONTH(CURRENT_DATE()) THEN totalAmount ELSE 0 E
     if (isset($_POST['transac']) && $_POST['transac'] === "getCSCatData") {
 
         $reportsOBJ = new ReportstController();
-        $from = ($_POST['from']) ? htmlspecialchars($_POST['from']) : "";
-        $to =  (isset($_POST['to'])) ? htmlspecialchars($_POST['to']) : "";
-        $Rtype =   htmlspecialchars($_POST['dr']);
+        $from = ($_POST['from']) ? htmlspecialchars(trim($_POST['from'])) : "";
+        $to =  (isset($_POST['to'])) ? htmlspecialchars(trim($_POST['to'])) : "";
+        $Rtype =   htmlspecialchars(trim($_POST['dr']));
 
         if ($Rtype === "single") {
             if (empty($from)) {
@@ -332,9 +332,9 @@ SUM(CASE WHEN MONTH(orderDate) = MONTH(CURRENT_DATE()) THEN totalAmount ELSE 0 E
 
     if (isset($_POST['transac']) && $_POST['transac'] === "getCSLineData") {
         $reportsOBJ = new ReportstController();
-        $from = ($_POST['from']) ? htmlspecialchars($_POST['from']) : "";
-        $Rtype =   htmlspecialchars($_POST['rtype']);
-        $type =   htmlspecialchars($_POST['type']);
+        $from = ($_POST['from']) ? htmlspecialchars(trim($_POST['from'])) : "";
+        $Rtype =   htmlspecialchars(trim($_POST['rtype']));
+        $type =   htmlspecialchars(trim($_POST['type']));
 
         if ($Rtype != "single") {
             return;
@@ -398,12 +398,12 @@ SUM(CASE WHEN MONTH(orderDate) = MONTH(CURRENT_DATE()) THEN totalAmount ELSE 0 E
     // if (isset($_POST['transac']) && $_POST['transac'] === "getItemAnal") {
     //     $reportsOBJ = new ReportstController();
 
-    //     $itemtype = htmlspecialchars($_POST['itemtype']);
-    //     $data = htmlspecialchars($_POST['data']);
-    //     $order = htmlspecialchars($_POST['order']);
-    //     $rtype = htmlspecialchars($_POST['rTypeAnl']);
-    //     $from = htmlspecialchars($_POST['from']);
-    //     $to = htmlspecialchars($_POST['to']);
+    //     $itemtype = htmlspecialchars(trim($_POST['itemtype']));
+    //     $data = htmlspecialchars(trim($_POST['data']));
+    //     $order = htmlspecialchars(trim($_POST['order']));
+    //     $rtype = htmlspecialchars(trim($_POST['rTypeAnl']));
+    //     $from = htmlspecialchars(trim($_POST['from']));
+    //     $to = htmlspecialchars(trim($_POST['to']));
 
     //     $submitDate = [];
 
@@ -429,15 +429,15 @@ SUM(CASE WHEN MONTH(orderDate) = MONTH(CURRENT_DATE()) THEN totalAmount ELSE 0 E
     if (isset($_POST['transac']) && $_POST['transac'] === "getItems") {
         $reportsOBJ = new ReportstController();
 
-        $itemReqType = htmlspecialchars($_POST['itemReqType']);
-        $spec = isset($_POST['itemID']) ? htmlspecialchars($_POST['itemID']) : 0;
-        $itemtype = htmlspecialchars($_POST['itemtype']);
-        $data = htmlspecialchars($_POST['data']);
-        $order = isset($_POST['order']) ? htmlspecialchars($_POST['order']) : 0;
-        $page = isset($_POST['page']) ? htmlspecialchars($_POST['page']) : 0;
-        $rtype = htmlspecialchars($_POST['rTypeAnl']);
-        $from = htmlspecialchars($_POST['from']);
-        $to = htmlspecialchars($_POST['to']);
+        $itemReqType = htmlspecialchars(trim($_POST['itemReqType']));
+        $spec = isset($_POST['itemID']) ? htmlspecialchars(trim($_POST['itemID'])) : 0;
+        $itemtype = htmlspecialchars(trim($_POST['itemtype']));
+        $data = htmlspecialchars(trim($_POST['data']));
+        $order = isset($_POST['order']) ? htmlspecialchars(trim($_POST['order'])) : 0;
+        $page = isset($_POST['page']) ? htmlspecialchars(trim($_POST['page'])) : 0;
+        $rtype = htmlspecialchars(trim($_POST['rTypeAnl']));
+        $from = htmlspecialchars(trim($_POST['from']));
+        $to = htmlspecialchars(trim($_POST['to']));
 
         $submitDate = [];
 

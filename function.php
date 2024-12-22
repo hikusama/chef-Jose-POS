@@ -75,6 +75,8 @@ function checkRole($role, $uri)
 
                 '/chef-Jose-POS/pannel/history.php',
 
+                '/chef-Jose-POS/pannel/cashiers.php',
+
                 '/chef-Jose-POS/pannel/overview.php',
 
                 '/chef-Jose-POS/pannel/myproducts.php',

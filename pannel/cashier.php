@@ -65,6 +65,12 @@ $isbaibing = validate($_SERVER['REQUEST_URI']);
                     <li id="history">
                         <div class="textdp"><i class="fas fa-history"></i>History</div>
                     </li>
+                    <?php if ($isbaibing["ios"] === 485) { ?>
+                        <li id="cashiers">
+                            <div class="textdp"><i class="fas fa-users"></i>Cashiers</div>
+                        </li>
+
+                    <?php } ?>
                 </div>
                 <div class="inner_side_nav_settings">
                     <li id="settings">
@@ -112,8 +118,8 @@ $isbaibing = validate($_SERVER['REQUEST_URI']);
                                 <option value="G-Cash">G-Cash</option>
                             </select>
                             <input type="text" placeholder="G-Cash account name.." id="gcashName" autocomplete="off" name="gcashName">
-                            <input type="number" placeholder="G-Cash account number.." id="gcashNum" name="gcashNum">
-                            <input type="number" placeholder="Tender amount.." name="money" id="CMmoney">
+                            <input type="number" min="0" placeholder="G-Cash account number.." id="gcashNum" name="gcashNum">
+                            <input type="number" min="0" placeholder="Tender amount.." name="money" id="CMmoney">
                             <div class="actionPay">
                                 <button type="button" id="cancCM">Cancel</button>
                                 <button type="submit" id="pay_orders">Pay</button>

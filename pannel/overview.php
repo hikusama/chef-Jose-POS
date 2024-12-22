@@ -1,7 +1,7 @@
 <?php
-    require_once "../function.php";
-    $isbaibing = validate($_SERVER['REQUEST_URI']);
-    
+require_once "../function.php";
+$isbaibing = validate($_SERVER['REQUEST_URI']);
+
 ?>
 
 <!DOCTYPE html>
@@ -10,19 +10,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="../UX/jquery-3.5.1.min.js?v=<?php echo time();?>"></script>
-    <script src="../UX/script.js?v=<?php echo time();?>"></script>
-    <script src="../UX/node_modules/chart.js/dist/chart.umd.js?v=<?php echo time();?>"></script>
-    <script src="../UX/overview.js?v=<?php echo time();?>"></script>
-    <link rel="stylesheet" href="../resources/style.css?v=<?php echo time();?>">
-    <link rel="stylesheet" href="../resources/overview.css?v=<?php echo time();?>">
-    <link rel="stylesheet" href="../resources/fontawesome-free-5.15.4-web/css/all.css?v=<?php echo time();?>">
+    <script src="../UX/jquery-3.5.1.min.js?v=<?php echo time(); ?>"></script>
+    <script src="../UX/script.js?v=<?php echo time(); ?>"></script>
+    <script src="../UX/node_modules/chart.js/dist/chart.umd.js?v=<?php echo time(); ?>"></script>
+    <script src="../UX/overview.js?v=<?php echo time(); ?>"></script>
+    <link rel="stylesheet" href="../resources/style.css?v=<?php echo time(); ?>">
+    <link rel="stylesheet" href="../resources/overview.css?v=<?php echo time(); ?>">
+    <link rel="stylesheet" href="../resources/fontawesome-free-5.15.4-web/css/all.css?v=<?php echo time(); ?>">
     <title>POS</title>
 </head>
 
 <body>
-
-<!--  Assalamu'alaykum akh, I hope this message finds you in the best of health and iman. I just wanted to share a gentle reminder, and I pray you receive it with the sincerity in sha allah, I encourage you to take a moment to reflect on a few things, in sha Allah. regarding on a fatwa u shared to our friends sometimes thoughts comes to ur mind can mislead us  dont let this deceive you because as we know, shayttan does not rest in his attempts to misguide us until our soul departed from our body from this we understand that shayttan comes to us because he knows we have laailaha illaha in our hearts we have value in our hearts. if this kind of thoughts come to our mind like the ruling about women or islam comes from arabs i ask u please dont make a fatwa or theory of our own and share it to others and like labeling as authentic because they are ready to take this as true yeah because they are curious about our religion and perhaps this can earn some hate from their hearts towards islam. if this kind of thoughts comes to us pls make a search for it islam solves all kinds of problem if you were to search the most influential person on earth it gives you first list the Muhammad S.A.W. But, This is normal thieves dont break into empty houses wallahi you are one of my known adaptable in knowledge and i recommend you to watch dawahwise or ustadz nouman ali-khan. oohhhhhhh akh i dont judge you by this if i said something that feels you bad please forgive me iam just a reminder we are muslims we have purpose in our lives alhamdullilah, this february is nxt ramadhan we need to revive our imaan, ramadhan mubarak in advance wallah  i love our team for the sake of allah and dont worry ai dont expect any reply from this. Assalamu'alaykum warahmatullahi wabarakatu. -->
 
     <div id="header">
         <div class="header_inner">
@@ -43,11 +41,11 @@
         <div class="side_nav">
             <div class="side_nav2d">
                 <div class="inner_side_nav">
-                <?php if ($isbaibing["ios"] === 485) { ?>
-                    <li id="overview" class="on_select">
-                        <div class="bgsect"></div>
-                        <div class="textdp"><i class="fas fa-chart-pie"></i>Overview</div>
-                    </li>
+                    <?php if ($isbaibing["ios"] === 485) { ?>
+                        <li id="overview" class="on_select">
+                            <div class="bgsect"></div>
+                            <div class="textdp"><i class="fas fa-chart-pie"></i>Overview</div>
+                        </li>
                     <?php } ?>
                     <li id="cashier">
                         <div class="textdp"><i class="fas fa-home"></i>Cashier</div>
@@ -59,11 +57,17 @@
                         <li id="myproducts">
                             <div class="textdp"><i class="fas fa-hamburger"></i>Products</div>
                         </li>
-                        <?php } ?>
+                    <?php } ?>
 
                     <li id="history">
                         <div class="textdp"><i class="fas fa-history"></i>History</div>
                     </li>
+                    <?php if ($isbaibing["ios"] === 485) { ?>
+                        <li id="cashiers">
+                            <div class="textdp"><i class="fas fa-users"></i>Cashiers</div>
+                        </li>
+
+                    <?php } ?>
                 </div>
                 <div class="inner_side_nav_settings">
                     <li id="settings">

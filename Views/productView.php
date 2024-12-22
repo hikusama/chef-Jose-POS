@@ -11,7 +11,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['transac'])) {
 
     // PRODUCT ADD
 
-    if ($_POST['transac'] == "addProd") {
+    if (isset($_POST['transac']) && $_POST['transac'] == "addProd") {
         $errors = [];
 
         $product_name = htmlspecialchars(strip_tags($_POST['name']));
@@ -70,7 +70,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['transac'])) {
 
     // CATEGORY ADD
 
-    if ($_POST['transac'] == "addCategory") {
+    if (isset($_POST['transac']) && $_POST['transac'] == "addCategory") {
 
 
         $errors = [];
@@ -111,7 +111,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['transac'])) {
 
     // PRODUCT EDIT
 
-    if ($_POST['transac'] == "editProd") {
+    if (isset($_POST['transac']) && $_POST['transac'] == "editProd") {
 
         $update = new ProductController(null, $product_name, $category_name, $price, $availability, $product_image, null);
 
@@ -126,7 +126,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['transac'])) {
 
     // VIEW PROD INFO
 
-    if ($_POST['transac'] == "viewProd_info") {
+    if (isset($_POST['transac']) && $_POST['transac'] == "viewProd_info") {
 
 
 
@@ -140,7 +140,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['transac'])) {
 
     // CATEGORY GET
 
-    if ($_POST['transac'] == "getCategory") {
+    if (isset($_POST['transac']) && $_POST['transac'] == "getCategory") {
         $getCategory = new ProductController(null, null, null, null, null, null, null);
 
         $rowsCat = $getCategory->getCat();
@@ -166,7 +166,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['transac'])) {
 
     // PRODUCT REMOVE
 
-    if ($_POST['transac'] == "removeProd") {
+    if (isset($_POST['transac']) && $_POST['transac'] == "removeProd") {
 
         $ID = htmlspecialchars(strip_tags($_POST['ID']));
         $state = 1;
@@ -198,7 +198,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['transac'])) {
 
     // PRODUCTS SHOW/SEARCH
 
-    if ($_POST['transac'] == "showSearchProd") {
+    if (isset($_POST['transac']) && $_POST['transac'] == "showSearchProd") {
 
         if (isset($_SESSION['currstate'])) {
             unset($_SESSION['currstate']);
@@ -286,7 +286,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['transac'])) {
 
     // PRODUCTS COMBO ADD SHOW/SEARCH
 
-    if ($_POST['transac'] == "comboSectionShowSearchProd") {
+    if (isset($_POST['transac']) && $_POST['transac'] == "comboSectionShowSearchProd") {
         $product_name = htmlspecialchars(strip_tags($_POST['name']));
         $combos = array();
 
@@ -361,7 +361,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['transac'])) {
         }
     }
 
-    if ($_POST['transac'] == "selectProd") {
+    if (isset($_POST['transac']) && $_POST['transac'] == "selectProd") {
         $productID = (int)($_POST['productID']);
 
 
@@ -382,7 +382,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['transac'])) {
         $_SESSION['combos'] = $combos;
     }
 
-    if ($_POST['transac'] == "rmSelectedProd") {
+    if (isset($_POST['transac']) && $_POST['transac'] == "rmSelectedProd") {
         $productID = htmlspecialchars(strip_tags($_POST['productID']));
 
 
@@ -426,7 +426,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['transac'])) {
         getSelected($combos, "na");
     }
 
-    if ($_POST['transac'] == "viewSelectedProd") {
+    if (isset($_POST['transac']) && $_POST['transac'] == "viewSelectedProd") {
         $combos = array();
 
         if (isset($_SESSION['combos'])) {
@@ -473,7 +473,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['transac'])) {
         getSelected($combos, "na");
     }
 
-    if ($_POST['transac'] == "viewComboSummary") {
+    if (isset($_POST['transac']) && $_POST['transac'] == "viewComboSummary") {
         $totalPriceCombo = 0;
         $item = 0;
         if (isset($_SESSION['combos'], $_SESSION['comboSummary'])) {
@@ -499,7 +499,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['transac'])) {
 
 
 
-    if ($_POST['transac'] == "insertCombo") {
+    if (isset($_POST['transac']) && $_POST['transac'] == "insertCombo") {
 
         $comboName = htmlspecialchars(strip_tags($_POST['comboName']));
         $comboPrice = intval($_POST['comboPrice']);
@@ -579,7 +579,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['transac'])) {
     }
 
 
-    if ($_POST['transac'] == "findCat") {
+    if (isset($_POST['transac']) && $_POST['transac'] == "findCat") {
 
         $_SESSION['currstate'] = 2;
 
@@ -652,7 +652,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['transac'])) {
         
         
     }
-    if ($_POST['transac'] == "findCombo") {
+    if (isset($_POST['transac']) && $_POST['transac'] == "findCombo") {
 
         $_SESSION['currstate'] = 3;
 

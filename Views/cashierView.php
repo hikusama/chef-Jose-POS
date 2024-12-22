@@ -14,8 +14,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     if (isset($_POST['transac']) && $_POST["transac"] === "searchNView") {
         session_start();
 
-        $searchVal = $_POST["searchVal"];
-        $category_id = $_POST["category_id"];
+        $searchVal = htmlspecialchars(trim($_POST["searchVal"]));
+        $category_id = htmlspecialchars(trim($_POST["category_id"]));
 
         $pdoTemp = new cashierController(null, $searchVal, null);
         $allCombo;
@@ -98,9 +98,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         session_start();
 
 
-        $qntity = htmlspecialchars($_POST["qntity"]);
-        $product_id = htmlspecialchars($_POST["product_id"]);
-        $type = htmlspecialchars($_POST["type"]);
+        $qntity = htmlspecialchars(trim($_POST["qntity"]));
+        $product_id = htmlspecialchars(trim($_POST["product_id"]));
+        $type = htmlspecialchars(trim($_POST["type"]));
 
 
         if (
@@ -220,8 +220,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     // CART ITEM REMOVE
 
     if (isset($_POST['transac']) && $_POST["transac"] === "removeToCart") {
-        $product_id = $_POST["product_id"];
-        $itemType = $_POST["itemType"];
+        $product_id = htmlspecialchars(trim($_POST["product_id"]));
+        $itemType = htmlspecialchars(trim($_POST["itemType"]));
 
         $ordersSession = array();
         $prodOrder = array();
@@ -295,7 +295,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     if (isset($_POST['transac']) && $_POST["transac"] === "addToCart") {
         // $transac =;
         session_start();
-        $id = $_POST["product_id"];
+        $id = htmlspecialchars(trim($_POST["product_id"]));
 
         $pdoTemp = new cashierController(null, null, $id);
         $prodOrder = array();
@@ -651,7 +651,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $total = $_SESSION['total'];
             $gcashName = NULL;
             $gcashNum = NULL;
-            $pmethod = $_POST['pmethod'];
+            $pmethod = htmlspecialchars(trim($_POST['pmethod']));
 
 
             if (!($pmethod == 'Cash' || $pmethod == 'G-Cash')) {
@@ -659,8 +659,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 return;
             }
             if ($pmethod == 'G-Cash') {
-                $gcashName = $_POST['gcashName'];
-                $gcashNum = $_POST['gcashNum'];
+                $gcashName = htmlspecialchars(trim($_POST['gcashName']));
+                $gcashNum = htmlspecialchars(trim($_POST['gcashNum']));
                 $numSize = $gcashNum;
                 $numSize = strlen($numSize);
                 if (empty($gcashNum) || empty($gcashName)) {
@@ -718,7 +718,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
 
     if (isset($_POST['transac']) && $_POST['transac'] === "addingDiscount") {
-        $discountType = $_POST["discountType"];
+        $discountType = htmlspecialchars(trim($_POST["discountType"]));
         $discount = (int)$_POST["discount"];
         session_start();
 
