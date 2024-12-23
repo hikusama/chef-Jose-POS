@@ -41,31 +41,31 @@ $isbaibing = validate($_SERVER['REQUEST_URI']);
             <div class="side_nav2d">
                 <div class="inner_side_nav">
                     <?php if ($isbaibing["ios"] === 485) { ?>
-                    <li id="overview">
-                        <div class="textdp"><i class="fas fa-chart-pie"></i>Overview</div>
-                    </li>
+                        <li id="overview">
+                            <div class="textdp"><i class="fas fa-chart-pie"></i>Overview</div>
+                        </li>
                     <?php } ?>
                     <li id="cashier">
                         <div class="textdp"><i class="fas fa-home"></i>Cashier</div>
                     </li>
                     <?php if ($isbaibing["ios"] === 485) { ?>
-                    <li id="reports">
-                        <div class="textdp"><i class="fas fa-file-medical-alt"></i>Reports</div>
-                    </li>
-                    <li id="myproducts">
-                        <div class="textdp"><i class="fas fa-hamburger"></i>Products</div>
-                    </li>
+                        <li id="reports">
+                            <div class="textdp"><i class="fas fa-file-medical-alt"></i>Reports</div>
+                        </li>
+                        <li id="myproducts">
+                            <div class="textdp"><i class="fas fa-hamburger"></i>Products</div>
+                        </li>
                     <?php } ?>
 
                     <li id="history">
                         <div class="textdp"><i class="fas fa-history"></i>History</div>
                     </li>
                     <?php if ($isbaibing["ios"] === 485) { ?>
-                    <li id="cashiers" class="on_select">
-                        <div class="bgsect"></div>
+                        <li id="cashiers" class="on_select">
+                            <div class="bgsect"></div>
 
-                        <div class="textdp"><i class="fas fa-users"></i>Cashiers</div>
-                    </li>
+                            <div class="textdp"><i class="fas fa-users"></i>Cashiers</div>
+                        </li>
 
                     <?php } ?>
                 </div>
@@ -94,7 +94,8 @@ $isbaibing = validate($_SERVER['REQUEST_URI']);
                     </div>
                 </div>
                 <div id="users">
-                    <ol>
+                    <!-- 
+                    <ol class="deleting">
                         <li class="picselp">
                             <div class="brd">
                                 <div class="wrap_pic">
@@ -203,7 +204,7 @@ $isbaibing = validate($_SERVER['REQUEST_URI']);
                                 <button class="smcntrl"><i class="fas fa-arrow-down"></i> Show more.</button>
                             </div>
                         </li>
-                    </ol>
+                    </ol> -->
 
                 </div>
                 <div id="overlay"></div>
@@ -220,7 +221,7 @@ $isbaibing = validate($_SERVER['REQUEST_URI']);
                             </div>
                         </li>
                         <section class="fsec">
-                            <h4>Form 1/3</h4>
+                            <h4>Add Form 1/3</h4>
 
                             <li>
                                 <label for="fn">First name</label>
@@ -245,11 +246,11 @@ $isbaibing = validate($_SERVER['REQUEST_URI']);
                             </div>
                         </section>
                         <section class="msec">
-                            <h4>Form 2/3</h4>
+                            <h4>Add Form 2/3</h4>
 
                             <li>
                                 <label for="cn">Contact no.</label>
-                                <input id="cn" type="number" placeholder="Contact no.." min="0" name="cn">
+                                <input id="cn" type="number" placeholder="Contact no(639).." min="0" name="cn">
                             </li>
                             <li>
                                 <label for="bd">Birth date</label>
@@ -270,7 +271,7 @@ $isbaibing = validate($_SERVER['REQUEST_URI']);
                             </div>
                         </section>
                         <section class="lsec">
-                            <h4>Form 3/3</h4>
+                            <h4>Add Form 3/3</h4>
 
                             <li>
                                 <label for="un">User name</label>
@@ -278,7 +279,7 @@ $isbaibing = validate($_SERVER['REQUEST_URI']);
                             </li>
                             <li>
                                 <label for="pw">Password</label>
-                                <input id="pw" type="password" placeholder="Email.." name="pw">
+                                <input id="pw" type="password" placeholder="Password.." name="pw">
                             </li>
                             <li>
                                 <label for="cpw">Confirm password</label>
@@ -293,8 +294,25 @@ $isbaibing = validate($_SERVER['REQUEST_URI']);
                         </section>
                     </form>
                 </div>
+                <div class="addCSREdit">
+                </div>
+                <div id="loadNt" style="display: none;">
 
-
+                    <div class="loader" >
+                        <div class="bar1"></div>
+                        <div class="bar2"></div>
+                        <div class="bar3"></div>
+                        <div class="bar4"></div>
+                        <div class="bar5"></div>
+                        <div class="bar6"></div>
+                        <div class="bar7"></div>
+                        <div class="bar8"></div>
+                        <div class="bar9"></div>
+                        <div class="bar10"></div>
+                        <div class="bar11"></div>
+                        <div class="bar12"></div>
+                    </div>
+                </div>
 
 
 

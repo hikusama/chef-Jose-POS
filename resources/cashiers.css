@@ -26,6 +26,7 @@
     right: 0;
     right: 1rem;
     top: 1rem;
+    
 }
 
 .dark_mode .addCashier button,
@@ -46,6 +47,7 @@
 
 .monokai_mode #users ol {
     background-color: #1E1F1C;
+    outline: solid 1px rgba(122, 122, 122, 75%);
 
 }
 
@@ -68,6 +70,16 @@
     background: #181818;
     color: rgba(219, 219, 219, 0.678);
     outline: solid 1px rgb(54, 54, 54);
+    
+}
+.monokai_mode #searchUser input{
+    outline: solid 1px rgb(107 107 107);
+    
+}
+
+.dark_mode #searchUser input:focus,
+.monokai_mode #searchUser input:focus{
+    outline: solid 1px rgb(158, 158, 158);
 
 }
 
@@ -152,6 +164,12 @@
     overflow: hidden;
 }
 
+.dark_mode .shw {
+    background: linear-gradient(transparent, #181818, #181818);
+}
+.monokai_mode .shw {
+    background: linear-gradient(transparent, #1E1F1C, #1E1F1C);
+}
 .shw {
     display: grid !important;
     place-items: center;
@@ -162,7 +180,7 @@
     transform: translate(-50%, -50%);
     width: 100%;
     padding: 1rem 0;
-    background: linear-gradient(transparent, #181818, #181818);
+    background: linear-gradient(transparent, white, white);
     cursor: pointer;
 }
 
@@ -221,7 +239,7 @@
     width: 4rem;
     box-shadow: 0 0 0 1rem rgba(255, 104, 3, 0);
     border-radius: 50%;
-    background-color: rgb(255, 104, 3);
+    background-color: rgb(141 56 0);
     animation-name: selss;
     animation-duration: 1s;
     animation-iteration-count: infinite;
@@ -239,6 +257,12 @@
         box-shadow: 0 0 0 0 rgb(255, 104, 3);
 
     }
+}
+.n2 i{
+    animation: unset !important;
+}
+.n2::after {
+    background-color: rgb(199 0 0) !important;
 }
 
 .monokai_mode .infoDD .action button,
@@ -294,6 +318,7 @@
     transform: translate(-50%, -50%);
 }
 
+.addCSREdit ,
 .addCSR {
     position: absolute;
     top: 45%;
@@ -301,37 +326,45 @@
     transform: translate(-50%, -50%);
     width: fit-content;
     display: none;
+    height: fit-content;
+    background: white;
+    min-height: 14rem;
+    min-width: 20rem;
+    border-radius: .4rem;
+    outline: solid 1px rgba(0, 0, 0, 0.479);
 }
 
-.monokai_mode .addCSR form {
+.monokai_mode .addCSREdit ,
+.monokai_mode .addCSR {
     outline: solid 1px rgba(255, 255, 255, 0.267);
     background: #1E1F1C;
 }
 
-.dark_mode .addCSR form {
+.dark_mode .addCSREdit,
+.dark_mode .addCSR {
     outline: solid 1px rgba(255, 255, 255, 0.267);
     background: #181818;
 }
 
+.addCSREdit form ,
 .addCSR form {
     overflow: hidden;
     position: relative;
-    padding: 1.5rem 0 ;
-    border-radius: .4rem;
-    outline: solid 1px rgba(0, 0, 0, 0.479);
-    height: fit-content;
-    background: white;
-    width: 20rem;
+    padding: 1.5rem 0;
+
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 1rem;
 }
 
+.addCSREdit form section>* ,
 .addCSR form section>* {
     margin-top: .8rem;
 }
 
+.dark_mode .addCSREdit form input,
+.monokai_mode .addCSREdit form input ,
 .dark_mode .addCSR form input,
 .monokai_mode .addCSR form input {
     background-color: #111010;
@@ -339,17 +372,21 @@
     outline: solid 1px rgba(255, 255, 255, 0.267);
 }
 
+.dark_mode .addCSREdit form input:focus,
+.monokai_mode .addCSREdit form input:focus ,
 .dark_mode .addCSR form input:focus,
 .monokai_mode .addCSR form input:focus {
     outline: solid 1px rgba(255, 255, 255, 0.808);
 
 }
 
+.addCSREdit form input:focus ,
 .addCSR form input:focus {
     outline: solid 1px rgba(0, 0, 0, 0.808);
 
 }
 
+.addCSREdit form input ,
 .addCSR form input {
     background: white;
     color: black;
@@ -362,13 +399,15 @@
     outline: solid 1px rgba(0, 0, 0, 0.479);
 }
 
+.addCSREdit form li ,
 .addCSR form li {
     list-style: none;
     display: flex;
     flex-direction: column;
 }
 
-.picSend img {
+.addCSREdit .picSend img ,
+.addCSR .picSend img {
     height: 7.5rem;
     position: absolute;
     top: 50%;
@@ -376,30 +415,35 @@
     transform: translate(-50%, -50%);
 }
 
-.imgss {
+.addCSREdit .imgss,
+.addCSR .imgss {
     position: relative;
     height: 7rem;
     width: 7rem;
     border-radius: 50%;
-    outline: solid 2px white;
+    outline: solid 2px rgb(48, 48, 48);
     overflow: hidden;
 
 }
 
-.picSend {
+.addCSREdit .picSend ,
+.addCSR .picSend {
     width: fit-content;
     position: relative;
 }
 
-.dark_mode .picSend i,
-.monokai_mode .picSend i {
+.dark_mode .addCSREdit .picSend i,
+.dark_mode .addCSREdit .picSend i,
+.monokai_mode .addCSR .picSend i ,
+.monokai_mode .addCSR .picSend i {
     background: white;
     outline: solid 2px white;
     color: black;
 
 }
 
-.picSend i {
+.addCSREdit .picSend i ,
+.addCSR .picSend i {
     display: grid;
     place-items: center;
     cursor: pointer;
@@ -416,38 +460,45 @@
     outline: solid 2px black;
 }
 
-.dark_mode .picSend i:hover,
-.monokai_mode .picSend i:hover {
+.dark_mode .addCSREdit .picSend i:hover,
+.monokai_mode .addCSREdit .picSend i:hover 
+.dark_mode .addCSR .picSend i:hover,
+.monokai_mode .addCSR .picSend i:hover {
     transition: .3s;
     background: rgba(255, 255, 255, 0.808);
 
     transform: translate(-50%, -50%) scale(.9);
 }
 
-.picSend i:hover {
+.addCSREdit .picSend i:hover ,
+.addCSR .picSend i:hover {
     transition: .7s;
     background: rgba(0, 0, 0, 0.74);
 
 }
 
- 
-.picSend i:hover::before {
-    transform: translate(-50%, -50%) rotate(90deg) ;
+
+.addCSREdit .picSend i:hover::before ,
+.addCSR .picSend i:hover::before {
+    transform: translate(-50%, -50%) rotate(90deg);
     transition: .3s;
 }
 
-.picSend i::before {
+.addCSREdit .picSend i::before ,
+.addCSR .picSend i::before {
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
 }
 
-.picSend input {
+.addCSR .picSend input ,
+.addCSREdit .picSend input {
     position: absolute;
 }
 
-.psm {
+.addCSREdit .psm ,
+.addCSR .psm {
     width: 100%;
     display: grid !important;
     place-items: center;
@@ -455,38 +506,53 @@
 
 }
 
-#addCashierFrm h4 {
+.addCSREdit #editCashierFrm h4 ,
+.addCSR #addCashierFrm h4 {
     text-align: center;
 }
 
-.msec,
-.lsec {
+.addCSREdit .msecEdit,
+.addCSREdit .lsecEdit,
+.addCSR .msec,
+.addCSR .lsec {
     display: none;
 }
-.errtype{
+
+.errtypeEdit ,
+.errtype {
     margin: 1rem !important;
     color: rgb(255, 65, 65);
     font-size: .9rem;
     text-align: center;
 
 }
-.errtype > *{
+.newB{
+    outline-color: rgb(0 173 24) !important;
+}
+
+.errtypeEdit>* ,
+.errtype>* {
     animation-name: err;
     animation-duration: .4s;
     animation-iteration-count: 1;
 }
+
 @keyframes err {
-    0%{
+    0% {
         transform: translateX(-2rem);
     }
 }
-.proceedAction {
+
+.addCSREdit .proceedAction ,
+.addCSR .proceedAction {
     display: flex;
     justify-content: center;
     gap: .8rem;
 
 }
-#cancelAdd{
+
+#cancelEdit ,
+#cancelAdd {
     cursor: pointer;
     position: absolute;
     padding: .5rem .8rem;
@@ -495,29 +561,40 @@
     top: 0;
     font-size: 1.1rem;
 }
-#cancelAdd:hover i{
+
+#cancelEdit:hover i ,
+#cancelAdd:hover i {
     color: rgb(252, 33, 33);
     transition: .3s;
 }
+
+.monokai_mode #cancelEdit:hover,
+.dark_mode #cancelEdit:hover ,
 .monokai_mode #cancelAdd:hover,
-.dark_mode #cancelAdd:hover{
+.dark_mode #cancelAdd:hover {
     background: rgba(107, 107, 107, 0.144);
     outline: solid 1px rgba(56, 56, 56, 0.678);
 
 }
-#cancelAdd:hover{
+
+#cancelEdit:hover ,
+#cancelAdd:hover {
     background: rgba(107, 107, 107, 0.144);
     outline: solid 1px rgba(56, 56, 56, 0.678);
 
 }
-.dark_mode .proceedAction button,
-.monokai_mode .proceedAction button {
+
+.dark_mode .addCSREdit .proceedAction button,
+.dark_mode .addCSREdit .proceedAction button,
+.monokai_mode .addCSR .proceedAction button ,
+.monokai_mode .addCSR .proceedAction button {
     outline: solid 1px rgba(255, 255, 255, 0.678);
     color: white;
 
 }
 
-.proceedAction button {
+.addCSREdit .proceedAction button ,
+.addCSR .proceedAction button {
     cursor: pointer;
     background: #a27c126c;
     color: rgb(0, 0, 0);
@@ -528,16 +605,48 @@
     outline: solid 1px rgba(0, 0, 0, 0.479);
 }
 
-.proceedAction button:hover {
+.addCSREdit .proceedAction button:hover ,
+.addCSR .proceedAction button:hover {
     background: #a27c12e1;
     transition: .4s;
 }
-.invin{
-    outline-color: rgb(255 0 0 / 74%)  !important;
+
+.invin {
+    outline-color: rgb(255 0 0 / 74%) !important;
 }
 
+.deleting {
+    animation-name: del;
+    animation-iteration-count: 1;
+    animation-duration: .7s;
 
+}
 
+@keyframes del {
+    50% {
+        transform: rotate(-4deg);
+    }
+
+    100% {
+        opacity: 0;
+        transform: rotate(-4deg) translateX(3rem);
+    }
+}
+.addCSREdit,
+.addCSR{
+    animation-name: addCs;
+    animation-duration: .5s;
+    animation-iteration-count: 1;
+
+}
+@keyframes addCs {
+    0%{
+        left: 40%;
+        opacity: 40%;
+        transform: translate(-50%, -50%) ;
+
+    }
+}
 
 
 

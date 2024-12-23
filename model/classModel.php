@@ -1705,22 +1705,23 @@
                     return true;
                 }
             }
-
         }
-        
-        public function delCahierAccount($uid){
+
+        public function delCahierAccount($uid)
+        {
             $sql = "DELETE FROM user WHERE userID = ?";
             $stmt = $this->connect()->prepare($sql);
             if ($stmt->execute([$uid])) {
                 return true;
-            }else{
+            } else {
                 return false;
             }
         }
 
 
 
-        public function addCahier($info){
+        public function addCahier($info)
+        {
 
             $sql = "INSERT INTO user(userRole,userName,email,password) VALUES(?, ?, ?, ?);";
 
@@ -1732,21 +1733,20 @@
             $obj = $this->connect();
             $stmt = $obj->prepare($sql);
 
-            if ($stmt->execute(["Employee",$info['un'],$info['em'],$password])) {
+            if ($stmt->execute(["Employee", $info['un'], $info['em'], $password])) {
                 (int)$uid = $obj->lastInsertId();
-                if($this->addCahierInfo($info,$uid)){
+                if ($this->addCahierInfo($info, $uid)) {
                     return true;
-                }else{
+                } else {
                     return !$this->delCahierAccount($uid);
                 }
-
-            }else{
+            } else {
                 return false;
             }
-            
         }
 
-        public function addCahierInfo($info,$uid){
+        public function addCahierInfo($info, $uid)
+        {
 
             $sql = "INSERT INTO 
                     employees(userID,profilePic,fName,mName,lName,age,birthdate,address,contactno) 
@@ -1764,12 +1764,115 @@
                 $info['addr'],
                 $info['cn']
             ])) {
-                
+
                 return true;
+            } else {
+                return false;
+            }
+        }
+
+        public function findEmp($name, $page)
+        {
+
+            $max_page_per_req = 15;
+
+            $offset = ($page - 1) * $max_page_per_req;
+
+
+            $sql = "SELECT * FROM employees LEFT JOIN user ON user.userID = employees.userID";
+
+            if (!empty($name)) {
+                $sql .= " WHERE fName LIKE :name OR mName LIKE :name OR lName LIKE :name";
+            }
+            $sqlF = $sql . " LIMIT :limit OFFSET :offset";
+
+            $stmt = $this->connect()->prepare($sqlF);
+            if (!empty($name)) {
+                $stmt->bindParam(":name", $name, PDO::PARAM_STR);
+            }
+            $stmt->bindParam(':limit', $max_page_per_req, PDO::PARAM_INT);
+            $stmt->bindParam(':offset', $offset, PDO::PARAM_INT);
+
+
+            
+
+            // count page 
+            $sql2 = "SELECT COUNT(employees.employeeID) AS total_rows FROM employees LEFT JOIN user ON user.userID = employees.userID";
+            
+            
+            if (!empty($name)) {
+                $sql2 .= " WHERE fName LIKE :name OR mName LIKE :name OR lName LIKE :name";
+            }
+
+            $stmt2 = $this->connect()->prepare($sql2);
+
+            if (!empty($name)) {
+                $stmt2->bindParam(":name", $name, PDO::PARAM_STR);
+            }
+
+            $stmt2->execute();
+            $rows2 = $stmt2->fetch(PDO::FETCH_ASSOC);
+            $total_rows = ($rows2) ? (int)$rows2['total_rows'] : 0;
+
+
+            $total_pages = ceil($total_rows / $max_page_per_req);
+
+
+            if ($stmt->execute()) {
+                $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                if ($rows) {
+                    return [
+                        'data' => $rows,
+                        'total_pages' => $total_pages,
+                        'current_page' => $page
+                    ];
+                } else {
+                    return [
+                        'data' => null,
+                        'total_pages' => null,
+                        'current_page' => null
+                    ];
+                }
+            } else {
+                return null;
+            }
+        
+        }
+
+
+        
+        public function updateEmployeeData($data,$keyVal,$id){
+            $stmt = $this->connect()->prepare(
+                "UPDATE employees SET $keyVal = ? WHERE userID = ?");
+                if ($stmt->execute([$data,$id])){
+                    return true;
+                }else{
+                    return false;
+                }
+        }
+
+        public function updateUserData($data,$keyVal,$id){
+            $stmt = $this->connect()->prepare(
+                "UPDATE user SET $keyVal = ? WHERE userID = ?");
+                if ($stmt->execute([$data,$id])){
+                    return true;
+                }else{
+                    return false;
+                }
+        }
+
+
+        public function getEmployeeData($id){
+
+            $sql = "SELECT * FROM employees LEFT JOIN user ON user.userID = employees.userID WHERE user.userID = ?;";
+            $stmt = $this->connect()->prepare($sql);
+
+            if ($stmt->execute([$id])){
+                $row = $stmt->fetch(PDO::FETCH_ASSOC);
+                return $row;
             }else{
                 return false;
             }
-            
         }
 
 

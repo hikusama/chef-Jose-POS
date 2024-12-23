@@ -37,4 +37,16 @@ class Employees extends Model
         return $this->addCahier($info);
     }
 
+    public function findEmpGateway($name,$page)
+    {
+        return $this->findEmp($name,$page);
+    }
+
+
+
+    public function getEmployeeDataByID($id)
+    {
+        return $this->getEmployeeData($id);
+    }
+
 }

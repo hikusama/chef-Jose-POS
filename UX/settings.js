@@ -24,7 +24,9 @@ $(document).ready(function () {
     }
     setNewBody()
 
-
+    $(".addm").on("click","#creatempacc", function () {
+        window.location.href = "cashiers.php"
+    });
 
     $(".themes_select label").click(function (e) {
         e.preventDefault();
