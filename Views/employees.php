@@ -60,10 +60,10 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $today = new DateTime();
             $ageBD = $today->diff($bdcal)->y;
             if ((int)$age >= 18 && (int)$age <= 50) {
-                if ((int)$ageBD == $age) {
+                if ((int)$ageBD == (int)$age) {
                     if (preg_match('/^639\d{9}$/', $cn)) {
                         if (!($obj->is_invalid_email($em))) {
-                            if (!isset($_POST['edit'])) {
+                            if (isset($_POST['edit'])) {
                                 if (!($obj->isEmailExist($em))) {
                                     http_response_code(200);
                                     $err =  "success";
@@ -166,16 +166,17 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 }
             }
             $lengthPw = strlen($pw);
+            $lengthPw = intval($lengthPw);
 
             if (count($errors) === 0) {
 
-                if ($pw != $cpw) {
-                    if ($lengthPw < 8 && $lengthPw > 16) {
+                if ($pw === $cpw) {
+                    if ($lengthPw >= 8 && $lengthPw <= 16) {
                     } else {
-                        $errors["errr"] = "<p>Password didn't match.</p>";
+                        $errors["errr"] = "<p>Password must be 8 - 16 characters only.</p>";
                     }
                 } else {
-                    $errors["errr"] = "<p>Password must be 8 - 16 characters only.</p>";
+                    $errors["errr"] = "<p>Password didn't match.</p>";
                 }
             }
 
@@ -189,7 +190,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             if (count($errors) === 0) {
 
                 if (((int)$ageBD >= 18 && (int)$ageBD <= 50) || ((int)$age >= 18 && (int)$age <= 50)) {
-                    if ((int)$ageBD === $age) {
+                    if ((int)$ageBD === (int)$age) {
                         if (preg_match('/^639\d{9}$/', $cn)) {
                             if (!($obj->is_invalid_email($em))) {
                                 if (!($obj->isEmailExist($em))) {
@@ -252,14 +253,25 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
 
     if (isset($_POST['transac']) && $_POST["transac"] === "allSecEdit") {
-        $modif = json_decode($_POST['modifieds'], true);
-        $modifieds = [];
-        // $modifieds = array_merge(...$modifieds);
-        foreach ($modif as $value) {
-            // $modif["'".$value['field']."'"] = $value['value'];
-            $modifieds[$value['field']] = $value['value'];
-        }
         $userID = htmlspecialchars(trim($_POST['userID']));
+
+        $obj = new Employees();
+        $org = "";
+        if (!empty($userID)) {
+            $org = $obj->getEmployeeDataByID($userID);
+        } else {
+            http_response_code(400);
+            $cont = "<p>No result for this refresh the page habibi.";
+        }
+
+        if (!$org) {
+            $res = "<p>Something went wrong.</p>";
+            http_response_code(400);
+            echo json_encode(["error" => $res]);
+            return;
+        }
+
+        $modifieds = [];
 
         $fn = htmlspecialchars(trim($_POST['fnEdit']));
         $mn = htmlspecialchars(trim($_POST['mnEdit']));
@@ -274,6 +286,65 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $un = htmlspecialchars(trim($_POST['unEdit']));
         $pw = htmlspecialchars(trim($_POST['pwEdit']));
         $cpw = htmlspecialchars(trim($_POST['cpwEdit']));
+
+
+
+        // first
+
+        if (isNotSame($org['fName'], $fn)) {
+            $modifieds['fName'] = $fn;
+        }
+        if (isNotSame($org['mName'], $mn)) {
+            $modifieds['mName'] = $mn;
+        }
+        if (isNotSame($org['lName'], $ln)) {
+            $modifieds['lName'] = $ln;
+        }
+        if (isNotSame($org['age'], $age)) {
+            $modifieds['age'] = $age;
+        }
+
+
+
+        // second
+
+        if (isNotSame($org['contactno'], $cn)) {
+            $modifieds['contactno'] = $cn;
+        }
+        if (isNotSame($org['birthdate'], $bd)) {
+            $modifieds['birthdate'] = $bd;
+        }
+        if (isNotSame($org['email'], $em)) {
+            $modifieds['email'] = $em;
+        }
+        if (isNotSame($org['address'], $addr)) {
+            $modifieds['address'] = $addr;
+        }
+
+
+        // last
+
+
+
+        if (isNotSame($org['userName'], $un)) {
+            $modifieds['userName'] = $un;
+        }
+        $errors = [];
+
+        if (!ce($pw) || !ce($cpw)) {
+            $lengthPw = strlen($pw);
+            $lengthPw = intval($lengthPw);
+
+            if ($pw === $cpw) {
+                if ($lengthPw >= 8 && $lengthPw <= 16) {
+                    $modifieds['password'] = $pw;
+                } else {
+                    $errors["errr"] = "<p>Password must be 8 - 16 characters only.</p>";
+                }
+            } else {
+                $errors["errr"] = "<p>Password didn't match.</p>";
+            }
+        }
 
         if (
             ce($fn) ||
@@ -292,52 +363,41 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             header("Content-Type: application/json");
             echo json_encode(["error" => "<p>Fill in all fields.</p>"]);
         } else {
-            $errors = [];
 
             $ImageData = "";
+            if (count($errors) === 0) {
 
-            if (isset($_FILES['dpEdit']) && $_FILES['dpEdit']['error'] == 0) {
-                $allowedExtensions = ['jpg', 'jpeg', 'png'];
-                $fileExtension = strtolower(pathinfo($_FILES['dpEdit']['name'], PATHINFO_EXTENSION));
-                $fileSize = $_FILES['dpEdit']['size'];
+                if (isset($_FILES['dpEdit']) && $_FILES['dpEdit']['error'] == 0) {
+                    $allowedExtensions = ['jpg', 'jpeg', 'png'];
+                    $fileExtension = strtolower(pathinfo($_FILES['dpEdit']['name'], PATHINFO_EXTENSION));
+                    $fileSize = $_FILES['dpEdit']['size'];
 
-                $maxFileSize = 3 * 1024 * 1024;
+                    $maxFileSize = 3 * 1024 * 1024;
 
-                if (in_array($fileExtension, $allowedExtensions)) {
-                    if ($fileSize <= $maxFileSize) {
-                        $ImageData = file_get_contents($_FILES['dpEdit']['tmp_name']);
+                    if (in_array($fileExtension, $allowedExtensions)) {
+                        if ($fileSize <= $maxFileSize) {
+                            $ImageData = file_get_contents($_FILES['dpEdit']['tmp_name']);
+                            if (isset($_POST['picChange'])) {
+                                $modifieds['profilePic'] = $ImageData;
+                            }
+                        } else {
+                            $errors["errr"] = "<p>The file size exceeds the maximum allowed limit (3 MB).</p>";
+                        }
                     } else {
-                        $errors["errr"] = "<p>The file size exceeds the maximum allowed limit (3 MB).</p>";
+                        $errors["errr"] = "<p>Only JPG and PNG files are allowed for profile pictures.</p>";
                     }
                 } else {
-                    $errors["errr"] = "<p>Only JPG and PNG files are allowed for profile pictures.</p>";
+                    $errors["errr"] = "<p>Please insert a profile.</p>";
                 }
-            } else {
-                $errors["errr"] = "<p>Please insert a profile.</p>";
             }
 
 
 
-            $obj = new Employees();
-            if (count($errors) === 0 && isset($modifieds['un'])) {
+            if (count($errors) === 0 && isset($modifieds['userName'])) {
                 if ($obj->isUserNameExist($un)) {
                     $errors["errr"] = "<p>User name already exist.</p>";
                 }
             }
-            $lengthPw = strlen($pw);
-
-
-            if (count($errors) === 0 && !ce($pw)) {
-                if ($pw != $cpw) {
-                    if ($lengthPw < 8 && $lengthPw > 16) {
-                    } else {
-                        $errors["errr"] = "<p>Password didn't match.</p>";
-                    }
-                } else {
-                    $errors["errr"] = "<p>Password must be 8 - 16 characters only.</p>";
-                }
-            }
-
 
 
 
@@ -351,7 +411,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                     if ((int)$ageBD == $age) {
                         if (preg_match('/^639\d{9}$/', $cn)) {
                             if (!($obj->is_invalid_email($em))) {
-                                if (isset($modifieds['em'])) {
+                                if (isset($modifieds['email'])) {
 
                                     if (!($obj->isEmailExist($em))) {
                                     } else {
@@ -372,7 +432,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 }
             }
 
-            if (count($errors) === 0 && count($modifieds) > 0) {
+            if (count($errors) === 0 && $modifieds) {
                 $res = "";
 
                 // if ($obj->addCashierAccGate([
@@ -395,30 +455,26 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 //     $res = "<p>Something went wrong.</p>";
                 // }
 
-                if (isset($modifieds['pwEdit'])) {
+                if (isset($modifieds['password'])) {
                     $options = [
                         'cost' => 12
                     ];
                     $password = password_hash($pw, PASSWORD_BCRYPT, $options);
                     $modifieds["password"] = $password;
                 }
-                // var_dump($modifieds);
+
                 $errorCount = 0;
                 foreach ($modifieds as $key => $value) {
                     if (
-                        $value == "userName" ||
-                        $value == "email" ||
-                        $value == "password"
+                        $key == "userName" ||
+                        $key == "email" ||
+                        $key == "password"
                     ) {
-                        if (!$obj->updateUserData(htmlspecialchars(trim($_POST["$key"])), $value, $userID)) {
+                        if (!$obj->updateUserData($value, $key, $userID)) {
                             $errorCount += 1;
                         }
                     } else {
-                        if (isset($modifieds['dpEdit'])) {
-                            if (!$obj->updateEmployeeData($ImageData, $value, $userID)) {
-                                $errorCount += 1;
-                            }
-                        } else if (!$obj->updateEmployeeData(htmlspecialchars(trim($_POST["$key"])), $value, $userID)) {
+                        if (!$obj->updateEmployeeData($value, $key, $userID)) {
                             $errorCount += 1;
                         }
                     }
@@ -434,7 +490,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 header("Content-Type: application/json");
                 echo json_encode(["error" => $res]);
             } else {
-                if (count($errors) === 0 && count($modifieds) === 0) {
+                if (count($errors) === 0 && !$modifieds) {
                     $errors['errr'] = "<p>No modification needed.</p>";
                 }
 
@@ -474,6 +530,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                             </div>
                         </li>
                         <section class="fsecEdit">
+                        <div>
                             <h4>Edit Form 1/3</h4>
 
                             <li>
@@ -497,8 +554,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                             <div class="proceedAction">
                                 <button id="nxt1Edit" type="button">Next</button>
                             </div>
+                        </div>
                         </section>
                         <section class="msecEdit">
+                        <div>
+
                             <h4>Edit Form 2/3</h4>
 
                             <li>
@@ -522,8 +582,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                                 <button id="back1Edit" type="button">Back</button>
                                 <button id="nxt2Edit" type="button">Next</button>
                             </div>
+                        </div>
                         </section>
                         <section class="lsecEdit">
+                        <div>
+
                             <h4>Edit Form 3/3</h4>
 
                             <li>
@@ -544,6 +607,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                                 <button id="back2Edit" type="button">Back</button>
                                 <button id="submitEdit" type="button">Submit</button>
                             </div>
+                        </div>
                         </section>
                     </form>
             ';
@@ -582,6 +646,17 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         header("Content-Type: application/json");
         echo json_encode(["error" => $error]);
     }
+
+
+
+
+
+
+
+
+
+
+
     if (isset($_POST['transac']) && $_POST["transac"] === "findEmployee") {
         $name = htmlspecialchars(trim($_POST['name']));
         $page = htmlspecialchars(trim($_POST['page']));
@@ -592,10 +667,12 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         if (!empty($name)) {
             $name = "%" . $name . "%";
         }
-        $rows = "";
+
         try {
             $cont = "";
             $junk = $obj->findEmpGateway($name, $page);
+            $total_pages = intval($junk['total_pages']);
+            $current_page = intval($junk['current_page']);
             $rows = $junk['data'];
             http_response_code(200);
             if ($rows) {
@@ -641,7 +718,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                                 </data>
                                 <data>
                                 <p>Contactno:</p>
-                                <p>' . $row['fName'] . '</p>
+                                <p>+' . $row['contactno'] . '</p>
                             </data>
                             <data>
                                 <p>Email:</p>
@@ -662,6 +739,17 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                     </ol>
                 ';
                 }
+                $cont .= '
+                          <li id="page-dir-cont" style="">
+                              <div class="main-dir-link">';
+                              for ($i=1; $i <= $total_pages ; $i++) {
+                                  $g = ($i === $current_page) ? '<button type="button" id="pageON">' : '<button type="button" class="data-link" id="'.$i.'">' ;
+                                  $cont .= $g.$i;
+                                  $cont .= '</button>';
+                              }
+                              $cont .= '</div>
+                          </li>
+                        ';
             } else {
                 $cont = "<p>No results.</p>";
             }
@@ -691,6 +779,15 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
 
 */
+}
+
+
+function isNotSame($org, $test)
+{
+    if ($org != $test) {
+        return true;
+    }
+    return false;
 }
 
 

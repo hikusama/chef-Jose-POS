@@ -485,6 +485,10 @@
     width: fit-content;
 }
 
+.dark_mode .findBy li ,
+.monokai_mode .findBy li {
+    color: white;
+}
 .findBy li {
     color: #353535;
     list-style: none;
@@ -759,10 +763,8 @@
 
 .dark_mode #itemAnalyticalData ol {
     color: white;
-
     background-color: #181818;
     outline: solid 1px rgba(99, 99, 99, 0.411);
-    pointer-events: none;
 }
 
 #itemAnalyticalData {
@@ -1001,9 +1003,13 @@
 
 }
 
+.dark_mode .dataPrTypes ,
+.monokai_mode .dataPrTypes {
+    border: solid 1px rgba(163, 163, 163, 0.38);
+
+}
 .dataPrTypes {
     padding: .5rem;
-    background-color: #f9f9f9;
     border-radius: .7rem;
     width: 26rem;
     height: fit-content;
@@ -1138,3 +1144,33 @@
     border-radius: 1rem;
     font-size: 1rem;
 }
+
+
+/* today */
+.ogCards section ol > *:nth-child(3) p{
+    position: relative;
+}
+.ogCards section > *:nth-child(2) > *:nth-child(3) p::before{
+    content: 'From yesterday';
+    position: absolute;
+    top: 200%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+}
+.ogCards section > *:nth-child(3) > *:nth-child(3) p::before{
+    content: 'From last week';
+    position: absolute;
+    top: 200%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+}
+.ogCards section > *:nth-child(4) > *:nth-child(3) p::before{
+    content: 'From last month';
+    position: absolute;
+    top: 200%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+}
+
+
+

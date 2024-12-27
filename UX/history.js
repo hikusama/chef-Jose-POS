@@ -12,16 +12,18 @@ $(document).ready(function () {
 
     $(".history_info").on("click", "#delReceipt", function (e) {
         e.preventDefault();
+        if (prompt("Type 'delete' to confirm.") === "delete") {
 
-        if (reqOpen == true) {
-            reqOpen = false
-            let rf = $(this).parent().attr('id');
-            $(".data").find("#" + rf).parent().addClass("rmByRf")
-            setTimeout(() => {
-                $(".data").find(".rmByRf").detach()
-            }, 450);
-            delOrder($(this).parent().attr('id'))
+            if (reqOpen == true) {
+                reqOpen = false
+                let rf = $(this).parent().attr('id');
+                $(".data").find("#" + rf).parent().addClass("rmByRf")
+                setTimeout(() => {
+                    $(".data").find(".rmByRf").detach()
+                }, 450);
+                delOrder($(this).parent().attr('id'))
 
+            }
         }
 
 

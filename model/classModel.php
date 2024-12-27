@@ -205,8 +205,8 @@
                                 SUM(CASE WHEN MONTH(orderDate) = MONTH(CURRENT_DATE()) THEN discount ELSE 0 END) AS discountmonth,
                                 SUM(CASE WHEN MONTH(orderDate) = MONTH(CURRENT_DATE()) THEN 1 ELSE 0 END) AS ordersmonth,
 
-                                SUM(CASE WHEN YEARWEEK(orderDate, 1) = YEARWEEK(CURDATE(), 1) THEN 1 ELSE 0 END) AS salesweek,  
-                                SUM(CASE WHEN YEARWEEK(orderDate, 1) = YEARWEEK(CURDATE(), 1) THEN 1 ELSE 0 END) AS discountweek,  
+                                SUM(CASE WHEN YEARWEEK(orderDate, 1) = YEARWEEK(CURDATE(), 1) THEN totalAmount ELSE 0 END) AS salesweek,  
+                                SUM(CASE WHEN YEARWEEK(orderDate, 1) = YEARWEEK(CURDATE(), 1) THEN discount ELSE 0 END) AS discountweek,  
                                 SUM(CASE WHEN YEARWEEK(orderDate, 1) = YEARWEEK(CURDATE(), 1) THEN 1 ELSE 0 END) AS ordersweek,  
 
                             -- last things
@@ -628,7 +628,7 @@
                 SUM(CASE WHEN DATE(ord.orderDate) = DATE_SUB(?, INTERVAL 1 DAY) THEN $data ELSE 0 END) AS beforeData";
             }
             $sql .= ",SUM(CASE WHEN YEARWEEK(ord.orderDate, 1) = YEARWEEK(?, 1) THEN $data ELSE 0 END) AS TW
-                     ,SUM(CASE WHEN YEARWEEK(ord.orderDate) = YEARWEEK(? - INTERVAL 1 WEEK, 1) THEN $data ELSE 0 END) AS LW";
+                     ,SUM(CASE WHEN YEARWEEK(ord.orderDate, 1) = YEARWEEK(? - INTERVAL 1 WEEK, 1) THEN $data ELSE 0 END) AS LW";
 
             $sql .= " FROM 
                 " . $select . " AS pcr
@@ -639,7 +639,6 @@
               GROUP BY 
                 pcr." . $name . "
               ORDER BY selData " . $order . " LIMIT ? OFFSET ?";
-
             $stmt = $this->connect()->prepare($sql);
 
             $paramIndex = 1;
@@ -1466,8 +1465,11 @@
 
         //------------------------- CASHIER THINGS -----------------------------
 
-        public function getAllCombosModel($comboName)
+        public function getAllCombosModel($comboName, $page = 1)
         {
+            $max_page_per_req = 25;
+            $offset = ($page - 1) * $max_page_per_req;
+
             if (!empty($comboName)) {
                 $comboName = "%" . $comboName . "%";
             }
@@ -1479,26 +1481,71 @@
             if (!empty($comboName)) {
                 $sql .= " WHERE combo.comboName LIKE :comboName GROUP BY combo.comboID";
             }
+            $sql .= " LIMIT :limit OFFSET :offset";
 
             $stmt = $this->connect()->prepare($sql);
             if (!empty($comboName)) {
                 $stmt->bindParam(':comboName', $comboName);
             }
+            $stmt->bindParam(':limit', $max_page_per_req, PDO::PARAM_INT);
+            $stmt->bindParam(':offset', $offset, PDO::PARAM_INT);
 
-            $stmt->execute();
 
-            $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-            if ($rows) {
-                return $rows;
+
+            // count page 
+            $sql2 = "SELECT COUNT(combo.comboID) AS total_rows FROM combo";
+
+
+            if (!empty($comboName)) {
+                $sql2 .= " WHERE combo.comboName LIKE :comboName GROUP BY combo.comboID";
+            }
+
+            $stmt2 = $this->connect()->prepare($sql2);
+
+            if (!empty($comboName)) {
+                $stmt2->bindParam(':comboName', $comboName);
+            }
+
+
+
+            $stmt2->execute();
+            $rows2 = $stmt2->fetch(PDO::FETCH_ASSOC);
+            $total_rows = ($rows2) ? (int)$rows2['total_rows'] : 0;
+
+
+            $total_pages = ceil($total_rows / $max_page_per_req);
+
+
+            if ($stmt->execute()) {
+                $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                if ($rows) {
+                    return [
+                        'data' => $rows,
+                        'total_pages' => $total_pages,
+                        'current_page' => $page
+                    ];
+                } else {
+                    return [
+                        'data' => null,
+                        'total_pages' => null,
+                        'current_page' => null
+                    ];
+                }
             } else {
                 return null;
             }
         }
 
 
-        public function getAllProductss($product_name, $category)
+        public function getAllProductss($product_name, $category, $page = 1)
         {
+
+            // fme
+            $max_page_per_req = 25;
+
+            $offset = ($page - 1) * $max_page_per_req;
+
             if (!empty($product_name)) {
                 $product_name = "%" . $product_name . "%";
             }
@@ -1518,7 +1565,9 @@
                     $sql .= " AND products.name LIKE :product_name";
                 }
             }
-            $sql .= " GROUP BY products.productID ORDER BY products.availability = 'Available' DESC";
+            $sql .= " GROUP BY products.productID ORDER BY products.availability = 'Available' DESC LIMIT :limit OFFSET :offset";
+
+
 
             $pdo = $this->connect();
             $stmt = $pdo->prepare($sql);
@@ -1528,12 +1577,58 @@
             if (!empty($category)) {
                 $stmt->bindParam(':category', $category);
             }
-            $stmt->execute();
+            $stmt->bindParam(':limit', $max_page_per_req, PDO::PARAM_INT);
+            $stmt->bindParam(':offset', $offset, PDO::PARAM_INT);
 
-            $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-            if ($rows) {
-                return $rows;
+            
+            // count page 
+            $sql2 = "SELECT COUNT(products.productID) AS total_rows FROM products";
+
+
+            if (!empty($category)) {
+                $sql2 .= " INNER JOIN category ON category.category_id = products.category_id WHERE category.category_id = :category";
+            }
+
+            if (!empty($product_name)) {
+                if (empty($category)) {
+                    $sql2 .= " WHERE products.name LIKE :product_name";
+                } else {
+                    $sql2 .= " AND products.name LIKE :product_name";
+                }
+            }
+            $stmt2 = $this->connect()->prepare($sql2);
+
+            if (!empty($product_name)) {
+                $stmt2->bindParam(':product_name', $product_name);
+            }
+            if (!empty($category)) {
+                $stmt2->bindParam(':category', $category);
+            }
+
+            $stmt2->execute();
+            $rows2 = $stmt2->fetch(PDO::FETCH_ASSOC);
+            $total_rows = ($rows2) ? (int)$rows2['total_rows'] : 0;
+
+
+            $total_pages = ceil($total_rows / $max_page_per_req);
+
+
+            if ($stmt->execute()) {
+                $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                if ($rows) {
+                    return [
+                        'data' => $rows,
+                        'total_pages' => $total_pages,
+                        'current_page' => $page
+                    ];
+                } else {
+                    return [
+                        'data' => null,
+                        'total_pages' => null,
+                        'current_page' => null
+                    ];
+                }
             } else {
                 return null;
             }
@@ -1794,12 +1889,12 @@
             $stmt->bindParam(':offset', $offset, PDO::PARAM_INT);
 
 
-            
+
 
             // count page 
             $sql2 = "SELECT COUNT(employees.employeeID) AS total_rows FROM employees LEFT JOIN user ON user.userID = employees.userID";
-            
-            
+
+
             if (!empty($name)) {
                 $sql2 .= " WHERE fName LIKE :name OR mName LIKE :name OR lName LIKE :name";
             }
@@ -1836,54 +1931,46 @@
             } else {
                 return null;
             }
-        
         }
 
 
-        
-        public function updateEmployeeData($data,$keyVal,$id){
+
+        public function updateEmployeeData($data, $keyVal, $id)
+        {
             $stmt = $this->connect()->prepare(
-                "UPDATE employees SET $keyVal = ? WHERE userID = ?");
-                if ($stmt->execute([$data,$id])){
-                    return true;
-                }else{
-                    return false;
-                }
+                "UPDATE employees SET $keyVal = ? WHERE userID = ?"
+            );
+            if ($stmt->execute([$data, $id])) {
+                return true;
+            } else {
+                return false;
+            }
         }
 
-        public function updateUserData($data,$keyVal,$id){
+        public function updateUserData($data, $keyVal, $id)
+        {
             $stmt = $this->connect()->prepare(
-                "UPDATE user SET $keyVal = ? WHERE userID = ?");
-                if ($stmt->execute([$data,$id])){
-                    return true;
-                }else{
-                    return false;
-                }
-        }
-
-
-        public function getEmployeeData($id){
-
-            $sql = "SELECT * FROM employees LEFT JOIN user ON user.userID = employees.userID WHERE user.userID = ?;";
-            $stmt = $this->connect()->prepare($sql);
-
-            if ($stmt->execute([$id])){
-                $row = $stmt->fetch(PDO::FETCH_ASSOC);
-                return $row;
-            }else{
+                "UPDATE user SET $keyVal = ? WHERE userID = ?"
+            );
+            if ($stmt->execute([$data, $id])) {
+                return true;
+            } else {
                 return false;
             }
         }
 
 
+        public function getEmployeeData($id)
+        {
 
+            $sql = "SELECT * FROM employees LEFT JOIN user ON user.userID = employees.userID WHERE user.userID = ?;";
+            $stmt = $this->connect()->prepare($sql);
 
-
-
-
-
-
-
-
-
+            if ($stmt->execute([$id])) {
+                $row = $stmt->fetch(PDO::FETCH_ASSOC);
+                return $row;
+            } else {
+                return false;
+            }
+        }
     }

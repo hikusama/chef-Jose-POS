@@ -26,15 +26,17 @@ $(document).ready(function () {
     $(".myproducts").on("click", "#deleteByID", function (e) {
         e.preventDefault()
         id = parseInt($(this).parent().attr("id"))
+        if (prompt("Type 'delete' to confirm.") === "delete") {
 
-        deleteThings(id)
-        $(".more_showPane").trigger("click");
-        $("#content_products .action_select").removeClass("action_selectNew");
-        $(this).closest('li').addClass('delItem')
-        setTimeout(() => {
-            $(this).closest('li').detach()
-        }, 300);
+            deleteThings(id)
+            $(".more_showPane").trigger("click");
+            $("#content_products .action_select").removeClass("action_selectNew");
+            $(this).closest('li').addClass('delItem')
+            setTimeout(() => {
+                $(this).closest('li').detach()
+            }, 300);
 
+        }
 
 
     });

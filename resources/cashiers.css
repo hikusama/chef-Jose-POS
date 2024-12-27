@@ -28,11 +28,12 @@
     top: 1rem;
     
 }
-
+.monokai_mode  .main-dir-link button,
+.dark_mode  .main-dir-link button,
 .dark_mode .addCashier button,
 .monokai_mode .addCashier button {
     color: rgba(255, 255, 255, 0.753);
-    outline: solid 1px rgba(255, 255, 255, 0.466);
+    outline: solid 1px rgba(255, 255, 255, 0.466) !important;
 
 }
 
@@ -45,12 +46,14 @@
     background-color: rgb(255 104 3 / 44%);
 }
 
+.monokai_mode  .main-dir-link button,
 .monokai_mode #users ol {
     background-color: #1E1F1C;
     outline: solid 1px rgba(122, 122, 122, 75%);
 
 }
 
+.dark_mode  .main-dir-link button,
 .dark_mode #users ol {
     background-color: #181818;
     outline: solid 1px rgba(122, 122, 122, 0.233);
@@ -114,7 +117,7 @@
 #users ol {
 
     width: 20rem;
-    border-radius: 5rem .5rem;
+    border-radius: 1.5rem;
     padding: 0 1rem .8rem;
     list-style: none;
     background-color: white;
@@ -140,7 +143,7 @@
     align-items: center;
     justify-content: space-between;
     flex-wrap: wrap;
-
+    gap: 1rem;
 }
 
 #users ol li:nth-child(2)>*>*:nth-child(1) {
@@ -518,9 +521,15 @@
     display: none;
 }
 
+.errtypeEdit p,
+.errtype p{
+    padding: 1rem !important;
+    color: rgb(255, 65, 65);
+    font-size: .9rem;
+    text-align: center;
+}
 .errtypeEdit ,
 .errtype {
-    margin: 1rem !important;
     color: rgb(255, 65, 65);
     font-size: .9rem;
     text-align: center;
@@ -632,6 +641,14 @@
         transform: rotate(-4deg) translateX(3rem);
     }
 }
+.addCSR section > *,
+.addCSREdit section > *{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: .6rem;
+}
 .addCSREdit,
 .addCSR{
     animation-name: addCs;
@@ -649,35 +666,54 @@
 }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 /* Form add end */
+
+
+
+
+
+
+
+#users > *{
+    list-style: none;
+}
+#users #page-dir-cont {
+    width: 100%;
+    background: none !important;
+    border: none !important;
+    cursor: default !important;
+}
+
+#users #page-dir-cont .main-dir-link {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    width: 100%;
+    max-width: 100% !important;
+}
+
+#users #page-dir-cont .main-dir-link button {
+    height: 2rem;
+    width: 3.5rem;
+    display: grid;
+    place-items: center;
+    border-radius: 1rem;
+    font-size: 1rem;
+    border: none;
+    outline: solid 1px rgba(0, 0, 0, 0.582);
+
+}
+
+#users #page-dir-cont .main-dir-link .data-link:hover {
+    background: rgb(212, 88, 5) !important;
+    transition: .2s;
+    cursor: pointer;
+
+}
+
+
+ 
+
+#users #pageON {
+    background: rgb(212, 88, 5) !important;
+}

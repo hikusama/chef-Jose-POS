@@ -15,7 +15,7 @@ $(document).ready(function () {
     // // let samp = (currYr - 1).toString() + " - " + currYr.toString()
 
     // $(".recordDate").html(samp.getMonth() + "/" + samp.getDate() + "/" + samp.getFullYear());
-    $(".recordDate").html(today);
+    $(".recordDate").html("Select date first.");
     $(".dateAnalytics").html(today);
 
     getItems("proddR", "highest", "singleAnl", "sales-data", today, "", 1)
@@ -55,7 +55,6 @@ $(document).ready(function () {
         } else {
             $("#" + id).prop("checked", true)
         }
-        console.log("#" + id);
 
 
     });
@@ -147,11 +146,9 @@ $(document).ready(function () {
             if (anlRtype === "singleAnl") {
                 $(".startAnl p").html("Go to")
                 $(".endAnl").detach()
-                console.log(anlRtype);
             } else if (anlRtype === "doubleAnl") {
                 $(".startAnl p").html("Start")
                 $(".dateThings").append(endAnl);
-                console.log(anlRtype);
 
             }
 
@@ -265,13 +262,11 @@ $(document).ready(function () {
             $(this).addClass("onSt");
 
             if (id === "week") {
-                console.log(1);
                 $("#itemdataweek").show();
                 $("#itemdatamonth").hide();
 
 
             } else if (id === "month") {
-                console.log(2);
                 $("#itemdatamonth").show();
                 $("#itemdataweek").hide();
 
@@ -284,7 +279,6 @@ $(document).ready(function () {
     $(".analytics").on("click", ".btt #rmX", function (e) {
         e.preventDefault();
         e.stopPropagation();
-        console.log(45454);
 
         $("#itemAnalyticalData ol").removeClass("NOL");
         $(".analytics .data_presentation_wrap").detach();

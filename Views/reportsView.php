@@ -464,7 +464,7 @@ SUM(CASE WHEN MONTH(orderDate) = MONTH(CURRENT_DATE()) THEN totalAmount ELSE 0 E
         }
 
         if ($data === "orders-data") {
-            $data = "oi.quantity";
+            $data = " oi.quantity";
         } else if ($data === "sales-data") {
             $data = " oi.unitPrice ";
         }
@@ -840,11 +840,11 @@ function cP($s, $e)
     $rtt = "";
 
     if ($ready < 0) {
-        $rtt = '<p class="" style="color: rgb(215 0 0); white-space:nowrap;">' . $ready . '%</p>';
+        $rtt = '<p class="rtmhen" style="color: rgb(215 0 0); white-space:nowrap;">' . $ready . '%</p>';
     } else if ($ready > 0) {
-        $rtt = '<p class="" style="white-space:nowrap;">+' . $ready . '%</p>';
+        $rtt = '<p class="rtmhen" style="white-space:nowrap;">+' . $ready . '%</p>';
     } else {
-        $rtt = '<p class="" style="white-space:nowrap;color: unset;"><b></b>0.0</p>';
+        $rtt = '<p class="rtmhen" style="white-space:nowrap;color: unset;"><b></b>0.0</p>';
     }
 
 
@@ -875,7 +875,7 @@ function RP($s, $e)
                 </div>';
     } else {
         $rtt = '<div class="rpRs" style="white-space:nowrap;color: unset;">
-                    <p>0.0</p>
+                    <p>0.0: '.$s.'-'.$e.'</p>
                     <p> From last week.</p>
                 </div>';
     }

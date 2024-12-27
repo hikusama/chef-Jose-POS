@@ -1357,7 +1357,7 @@
 }
 
 
-.dark_mode #content_products-cont #page-dir-cont .main-dir-link #more,
+.monokai_mode #content_products-cont #page-dir-cont .main-dir-link #more,
 .dark_mode #content_products-cont #page-dir-cont .main-dir-link #more {
     background: #3a3939 !important;
 }

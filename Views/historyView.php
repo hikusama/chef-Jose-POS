@@ -45,9 +45,10 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $gno = ($rows[0]["gcashAccountNo"] != NULL) ? $rows[0]["gcashAccountNo"] : NULL;
             $dc = ($rows[0]["discount"] != NULL) ? ($rows[0]["discount"] / $subtotal) * 100 : NULL;
             $dcT = ($rows[0]["discountType"] != NULL) ? $rows[0]["discountType"] : NULL;
-            $tA = $rows[0]["totalAmount"];
+            $tA = intval($rows[0]["totalAmount"]);
             $pM = $rows[0]["paymentMethod"];
-            $tendered = $rows[0]["tendered"] - $tA ;
+            $change = intval($rows[0]["tendered"]) - $tA;
+            $tendered = intval($rows[0]["tendered"]);
             $dsSection = "";
             $gcashSection = "";
             $gcash = NULL;
@@ -84,8 +85,22 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 ];
             }
             foreach ($rows as $row) {
-                $name = ($row["itemType"] === "product") ? $row["name"] : $row["comboName"];
-                $unitPrice = isset($row["unitPrice"]) ? $row["unitPrice"] : $row["comboPrice"];
+                $name = "Item deleted.";
+                $unitPrice = 0;
+                if ($row["itemType"] === "product") {
+                    if (isset($row["name"]) && $row["name"] != null) {
+                        $name = $row["name"];
+                    }
+                } else {
+                    if (isset($row["comboName"]) && $row["comboName"] != null) {
+                        $name = $row["comboName"];
+                    }
+                }
+                if (isset($row["unitPrice"]) && $row["unitPrice"] != null) {
+                    $unitPrice = $row["unitPrice"];
+                } else if (isset($row["comboPrice"]) && $row["comboPrice"] != null) {
+                    $unitPrice = $row["comboPrice"];
+                }
                 $quantity = $row["quantity"];
                 echo '
                 <li>
@@ -94,12 +109,16 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                     <p>₱' . $unitPrice . '</p>
                 </li>
                 ';
+                $itemp = null;
+                if ($unitPrice > $quantity) {
+                    $itemp = $unitPrice / $quantity;
+                }
 
                 $order = [];
                 $order = [
                     "name" => $name,
                     "price" => $unitPrice,
-                    "itemprice" => $unitPrice / $quantity,
+                    "itemprice" => $itemp,
                     "qntity" => $quantity
                 ];
                 array_push($ordersSession, $order);
@@ -118,7 +137,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                         ' . $gcashSection . $dsSection . '
                         <li>
                             <p>Tendered</p>
-                            <p>' . $tendered . '</p>
+                            <p>₱' . $tendered . '</p>
+                        </li>
+                        <li>
+                            <p>Change</p>
+                            <p>₱' . $change . '</p>
                         </li>
                         <li>
                             <p>Total Amount</p>
@@ -127,7 +150,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                     </ol>
                     <div class="askReceipt" id="' . $refNO . '">
                         <button type="button" id="print_receipt">Print</button>
-                        '.$btn.'
+                        ' . $btn . '
                     </div>';
             $_SESSION['ordersT'] = $ordersSession;
             $_SESSION['discountT'] = ($dc == "N/A") ? NULL : $dc;

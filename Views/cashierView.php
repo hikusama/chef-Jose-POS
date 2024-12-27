@@ -14,18 +14,28 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     if (isset($_POST['transac']) && $_POST["transac"] === "searchNView") {
         session_start();
 
+        $page = htmlspecialchars(trim($_POST["page"]));
         $searchVal = htmlspecialchars(trim($_POST["searchVal"]));
         $category_id = htmlspecialchars(trim($_POST["category_id"]));
 
         $pdoTemp = new cashierController(null, $searchVal, null);
         $allCombo;
         $allProd;
+
+        $total_pages = 0;
+        $current_page = 1;
         if ($category_id == "cmb") {
-            $allCombo = $pdoTemp->getAllComboss();
+            $obj = $pdoTemp->getAllComboss($page);
+            $allCombo = $obj['data'];
+            $total_pages = intval($obj['total_pages']);
+            $current_page = intval($obj['current_page']);
             $_SESSION['categoryState'] = 'cmb';
         } else if (is_numeric((int)$category_id)) {
             unset($_SESSION['categoryState']);
-            $allProd = $pdoTemp->getAllProducts($category_id);
+            $obj = $pdoTemp->getAllProducts($category_id, $page);
+            $allProd = $obj['data'];
+            $total_pages = intval($obj['total_pages']);
+            $current_page = intval($obj['current_page']);
         } else {
             echo "Something went wrong..";
             return;
@@ -56,6 +66,17 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 
                 ';
                 }
+                echo '
+                <li id="page-dir-cont" style="">
+                    <div class="main-dir-link">';
+                for ($i = 1; $i <= $total_pages; $i++) {
+                    $g = ($i === $current_page) ? '<button type="button" id="pageON">' : '<button type="button" class="data-link" id="' . $i . '">';
+                    echo $g . $i;
+                    echo '</button>';
+                }
+                echo '</div>
+                </li>
+                ';
             } else {
                 echo '<div class="nopr">No combo\'s..</div>';
             }
@@ -84,6 +105,17 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 
                 ';
                 }
+                echo '
+            <li id="page-dir-cont" style="">
+                <div class="main-dir-link">';
+                for ($i = 1; $i <= $total_pages; $i++) {
+                    $g = ($i === $current_page) ? '<button type="button" id="pageON">' : '<button type="button" class="data-link" id="' . $i . '">';
+                    echo $g . $i;
+                    echo '</button>';
+                }
+                echo '</div>
+            </li>
+            ';
             } else {
                 echo '<div class="nopr">No products..</div>';
             }
@@ -107,8 +139,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             empty($qntity) ||
             empty($product_id) ||
             empty($type)
-            ) {
-                return;
+        ) {
+            return;
         }
         if ($qntity < 0) {
             return;

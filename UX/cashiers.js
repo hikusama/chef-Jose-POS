@@ -5,7 +5,6 @@ $(document).ready(function () {
     $("#bd").attr('max', adultDate);
     let editArg = [];
     findEmployee("", 1)
-    let changeReq = [];
     let img_change = 0;
     $("#searchUser").on("input", "input", function (e) {
         e.preventDefault();
@@ -70,20 +69,13 @@ $(document).ready(function () {
         $("#picmhendpEdit").trigger("click");
     });
 
-    $(".cashiers_cont .addCSREdit").on("change", "#picmhen", function (e) {
+    $(".cashiers_cont .addCSR").on("change", "#picmhen", function (e) {
         handleimg('#prPic', '#picmhen')
 
     });
     $(".cashiers_cont .addCSREdit").on("change", "#picmhendpEdit", function (e) {
         handleimg('#prPicEdit', '#picmhendpEdit')
-        changeReq.push({field:$(this).attr('name'), value : "profilePic"});
-        
-        const input6 = $("#picmhendpEdit")[0];
-
-        const file = input6.files[0];
-        if (!file) {
-
-        }
+        img_change += 1;
     });
     $(".addCashier").on("click", function () {
         $("#overlay").show();
@@ -99,7 +91,15 @@ $(document).ready(function () {
     });
 
 
+    $('#users').on('click', '#page-dir-cont button', function (e) {
+        e.preventDefault()
+        let page = $(this).attr("id")
+        let searchVal = $("#searchUser input").val()
 
+        if (page != "pageON") {
+            findEmployee(searchVal, parseInt($(this).attr("id")))
+        }
+    });
     $('#addCashierFrm').on('keydown', '#age', function (event) {
         if (event.key === 'Enter') {
             $('#nxt1').trigger("click")
@@ -321,7 +321,7 @@ $(document).ready(function () {
             success: function (response) {
                 if (response.error === "success") {
                     $("#addCashierFrm input").val("")
-                    handleimg()
+                    handleimg('#prPic', '#picmhen')
                     $(".fsec").show();
                     $(".msec").hide();
                     $(".lsec").hide();
@@ -331,6 +331,7 @@ $(document).ready(function () {
                     $("#addCashierFrm input").removeClass("invin")
                     $(".picSend > *").removeClass("invin")
                     notify("Account created successfully...")
+                    findEmployee("", 1)
                 }
             }, error: function (xhr) {
                 const errorMessage = xhr.responseJSON?.error || '';
@@ -405,10 +406,10 @@ $(document).ready(function () {
         $("#addCashierFrm").trigger("submit");
 
     });
-    $("#submitEdit").click(function (e) {
+    $(".cashiers_cont").on("click", "#submitEdit", function (e) {
         e.preventDefault();
 
-        $("#addCashierFrm").trigger("submit");
+        $("#editCashierFrm").trigger("submit");
 
     });
 
@@ -477,12 +478,15 @@ $(document).ready(function () {
         });
     });
 
+    let emMd = 0
     $(".cashiers_cont").on("click", "#nxt2Edit", function (e) {
         e.preventDefault();
 
         formData = new FormData()
         formData.append('transac', 'secondSec')
-        formData.append('edit', 1)
+        if (emMd > 0) {
+            formData.append('edit', 1)
+        }
         formData.append('age', $("#ageEdit").val())
         formData.append('cn', $("#cnEdit").val())
         formData.append('bd', $("#bdEdit").val())
@@ -584,21 +588,14 @@ $(document).ready(function () {
         if (inp.trim() === "") {
             $(this).removeClass("newB");
             $(this).addClass("invin");
-            if (changeReq['fn']) {
-                delete changeReq['fn']
-            }
+
         } else if (inp.trim() != editArg.fName) {
             $(this).addClass("newB");
             $(this).removeClass("invin");
-            changeReq.push({field:$(this).attr('id'), value : "fName"});
-            
-
         } else {
             $(this).removeClass("invin");
             $(this).removeClass("newB");
-            if (changeReq['fn']) {
-                delete changeReq['fn']
-            }
+
         }
 
 
@@ -611,21 +608,18 @@ $(document).ready(function () {
 
         if (inp.trim() === "") {
             $(this).removeClass("newB");
-            $(this).addClass("invin"); if (changeReq['mn']) {
-                delete changeReq['mn']
-            }
+            $(this).addClass("invin");
+
+
         } else if (inp.trim() != editArg.mName) {
             $(this).addClass("newB");
             $(this).removeClass("invin");
-            changeReq.push({field:$(this).attr('id'), value : "mName"});
-            
+
 
         } else {
             $(this).removeClass("invin");
             $(this).removeClass("newB");
-            if (changeReq['mn']) {
-                delete changeReq['mn']
-            }
+
         }
 
 
@@ -636,21 +630,17 @@ $(document).ready(function () {
 
         if (inp.trim() === "") {
             $(this).removeClass("newB");
-            $(this).addClass("invin"); if (changeReq['ln']) {
-                delete changeReq['ln']
-            }
+            $(this).addClass("invin");
+
         } else if (inp.trim() != editArg.lName) {
             $(this).addClass("newB");
             $(this).removeClass("invin");
-            changeReq.push({field:$(this).attr('id'), value : "lName"});
-            
+
 
         } else {
             $(this).removeClass("invin");
             $(this).removeClass("newB");
-            if (changeReq['ln']) {
-                delete changeReq['ln']
-            }
+
         }
 
 
@@ -661,20 +651,15 @@ $(document).ready(function () {
 
         if (inp.trim() === "") {
             $(this).removeClass("newB");
-            $(this).addClass("invin"); if (changeReq['age']) {
-                delete changeReq['age']
-            }
+            $(this).addClass("invin");
         } else if (inp.trim() != editArg.age) {
             $(this).addClass("newB");
             $(this).removeClass("invin");
-            changeReq.push({field:$(this).attr('id'), value : "age"});
-            
+
 
         } else {
             $(this).removeClass("invin");
-            $(this).removeClass("newB"); if (changeReq['age']) {
-                delete changeReq['age']
-            }
+            $(this).removeClass("newB");
         }
 
     });
@@ -688,22 +673,16 @@ $(document).ready(function () {
 
         if (inp.trim() === "") {
             $(this).removeClass("newB");
-            changeReq.push({field:$(this).attr('id'), value : "contactno"});
-            
-            $(this).addClass("invin"); if (changeReq['cn']) {
-                delete changeReq['cn']
-            }
+            $(this).addClass("invin");
+
         } else if (inp.trim() != editArg.contactno) {
             $(this).addClass("newB");
             $(this).removeClass("invin");
-            changeReq.push({field:$(this).attr('id'), value : "contactno"});
-            
+
 
         } else {
             $(this).removeClass("invin");
-            $(this).removeClass("newB"); if (changeReq['cn']) {
-                delete changeReq['cn']
-            }
+            $(this).removeClass("newB");
         }
 
 
@@ -715,21 +694,16 @@ $(document).ready(function () {
         if (inp.trim() === "") {
             $(this).removeClass("newB");
             $(this).addClass("invin");
-            if (changeReq['bd']) {
-                delete changeReq['bd']
-            }
+
         } else if (inp.trim() != editArg.birthdate) {
             $(this).addClass("newB");
             $(this).removeClass("invin");
-            changeReq.push({field:$(this).attr('id'), value : "birthdate"});
-            
+
 
         } else {
             $(this).removeClass("invin");
             $(this).removeClass("newB");
-            if (changeReq['bd']) {
-                delete changeReq['bd']
-            }
+
         }
 
 
@@ -741,21 +715,17 @@ $(document).ready(function () {
         if (inp.trim() === "") {
             $(this).removeClass("newB");
             $(this).addClass("invin");
-            if (changeReq['em']) {
-                delete changeReq['em']
-            }
+
         } else if (inp.trim() != editArg.email) {
             $(this).addClass("newB");
             $(this).removeClass("invin");
-            changeReq.push({field:$(this).attr('id'), value : "email"});
-            
+            emMd += 1;
 
         } else {
             $(this).removeClass("invin");
             $(this).removeClass("newB");
-            if (changeReq['em']) {
-                delete changeReq['em']
-            }
+            emMd = 0
+
         }
 
 
@@ -767,21 +737,16 @@ $(document).ready(function () {
         if (inp.trim() === "") {
             $(this).removeClass("newB");
             $(this).addClass("invin");
-            if (changeReq['addr']) {
-                delete changeReq['addr']
-            }
+
         } else if (inp.trim() != editArg.address) {
             $(this).addClass("newB");
             $(this).removeClass("invin");
-            changeReq.push({field:$(this).attr('id'), value : "address"});
-            
+
 
         } else {
             $(this).removeClass("invin");
             $(this).removeClass("newB");
-            if (changeReq['addr']) {
-                delete changeReq['addr']
-            }
+
         }
 
     });
@@ -797,22 +762,36 @@ $(document).ready(function () {
         if (inp.trim() === "") {
             $(this).removeClass("newB");
             $(this).addClass("invin");
-            if (changeReq['un']) {
-                delete changeReq['un']
-            }
+
         } else if (inp.trim() != editArg.userName) {
             $(this).addClass("newB");
             $(this).removeClass("invin");
-            changeReq.push({field:$(this).attr('id'), value : "userName"});
-            
-            
 
         } else {
             $(this).removeClass("invin");
             $(this).removeClass("newB");
-            if (changeReq['un']) {
-                delete changeReq['un']
-            }
+
+        }
+
+    });
+
+    $(".cashiers_cont").on("input", "#pwEdit", function (e) {
+        e.preventDefault();
+        inp = $(this).val()
+
+
+        if (inp.trim() === "") {
+            $(this).removeClass("newB");
+            $(this).removeClass("invin");
+
+        } else if (inp.trim() != "") {
+            $(this).addClass("newB");
+            $(this).removeClass("invin");
+
+        } else {
+            $(this).removeClass("invin");
+            $(this).removeClass("newB");
+
         }
 
     });
@@ -822,14 +801,16 @@ $(document).ready(function () {
 
 
 
+
     $(".cashiers_cont").on("submit", "#editCashierFrm", function (a) {
         a.preventDefault();
         let id = $(this).find("#prPicEdit").attr("class")
-        console.log(changeReq);
         formData = new FormData(this)
         formData.append('transac', 'allSecEdit')
         formData.append('userID', id)
-        formData.append('modifieds', JSON.stringify(changeReq))
+        if (img_change > 0) {
+            formData.append('picChange', 1)
+        }
 
         $.ajax({
             url: '../Views/employees.php',
@@ -841,6 +822,7 @@ $(document).ready(function () {
             success: function (response) {
                 if (response.error === "success") {
                     $("#editCashierFrm input").val("")
+                    handleimg('#prPicEdit', '#picmhendpEdit')
                     $(".fsecEdit").show();
                     $(".msecEdit").hide();
                     $(".lsecEdit").hide();
@@ -850,7 +832,7 @@ $(document).ready(function () {
                     $("#editCashierFrm input").removeClass("invin")
                     $(".addCSREdit .picSend > *").removeClass("invin")
                     notify("Account updated successfully...")
-                    findEmployee("",1)
+                    findEmployee("", 1)
                 }
             }, error: function (xhr) {
                 const errorMessage = xhr.responseJSON?.error || '';
@@ -886,15 +868,13 @@ $(document).ready(function () {
                 }
                 if ($(".errtypeEdit p").html() != "Fill in all fields." && i === 0) {
                     $(".addCSREdit .picSend > *").removeClass("invin")
-                    if (changeReq['pc']) {
+                    if (img_change > 0) {
                         $(".addCSREdit .picSend > *").removeClass("newB")
                     }
                 }
             }
         });
     });
-
-
 
 
 
@@ -1038,8 +1018,6 @@ $(document).ready(function () {
 
 
     function handleimg(dp, fl) {
-        console.log("hey:" + dp);
-        console.log("hey:" + fl);
 
         const profileImage6 = $(dp);
         const input6 = $(fl)[0];

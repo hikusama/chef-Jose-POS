@@ -221,75 +221,82 @@ $isbaibing = validate($_SERVER['REQUEST_URI']);
                             </div>
                         </li>
                         <section class="fsec">
-                            <h4>Add Form 1/3</h4>
+                            <div>
 
-                            <li>
-                                <label for="fn">First name</label>
-                                <input id="fn" type="text" placeholder="First name..." name="fn">
-                            </li>
-                            <li>
-                                <label for="mn">Middle name</label>
-                                <input id="mn" type="text" placeholder="Middle name..." name="mn">
-                            </li>
-                            <li>
-                                <label for="ln">Last name</label>
-                                <input id="ln" type="text" placeholder="Last name.." name="ln">
-                            </li>
-                            <li>
-                                <label for="age">Age</label>
-                                <input id="age" type="number" placeholder="Age.." name="age" min="0">
-                            </li>
-                            <div class="errtype"></div>
+                                <h4>Add Form 1/3</h4>
 
-                            <div class="proceedAction">
-                                <button id="nxt1" type="button">Next</button>
+                                <li>
+                                    <label for="fn">First name</label>
+                                    <input id="fn" type="text" placeholder="First name..." name="fn">
+                                </li>
+                                <li>
+                                    <label for="mn">Middle name</label>
+                                    <input id="mn" type="text" placeholder="Middle name..." name="mn">
+                                </li>
+                                <li>
+                                    <label for="ln">Last name</label>
+                                    <input id="ln" type="text" placeholder="Last name.." name="ln">
+                                </li>
+                                <li>
+                                    <label for="age">Age</label>
+                                    <input id="age" type="number" placeholder="Age.." name="age" min="0">
+                                </li>
+                                <div class="errtype"></div>
+
+                                <div class="proceedAction">
+                                    <button id="nxt1" type="button">Next</button>
+                                </div>
                             </div>
                         </section>
                         <section class="msec">
-                            <h4>Add Form 2/3</h4>
+                            <div>
+                                <h4>Add Form 2/3</h4>
 
-                            <li>
-                                <label for="cn">Contact no.</label>
-                                <input id="cn" type="number" placeholder="Contact no(639).." min="0" name="cn">
-                            </li>
-                            <li>
-                                <label for="bd">Birth date</label>
-                                <input id="bd" type="date" placeholder="Birth date.." name="bd">
-                            </li>
-                            <li>
-                                <label for="em">Email</label>
-                                <input id="em" type="text" placeholder="Email.." name="em">
-                            </li>
-                            <li>
-                                <label for="addr">Address</label>
-                                <input id="addr" type="text" placeholder="Address.." name="addr">
-                            </li>
-                            <div class="errtype"></div>
-                            <div class="proceedAction">
-                                <button id="back1" type="button">Back</button>
-                                <button id="nxt2" type="button">Next</button>
+                                <li>
+                                    <label for="cn">Contact no.</label>
+                                    <input id="cn" type="number" placeholder="Contact no(639).." min="0" name="cn">
+                                </li>
+                                <li>
+                                    <label for="bd">Birth date</label>
+                                    <input id="bd" type="date" placeholder="Birth date.." name="bd">
+                                </li>
+                                <li>
+                                    <label for="em">Email</label>
+                                    <input id="em" type="text" placeholder="Email.." name="em">
+                                </li>
+                                <li>
+                                    <label for="addr">Address</label>
+                                    <input id="addr" type="text" placeholder="Address.." name="addr">
+                                </li>
+                                <div class="errtype"></div>
+                                <div class="proceedAction">
+                                    <button id="back1" type="button">Back</button>
+                                    <button id="nxt2" type="button">Next</button>
+                                </div>
                             </div>
                         </section>
                         <section class="lsec">
-                            <h4>Add Form 3/3</h4>
+                            <div>
+                                <h4>Add Form 3/3</h4>
 
-                            <li>
-                                <label for="un">User name</label>
-                                <input id="un" type="text" placeholder="User name.." name="un">
-                            </li>
-                            <li>
-                                <label for="pw">Password</label>
-                                <input id="pw" type="password" placeholder="Password.." name="pw">
-                            </li>
-                            <li>
-                                <label for="cpw">Confirm password</label>
-                                <input id="cpw" type="password" placeholder="Confirm password.." name="cpw">
-                            </li>
-                            <div class="errtype"></div>
+                                <li>
+                                    <label for="un">User name</label>
+                                    <input id="un" type="text" placeholder="User name.." name="un">
+                                </li>
+                                <li>
+                                    <label for="pw">Password</label>
+                                    <input id="pw" type="password" placeholder="Password.." name="pw">
+                                </li>
+                                <li>
+                                    <label for="cpw">Confirm password</label>
+                                    <input id="cpw" type="password" placeholder="Confirm password.." name="cpw">
+                                </li>
+                                <div class="errtype"></div>
 
-                            <div class="proceedAction">
-                                <button id="back2" type="button">Back</button>
-                                <button id="submit" type="button">Submit</button>
+                                <div class="proceedAction">
+                                    <button id="back2" type="button">Back</button>
+                                    <button id="submit" type="button">Submit</button>
+                                </div>
                             </div>
                         </section>
                     </form>
@@ -298,7 +305,7 @@ $isbaibing = validate($_SERVER['REQUEST_URI']);
                 </div>
                 <div id="loadNt" style="display: none;">
 
-                    <div class="loader" >
+                    <div class="loader">
                         <div class="bar1"></div>
                         <div class="bar2"></div>
                         <div class="bar3"></div>

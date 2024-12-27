@@ -18,7 +18,6 @@ $(document).ready(function () {
         
         
         if (he === false) {
-            console.log(he);
             $(".side_nav2d li").removeClass("on_select")
             $(this).addClass("on_select")
             
