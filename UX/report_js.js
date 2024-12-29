@@ -276,6 +276,59 @@ $(document).ready(function () {
         }
 
     });
+    
+    $(".middle_side").on("input", "#findItem input", function (e) {
+        e.preventDefault();
+        let search = $(this).val()
+        let page = $(".middle_side #pageON").html()
+        let itemtype = $(".onRank").attr("id")
+        let order = $(".onOrdered").attr("id")
+        let rtype = $('.rt input[name="rTypeAnl"]:checked').val()
+ 
+        let data = $(".onDataType").attr("id")
+        let from = $('.startAnl input[name="fromAnl"]').val()
+
+        if (!from) {
+            from = today
+        }
+
+        let to = ""
+        if (rtype === "doubleAnl") {
+            to = $('.endAnl input[name="toR"]').val()
+            dateNg = from + " - " + to
+            $(".dateAnalytics").html(dateNg);
+        } else {
+            $(".dateAnalytics").html(from);
+
+        }
+
+
+        getItems(itemtype, order, rtype, data, from, to, 1, search)
+    });
+
+    $(".middle_side").on("click", ".showThings", function (e) {
+        e.preventDefault();
+        hs = $(this).parent().hasClass('hidePart')
+
+        if (hs) {
+            $(".todays-report").addClass('hidePart')
+            $(".cstmRp").addClass('hidePart')
+            $(".showThings h5").html('<i class="fas fa-arrow-left"></i> <p>Show more</p> <i class="fas fa-arrow-right"></i>')
+
+            $(this).parent().removeClass('hidePart')
+            $(this).find('h5').html('<i class="fas fa-arrow-right"></i> <p>Show less</p> <i class="fas fa-arrow-left"></i>')
+            console.log(55);
+            
+
+        }else{
+            $(".showThings h5").html('<i class="fas fa-arrow-left"></i> <p>Show more</p> <i class="fas fa-arrow-right"></i>')
+            $(".todays-report").addClass('hidePart')
+            $(".cstmRp").addClass('hidePart')
+        }
+
+
+
+    })
     $(".analytics").on("click", ".btt #rmX", function (e) {
         e.preventDefault();
         e.stopPropagation();
@@ -293,7 +346,7 @@ $(document).ready(function () {
         let itemtype = $(".onRank").attr("id")
         let order = $(".onOrdered").attr("id")
         let rtype = $('.rt input[name="rTypeAnl"]:checked').val()
-        
+
         let data = $(".onDataType").attr("id")
         let from = $('.startAnl input[name="fromAnl"]').val()
 
@@ -302,7 +355,7 @@ $(document).ready(function () {
             to = $('.endAnl input[name="toR"]').val()
             dateNg = from + " - " + to
             $(".dateAnalytics").html(dateNg);
-        }else{
+        } else {
             $(".dateAnalytics").html(from);
 
         }
@@ -336,11 +389,12 @@ $(document).ready(function () {
         $(".analytics .data_presentation_wrap").show();
 
     }
-    function getItems(itemtype, order, rTypeAnl, data, from, to, page) {
+    function getItems(itemtype, order, rTypeAnl, data, from, to, page, search = "") {
         isReqItemAnalOpen = false;
         formData = new FormData()
         formData.append('transac', 'getItems')
         formData.append('itemReqType', 'itemWdata')
+        formData.append('search', search)
         formData.append('page', page)
         formData.append('itemtype', itemtype)
         formData.append('data', data)

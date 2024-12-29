@@ -603,8 +603,12 @@
 
 
 
-        public function itemsReport($itemtype, $order, $range, $data, $page = 1)
+        public function itemsReport($itemtype, $order, $range, $data, $page = 1, $search)
         {
+            if (!empty($search)) {
+                $search = "%" . $search . "%";
+            }
+
             $max_page_per_req = 15;
 
             $offset = ($page - 1) * $max_page_per_req;
@@ -635,7 +639,11 @@
               LEFT JOIN 
                 orderitems AS oi ON oi." . $id . " = pcr." . $id . "
               LEFT JOIN 
-                orders AS ord ON ord.ref_no = oi.ref_no
+                orders AS ord ON ord.ref_no = oi.ref_no";
+            if (!empty($search)) {
+                $sql .= " WHERE pcr." . $name . " LIKE ? ";
+            }
+            $sql .= "
               GROUP BY 
                 pcr." . $name . "
               ORDER BY selData " . $order . " LIMIT ? OFFSET ?";
@@ -654,9 +662,11 @@
                 $stmt->bindValue($paramIndex++, $range[0], PDO::PARAM_STR);
                 $stmt->bindValue($paramIndex++, $range[0], PDO::PARAM_STR);
             }
+            if (!empty($search)) {
+                $stmt->bindValue($paramIndex++, $search, PDO::PARAM_STR);
+            }
             $stmt->bindValue($paramIndex++, $max_page_per_req, PDO::PARAM_INT);
             $stmt->bindValue($paramIndex++, $offset, PDO::PARAM_INT);
-
             // $stmt->bindParam(':limit', $max_page_per_req, PDO::PARAM_INT);
             // $stmt->bindParam(':offset', $offset, PDO::PARAM_INT);
             $stmt->execute();
@@ -664,10 +674,14 @@
             $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 
-            $sql2Q = "SELECT COUNT(*) AS total_rows FROM $select";
-
+            $sql2Q = "SELECT COUNT(pcr." . $id . ") AS total_rows FROM $select AS pcr";
+            if (!empty($search)) {
+                $sql2Q .= " WHERE pcr." . $name . " LIKE :search ";
+            }
             $sql2 = $this->connect()->prepare($sql2Q);
-
+            if (!empty($search)) {
+                $sql2->bindParam(":search", $search, PDO::PARAM_STR);
+            }
 
             $sql2->execute();
 
@@ -857,6 +871,72 @@
         //------------------------- PRODUCT THINGS -----------------------------
 
 
+        // DUMP DATA 
+        public function dumpReqData($id)
+        {
+            $sql = "SELECT * FROM combo AS cb INNER JOIN comboitems AS ci ON ci.comboID = cb.comboID WHERE cb.comboID = ?";
+            $stmt = $this->connect()->prepare($sql);
+            $stmt->execute([$id]);
+            $rows =  $stmt->fetchAll(PDO::FETCH_ASSOC);
+            if ($rows) {
+                return $rows;
+            } else {
+                return null;
+            }
+        }
+
+
+        // FORM DATA PRODUCT
+        public function productData($id)
+        {
+            $sql = "SELECT * FROM products INNER JOIN category ON category.category_id = products.category_id WHERE products.productID = ?";
+            $stmt = $this->connect()->prepare($sql);
+            $stmt->execute([$id]);
+            $rows =  $stmt->fetch(PDO::FETCH_ASSOC);
+            if ($rows) {
+                return $rows;
+            } else {
+                return null;
+            }
+        }
+        public function categoryData($id)
+        {
+            $sql = "SELECT * FROM category WHERE category_id = ?";
+            $stmt = $this->connect()->prepare($sql);
+            $stmt->execute([$id]);
+            $rows =  $stmt->fetch(PDO::FETCH_ASSOC);
+            if ($rows) {
+                return $rows;
+            } else {
+                return null;
+            }
+        }
+        public function comboDataLight($id)
+        {
+            $sql = "SELECT cb.comboName,cb.comboCode,cb.availability,cb.comboPrice,ci.productID FROM combo AS cb INNER JOIN comboitems AS ci ON ci.comboID = cb.comboID WHERE cb.comboID = ?";
+            $stmt = $this->connect()->prepare($sql);
+            $stmt->execute([$id]);
+            $rows =  $stmt->fetchAll(PDO::FETCH_ASSOC);
+            if ($rows) {
+                return $rows;
+            } else {
+                return null;
+            }
+        }
+        public function comboData($id)
+        {
+            $sql = "SELECT * FROM combo INNER JOIN comboItems ON combo.comboID = comboItems.comboID WHERE combo.comboID = ?";
+            $stmt = $this->connect()->prepare($sql);
+            $stmt->execute([$id]);
+            $rows =  $stmt->fetch(PDO::FETCH_ASSOC);
+            if ($rows) {
+                return $rows;
+            } else {
+                return null;
+            }
+        }
+
+
         // ADD PRODUCT
         public function insertProduct($product_name, $category_name, $price, $availability, $product_image)
         {
@@ -882,15 +962,15 @@
 
 
         // EDIT PRODUCT 
-        public function editProduct($product_name, $category_name, $price, $product_image, $quantity)
-        {
-            $stmt = $this->connect()->prepare("UPDATE products SET product_name= :name, category_name= :category, price= :price, displayPic= :displayPic, quantity= :quantity WHERE id = :id");
-            $stmt->bindParam(':name', $product_name);
-            $stmt->bindParam(':category', $category_name);
-            $stmt->bindParam(':price', $price);
-            $stmt->bindParam(':display_pic', $product_image);
-            $stmt->bindParam(':quantity', $quantity);
-        }
+        // public function editProduct($product_name, $category_name, $price, $product_image, $quantity)
+        // {
+        //     $stmt = $this->connect()->prepare("UPDATE products SET product_name= :name, category_name= :category, price= :price, displayPic= :displayPic, quantity= :quantity WHERE id = :id");
+        //     $stmt->bindParam(':name', $product_name);
+        //     $stmt->bindParam(':category', $category_name);
+        //     $stmt->bindParam(':price', $price);
+        //     $stmt->bindParam(':display_pic', $product_image);
+        //     $stmt->bindParam(':quantity', $quantity);
+        // }
 
 
         //DELETE
@@ -1072,7 +1152,7 @@
                 $sql .= " (products.name LIKE :product_name OR category.category_name LIKE :product_name)";
             }
 
-            $sql .= " GROUP BY products.productID";
+            $sql .= " GROUP BY products.productID LIMIT 20";
 
             $stmt = $this->connect()->prepare($sql);
 
@@ -1581,7 +1661,7 @@
             $stmt->bindParam(':offset', $offset, PDO::PARAM_INT);
 
 
-            
+
             // count page 
             $sql2 = "SELECT COUNT(products.productID) AS total_rows FROM products";
 

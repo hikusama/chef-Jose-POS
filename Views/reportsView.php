@@ -429,6 +429,7 @@ SUM(CASE WHEN MONTH(orderDate) = MONTH(CURRENT_DATE()) THEN totalAmount ELSE 0 E
     if (isset($_POST['transac']) && $_POST['transac'] === "getItems") {
         $reportsOBJ = new ReportstController();
 
+        $search = isset($_POST['search']) ? htmlspecialchars(trim($_POST['search'])) : "";
         $itemReqType = htmlspecialchars(trim($_POST['itemReqType']));
         $spec = isset($_POST['itemID']) ? htmlspecialchars(trim($_POST['itemID'])) : 0;
         $itemtype = htmlspecialchars(trim($_POST['itemtype']));
@@ -566,12 +567,12 @@ SUM(CASE WHEN MONTH(orderDate) = MONTH(CURRENT_DATE()) THEN totalAmount ELSE 0 E
 
         } else if ($itemReqType === "itemWdata") {
 
-            $rows = $reportsOBJ->getDataItem($itemtype, $order, $submitDate, $data,$page);
+            $rows = $reportsOBJ->getDataItem($itemtype, $order, $submitDate, $data,$page,$search);
             $rowdata = $rows['data'];
             $total_pages = (int)$rows['total_pages'];
             $current_page = (int)$rows['current_page'];
             $bulk = "";
-            if ($rowdata !== null) {
+            if ($rowdata) {
                 $cnt = '';
                 if ($data !== "oi.quantity") {
                     $cnt = '₱';
@@ -619,10 +620,13 @@ SUM(CASE WHEN MONTH(orderDate) = MONTH(CURRENT_DATE()) THEN totalAmount ELSE 0 E
                 }
                 $bulk .=  '</div>
                 ';
-                header("Content-Type: application/json");
-                http_response_code(200);
-                echo json_encode(["item" => $bulk]);
+
+            }else{
+                $bulk = "<p>Item <b>'".$search."'</b> not found.</p>";
             }
+            header("Content-Type: application/json");
+            http_response_code(200);
+            echo json_encode(["item" => $bulk]);
         }
     }
 }
@@ -875,7 +879,7 @@ function RP($s, $e)
                 </div>';
     } else {
         $rtt = '<div class="rpRs" style="white-space:nowrap;color: unset;">
-                    <p>0.0: '.$s.'-'.$e.'</p>
+                    <p>0.0</p>
                     <p> From last week.</p>
                 </div>';
     }

@@ -32,10 +32,10 @@ class ProductController extends Model
         $this->insertCategory($this->Add_category);
     }
 
-    public function updateProducts()
-    {
-        $this->editProduct($this->product_name, $this->category_name, $this->price, $this->product_image, $this->availability);
-    }
+    // public function updateProducts()
+    // {
+    //     $this->editProduct($this->product_name, $this->category_name, $this->price, $this->product_image, $this->availability);
+    // }
 
     public function getCat()
     {

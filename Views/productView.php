@@ -154,45 +154,98 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['transac'])) {
                 echo '<option value="' . $row["category_id"] . '" name="category">' . $row["category_name"] . '</option>';
             }
         }
-
-
-
-
-
-        // PRODUCT DELETE
-
     }
 
 
-    // PRODUCT REMOVE
+    // ITEM UPDATE
 
-    if (isset($_POST['transac']) && $_POST['transac'] == "removeProd") {
+    if (isset($_POST['transac']) && $_POST['transac'] == "fetchDataAction") {
+
+        $ID = htmlspecialchars(strip_tags($_POST['ID']));
+        $res = "";
+        $formType = "products";
+        if (empty($ID)) {
+            http_response_code(400);
+            $res = "No id";
+            header("Content-Type: application/json");
+            echo json_encode(["form" => $res, "formType" => $formType]);
+            return false;
+        }
+
+        $state = 1;
+        if (isset($_SESSION['currstate'])) {
+            $state = $_SESSION['currstate'];
+        }
+        $obj = new ProductController(null, null, null, null, null, null, null);
+        $rowsCat = $obj->getCat();
+
+        $org = "";
+
+        if ($state === 1) {
+            $formType = "products";
+            $data = $obj->productData($ID);
+            $res = getPForm($ID, $data, $rowsCat);
+        } else if ($state === 2) {
+            $formType = "category";
+            $data = $obj->categoryData($ID);
+            $res = getCatForm($ID, $data);
+        } else if ($state === 3) {
+            $formType = "combo";
+            $data = $obj->comboData($ID);
+            $bulk = getCbForm($ID, $data);
+            $res = $bulk["RtData"];
+            $org = $bulk['check'];
+        }
+        if ($res === "") {
+            http_response_code(400);
+            $res = "No data";
+        }
+
+
+
+
+
+        header("Content-Type: application/json");
+        echo json_encode(["form" => $res, "formType" => $formType, "orgData" => $org]);
+        return;
+    }
+
+
+    // ITEM REMOVE
+
+    if (isset($_POST['transac']) && $_POST['transac'] == "removeAction") {
 
         $ID = htmlspecialchars(strip_tags($_POST['ID']));
         $state = 1;
         if (isset($_SESSION['currstate'])) {
             $state = $_SESSION['currstate'];
-            if ($state === 2) {
-                $state = 2;
-            }else if ($state === 3) {
-                $state = 3;
-            }
+            // if ($state === 2) {
+            //     $state = 2;
+            // } else if ($state === 3) {
+            //     $state = 3;
+            // }
         }
 
-        
+        $res = "";
+
         if (empty($ID)) {
+            http_response_code(400);
+            $res = "No id";
             return false;
         }
         $delete = new ProductController(null, null, null, null, null, null, null);
 
-        if($delete->delete_things($ID,$state)){
-            echo "Deleted";
-        }else{
-            echo "Error deleting";
+        if ($delete->delete_things($ID, $state)) {
+            http_response_code(200);
+            $res = "Deleted";
+        } else {
+            http_response_code(400);
+            $res = "Error deleting";
         }
+
+        header("Content-Type: application/json");
+        echo json_encode(["result" => $res]);
         return;
-
-
     }
 
 
@@ -205,7 +258,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['transac'])) {
         }
 
         $product_name = htmlspecialchars(strip_tags($_POST['name']));
-        
+
         (int)$selected_page = (intval($_POST['page']) == 0) ? 1 : intval($_POST['page']);
 
 
@@ -257,26 +310,24 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['transac'])) {
             echo '
             <li id="page-dir-cont" style="">
                 <div class="main-dir-link">';
-                // $iterate = 1;
-                // $pg =  (51 / 100)  ;
-                // if ($current_page == 7) {
-                    
+            // $iterate = 1;
+            // $pg =  (51 / 100)  ;
+            // if ($current_page == 7) {
+
+            // }
+            for ($i = 1; $i <= $total_pages; $i++) {
+
+                // if ($i === 8) {
+                //     echo '<button type="button" id="more">...</button>';
+                //     break;
                 // }
-                for ($i=1; $i <= $total_pages ; $i++) {
-
-                    // if ($i === 8) {
-                    //     echo '<button type="button" id="more">...</button>';
-                    //     break;
-                    // }
-                    $g = ($i === $current_page) ? '<button type="button" id="pageON">' : '<button type="button" class="data-link" id="'.$i.'">' ;
-                    echo $g.$i;
-                    echo '</button>';
-
-                }
-                echo '</div>
+                $g = ($i === $current_page) ? '<button type="button" id="pageON">' : '<button type="button" class="data-link" id="' . $i . '">';
+                echo $g . $i;
+                echo '</button>';
+            }
+            echo '</div>
             </li>
             ';
-
         } else {
             echo "No products..";
         }
@@ -355,7 +406,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['transac'])) {
                     </li>
                 </ol>';
             }
-
         } else {
             echo "No products..";
         }
@@ -375,12 +425,481 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['transac'])) {
             $combos = $_SESSION['combos'];
         }
 
-        array_push($combos, $productID);
-        getSelected($combos, "update");
+
+
+        if (count($combos) !== 10 ) {            
+            array_push($combos, $productID);
+            getSelected($combos, "update");
+            $_SESSION['combos'] = $combos;
+            http_response_code(200);
+            header("Content-Type: application/json");
+            echo json_encode(["res" => "good","msg" =>""]);
+
+        }else{
+            http_response_code(200);
+            header("Content-Type: application/json");
+            echo json_encode(["res" => "error","msg" =>"Max(10) combo selected."]);
+
+        }
 
         // $_SESSION['combo'] = count($combos);
-        $_SESSION['combos'] = $combos;
     }
+
+
+
+
+
+
+    // Edit Combo Things 
+
+    if (isset($_POST['transac']) && $_POST['transac'] == "dumpComboProd") {
+        $comboID = (int)($_POST['comboID']);
+        $obj = new ProductController(null, null, null, null, null, null, null);
+        $productsIDs = $obj->dumpReqData($comboID);
+        if (empty($comboID)) {
+            echo "No id.";
+            return;
+        }
+        $combosDumped = array();
+
+        if (isset($_SESSION['combosDumped'])) {
+            unset($_SESSION['combosDumped']);
+        }
+
+        foreach ($productsIDs as $id) {
+            array_push($combosDumped, $id['productID']);
+        }
+
+        $_SESSION['combosDumped'] = $combosDumped;
+        getSelected($combosDumped, "update", 2);
+    }
+
+
+    if (isset($_POST['transac']) && $_POST['transac'] == "unsetF") {
+        if (isset($_SESSION['combosDumped'])) {
+            unset($_SESSION['combosDumped']);
+        }
+        if (isset($_SESSION['comboDumpedSummary'])) {
+            unset($_SESSION['comboDumpedSummary']);
+        }
+    }
+
+
+    if (isset($_POST['transac']) && $_POST['transac'] == "viewSelectedDumpedProd") {
+        $combosDumped = array();
+        $comboID = (int)($_POST['comboID']);
+
+        if (isset($_SESSION['combosDumped'])) {
+            $combosDumped = $_SESSION['combosDumped'];
+        } else {
+            echo '            <div class="loadingScComboForm-outer">
+                <div class="loadingScComboForm">
+                    <ol>
+                        <li>
+                            <div>
+
+                            </div>
+                        </li>
+                        <li>
+
+                        </li>
+                    </ol>
+                    <ol>
+                        <li>
+                            <div>
+
+                            </div>
+                        </li>
+                        <li>
+
+                        </li>
+                    </ol>
+                    <ol>
+                        <li>
+                            <div>
+
+                            </div>
+                        </li>
+                        <li>
+
+                        </li>
+                    </ol>
+                </div>
+            </div> ';
+            echo "No selected products..";
+            return;
+        }
+        $obj = new ProductController(null, null, null, null, null, null, null);
+        $orgData = $obj->comboDataLight($comboID);
+        $orgProducts = array();
+
+        $i = -1;
+        foreach ($orgData as $val) {
+            $orgProducts[$i+=1] = $val['productID'];
+        }
+
+        $res = "nahh";
+        $notMatching = array_diff($combosDumped,$orgProducts);
+
+        if(count($orgProducts) === count($combosDumped)){
+            if (!empty($notMatching)) {
+                $res = "modif";
+            }
+        }else{
+            $res = "modif";
+        }
+
+
+        getSelected($combosDumped, $res, 2);
+    }
+
+
+    if (isset($_POST['transac']) && $_POST['transac'] == "comboSectionShowSearchProdEdit") {
+        $product_name = htmlspecialchars(strip_tags($_POST['name']));
+        $combosDumped = array();
+
+        if (isset($_SESSION['combosDumped'])) {
+            $combosDumped = $_SESSION['combosDumped'];
+        }
+
+
+
+        $searchShow = new ProductController(null, $product_name, null, null, null, null, null);
+        $rows = $searchShow->getProdSearchCombo($combosDumped);
+
+
+        if ($rows) {
+            echo '
+            <div class="loadingScComboForm-outer">
+                <div class="loadingScComboForm">
+                    <ol>
+                        <li>
+                            <div>
+
+                            </div>
+                        </li>
+                        <li>
+
+                        </li>
+                    </ol>
+                    <ol>
+                        <li>
+                            <div>
+
+                            </div>
+                        </li>
+                        <li>
+
+                        </li>
+                    </ol>
+                    <ol>
+                        <li>
+                            <div>
+
+                            </div>
+                        </li>
+                        <li>
+
+                        </li>
+                    </ol>
+                </div>
+            </div>        
+            ';
+            foreach ($rows as $row) {
+                echo '
+                <ol>
+                    <li>
+                        <div>
+                            <img src="data:image/jpeg;base64, ' . base64_encode($row['displayPic']) . ' " alt="">
+                        </div>
+                    </li>
+                    <li>
+                        <p>' . $row['name'] . '</p>
+                    </li>
+                    <li>
+                        <div class="action-combo" id="' . $row['productID'] . '">
+                            <i class="fas fa-plus" id="selectProdEdit" style="color: rgb(107, 252, 107);"></i>                        
+                        </div>
+                    </li>
+                </ol>';
+            }
+        } else {
+            echo "No products..";
+        }
+    }
+
+
+    if (isset($_POST['transac']) && $_POST['transac'] == "rmSelectedProdEdit") {
+        $productID = htmlspecialchars(strip_tags($_POST['productID']));
+
+        if (empty($productID)) {
+            echo "No id";
+            return;
+        }
+        $combosDumped = array();
+
+        if (isset($_SESSION['combosDumped'])) {
+            $combosDumped = $_SESSION['combosDumped'];
+        }
+
+        $array_size = count($combosDumped);
+
+
+        for ($i = 0; $i < $array_size; $i++) {
+            if ($combosDumped[$i] == $productID) {
+                unset($combosDumped[$i]);
+                $combosDumped = array_values($combosDumped);
+                break;
+            }
+        }
+
+        $array_size = count($combosDumped);
+
+        if ($array_size == 0) {
+            unset($_SESSION['combosDumped']);
+            echo "No products..";
+            return;
+        }
+
+        $_SESSION['combosDumped'] = $combosDumped;
+        getSelected($combosDumped, "na", 2);
+    }
+
+
+    if (isset($_POST['transac']) && $_POST['transac'] == "selectProdEdit") {
+        $productID = (int)($_POST['productID']);
+
+
+        if (empty($productID)) {
+            echo "No id";
+            return;
+        }
+        $combosDumped = array();
+
+        if (isset($_SESSION['combosDumped'])) {
+            $combosDumped = $_SESSION['combosDumped'];
+        }
+
+        if (count($combosDumped) !== 10 ) {            
+            array_push($combosDumped, $productID);
+            getSelected($combosDumped, "update", 2);
+            $_SESSION['combosDumped'] = $combosDumped;
+            http_response_code(200);
+            header("Content-Type: application/json");
+            echo json_encode(["res" => "good","msg" =>""]);
+
+        }else{
+            http_response_code(200);
+            header("Content-Type: application/json");
+            echo json_encode(["res" => "error","msg" =>"Max(10) combo selected."]);
+
+        }
+
+        // $_SESSION['combo'] = count($combosDumped);
+    }
+
+
+    if (isset($_POST['transac']) && $_POST['transac'] == "viewComboSummaryEdit") {
+        $totalPriceCombo = 0;
+        $item = 0;
+        if (isset($_SESSION['combosDumped'], $_SESSION['comboDumpedSummary'])) {
+            $cmb = $_SESSION['comboDumpedSummary'];
+            $totalPriceCombo = $cmb['totalPriceCombo'];
+            $item = $cmb['totalItemCombo'];
+        } else {
+            var_dump($_SESSION['combosDumped']);
+            var_dump($_SESSION['comboDumpedSummary']);
+        }
+        $totalPriceComboTmp = number_format($totalPriceCombo, 0, ',');
+
+        echo '
+        <li>
+            <h3>₱' . $totalPriceComboTmp . '</h3>
+            <p>Products in Total</p>
+        </li>
+        <li>
+            <h3>' . $item . '</h3>
+            <p>Item/s</p>
+        </li>
+        ';
+    }
+
+
+    if (isset($_POST['transac']) && $_POST['transac'] == "comboDoubleAction") {
+
+        $reqType = htmlspecialchars(strip_tags(trim($_POST['reqType'])));
+        $comboID = htmlspecialchars(strip_tags(trim($_POST['comboID'])));
+        $imgChanges = htmlspecialchars(strip_tags(trim($_POST['imgChanges'])));
+        $comboName = htmlspecialchars(strip_tags(trim($_POST['comboName'])));
+        $comboPrice = intval($_POST['comboPrice']);
+        $comboCode = htmlspecialchars(strip_tags(trim($_POST['comboCode'])));
+        $availability = htmlspecialchars(strip_tags(trim($_POST['availability'])));
+
+        $combosDumped = array();
+
+
+        if (empty($comboName) || empty($comboPrice) || empty($availability) || empty($comboCode)) {
+            $msg = "Fill in all fields.";
+            http_response_code(200);
+            header("Content-Type: application/json");
+            echo json_encode(["res" => "minorerr", "msg" => $msg]);
+            return;
+        }
+        $comboIMG;
+        if (isset($_FILES['comboPic']) && $_FILES['comboPic']['error'] == 0) {
+
+            $image_file_type = strtolower(pathinfo($_FILES['comboPic']['name'], PATHINFO_EXTENSION));
+            $fileSize = $_FILES['comboPic']['size'];
+
+            $maxFileSize = 3 * 1024 * 1024;
+            $allowed_types = ['jpg', 'png', 'jpeg', 'gif'];
+            if (!in_array($image_file_type, $allowed_types)) {
+                $msg = 'Invalid pic format ( <b style="font-size:1rem;">jpg, png, jpeg, gif</b> )';
+                http_response_code(200);
+                header("Content-Type: application/json");
+                echo json_encode(["res" => "minorerr", "msg" => $msg]);
+                return;
+            } else {
+                if ($fileSize <= $maxFileSize) {
+                    $comboIMG = file_get_contents($_FILES['comboPic']['tmp_name']);
+                } else {
+                    $msg = "The file size exceeds the maximum allowed limit (3 MB)!";
+                    http_response_code(200);
+                    header("Content-Type: application/json");
+                    echo json_encode(["res" => "minorerr", "msg" => $msg]);
+                    return;
+                }
+            }
+        } else {
+            $msg =  'Please insert image of combo.';
+            http_response_code(200);
+            header("Content-Type: application/json");
+            echo json_encode(["res" => "minorerr", "msg" => $msg]);
+            return;
+        }
+
+
+
+        if (!isset($_SESSION['combosDumped'])) {
+            $msg = "No combo selected.";
+            http_response_code(200);
+            header("Content-Type: application/json");
+            echo json_encode(["res" => "minorerr", "msg" => $msg]);
+            return;
+        }
+
+        $sz;
+
+        if (isset($_SESSION['combosDumped'])) {
+            $combosDumped = $_SESSION['combosDumped'];
+            $sz = count($combosDumped);
+            if ($sz <= 1) {
+                $msg = "Selecting combo must be more than 1.";
+                http_response_code(200);
+                header("Content-Type: application/json");
+                echo json_encode(["res" => "minorerr", "msg" => $msg]);
+                return;
+            }
+        }
+        $modifItems = 0;
+        $modifiedsAtrr = [];
+
+        $obj = new ProductController(null, null, null, null, null, null, null);
+        $orgData = $obj->comboDataLight($comboID);
+        $orgProducts = [];
+        $i = -1;
+        if ($orgData) {
+            foreach ($orgData as $val) {
+                $orgProducts[$i+=1] = $val['productID'];
+            }
+        }
+
+        $notMatching = array_diff($combosDumped,$orgProducts);
+
+        if(count($orgProducts) === count($combosDumped)){
+            if (!empty($notMatching)) {
+                $modifItems = 1 ;
+            }
+        }else{
+            $modifItems = 1;
+        }
+
+        if (isNotSame($orgData[0]['comboName'], $comboName)) {
+            $modifiedsAtrr["comboName"] = $comboName;
+        }
+
+        if (isNotSame($orgData[0]['comboCode'], $comboCode)) {
+            $modifiedsAtrr["comboCode"] = $comboCode;
+        }
+
+        if (isNotSame($orgData[0]['comboPrice'], $comboPrice)) {
+            $modifiedsAtrr["comboPrice"] = $comboPrice;
+        }
+
+        if (isNotSame($orgData[0]['availability'], $availability)) {
+            $modifiedsAtrr["availability"] = $availability;
+        }
+
+        if ($imgChanges == 1) {
+            $modifiedsAtrr["displayPic"] = $comboIMG;
+        }
+
+
+
+
+
+        if (isset($modifiedsAtrr["comboCode"])) {
+            if ($obj->checkCombo($comboName, "comboName")) {
+                $msg = "Combo name already used.";
+                http_response_code(200);
+                header("Content-Type: application/json");
+                echo json_encode(["res" => "minorerr", "msg" => $msg]);
+                return;
+            }
+        }
+
+        if (isset($modifiedsAtrr["comboCode"])) {
+            if ($obj->checkCombo($comboCode, "comboCode")) {
+                $msg = "Combo code already used.";
+                http_response_code(200);
+                header("Content-Type: application/json");
+                echo json_encode(["res" => "minorerr", "msg" => $msg]);
+                return;
+            }
+        }
+        $resType = "";
+
+
+        if (count($modifiedsAtrr) !== 0 || $modifItems !== 0) {
+            if ($reqType === "check") {
+                $msg = '<p style="color:#00dd00">Ready to update...</p>';
+                $resType = "checked";
+            } else if ($reqType === "update") {
+                $msg = "success";
+                $resType = "executed";
+            }
+        } else {
+            $msg = "No changes made.";
+            $resType = "minorerr";
+        }
+
+        http_response_code(200);
+        header("Content-Type: application/json");
+        echo json_encode(["res" => $resType, "msg" => $msg]);
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     if (isset($_POST['transac']) && $_POST['transac'] == "rmSelectedProd") {
         $productID = htmlspecialchars(strip_tags($_POST['productID']));
@@ -501,15 +1020,15 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['transac'])) {
 
     if (isset($_POST['transac']) && $_POST['transac'] == "insertCombo") {
 
-        $comboName = htmlspecialchars(strip_tags($_POST['comboName']));
+        $comboName = htmlspecialchars(strip_tags(trim($_POST['comboName'])));
         $comboPrice = intval($_POST['comboPrice']);
-        $comboCode = htmlspecialchars(strip_tags($_POST['comboCode']));
-        $availability = htmlspecialchars(strip_tags($_POST['availability']));
-    
+        $comboCode = htmlspecialchars(strip_tags(trim($_POST['comboCode'])));
+        $availability = htmlspecialchars(strip_tags(trim($_POST['availability'])));
+
         $combos = array();
 
 
-        if (empty($comboName) || empty($comboPrice)|| empty($availability) || empty($comboCode)) {
+        if (empty($comboName) || empty($comboPrice) || empty($availability) || empty($comboCode)) {
             echo "Fill in all fields.";
             return;
         }
@@ -557,15 +1076,15 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['transac'])) {
 
         // var_dump($combos);
         // $prodController->checkCombo($comboName,"comboName");
-        if ($prodController->checkCombo($comboName,"comboName")) {
+        if ($prodController->checkCombo($comboName, "comboName")) {
             echo "Combo name already used.";
             return;
         }
-        if ($prodController->checkCombo($comboCode,"comboCode")) {
+        if ($prodController->checkCombo($comboCode, "comboCode")) {
             echo "Combo code already used.";
             return;
         }
-        $prodController->insertCombo($combos,$comboIMG,$comboName,$comboCode,$comboPrice,$availability);
+        $prodController->insertCombo($combos, $comboIMG, $comboName, $comboCode, $comboPrice, $availability);
 
         // echo $prodController->checkCombo($comboCode,"comboCode");
         unset($_SESSION['combos']);
@@ -575,7 +1094,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['transac'])) {
         // if (!$prodController) {
         //     echo "Error Inserting..";
         // }
-    
+
     }
 
 
@@ -587,11 +1106,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['transac'])) {
         (int)$selected_page = (intval($_POST['page']) == 0) ? 1 : intval($_POST['page']);
 
         $prodController = new ProductController(null, null, null, null, null, null, null);
-        $obj = $prodController->findCatGt($catName,$selected_page);
+        $obj = $prodController->findCatGt($catName, $selected_page);
         $rows = $obj['data'];
         $total_pages = $obj['total_pages'];
         $current_page = $obj['current_page'];
-        
+
         echo '
         <div class="loading_sc">
             <div>
@@ -633,24 +1152,21 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['transac'])) {
             echo '
             <li id="page-dir-cont" style="">
                 <div class="main-dir-link">';
-                for ($i=1; $i <= $total_pages ; $i++) {
-                    // if ($i === 8) {
-                    //     echo '<button type="button" id="more">...</button>';
-                    //     break;
-                    // }
-                    $g = ($i === $current_page) ? '<button type="button" id="pageON">' : '<button type="button" class="data-link" id="'.$i.'">' ;
-                    echo $g.$i;
-                    echo '</button>';
-
-                }
-                echo '</div>
+            for ($i = 1; $i <= $total_pages; $i++) {
+                // if ($i === 8) {
+                //     echo '<button type="button" id="more">...</button>';
+                //     break;
+                // }
+                $g = ($i === $current_page) ? '<button type="button" id="pageON">' : '<button type="button" class="data-link" id="' . $i . '">';
+                echo $g . $i;
+                echo '</button>';
+            }
+            echo '</div>
             </li>
             ';
         } else {
             echo "No category..";
         }
-        
-        
     }
     if (isset($_POST['transac']) && $_POST['transac'] == "findCombo") {
 
@@ -660,11 +1176,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['transac'])) {
         (int)$selected_page = (intval($_POST['page']) == 0) ? 1 : intval($_POST['page']);
 
         $prodController = new ProductController(null, null, null, null, null, null, null);
-        $obj = $prodController->findComboGt($comboName,$selected_page);
+        $obj = $prodController->findComboGt($comboName, $selected_page);
         $rows = $obj['data'];
         $total_pages = $obj['total_pages'];
         $current_page = $obj['current_page'];
-        
+
         echo '
         <div class="loading_sc">
             <div>
@@ -705,33 +1221,25 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['transac'])) {
             echo '
             <li id="page-dir-cont" style="">
                 <div class="main-dir-link">';
-                for ($i=1; $i <= $total_pages ; $i++) {
-                    // if ($i === 8) {
-                    //     echo '<button type="button" id="more">...</button>';
-                    //     break;
-                    // }
-                    $g = ($i === $current_page) ? '<button type="button" id="pageON">' : '<button type="button" class="data-link" id="'.$i.'">' ;
-                    echo $g.$i;
-                    echo '</button>';
-
-                }
-                echo '</div>
+            for ($i = 1; $i <= $total_pages; $i++) {
+                // if ($i === 8) {
+                //     echo '<button type="button" id="more">...</button>';
+                //     break;
+                // }
+                $g = ($i === $current_page) ? '<button type="button" id="pageON">' : '<button type="button" class="data-link" id="' . $i . '">';
+                echo $g . $i;
+                echo '</button>';
+            }
+            echo '</div>
             </li>
             ';
         } else {
             echo "No combo..";
         }
-        
-        
     }
-
-
-
-
-
 }
 
-function getSelected($comboIDSelected, $type)
+function getSelected($comboIDSelected, $type, $sumT = 1)
 {
 
     $searchShow = new ProductController(null, $comboIDSelected, null, null, null, null, null);
@@ -739,7 +1247,16 @@ function getSelected($comboIDSelected, $type)
 
     $tPrice = 0;
     $item = 0;
-
+    $eventID = "";
+    if ($sumT == 1) {
+        $eventID = "rmSelectedCombo";
+    } else {
+        $eventID = "rmSelectedComboEdit";
+    }
+    $modif = "";
+    if ($type == "modif") {
+        $modif = "modif ";
+    }
     if ($rows) {
         if ($type == "update") {
 
@@ -751,7 +1268,11 @@ function getSelected($comboIDSelected, $type)
                 "totalPriceCombo" => $tPrice,
                 "totalItemCombo" => $item
             ];
-            $_SESSION['comboSummary'] = $sum;
+            if ($sumT == 1) {
+                $_SESSION['comboSummary'] = $sum;
+            } else {
+                $_SESSION['comboDumpedSummary'] = $sum;
+            }
         } else {
 
 
@@ -793,7 +1314,7 @@ function getSelected($comboIDSelected, $type)
         ';
             foreach ($rows as $row) {
                 echo '
-            <ol>
+            <ol class="'.$modif.'">
                 <li>
                     <div>
                         <img src="data:image/jpeg;base64, ' . base64_encode($row['displayPic']) . ' " alt="">
@@ -804,7 +1325,7 @@ function getSelected($comboIDSelected, $type)
                 </li>
                 <li>
                     <div class="action-combo" id="' . $row['productID'] . '">
-                        <i class="fas fa-minus" id="rmSelectedCombo" style="color: rgb(241, 86, 65);"></i>                        
+                        <i class="fas fa-minus" id="' . $eventID . '" style="color: rgb(241, 86, 65);"></i>                        
                     </div>
                 </li>
             </ol>';
@@ -815,10 +1336,371 @@ function getSelected($comboIDSelected, $type)
                 "totalPriceCombo" => $tPrice,
                 "totalItemCombo" => $item
             ];
-            $_SESSION['comboSummary'] = $sum;
+            if ($sumT == 1) {
+                $_SESSION['comboSummary'] = $sum;
+            } else {
+                $_SESSION['comboDumpedSummary'] = $sum;
+            }
         }
     } else {
-        unset($_SESSION['comboSummary']);
+        if ($sumT == 1) {
+            unset($_SESSION['comboSummary']);
+        } else {
+            unset($_SESSION['comboDumpedSummary']);
+        }
         echo "No selected products..";
     }
 }
+
+
+function getPForm($id, $data, $cat)
+{
+
+    $av = "";
+    $availability = $data['availability'];
+    if ($availability === "Available") {
+        $av = '
+        <option value="Available">Available</option>
+        <option value="Not-available">Not-available</option>
+        <option value="">Availability</option>
+        ';
+    } else if ($availability === "Not-available") {
+        $av = '
+        <option value="Available">Available</option>
+        <option value="Not-available">Not-available</option>
+        <option value="">Availability</option>
+        ';
+    } else {
+        $av = '
+        <option value="">Availability</option>
+        <option value="Available">Available</option>
+        <option value="Not-available">Not-available</option>
+        ';
+    }
+
+    $catIDORG = $data['category_id'];
+    $catSel = '<option value="' . $catIDORG . '" name="category">' . $data["category_name"] . '</option>';
+
+
+    foreach ($cat as $row) {
+        $catIDLoop = $row["category_id"];
+        if ($catIDLoop !== $catIDORG) {
+            $catSel .= '<option value="' . $catIDLoop . '" name="category">' . $row["category_name"] . '</option>';
+        }
+    }
+    $catSel .= '<option value="">Category</option>';
+
+    return '
+        <div class="label_style">
+            <p></p>
+            <h3>Edit Products</h3>
+            <p></p>
+        </div>
+        <section>
+        <ol>
+            <li>
+                <div>
+                    <img src="data:image/jpeg;base64 ,' . base64_encode($data['displayPic']) . '" id="editimgdisplay" dt="' . $id . '" alt="Display pic">
+                </div>
+                <label for="addpicedit">
+                    <i class="fas fa-plus"></i>
+                </label>
+                <input type="file" id="addpicedit" style="visibility: hidden; position: absolute; height: 0; width: 0; " name="displayPic">
+            </li>
+        </ol>
+        <ol>
+            <li>
+                <div>
+                    <i class="fas fa-book"></i>
+                    <input placeholder="Price" type="number" name="price" value="' . $data['price'] . '" id="prod_priceedit">
+                </div>
+                <p>Price</p>
+            </li>
+        </ol>
+        </section>
+        <section>
+        <ol>
+            <li>
+                <div>
+                    <i class="fas fa-book"></i>
+                    <input type="text" placeholder="Product" value="' . $data['name'] . '" id="prod_nameedit" name="name">
+                </div>
+                <p>Product</p>
+            </li>
+        </ol>
+        <ol>
+            <li>
+                <div>
+                    <i class="fas fa-book"></i>
+                    <select name="availability" id="availabilityedit">
+                        ' . $av . '
+                    </select>
+                </div>
+                <p>Availability</p>
+            </li>
+            <li>
+                <div>
+                    <i class="fas fa-book"></i>
+                    <select name="category" id="prod_category">
+                        ' . $catSel . '
+                    </select>
+                </div>
+                <p>Category</p>
+            </li>
+        </ol>
+        <div class="edit_cont_button">
+            <button type="submit" id="submit_editprod"><i class="fas fa-pen"></i>Submit Changes</button>
+            <p>Need to remove BG? <a style="color: #00c4ff;" href="https://www.remove.bg/upload" target="blank">Click here..</a></p>
+        </div>
+        </section>
+        <button type="button" id="cancedit" title="Cancel">
+        <i class="fas fa-plus"></i>
+        </button>
+        <div class="responseedit">
+        </div>
+    ';
+}
+function getCatForm($id, $data)
+{
+
+    return '
+        <div class="uiInfo">
+            <p></p>
+            <h3>Edit Category</h3>
+            <p></p>
+        </div>
+        <button id="cancelEditCat"><i class="fas fa-plus" style="transform: rotate(45deg);"></i></button>
+        <form id="editcategory" dt="' . $id . '">
+            <li>
+                <i class="fas fa-book"></i>
+                <input type="text" id="editCatInput" placeholder="Category" value="' . $data['category_name'] . '" name="category">
+                <p>Category</p>
+            </li>
+            <button id="validateCat" type="submit"><i class="fas fa-check"></i>Submit Changes</button>
+        </form>
+        <div class="editcategory-response">
+        </div>
+    ';
+}
+// submiteditCategory
+function getCbForm($id, $data)
+{
+    $av = "";
+    $availability = $data['availability'];
+    if ($availability === "Available") {
+        $av = '
+        <option value="Available">Available</option>
+        <option value="Not-available">Not-available</option>
+        <option value="">Availability</option>
+        ';
+    } else if ($availability === "Not-available") {
+        $av = '
+        <option value="Available">Available</option>
+        <option value="Not-available">Not-available</option>
+        <option value="">Availability</option>
+        ';
+    } else {
+        $av = '
+        <option value="">Availability</option>
+        <option value="Available">Available</option>
+        <option value="Not-available">Not-available</option>
+        ';
+    }
+    $totalPriceCombo = 0;
+    $totalItemCombo = 0;
+    $check = [
+        "comboName" => $data['comboName'],
+        "comboCode" => $data['comboCode'],
+        "availability" => $data['availability'],
+        "comboPrice" => $data['comboPrice']
+    ];
+
+    if (isset($_SESSION['comboDumpedSummary'])) {
+        $sum = $_SESSION['comboDumpedSummary'];
+        $totalPriceCombo = $sum['totalPriceCombo'];
+        $totalItemCombo = $sum['totalItemCombo'];
+    }
+    return ["RtData" => '
+    <div class="exitedit">
+    <i class="fas fa-plus"></i>
+</div>
+<form id="editComboForm" enctype="multipart/form-data">
+    <section>
+        <div class="img-wrap-out">
+
+            <div class="image-wrap">
+                <img src="data:image/jpeg;base64 ,' . base64_encode($data['displayPic']) . '" id="comboDPEdit" alt="">
+                <input type="file" style="visibility: hidden;" id="selectComboPicEdit" name="comboPic">
+            </div>
+            <label for="selectComboPicEdit">
+                <i class="fas fa-plus"></i>
+            </label>
+        </div>
+    </section>
+    <section>
+        <ol>
+            <li>
+                <i class="fas fa-book"></i>
+                <input type="text" name="comboName" value="' . $data['comboName'] . '" placeholder="Combo name..." id="comboNameEdit">
+                <p>Combo name</p>
+            </li>
+            <li>
+                <i class="fas fa-book"></i>
+                <input type="text" name="comboCode" value="' . $data['comboCode'] . '" placeholder="Combo code..." id="comboCodeEdit">
+                <p>Combo code</p>
+            </li>
+        </ol>
+        <ol>
+            <li>
+                <i class="fas fa-book"></i>
+                <input type="number" value="' . $data['comboPrice'] . '" name="comboPrice" placeholder="Price..." id="comboPriceEdit">
+                <p>Price</p>
+            </li>
+            <div class="data_summary_combo_edit">
+                <li>
+                    <h3>₱' . $totalPriceCombo . '</h3>
+                    <p>Products in Total</p>
+                </li>
+                <li>
+                    <h3>' . $totalItemCombo . '</h3>
+                    <p>Item/s</p>
+                </li>
+            </div>
+        </ol>
+        <ol>
+            <li>
+                <i class="fas fa-book"></i>
+                <select name="availability" id="availEdit">
+                    ' . $av . '
+                </select>
+            </li>
+        </ol>
+        <button id="tgedit" type="submit"></button>
+    </section>
+</form>
+<div class="outer-response">
+    <section>
+        <div class="action-products-outer">
+
+            <div class="action-products">
+                <div id="viewSelEdit">
+
+                    <h3>Products selected</h3>
+                    <div class="data-products-selected">
+                        <div class="loadingScComboForm-outer">
+
+                            <div class="loadingScComboForm">
+                                <ol>
+                                    <li>
+                                        <div>
+
+                                        </div>
+                                    </li>
+                                    <li>
+
+                                    </li>
+                                </ol>
+                                <ol>
+                                    <li>
+                                        <div>
+
+                                        </div>
+                                    </li>
+                                    <li>
+
+                                    </li>
+                                </ol>
+                                <ol>
+                                    <li>
+                                        <div>
+
+                                        </div>
+                                    </li>
+                                    <li>
+
+                                    </li>
+                                </ol>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div id="findProdControllerEdit">
+
+                    <h3>Find to add</h3>
+                    <div class="find-prod">
+                        <li>
+                            <i class="fas fa-search"></i>
+                            <input type="search" id="findProdInputEdit" autocomplete="off"
+                                placeholder="Search for products or category..">
+                        </li>
+                    </div>
+                    <div class="data-products">
+                        <div class="loadingScComboForm-outer">
+
+                            <div class="loadingScComboForm">
+                                <ol>
+                                    <li>
+                                        <div>
+
+                                        </div>
+                                    </li>
+                                    <li>
+
+                                    </li>
+                                </ol>
+                                <ol>
+                                    <li>
+                                        <div>
+
+                                        </div>
+                                    </li>
+                                    <li>
+
+                                    </li>
+                                </ol>
+                                <ol>
+                                    <li>
+                                        <div>
+
+                                        </div>
+                                    </li>
+                                    <li>
+
+                                    </li>
+                                </ol>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section>
+        <div class="combo-main-action">
+            <button id="addRm-comboEdit" type="button"> <i class="fas fa-search"></i>Find producs</button>
+            <button id="validate" type="submit"><i class="fas fa-check-square"></i>Validate</button>
+        </div>
+        <div class="combo-response">
+            <div class="waiting">
+                <p></p>
+                <p></p>
+                <p></p>
+                <p></p>
+            </div>
+        </div>
+    </section>
+</div>
+    ', "check" => $check];
+}
+
+function isNotSame($org, $test)
+{
+    if ($org != $test) {
+        return true;
+    }
+    return false;
+}
+// submit-combo_form

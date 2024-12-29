@@ -332,8 +332,8 @@ $isbaibing = validate($_SERVER['REQUEST_URI']);
                                         <i class="fas fa-book"></i>
                                         <select name="availability" id="avail">
                                             <option value="">Availability</option>
-                                            <option value="available">Available</option>
-                                            <option value="not-available">Not-available</option>
+                                            <option value="Available">Available</option>
+                                            <option value="Not-available">Not-available</option>
                                         </select>
                                     </li>
                                 </ol>
@@ -457,6 +457,16 @@ $isbaibing = validate($_SERVER['REQUEST_URI']);
                         </div>
                     </div>
                 </div>
+
+
+                <div class="comboEdit-form-cont">
+                    <div class="comboEdit-form-inner">
+                        <div class="loadPa">
+                        </div>
+
+                    </div>
+                </div>
+
                 <div id="addProductForm">
                     <form id="submit_form" enctype="multipart/form-data">
                         <div class="label_style">
@@ -503,8 +513,8 @@ $isbaibing = validate($_SERVER['REQUEST_URI']);
                                         <i class="fas fa-book"></i>
                                         <select name="availability" id="availability">
                                             <option value="">Availability</option>
-                                            <option value="available">Available</option>
-                                            <option value="not-available">Not-available</option>
+                                            <option value="Available">Available</option>
+                                            <option value="Not-available">Not-available</option>
                                         </select>
                                     </div>
                                     <p>Availability</p>
@@ -531,6 +541,18 @@ $isbaibing = validate($_SERVER['REQUEST_URI']);
                         </div>
                     </form>
                 </div>
+
+
+
+
+                <div id="editProductForm">
+                    <form id="editsubmit_form" enctype="multipart/form-data">
+
+                    </form>
+                </div>
+
+
+
                 <div class="categoryForm-outer">
 
                     <div id="categoryForm">
@@ -550,6 +572,29 @@ $isbaibing = validate($_SERVER['REQUEST_URI']);
                         </form>
                         <div class="category-response">
                         </div>
+                    </div>
+                </div>
+
+                <div class="editcategoryForm-outer">
+                    <div id="editcategoryForm">
+                    </div>
+                </div>
+
+
+                <div id="loadNt" style="display: none;">
+                    <div class="loader">
+                        <div class="bar1"></div>
+                        <div class="bar2"></div>
+                        <div class="bar3"></div>
+                        <div class="bar4"></div>
+                        <div class="bar5"></div>
+                        <div class="bar6"></div>
+                        <div class="bar7"></div>
+                        <div class="bar8"></div>
+                        <div class="bar9"></div>
+                        <div class="bar10"></div>
+                        <div class="bar11"></div>
+                        <div class="bar12"></div>
                     </div>
                 </div>
             </div>

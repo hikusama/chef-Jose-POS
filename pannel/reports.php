@@ -83,7 +83,7 @@ $isbaibing = validate($_SERVER['REQUEST_URI']);
         </div>
         <div class="middle_side">
 
-            <div class="todays-report">
+            <div class="todays-report hidePart">
                 <div class="hdr">
                     <h3>Todays Report</h3>
                     <button id="todayRecordPDF" title="Download as PDF">
@@ -148,9 +148,14 @@ $isbaibing = validate($_SERVER['REQUEST_URI']);
                         <canvas id="todDcLineChart"></canvas>
                     </div>
                 </div>
+                <div class="showThings">
+                    <h5 id="showT"><i class="fas fa-arrow-left"></i>
+                        <p>Show more</p> <i class="fas fa-arrow-right"></i>
+                    </h5>
+                </div>
             </div>
 
-            <div class="cstmRp">
+            <div class="cstmRp hidePart">
                 <div class="hdr">
                     <h3>Find your reports</h3>
                     <p class="recordDate">----<b></b></p>
@@ -228,7 +233,7 @@ $isbaibing = validate($_SERVER['REQUEST_URI']);
                     </section>
                 </div>
                 <div class="cs_major-chart">
-                    <div class="catThings"  style="border: none;">
+                    <div class="catThings" style="border: none;">
                         <div class="cs_category-bar-chart">
                             <h4>Category</h4>
                             <canvas id="csCatBarChart"></canvas>
@@ -287,12 +292,17 @@ $isbaibing = validate($_SERVER['REQUEST_URI']);
                         </div>
                     </div>
                 </div>
-
+                <div class="showThings">
+                    <h5 id="showT"><i class="fas fa-arrow-left"></i>
+                        <p>Show more</p> <i class="fas fa-arrow-right"></i>
+                    </h5>
+                </div>
 
             </div>
 
 
             <div class="ogCards">
+                <h3>Summary</h3>
                 <section class="card1">
                     <h3>Sales</h3>
                     <ol>
@@ -415,6 +425,12 @@ $isbaibing = validate($_SERVER['REQUEST_URI']);
                         </div>
                     </div>
                 </div>
+                <div id="findItem">
+                    <div class="wrapFind">
+                        <i class="fas fa-search"></i>
+                        <input type="text" placeholder="Search for item..">
+                    </div>
+                </div>
                 <div id="itemAnalyticalData">
                     <!-- <ol>
                         <section class="ssum">
@@ -460,7 +476,7 @@ $isbaibing = validate($_SERVER['REQUEST_URI']);
                             </div>
                         </section>
 
-                        <section class="table-data" >
+                        <section class="table-data">
                             <p class="singleRGRP">Double range</p>
                             <table border="1">
                                 <thead>

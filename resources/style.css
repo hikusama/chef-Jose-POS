@@ -1026,6 +1026,7 @@ img {
 }
 
 
+.editcategory-response,
 .category-response,
 .response {
     position: absolute;
@@ -1046,6 +1047,7 @@ img {
     border-right: solid 1px rgba(141, 141, 141, 0.788);
 }
 
+.editcategory-response>*,
 .category-response>*,
 .response>* {
     margin-top: .1rem;
@@ -1061,6 +1063,7 @@ img {
     }
 }
 
+.monokai_mode .editcategory-response,
 .monokai_mode .category-response,
 .monokai_mode .response {
     background-color: #47493e;
@@ -1068,6 +1071,7 @@ img {
 
 }
 
+.dark_mode .editcategory-response,
 .dark_mode .category-response,
 .dark_mode .response {
     background-color: #000000a1;
