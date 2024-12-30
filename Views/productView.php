@@ -1698,7 +1698,7 @@ function getCbForm($id, $data)
         <div class="img-wrap-out">
 
             <div class="image-wrap">
-                <img src="data:image/jpeg;base64 ,' . base64_encode($data['displayPic']) . '" id="comboDPEdit" alt="">
+                <img src="data:image/jpeg;base64 ,' . base64_encode($data['displayPic']) . '" id="comboDPEdit" dt="' . $id . '" alt="">
                 <input type="file" style="visibility: hidden;" id="selectComboPicEdit" name="comboPic">
             </div>
             <label for="selectComboPicEdit">

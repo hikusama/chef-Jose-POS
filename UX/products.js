@@ -408,7 +408,7 @@ $(document).ready(function () {
 
     $(".myproducts").on("submit", "#editComboForm", function (ae) {
         ae.preventDefault()
-        id = parseInt($("#editByID").parent().attr("id"))
+        id = parseInt($("#comboDPEdit").attr("dt"))
 
         formData = new FormData(this)
         formData.append("transac", "comboDoubleAction")
@@ -575,7 +575,7 @@ $(document).ready(function () {
     });
     $(".myproducts").on("click", "#addRm-comboEdit", function (e) {
         e.preventDefault();
-        id = parseInt($("#editByID").parent().attr("id"))
+        id = parseInt($("#comboDPEdit").attr("dt"))
 
         if (!clickedFndEdit) {
             $(this).html(`<i class="fas fa-eye"></i>View selected`)
@@ -774,7 +774,7 @@ $(document).ready(function () {
     $(".myproducts").on("submit", "#editsubmit_form", function (e) {
         e.preventDefault();
         reqtype = $("#editsubmit_form .actr").attr("value")
-        id = parseInt($("#editByID").parent().attr("id"))
+        id = parseInt($("#editimgdisplay").attr("dt"))
 
         formData = new FormData(this)
         formData.append("transac", "editProd")
@@ -1569,7 +1569,7 @@ $(document).ready(function () {
     // category edit
 
     function editCatSubmit(formData) {
-        id = parseInt($("#editByID").parent().attr("id"))
+        id = parseInt($("#editcategory").attr("dt"))
         reqtype = $("#editcategory button").attr("value")
 
         formData.append("ID", id)
