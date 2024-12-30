@@ -14,7 +14,10 @@ $(document).ready(function () {
     let editPorm = $("#editProductForm").detach();
     let editCat = $(".editcategoryForm-outer").detach();
     let editCombo = $(".comboEdit-form-cont").detach();
+    let orgProdData = [];
     let orgComboData = [];
+    let orgCatData = [];
+    let imgChangeProd = 0
     let imgChange = 0
 
     // $(".myproducts").detach(addPorm);
@@ -36,14 +39,102 @@ $(document).ready(function () {
     let interval = "";
     // });
 
+    // validation front-end product Edit 
+
+    $(".myproducts").on("change", "#editProductForm select", function (e) {
+        e.preventDefault()
+        $(".myproducts #editProductForm .actr").html(`<i class="fas fa-check-square"></i> Validate`)
+        $(".myproducts #editProductForm .actr").attr(`value`, `check`)
+        $(".myproducts #editProductForm .actr").attr(`id`, `validateProd`)
+        $(".responseedit").html("")
+    });
+
+    $(".myproducts").on("input", "#editProductForm input", function (e) {
+        e.preventDefault()
+        $(".myproducts #editProductForm .actr").html(`<i class="fas fa-check-square"></i> Validate`)
+        $(".myproducts #editProductForm .actr").attr(`value`, `check`)
+        $(".myproducts #editProductForm .actr").attr(`id`, `validateProd`)
+        $(".responseedit").html("")
+    });
+    $(".myproducts").on("input", "#prod_priceedit", function (e) {
+        e.preventDefault()
+        val = $(this).val().trim()
+
+        $(this).removeClass("modif")
+        $(this).removeClass("emptyI")
+
+        if (val === "") {
+            $(this).addClass("emptyI")
+        } else if (val != orgProdData.price) {
+            $(this).addClass("modif")
+        }
+    });
+
+    $(".myproducts").on("input", "#prod_nameedit", function (e) {
+        e.preventDefault()
+        val = $(this).val().trim()
+
+        $(this).removeClass("modif")
+        $(this).removeClass("emptyI")
+
+        if (val === "") {
+            $(this).addClass("emptyI")
+        } else if (val != orgProdData.name) {
+            $(this).addClass("modif")
+        }
+    });
+
+    $(".myproducts").on("change", "#availabilityedit", function (e) {
+        e.preventDefault()
+        val = $(this).val().trim()
+
+        $(this).removeClass("modif")
+        $(this).removeClass("emptyI")
+
+        if (val === "") {
+            $(this).addClass("emptyI")
+        } else if (val != orgProdData.availability) {
+            $(this).addClass("modif")
+        }
+    });
+
+    $(".myproducts").on("change", "#prod_category", function (e) {
+        e.preventDefault()
+        val = $(this).val().trim()
+
+        $(this).removeClass("modif")
+        $(this).removeClass("emptyI")
+
+        if (val === "") {
+            $(this).addClass("emptyI")
+        } else if (val != orgProdData.categoryID) {
+            $(this).addClass("modif")
+        }
+    });
+
+
+
+
+
+
 
     // validation front-end Category Edit 
     $(".myproducts").on("input", "#editCatInput", function (e) {
         e.preventDefault()
-        id = parseInt($("#editByID").parent().attr("id"))
+        val = $(this).val().trim()
 
-        updateCat(id,"check")
-        // comboShowProdEdit($(this).val())
+        $(this).removeClass("modif")
+        $(this).removeClass("emptyI")
+        $(".myproducts #editcategory button").html(`<i class="fas fa-check-square"></i> Validate`)
+        $(".myproducts #editcategory button").attr(`value`, `check`)
+        $(".myproducts #editcategory button").attr(`id`, `validateCat`)
+        $(".editcategory-response").html("")
+
+        if (val === "") {
+            $(this).addClass("emptyI")
+        } else if (val != orgCatData) {
+            $(this).addClass("modif")
+        }
 
     });
 
@@ -275,7 +366,6 @@ $(document).ready(function () {
                 $("#content_products >*").removeClass("changeComboSec")
                 $("#content_products >*").detach()
                 allCombo("")
-
             }, 250);
             $(".find_prod input").val("");
             $(".find_prod input").attr("placeholder", "Search for combo's or code...");
@@ -306,11 +396,8 @@ $(document).ready(function () {
                     $(".myproducts #addComboForm input").val("");
                     $(".combo-response").html("");
                     $(".exit").trigger("click");
-                    if (prdShowState != 3) {
-                        $("#cmboType").trigger("click");
-                    } else {
-                        allCombo("")
-                    }
+                    prdShowState = 3
+                    $("#cmboType").trigger("click");
                     notify("Combo added successfully...")
                 }
             }
@@ -352,12 +439,9 @@ $(document).ready(function () {
                             $(".myproducts #editComboForm input").val("");
                             $(".combo-response").html("");
                             $(".exitEdit").trigger("click");
-                            if (prdShowState != 3) {
-                                $("#cmboType").trigger("click");
-                            } else {
-                                allCombo("")
-                            }
-                            notify("Combo updated successfully...")
+                            prdShowState = 3
+                            $("#cmboType").trigger("click");
+                            notify("Combo Updated successfully...")
                         }
                     }
                 }
@@ -557,7 +641,7 @@ $(document).ready(function () {
 
     });
 
-    
+
     $(".myproducts").on("click", ".exit", function () {
         $(comboAdd).detach()
         $("#overlay_prod").hide();
@@ -603,13 +687,20 @@ $(document).ready(function () {
     });
 
 
+    $(".myproducts").on("change", "#addpicedit", function (e) {
+        e.preventDefault();
+
+        imagePick("#editimgdisplay", "#addpicedit", 3);
+        imgChangeProd = 1
+
+    });
+
+
     $(".myproducts").on("change", "#addpic", function (e) {
         e.preventDefault();
-        const input = $('#addpic')[0];
 
-        if (input) {
-            imagePick("#imgdisplay", "#addpic");
-        }
+        imagePick("#imgdisplay", "#addpic");
+
     });
 
 
@@ -675,6 +766,46 @@ $(document).ready(function () {
 
                 }
                 $('.response').html(response);
+            }
+        });
+
+    });
+
+    $(".myproducts").on("submit", "#editsubmit_form", function (e) {
+        e.preventDefault();
+        reqtype = $("#editsubmit_form .actr").attr("value")
+        id = parseInt($("#editByID").parent().attr("id"))
+
+        formData = new FormData(this)
+        formData.append("transac", "editProd")
+        formData.append("imgChange", imgChangeProd)
+        formData.append("id", id)
+        formData.append("reqtype", reqtype)
+
+        $.ajax({
+            url: '../views/productView.php',
+            method: 'POST',
+            data: formData,
+            contentType: false,
+            processData: false,
+            success: function (response) {
+                $('.responseedit').html(response.msg);
+                if (response.res !== "minorerr") {
+                    if (response.res === "no error") {
+                        $("#validateProd").html(`<i class="fas fa-plus"></i> Submit changes`)
+                        $("#validateProd").attr(`value`, `update`)
+                        $("#validateProd").attr(`id`, `submit_editprod`)
+                    } else if (response.res === "success") {
+                        $("#cancedit").trigger("click");
+                        prdShowState = 1
+                        allProducts("", 1)
+                        notify(response.msg)
+                    } else {
+                        $("#submit_editprod").html(`<i class="fas fa-check-square"></i> Validate`)
+                        $("#submit_editprod").attr(`value`, `check`)
+                        $("#submit_editprod").attr(`id`, `validateProd`)
+                    }
+                }
             }
         });
 
@@ -768,6 +899,16 @@ $(document).ready(function () {
     });
 
 
+    $(".myproducts").on("submit", "#editcategory", function (e) {
+        e.preventDefault()
+        formData = new FormData(this)
+
+        editCatSubmit(formData)
+
+    });
+
+
+
     $(".myproducts").on("submit", "#category", function (e) {
         e.preventDefault()
         formData = new FormData(this)
@@ -785,13 +926,13 @@ $(document).ready(function () {
                     notify("Category Added Successfully")
                     open_Insertion = true;
                     clearInterval(interval2)
-
+                    prdShowState = 2
                     $("#categoryForm .category-response").html("");
                     $("#categoryForm input").val("");
                     $(".uiInfo").hide();
                     $("#overlay_prod").hide();
                     $(".categoryForm-outer").detach();
-                    allProducts("")
+                    allCat("", 1)
                 }
                 $('.category-response').html(response);
             }
@@ -1105,6 +1246,9 @@ $(document).ready(function () {
                     $("#editsubmit_form").append(loadNt);
                     $(loadNt).show()
                     insertF($("#editsubmit_form #editimgdisplay").attr('src'), '#addpicedit')
+
+                    orgProdData = response.orgData
+
                     setTimeout(() => {
                         $(loadNt).detach()
                         $("#editsubmit_form > *").show()
@@ -1118,6 +1262,9 @@ $(document).ready(function () {
                     $("#editcategoryForm > *").hide()
                     $("#editcategoryForm").append(loadNt);
                     $(loadNt).show()
+
+                    orgCatData = response.orgData
+
                     setTimeout(() => {
                         $(loadNt).detach()
                         $("#editcategoryForm > *").show()
@@ -1127,12 +1274,14 @@ $(document).ready(function () {
                         }, 600);
                     }, 800);
                 } else if (response.formType === "combo") {
+                    // loadNtCombo = 
+
                     $(".comboEdit-form-inner").html(response.form);
                     insertF($(".comboEdit-form-inner #comboDPEdit").attr('src'), '#selectComboPicEdit')
                     $(".comboEdit-form-inner > *").hide()
                     $(".comboEdit-form-inner").append(loadNtCombo);
+                    $(loadNtCombo).html(loadNt)
                     $(loadNt).show()
-                    $(loadNtCombo).show()
 
                     orgComboData = response.orgData
 
@@ -1419,12 +1568,15 @@ $(document).ready(function () {
 
     // category edit
 
-    function updateCat(id,reqtype) {
+    function editCatSubmit(formData) {
+        id = parseInt($("#editByID").parent().attr("id"))
+        reqtype = $("#editcategory button").attr("value")
 
-        formData = new FormData(this)
         formData.append("ID", id)
-        formData.append("transac", "updateCat")
+        formData.append("transac", "editCategory")
         formData.append("reqtype", reqtype)
+
+
 
         $.ajax({
             url: '../views/productView.php',
@@ -1434,9 +1586,28 @@ $(document).ready(function () {
             contentType: false,
             processData: false,
             success: function (response) {
-                if (response.result == "Updated") {
-                    notify("Updated successfully...")
+
+                $('.editcategory-response').html(response.msg);
+                if (response.res !== "minorerr") {
+                    if (response.res === "no error") {
+                        $("#validateCat").html(`<i class="fas fa-plus"></i> Submit changes`)
+                        $("#validateCat").attr(`value`, `update`)
+                        $("#validateCat").attr(`id`, `submiteditCategory`)
+                    } else if (response.res === "success") {
+                        $("#editcategory input").val("");
+                        $("#overlay_prod").hide();
+                        prdShowState = 2
+                        clearInterval(interval)
+                        $(".editcategoryForm-outer").detach();
+                        allCat("", 1)
+                        notify(response.msg)
+                    } else {
+                        $("#submiteditCategory").html(`<i class="fas fa-check-square"></i> Validate`)
+                        $("#submiteditCategory").attr(`value`, `check`)
+                        $("#submiteditCategory").attr(`id`, `validateCat`)
+                    }
                 }
+
             }
         });
 
@@ -1485,12 +1656,18 @@ $(document).ready(function () {
             if (type === 2) {
                 $(".img-wrap-out > *").removeClass("emptyIP")
                 $(".img-wrap-out > *").addClass("modifP")
+            } else if (type === 3) {
+                $(".picmeEdit").removeClass("emptyIP3")
+                $(".picmeEdit").addClass("modifP3")
             }
         } else {
             profileImage.attr('src', '../image/dpTemplate.png');
             if (type === 2) {
                 $(".img-wrap-out > *").removeClass("modifP")
                 $(".img-wrap-out > *").addClass("emptyIP")
+            } else if (type === 3) {
+                $(".picmeEdit").removeClass("modifP3")
+                $(".picmeEdit").addClass("emptyIP3")
             }
         }
 

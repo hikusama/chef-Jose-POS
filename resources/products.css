@@ -691,12 +691,14 @@
     background-color: rgba(0, 0, 0, 0.329) !important;
 }
 
+.monokai_mode #submit_editprod,
+.dark_mode #submit_editprod,
 .monokai_mode #submiteditCategory,
 .dark_mode #submiteditCategory,
 .monokai_mode #submitCategory,
 .dark_mode #submitCategory,
-.monokai_mode #submit_editprod,
-.dark_mode #submit_editprod,
+.monokai_mode #validateProd,
+.dark_mode #validateProd,
 .monokai_mode #submit_prod,
 .dark_mode #submit_prod {
     color: white;
@@ -704,14 +706,14 @@
     border: solid 1px rgba(119, 119, 119, 0.596);
 }
 
-.monokai_mode #submit_editprod:hover,
+.monokai_mode #validateProd:hover,
 .monokai_mode #submit_prod:hover {
     outline-color: rgb(255, 104, 3);
     background-color: rgba(255, 104, 3, 0.644);
 
 }
 
-.dark_mode #submit_editprod:hover,
+.dark_mode #validateProd:hover,
 .dark_mode #submit_prod:hover {
     outline-color: rgb(255, 104, 3);
     background-color: rgba(255, 104, 3, 0.644);
@@ -829,7 +831,6 @@
 
 #prod_nameedit,
 #prod_name {
-    text-transform: capitalize;
     width: 20rem !important;
 }
 
@@ -1014,7 +1015,7 @@
     transform: rotate(90deg);
 }
 
-#submit_editprod i,
+#validateProd i,
 #submit_prod i {
     left: 1rem;
     position: absolute;
@@ -1205,7 +1206,6 @@
     font-size: 1rem;
     border-radius: .4rem;
     padding: 0 1rem 0 2rem;
-    text-transform: capitalize;
 }
 
 #editcategoryForm li input:focus ,
@@ -1255,7 +1255,10 @@
     border: solid 1px rgb(255, 104, 3);
 
 }
-
+.picmeEdit,
+.picmeAdd{
+    outline: solid 5px;
+}
 .uiInfo {
     position: absolute;
     top: -3rem;
@@ -1722,6 +1725,12 @@
 .emptyIP {
     outline: solid 2.3px rgb(253, 30, 0) !important;
 }
+.modifP3 {
+    outline: solid 5px rgb(0, 253, 139) !important;
+}
+.emptyIP3 {
+    outline: solid 5px rgb(253, 30, 0) !important;
+}
 /* 3232 */
 
 .monokai_mode .action-products,
@@ -1729,6 +1738,8 @@
     color: rgb(199 199 199);
 
 }
+#validateProd:hover i,
+#validateCat:hover i,
 #validate:hover i{
     transform: unset !important;
     
@@ -2050,9 +2061,13 @@
     
 }
 
+#submit_editprod ,
+#submiteditCategory ,
 #submitChanges {
-    background-color: rgb(0 255 5 / 34%);
+    background: rgb(0 255 5 / 34%) !important;
+    background-color: rgb(0 255 5 / 34%) !important;
     outline: solid 1px rgb(5 212 24);
+    border: none !important;
 }
 
 .combo-main-action>*:nth-child(2):hover i {
@@ -2064,8 +2079,12 @@
     transition: .3s;
     background-color: rgba(255, 104, 3, 0.192);
 }
+
+#submit_editprod:hover,
+#submiteditCategory:hover,
 #submitChanges:hover{
-    background-color: rgba(0, 255, 4, 0.178);
+    background: rgba(0, 255, 4, 0.178) !important;
+    background-color: rgba(0, 255, 4, 0.178) !important;
     outline: solid 1px rgb(3, 238, 27);
 }
 

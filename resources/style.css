@@ -1028,6 +1028,7 @@ img {
 
 .editcategory-response,
 .category-response,
+.responseedit ,
 .response {
     position: absolute;
     height: fit-content;
@@ -1049,13 +1050,17 @@ img {
 
 .editcategory-response>*,
 .category-response>*,
+.responseedit>*,
 .response>* {
     margin-top: .1rem;
     animation-name: responseEntry;
     animation-duration: .7s;
-    animation-iteration-count: 1s;
+    animation-iteration-count: 1;
 }
-
+.editcategory-response p,
+.responseedit p{
+    color: red;
+}
 @keyframes responseEntry {
     0% {
         opacity: 0;
@@ -1065,6 +1070,7 @@ img {
 
 .monokai_mode .editcategory-response,
 .monokai_mode .category-response,
+.monokai_mode .responseedit ,
 .monokai_mode .response {
     background-color: #47493e;
     color: rgb(206, 206, 206);
@@ -1073,6 +1079,7 @@ img {
 
 .dark_mode .editcategory-response,
 .dark_mode .category-response,
+.dark_mode .responseedit ,
 .dark_mode .response {
     background-color: #000000a1;
     color: rgb(206, 206, 206);

@@ -899,6 +899,36 @@
                 return null;
             }
         }
+        
+        public function updateProductThings($id,$col,$data)
+        {
+            $stmt = $this->connect()->prepare("UPDATE products SET $col = ? where productID = ?");
+            if ($stmt->execute([$data,$id])) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+
+
+        //  name	price	availability
+        public function productDataLight($id)
+        {
+            $sql = "SELECT 
+            prd.name,
+            prd.price,
+            prd.category_id,
+            prd.availability 
+            FROM products AS prd WHERE prd.productID = ?";
+            $stmt = $this->connect()->prepare($sql);
+            $stmt->execute([$id]);
+            $rows =  $stmt->fetch(PDO::FETCH_ASSOC);
+            if ($rows) {
+                return $rows;
+            } else {
+                return null;
+            }
+        }
         public function categoryData($id)
         {
             $sql = "SELECT * FROM category WHERE category_id = ?";
@@ -1838,6 +1868,32 @@
             $rows =  $stmt->fetch(PDO::FETCH_ASSOC);
 
             if ($rows) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+
+
+        public function getCategoryName($id)
+        {
+            $stmt = $this->connect()->prepare("SELECT category_name FROM category where category_id = ?");
+            $stmt->execute([$id]);
+            $rows =  $stmt->fetch(PDO::FETCH_ASSOC);
+
+            if ($rows) {
+                return $rows['category_name'];
+            } else {
+                return null;
+            }
+        }
+
+
+
+        public function updateCategoryName($id,$catName)
+        {
+            $stmt = $this->connect()->prepare("UPDATE category SET category_name = ? where category_id = ?");
+            if ($stmt->execute([$catName,$id])) {
                 return true;
             } else {
                 return false;

@@ -477,7 +477,7 @@ $isbaibing = validate($_SERVER['REQUEST_URI']);
                         </div>
                         <section>
                             <ol>
-                                <li>
+                                <li class="picmeAdd">
                                     <div>
                                         <img src="../image/dpTemplate.png" id="imgdisplay" alt="Display pic">
                                     </div>

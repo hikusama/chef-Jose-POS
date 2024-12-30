@@ -59,12 +59,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['transac'])) {
         }
 
 
-
-
-
-
-        // CATEGORY ADD
-
     }
 
 
@@ -96,32 +90,201 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['transac'])) {
                 echo '<p style="white-space:nowrap; color:#ff4141;font-size: 1.1rem;" class="errorText">' . $error . '</p>';
             }
         }
-
-
-
-
-
-
-
-
-        // PRODUCT EDIT
-
     }
 
 
     // PRODUCT EDIT
 
     if (isset($_POST['transac']) && $_POST['transac'] == "editProd") {
+        $errors = [];
 
-        $update = new ProductController(null, $product_name, $category_name, $price, $availability, $product_image, null);
+        $imgChangeProd = htmlspecialchars(strip_tags($_POST['imgChange']));
+        $id = htmlspecialchars(strip_tags($_POST['id']));
+        $reqtype = htmlspecialchars(strip_tags($_POST['reqtype']));
+        $name = htmlspecialchars(strip_tags($_POST['name']));
+        $category_id = htmlspecialchars(strip_tags($_POST['category']));
+        $price = intval($_POST['price']);
+        $availability = htmlspecialchars(strip_tags($_POST['availability']));
+        
+        $obj = new ProductController(null, $name, $category_id, $price, $availability, null, null);
+        
+        if ($obj->is_empty_inputs($name, $category_id, $price, $availability) || $price < 1) {
+            $msg = "<p>Please fill in all fields</p>";
+            http_response_code(200);
+            header("Content-Type: application/json");
+            echo json_encode(["res" => "minorerr", "msg" => $msg]);
+            return;
+        }
+
+        $product_image = "";
+        if (isset($_FILES['displayPic']) && $_FILES['displayPic']['error'] == 0) {
+
+            $image_file_type = strtolower(pathinfo($_FILES['displayPic']['name'], PATHINFO_EXTENSION));
+            $fileSize = $_FILES['displayPic']['size'];
+
+            $maxFileSize = 3 * 1024 * 1024;
+            $allowed_types = ['jpg', 'png', 'jpeg', 'gif'];
+            if (!in_array($image_file_type, $allowed_types)) {
+                $msg = '<p>Invalid format ( <b style="font-size:1rem;">jpg, png, jpeg, gif</b> )</p>';
+                http_response_code(200);
+                header("Content-Type: application/json");
+                echo json_encode(["res" => "minorerr", "msg" => $msg]);
+                return;
+            } else {
+                if ($fileSize <= $maxFileSize) {
+                    $product_image = file_get_contents($_FILES['displayPic']['tmp_name']);
+                } else {
+                    $msg = "<p>The file size exceeds the maximum allowed limit (3 MB)!</p>";
+                    http_response_code(200);
+                    header("Content-Type: application/json");
+                    echo json_encode(["res" => "minorerr", "msg" => $msg]);
+                    return;
+                }
+            }
+        } else {
+            $msg = "<p>Please insert image of product.</p>";
+            http_response_code(200);
+            header("Content-Type: application/json");
+            echo json_encode(["res" => "minorerr", "msg" => $msg]);
+            return;
+        }
+        
+        $orgData = $obj->productDataLight($id);
+
+        $modifieds = [];
+        /*
+            prd.name,
+            prd.price,
+            prd.category_id,
+            prd.availability 
+        */
+
+        if ($imgChangeProd > 0) {
+            $modifieds["displayPic"] = $product_image;
+        }
+
+        if (isNotSame($orgData['name'], $name)) {
+            $modifieds["name"] = $name;
+        }
+
+        if (isNotSame($orgData['price'], $price)) {
+            $modifieds["price"] = $price;
+        }
+
+        if (isNotSame($orgData['category_id'], $category_id)) {
+            $modifieds["category_id"] = $category_id;
+        }
+
+        if (isNotSame($orgData['availability'], $availability)) {
+            $modifieds["availability"] = $availability;
+        }
 
 
 
 
 
-        // PRODUCT VIEW INFO
+        if (count($modifieds) !== 0) {
+            $res = "";
+            $msg = "";
+            if ($reqtype === "check") {
+                $msg = '<p style="color:#00dd00">Ready to update...</p>';
+                http_response_code(200);
+                $res = "no error";
+            } else if ($reqtype === "update") {
+                // $obj->addCategory();
+                $errorCount = 0;
+                foreach ($modifieds as $key => $value) {
+                    if (!$obj->updateProductThings($id,$key,$value)) {
+                        $errorCount += 1;
+                    }
+                }
+                if ($errorCount === 0) {
+                    $msg = "Products Updated Successfully...";
+                    $res = "success";
+                    http_response_code(200);
+                }else{
+                    $msg = "Execution error.";
+                    $res = "failed";
+                    http_response_code(400);
+                }
+            }
+            header("Content-Type: application/json");
+            echo json_encode(["res" => $res, "msg" => $msg]);
+        }else{
+            $msg = "<p>No changes</p>";
+            http_response_code(200);
+            header("Content-Type: application/json");
+            echo json_encode(["res" => "minorerr", "msg" => $msg]);
+        }
+
 
     }
+
+    // CATEGORY EDIT
+
+    if (isset($_POST['transac']) && $_POST['transac'] == "editCategory") {
+
+        $reqtype = htmlspecialchars(strip_tags($_POST['reqtype']));
+        $id = htmlspecialchars(strip_tags($_POST['ID']));
+        $category_name = htmlspecialchars(strip_tags($_POST['category']));
+
+        $isModified = false;
+
+        if (empty($category_name)) {
+            $msg = "<p>Please fill in all fields.</p>";
+            http_response_code(200);
+            header("Content-Type: application/json");
+            echo json_encode(["res" => "minorerr", "msg" => $msg]);
+            return;
+        }
+
+        $obj = new ProductController(null, null, null, null, null, null, $category_name);
+        $orgCatName = $obj->getCategoryName($id);
+
+        if ($orgCatName === $category_name) {
+            $isModified = true;
+        }
+
+        if ($isModified === false) {
+            if ($obj->isCategoryExist($category_name)) {
+                $msg = "<p>Category name already used</p>";
+                http_response_code(200);
+                header("Content-Type: application/json");
+                echo json_encode(["res" => "minorerr", "msg" => $msg]);
+                return;
+            }
+        }
+
+        $res = "";
+        $msg = "";
+        if ($isModified === false) {
+            if ($reqtype === "check") {
+                $msg = '<p style="color:#00dd00">Ready to update...</p>';
+                http_response_code(200);
+                $res = "no error";
+            } else if ($reqtype === "update") {
+                // $obj->addCategory();
+                if ($obj->updateCategoryName($id,$category_name)) {
+                    $msg = "Category Updated Successfully...";
+                    $res = "success";
+                    http_response_code(200);
+                }else{
+                    $msg = "Execution error.";
+                    $res = "failed";
+                    http_response_code(400);
+                }
+            }
+            header("Content-Type: application/json");
+            echo json_encode(["res" => $res, "msg" => $msg]);
+        }else{
+            $msg = "<p>No changes</p>";
+            http_response_code(200);
+            header("Content-Type: application/json");
+            echo json_encode(["res" => "minorerr", "msg" => $msg]);
+        }
+    }
+
+
 
 
     // VIEW PROD INFO
@@ -184,11 +347,14 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['transac'])) {
         if ($state === 1) {
             $formType = "products";
             $data = $obj->productData($ID);
-            $res = getPForm($ID, $data, $rowsCat);
+            $bulk = getPForm($ID, $data, $rowsCat);
+            $res = $bulk["RtData"];
+            $org = $bulk['check'];
         } else if ($state === 2) {
             $formType = "category";
             $data = $obj->categoryData($ID);
             $res = getCatForm($ID, $data);
+            $org = $data['category_name'];
         } else if ($state === 3) {
             $formType = "combo";
             $data = $obj->comboData($ID);
@@ -427,19 +593,17 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['transac'])) {
 
 
 
-        if (count($combos) !== 10 ) {            
+        if (count($combos) !== 10) {
             array_push($combos, $productID);
             getSelected($combos, "update");
             $_SESSION['combos'] = $combos;
             http_response_code(200);
             header("Content-Type: application/json");
-            echo json_encode(["res" => "good","msg" =>""]);
-
-        }else{
+            echo json_encode(["res" => "good", "msg" => ""]);
+        } else {
             http_response_code(200);
             header("Content-Type: application/json");
-            echo json_encode(["res" => "error","msg" =>"Max(10) combo selected."]);
-
+            echo json_encode(["res" => "error", "msg" => "Max(10) combo selected."]);
         }
 
         // $_SESSION['combo'] = count($combos);
@@ -535,17 +699,17 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['transac'])) {
 
         $i = -1;
         foreach ($orgData as $val) {
-            $orgProducts[$i+=1] = $val['productID'];
+            $orgProducts[$i += 1] = $val['productID'];
         }
 
         $res = "nahh";
-        $notMatching = array_diff($combosDumped,$orgProducts);
+        $notMatching = array_diff($combosDumped, $orgProducts);
 
-        if(count($orgProducts) === count($combosDumped)){
+        if (count($orgProducts) === count($combosDumped)) {
             if (!empty($notMatching)) {
                 $res = "modif";
             }
-        }else{
+        } else {
             $res = "modif";
         }
 
@@ -680,19 +844,17 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['transac'])) {
             $combosDumped = $_SESSION['combosDumped'];
         }
 
-        if (count($combosDumped) !== 10 ) {            
+        if (count($combosDumped) !== 10) {
             array_push($combosDumped, $productID);
             getSelected($combosDumped, "update", 2);
             $_SESSION['combosDumped'] = $combosDumped;
             http_response_code(200);
             header("Content-Type: application/json");
-            echo json_encode(["res" => "good","msg" =>""]);
-
-        }else{
+            echo json_encode(["res" => "good", "msg" => ""]);
+        } else {
             http_response_code(200);
             header("Content-Type: application/json");
-            echo json_encode(["res" => "error","msg" =>"Max(10) combo selected."]);
-
+            echo json_encode(["res" => "error", "msg" => "Max(10) combo selected."]);
         }
 
         // $_SESSION['combo'] = count($combosDumped);
@@ -810,17 +972,17 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['transac'])) {
         $i = -1;
         if ($orgData) {
             foreach ($orgData as $val) {
-                $orgProducts[$i+=1] = $val['productID'];
+                $orgProducts[$i += 1] = $val['productID'];
             }
         }
 
-        $notMatching = array_diff($combosDumped,$orgProducts);
+        $notMatching = array_diff($combosDumped, $orgProducts);
 
-        if(count($orgProducts) === count($combosDumped)){
+        if (count($orgProducts) === count($combosDumped)) {
             if (!empty($notMatching)) {
-                $modifItems = 1 ;
+                $modifItems = 1;
             }
-        }else{
+        } else {
             $modifItems = 1;
         }
 
@@ -1314,7 +1476,7 @@ function getSelected($comboIDSelected, $type, $sumT = 1)
         ';
             foreach ($rows as $row) {
                 echo '
-            <ol class="'.$modif.'">
+            <ol class="' . $modif . '">
                 <li>
                     <div>
                         <img src="data:image/jpeg;base64, ' . base64_encode($row['displayPic']) . ' " alt="">
@@ -1381,6 +1543,12 @@ function getPForm($id, $data, $cat)
     $catIDORG = $data['category_id'];
     $catSel = '<option value="' . $catIDORG . '" name="category">' . $data["category_name"] . '</option>';
 
+    $check = [
+        "name" => $data['name'],
+        "categoryID" => $catIDORG,
+        "availability" => $data['availability'],
+        "price" => $data['price']
+    ];
 
     foreach ($cat as $row) {
         $catIDLoop = $row["category_id"];
@@ -1390,7 +1558,7 @@ function getPForm($id, $data, $cat)
     }
     $catSel .= '<option value="">Category</option>';
 
-    return '
+    return ["RtData" => '
         <div class="label_style">
             <p></p>
             <h3>Edit Products</h3>
@@ -1398,7 +1566,7 @@ function getPForm($id, $data, $cat)
         </div>
         <section>
         <ol>
-            <li>
+            <li class="picmeEdit">
                 <div>
                     <img src="data:image/jpeg;base64 ,' . base64_encode($data['displayPic']) . '" id="editimgdisplay" dt="' . $id . '" alt="Display pic">
                 </div>
@@ -1412,7 +1580,7 @@ function getPForm($id, $data, $cat)
             <li>
                 <div>
                     <i class="fas fa-book"></i>
-                    <input placeholder="Price" type="number" name="price" value="' . $data['price'] . '" id="prod_priceedit">
+                    <input placeholder="Price" autocomplete="off" type="number" name="price" value="' . $data['price'] . '" id="prod_priceedit">
                 </div>
                 <p>Price</p>
             </li>
@@ -1423,7 +1591,7 @@ function getPForm($id, $data, $cat)
             <li>
                 <div>
                     <i class="fas fa-book"></i>
-                    <input type="text" placeholder="Product" value="' . $data['name'] . '" id="prod_nameedit" name="name">
+                    <input type="text" autocomplete="off"  placeholder="Product" value="' . $data['name'] . '" id="prod_nameedit" name="name">
                 </div>
                 <p>Product</p>
             </li>
@@ -1449,7 +1617,7 @@ function getPForm($id, $data, $cat)
             </li>
         </ol>
         <div class="edit_cont_button">
-            <button type="submit" id="submit_editprod"><i class="fas fa-pen"></i>Submit Changes</button>
+            <button type="submit" class="actr" id="validateProd" name="reqtype" value="check"><i class="fas fa-check-square"></i>Validate</button>
             <p>Need to remove BG? <a style="color: #00c4ff;" href="https://www.remove.bg/upload" target="blank">Click here..</a></p>
         </div>
         </section>
@@ -1458,8 +1626,9 @@ function getPForm($id, $data, $cat)
         </button>
         <div class="responseedit">
         </div>
-    ';
+    ', "check" => $check];
 }
+// submit_editprod
 function getCatForm($id, $data)
 {
 
@@ -1473,10 +1642,10 @@ function getCatForm($id, $data)
         <form id="editcategory" dt="' . $id . '">
             <li>
                 <i class="fas fa-book"></i>
-                <input type="text" id="editCatInput" placeholder="Category" value="' . $data['category_name'] . '" name="category">
+                <input type="text" autocomplete="off"  id="editCatInput" placeholder="Category" value="' . $data['category_name'] . '" name="category">
                 <p>Category</p>
             </li>
-            <button id="validateCat" type="submit"><i class="fas fa-check"></i>Submit Changes</button>
+            <button id="validateCat" name="reqtype" value="check" type="submit"><i class="fas fa-check-square"></i>Validate</button>
         </form>
         <div class="editcategory-response">
         </div>
@@ -1541,19 +1710,19 @@ function getCbForm($id, $data)
         <ol>
             <li>
                 <i class="fas fa-book"></i>
-                <input type="text" name="comboName" value="' . $data['comboName'] . '" placeholder="Combo name..." id="comboNameEdit">
+                <input type="text" autocomplete="off"  name="comboName" value="' . $data['comboName'] . '" placeholder="Combo name..." id="comboNameEdit">
                 <p>Combo name</p>
             </li>
             <li>
                 <i class="fas fa-book"></i>
-                <input type="text" name="comboCode" value="' . $data['comboCode'] . '" placeholder="Combo code..." id="comboCodeEdit">
+                <input type="text" autocomplete="off"  name="comboCode" value="' . $data['comboCode'] . '" placeholder="Combo code..." id="comboCodeEdit">
                 <p>Combo code</p>
             </li>
         </ol>
         <ol>
             <li>
                 <i class="fas fa-book"></i>
-                <input type="number" value="' . $data['comboPrice'] . '" name="comboPrice" placeholder="Price..." id="comboPriceEdit">
+                <input type="number"  value="' . $data['comboPrice'] . '" name="comboPrice" placeholder="Price..." id="comboPriceEdit">
                 <p>Price</p>
             </li>
             <div class="data_summary_combo_edit">
