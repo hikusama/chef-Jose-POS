@@ -889,7 +889,7 @@
         // FORM DATA PRODUCT
         public function productData($id)
         {
-            $sql = "SELECT * FROM products INNER JOIN category ON category.category_id = products.category_id WHERE products.productID = ?";
+            $sql = "SELECT * FROM products LEFT JOIN category ON category.category_id = products.category_id WHERE products.productID = ?";
             $stmt = $this->connect()->prepare($sql);
             $stmt->execute([$id]);
             $rows =  $stmt->fetch(PDO::FETCH_ASSOC);
@@ -980,7 +980,7 @@
         }
         public function comboData($id)
         {
-            $sql = "SELECT * FROM combo INNER JOIN comboItems ON combo.comboID = comboItems.comboID WHERE combo.comboID = ?";
+            $sql = "SELECT * FROM combo LEFT JOIN comboItems ON combo.comboID = comboItems.comboID WHERE combo.comboID = ?";
             $stmt = $this->connect()->prepare($sql);
             $stmt->execute([$id]);
             $rows =  $stmt->fetch(PDO::FETCH_ASSOC);
@@ -1045,9 +1045,11 @@
         public function combo_itemsdelete($combo_id)
         {
             $sql = "DELETE FROM comboitems WHERE comboID = ?";
-            $stmt = $this->connect()->prepare($sql);
+            $obj = $this->connect();
+            $stmt = $obj->prepare($sql);
             $stmt->bindParam(1, $combo_id, PDO::PARAM_INT);
-
+            
+            
             if ($stmt->execute()) {
                 return true;
             }

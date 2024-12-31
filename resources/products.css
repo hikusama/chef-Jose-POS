@@ -1750,12 +1750,16 @@
     transform: unset !important;
     
 }
+.ng{
+    color: #00dd00;
+}
 .action-products {
     color: rgb(0, 0, 0);
     display: grid;
     place-items: center;
     padding: 9rem 0 3rem;
     height: fit-content;
+    min-height: 27rem;
 }
 
 .action-products li,

@@ -19,6 +19,7 @@ $(document).ready(function () {
     let orgCatData = [];
     let imgChangeProd = 0
     let imgChange = 0
+    let stCounts = 0;
 
     // $(".myproducts").detach(addPorm);
     $("#addProductForm").detach();
@@ -392,6 +393,15 @@ $(document).ready(function () {
                     $('.combo-response').html(response);
                 } else {
                     $(".myproducts #addComboForm input").val("");
+                    $(".data_summary_combo").html(` 
+                    <li>
+                        <h3>₱0</h3>
+                        <p>Products in Total</p>
+                    </li>
+                    <li>
+                        <h3>0</h3>
+                        <p>Item/s</p>
+                    </li>`);
                     $(".combo-response").html("");
                     $(".exit").trigger("click");
                     prdShowState = 3
@@ -457,6 +467,10 @@ $(document).ready(function () {
         e.preventDefault()
         $("#editComboForm").trigger("submit");
     });
+    $(".myproducts").on("click", "#submiteditCombo", function (e) {
+        e.preventDefault()
+        $("#editComboForm").trigger("submit");
+    });
 
 
 
@@ -472,10 +486,11 @@ $(document).ready(function () {
 
     });
 
-
+    let lastitem55
     $(".myproducts").on("click", "#rmSelectedComboEdit", function (e) {
         e.preventDefault()
         prodIDSel = $(this).parent().attr('id')
+        lastitem55 = $(this).closest('ol').html()
         deselectProdEdit(prodIDSel)
         $(this).closest('ol').addClass('ol_anim_rm')
         setTimeout(() => {
@@ -485,7 +500,7 @@ $(document).ready(function () {
         $('#submitChanges').attr('id', "validate");
         $('#validate').html('<i class="fas fa-check-square"></i>Validate');
         $('.combo-response').html(`<div class="waiting"><p></p><p></p><p></p><p></p></div>`);
-        $(".data_summary_combo_edit").css("color", "#00dd00")
+        $(".data_summary_combo_edit").addClass("ng")
     });
 
 
@@ -510,7 +525,7 @@ $(document).ready(function () {
         $('#submitChanges').attr('id', "validate");
         $('#validate').html('<i class="fas fa-check-square"></i>Validate');
         $('.combo-response').html(`<div class="waiting"><p></p><p></p><p></p><p></p></div>`);
-        $(".data_summary_combo_edit").css("color", "#00dd00")
+        $(".data_summary_combo_edit").addClass("ng")
 
     });
     let lastitem;
@@ -1296,7 +1311,7 @@ $(document).ready(function () {
                     }
                     $(".action-products").html(viewSelEdit)
                     viewSelectedDumpedProd(id)
-                    clickedFndEdit = false 
+                    clickedFndEdit = false
                     // if (clickedFndEdit) {
                     //     $(viewSelEdit).detach()
                     //     $(".action-products").html(findPrEdit)
@@ -1417,7 +1432,9 @@ $(document).ready(function () {
             contentType: false,
             processData: false,
             success: function (response) {
-
+                if (response.res === "error") {
+                    $(".exitedit").trigger("click");
+                }
             }, complete: function () {
             }
         });
@@ -1497,13 +1514,22 @@ $(document).ready(function () {
             contentType: false,
             processData: false,
             success: function (response) {
-                response = response.trim()
-                if (response == "No products..") {
 
-                    $(".data-products-selected").html(response);
+                if (response.res == "error") {
+                    $(".data_summary_combo_edit").removeClass("ng")
+                    $('.new-data-products').removeClass("modif")
+
+                    ab = `<ol class="new-data-products">${lastitem55}</ol>`
+                    setTimeout(() => {
+                        $(".data-products-selected").append(ab);
+                        $(ab).show()
+                    }, 230);
+                    $('.combo-response').html(response.msg);
+                } else {
+                    viewComboSumEdit();
+
                 }
             }, complete: function () {
-                viewComboSumEdit();
 
             }
         });
@@ -1523,11 +1549,17 @@ $(document).ready(function () {
             processData: false,
             success: function (response) {
                 if (response.res === "error") {
-
+                    if (stCounts == 0) {
+                        $(".data_summary_combo_edit").removeClass("ng")
+                    }
                     ab = `<ol class="new-data-products">${lastitemEdit}</ol>`
-                    $(".data-products").append(ab);
-                    $(ab).show()
+                    setTimeout(() => {
+                        $(".data-products").append(ab);
+                        $(ab).show()
+                    }, 230);
                     $('.combo-response').html(response.msg);
+                } else {
+                    stCounts += 1;
                 }
                 $(".data-products .loadingScComboForm-outer").detach();
 

@@ -626,12 +626,18 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['transac'])) {
             unset($_SESSION['combosDumped']);
         }
 
-        foreach ($productsIDs as $id) {
-            array_push($combosDumped, $id['productID']);
-        }
 
-        $_SESSION['combosDumped'] = $combosDumped;
-        getSelected($combosDumped, "update", 2);
+        if ($productsIDs) {
+            foreach ($productsIDs as $id) {
+                array_push($combosDumped, $id['productID']);
+            }
+            $_SESSION['combosDumped'] = $combosDumped;
+            getSelected($combosDumped, "update", 2);
+        } else {
+            http_response_code(200);
+            header("Content-Type: application/json");
+            echo json_encode(["res" => "error"]);
+        }
     }
 
 
@@ -804,12 +810,19 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['transac'])) {
 
         $array_size = count($combosDumped);
 
+        if ($array_size <= 2) {
+            http_response_code(200);
+            header("Content-Type: application/json");
+            echo json_encode(["res" => "error", "msg" => "Min(2) combo items."]);
+            return;
+        } else {
 
-        for ($i = 0; $i < $array_size; $i++) {
-            if ($combosDumped[$i] == $productID) {
-                unset($combosDumped[$i]);
-                $combosDumped = array_values($combosDumped);
-                break;
+            for ($i = 0; $i < $array_size; $i++) {
+                if ($combosDumped[$i] == $productID) {
+                    unset($combosDumped[$i]);
+                    $combosDumped = array_values($combosDumped);
+                    break;
+                }
             }
         }
 
@@ -850,7 +863,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['transac'])) {
         } else {
             http_response_code(200);
             header("Content-Type: application/json");
-            echo json_encode(["res" => "error", "msg" => "Max(10) combo selected."]);
+            echo json_encode(["res" => "error", "msg" => "Max(10) combo items."]);
         }
 
         // $_SESSION['combo'] = count($combosDumped);
@@ -865,8 +878,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['transac'])) {
             $totalPriceCombo = $cmb['totalPriceCombo'];
             $item = $cmb['totalItemCombo'];
         } else {
-            var_dump($_SESSION['combosDumped']);
-            var_dump($_SESSION['comboDumpedSummary']);
+            unset($_SESSION['combosDumped']);
+            unset($_SESSION['comboDumpedSummary']);
         }
         $totalPriceComboTmp = number_format($totalPriceCombo, 0, ',');
 
@@ -1037,9 +1050,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['transac'])) {
                 // $obj->addCategory();
 
                 // if ($obj->updateCategoryName($id,$category_name)) {
-                $msg = "Combo Updated Successfully...";
-                $resType = "success";
-                http_response_code(200);
+
                 // }else{
                 //     $msg = "Execution error.";
                 //     $res = "failed";
@@ -1047,27 +1058,29 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['transac'])) {
                 // }
                 $errorCount = 0;
 
-                if ($obj->combo_itemsdelete($comboID)) {
-                    if ($modifItems !== 0) {
+                if ($modifItems !== 0) {
+                    if ($obj->combo_itemsdelete($comboID)) {
                         foreach ($combosDumped as $key => $value) {
-                            if (!$obj->newComboItems(intval($comboID),$value)) {
+                            if (!$obj->newComboItems(intval($comboID), $value)) {
                                 $errorCount += 1;
                             }
                         }
                     }
-                    if (count($modifiedsAtrr) !== 0) {
-                        foreach ($modifiedsAtrr as $key => $value) {
-                            if (!$obj->updateComboThings($key, $value, $comboID)) {
-                                $errorCount += 1;
-                            }
+                }
+                if (count($modifiedsAtrr) !== 0) {
+                    foreach ($modifiedsAtrr as $key => $value) {
+                        if (!$obj->updateComboThings($key, $value, $comboID)) {
+                            $errorCount += 1;
                         }
                     }
-                }else{
-                    $errorCount += 1;
                 }
                 if ($errorCount > 0) {
                     $msg = "Execution error.";
                     http_response_code(400);
+                } else {
+                    $msg = "Combo Updated Successfully...";
+                    $resType = "success";
+                    http_response_code(200);
                 }
             } else {
                 $msg = "Execution error.";
@@ -1554,7 +1567,7 @@ function getPForm($id, $data, $cat)
 {
 
     $av = "";
-    $availability = $data['availability'];
+    $availability = $data['availability'] ?? "Not-available";
     if ($availability === "Available") {
         $av = '
         <option value="Available">Available</option>
@@ -1690,7 +1703,7 @@ function getCatForm($id, $data)
 function getCbForm($id, $data)
 {
     $av = "";
-    $availability = $data['availability'];
+    $availability = $data['availability'] ?? "Not-available";
     if ($availability === "Available") {
         $av = '
         <option value="Available">Available</option>
