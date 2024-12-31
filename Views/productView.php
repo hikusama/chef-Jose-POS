@@ -57,8 +57,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['transac'])) {
                 echo '<p style="white-space:nowrap; color:#ff4141;font-size: 1.1rem;" class="errorText">' . $error . '</p>';
             }
         }
-
-
     }
 
 
@@ -105,9 +103,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['transac'])) {
         $category_id = htmlspecialchars(strip_tags($_POST['category']));
         $price = intval($_POST['price']);
         $availability = htmlspecialchars(strip_tags($_POST['availability']));
-        
+
         $obj = new ProductController(null, $name, $category_id, $price, $availability, null, null);
-        
+
         if ($obj->is_empty_inputs($name, $category_id, $price, $availability) || $price < 1) {
             $msg = "<p>Please fill in all fields</p>";
             http_response_code(200);
@@ -148,7 +146,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['transac'])) {
             echo json_encode(["res" => "minorerr", "msg" => $msg]);
             return;
         }
-        
+
         $orgData = $obj->productDataLight($id);
 
         $modifieds = [];
@@ -194,7 +192,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['transac'])) {
                 // $obj->addCategory();
                 $errorCount = 0;
                 foreach ($modifieds as $key => $value) {
-                    if (!$obj->updateProductThings($id,$key,$value)) {
+                    if (!$obj->updateProductThings($id, $key, $value)) {
                         $errorCount += 1;
                     }
                 }
@@ -202,7 +200,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['transac'])) {
                     $msg = "Products Updated Successfully...";
                     $res = "success";
                     http_response_code(200);
-                }else{
+                } else {
                     $msg = "Execution error.";
                     $res = "failed";
                     http_response_code(400);
@@ -210,14 +208,12 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['transac'])) {
             }
             header("Content-Type: application/json");
             echo json_encode(["res" => $res, "msg" => $msg]);
-        }else{
+        } else {
             $msg = "<p>No changes</p>";
             http_response_code(200);
             header("Content-Type: application/json");
             echo json_encode(["res" => "minorerr", "msg" => $msg]);
         }
-
-
     }
 
     // CATEGORY EDIT
@@ -264,11 +260,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['transac'])) {
                 $res = "no error";
             } else if ($reqtype === "update") {
                 // $obj->addCategory();
-                if ($obj->updateCategoryName($id,$category_name)) {
+                if ($obj->updateCategoryName($id, $category_name)) {
                     $msg = "Category Updated Successfully...";
                     $res = "success";
                     http_response_code(200);
-                }else{
+                } else {
                     $msg = "Execution error.";
                     $res = "failed";
                     http_response_code(400);
@@ -276,7 +272,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['transac'])) {
             }
             header("Content-Type: application/json");
             echo json_encode(["res" => $res, "msg" => $msg]);
-        }else{
+        } else {
             $msg = "<p>No changes</p>";
             http_response_code(200);
             header("Content-Type: application/json");
@@ -889,7 +885,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['transac'])) {
 
     if (isset($_POST['transac']) && $_POST['transac'] == "comboDoubleAction") {
 
-        $reqType = htmlspecialchars(strip_tags(trim($_POST['reqType'])));
+        $reqtype = htmlspecialchars(strip_tags(trim($_POST['reqtype'])));
         $comboID = htmlspecialchars(strip_tags(trim($_POST['comboID'])));
         $imgChanges = htmlspecialchars(strip_tags(trim($_POST['imgChanges'])));
         $comboName = htmlspecialchars(strip_tags(trim($_POST['comboName'])));
@@ -950,7 +946,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['transac'])) {
             return;
         }
 
-        $sz;
 
         if (isset($_SESSION['combosDumped'])) {
             $combosDumped = $_SESSION['combosDumped'];
@@ -970,7 +965,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['transac'])) {
         $orgData = $obj->comboDataLight($comboID);
         $orgProducts = [];
         $i = -1;
-        if ($orgData) {
+        if ($orgData[0]['productID']) {
             foreach ($orgData as $val) {
                 $orgProducts[$i += 1] = $val['productID'];
             }
@@ -1029,21 +1024,61 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['transac'])) {
                 return;
             }
         }
-        $resType = "";
+        $resType = "minorerr";
 
 
         if (count($modifiedsAtrr) !== 0 || $modifItems !== 0) {
-            if ($reqType === "check") {
+            $msg = "";
+            if ($reqtype === "check") {
                 $msg = '<p style="color:#00dd00">Ready to update...</p>';
-                $resType = "checked";
-            } else if ($reqType === "update") {
-                $msg = "success";
-                $resType = "executed";
+                http_response_code(200);
+                $resType = "no error";
+            } else if ($reqtype === "update") {
+                // $obj->addCategory();
+
+                // if ($obj->updateCategoryName($id,$category_name)) {
+                $msg = "Combo Updated Successfully...";
+                $resType = "success";
+                http_response_code(200);
+                // }else{
+                //     $msg = "Execution error.";
+                //     $res = "failed";
+                //     http_response_code(400);
+                // }
+                $errorCount = 0;
+
+                if ($obj->combo_itemsdelete($comboID)) {
+                    if ($modifItems !== 0) {
+                        foreach ($combosDumped as $key => $value) {
+                            if (!$obj->newComboItems(intval($comboID),$value)) {
+                                $errorCount += 1;
+                            }
+                        }
+                    }
+                    if (count($modifiedsAtrr) !== 0) {
+                        foreach ($modifiedsAtrr as $key => $value) {
+                            if (!$obj->updateComboThings($key, $value, $comboID)) {
+                                $errorCount += 1;
+                            }
+                        }
+                    }
+                }else{
+                    $errorCount += 1;
+                }
+                if ($errorCount > 0) {
+                    $msg = "Execution error.";
+                    http_response_code(400);
+                }
+            } else {
+                $msg = "Execution error.";
+                http_response_code(400);
             }
         } else {
             $msg = "No changes made.";
             $resType = "minorerr";
         }
+
+
 
         http_response_code(200);
         header("Content-Type: application/json");
@@ -1850,7 +1885,7 @@ function getCbForm($id, $data)
     <section>
         <div class="combo-main-action">
             <button id="addRm-comboEdit" type="button"> <i class="fas fa-search"></i>Find producs</button>
-            <button id="validate" type="submit"><i class="fas fa-check-square"></i>Validate</button>
+            <button id="validateCombo" class="comboActr" type="submit" name="reqtype" value="check"><i class="fas fa-check-square"></i> Validate</button>
         </div>
         <div class="combo-response">
             <div class="waiting">
@@ -1872,4 +1907,4 @@ function isNotSame($org, $test)
     }
     return false;
 }
-// submit-combo_form
+// submiteditCombo

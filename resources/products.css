@@ -691,12 +691,16 @@
     background-color: rgba(0, 0, 0, 0.329) !important;
 }
 
+.monokai_mode #submiteditCombo,
+.dark_mode #submiteditCombo,
 .monokai_mode #submit_editprod,
 .dark_mode #submit_editprod,
 .monokai_mode #submiteditCategory,
 .dark_mode #submiteditCategory,
 .monokai_mode #submitCategory,
 .dark_mode #submitCategory,
+.monokai_mode #validateCombo,
+.dark_mode #validateCombo,
 .monokai_mode #validateProd,
 .dark_mode #validateProd,
 .monokai_mode #submit_prod,
@@ -706,6 +710,7 @@
     border: solid 1px rgba(119, 119, 119, 0.596);
 }
 
+.monokai_mode #validateCombo:hover,
 .monokai_mode #validateProd:hover,
 .monokai_mode #submit_prod:hover {
     outline-color: rgb(255, 104, 3);
@@ -713,6 +718,7 @@
 
 }
 
+.dark_mode #validateCombo:hover,
 .dark_mode #validateProd:hover,
 .dark_mode #submit_prod:hover {
     outline-color: rgb(255, 104, 3);
@@ -1738,9 +1744,9 @@
     color: rgb(199 199 199);
 
 }
+#validateCombo:hover i,
 #validateProd:hover i,
-#validateCat:hover i,
-#validate:hover i{
+#validateCat:hover i{
     transform: unset !important;
     
 }
@@ -2061,6 +2067,7 @@
     
 }
 
+#submiteditCombo ,
 #submit_editprod ,
 #submiteditCategory ,
 #submitChanges {
@@ -2080,6 +2087,7 @@
     background-color: rgba(255, 104, 3, 0.192);
 }
 
+#submiteditCombo:hover,
 #submit_editprod:hover,
 #submiteditCategory:hover,
 #submitChanges:hover{

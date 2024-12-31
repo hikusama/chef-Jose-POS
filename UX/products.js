@@ -157,7 +157,6 @@ $(document).ready(function () {
         val = $(this).val().trim()
         $(this).removeClass("modif")
         $(this).removeClass("emptyI")
-        console.log(orgComboData);
         $('#submitChanges').attr('id', "validate");
         $('#validate').html('<i class="fas fa-check-square"></i>Validate');
         $('.combo-response').html(`<div class="waiting"><p></p><p></p><p></p><p></p></div>`);
@@ -212,7 +211,6 @@ $(document).ready(function () {
         $('#validate').html('<i class="fas fa-check-square"></i>Validate');
         $('.combo-response').html(`<div class="waiting"><p></p><p></p><p></p><p></p></div>`);
 
-        console.log(val);
 
         if (val === "") {
             $(this).addClass("emptyI")
@@ -409,10 +407,11 @@ $(document).ready(function () {
     $(".myproducts").on("submit", "#editComboForm", function (ae) {
         ae.preventDefault()
         id = parseInt($("#comboDPEdit").attr("dt"))
+        reqtype = $(".comboActr").attr("value")
 
         formData = new FormData(this)
         formData.append("transac", "comboDoubleAction")
-        formData.append("reqType", "check")
+        formData.append("reqtype", reqtype)
         formData.append("comboID", id)
         formData.append("imgChanges", imgChange)
 
@@ -423,26 +422,24 @@ $(document).ready(function () {
             contentType: false,
             processData: false,
             success: function (response) {
-                if (response.res === "minorerr") {
-                    $('#submitChanges').attr('id', "validate");
-                    $('#validate').html('<i class="fas fa-check-square"></i>Validate');
-                    $('.combo-response').html(`<p>${response.msg}</p>`);
-                } else {
-                    if (response.res === "checked") {
-                        $('#validate').html('<i class="fas fa-plus"></i>Submit changes');
-                        $('#validate').attr('id', "submitChanges");
-                        $('.combo-response').html(response.msg);
+                $('.combo-response').html(response.msg);
 
-                    } else if (response.res === "executed") {
-                        if (response.msg === "success") {
 
-                            $(".myproducts #editComboForm input").val("");
-                            $(".combo-response").html("");
-                            $(".exitEdit").trigger("click");
-                            prdShowState = 3
-                            $("#cmboType").trigger("click");
-                            notify("Combo Updated successfully...")
-                        }
+                if (response.res !== "minorerr") {
+                    if (response.res === "no error") {
+                        $("#validateCombo").html(`<i class="fas fa-plus"></i> Submit changes`)
+                        $("#validateCombo").attr(`value`, `update`)
+                        $("#validateCombo").attr(`id`, `submiteditCombo`)
+                    } else if (response.res === "success") {
+                        $(".exitedit").trigger("click");
+                        prdShowState = 3
+                        clearInterval(interval)
+                        allCombo("", 1)
+                        notify(response.msg)
+                    } else {
+                        $("#submiteditCombo").html(`<i class="fas fa-check-square"></i> Validate`)
+                        $("#submiteditCombo").attr(`value`, `check`)
+                        $("#submiteditCombo").attr(`id`, `validateCombo`)
                     }
                 }
             }
@@ -456,7 +453,7 @@ $(document).ready(function () {
         $("#addComboForm").trigger("submit");
     });
 
-    $(".myproducts").on("click", "#validate", function (e) {
+    $(".myproducts").on("click", "#validateCombo", function (e) {
         e.preventDefault()
         $("#editComboForm").trigger("submit");
     });
@@ -1240,6 +1237,7 @@ $(document).ready(function () {
             contentType: false,
             processData: false,
             success: function (response) {
+                open_Insertion = true
                 if (response.formType === "products") {
                     $("#editsubmit_form").html(response.form);
                     $("#editsubmit_form > *").hide()
@@ -1298,6 +1296,7 @@ $(document).ready(function () {
                     }
                     $(".action-products").html(viewSelEdit)
                     viewSelectedDumpedProd(id)
+                    clickedFndEdit = false 
                     // if (clickedFndEdit) {
                     //     $(viewSelEdit).detach()
                     //     $(".action-products").html(findPrEdit)
@@ -1307,7 +1306,6 @@ $(document).ready(function () {
                     //     $("#addRm-comboEdit").html(`<i class="fas fa-search"></i>Find products`)
 
                     // }
-                    // console.log(clickedFndEdit);
 
 
                 }
@@ -1432,7 +1430,6 @@ $(document).ready(function () {
         formData.append("transac", "viewSelectedDumpedProd")
         formData.append("comboID", parseInt(id))
 
-        console.log(id);
 
         $.ajax({
             url: '../views/productView.php',
@@ -1526,7 +1523,6 @@ $(document).ready(function () {
             processData: false,
             success: function (response) {
                 if (response.res === "error") {
-                    console.log(lastitemEdit);
 
                     ab = `<ol class="new-data-products">${lastitemEdit}</ol>`
                     $(".data-products").append(ab);

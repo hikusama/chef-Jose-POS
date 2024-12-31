@@ -114,10 +114,10 @@ if (isset($_SESSION["userID"])) {
                 </div>
                 <form action="Views/loginView.php" method="post" id="form">
                     <div class="form-group">
-                        <input type="text" id="username" name="username" placeholder="Username" required>
+                        <input type="text" autocomplete="off" id="username" name="username" placeholder="Username" required>
                     </div>
                     <div class="form-group">
-                        <input type="password" id="password" name="password" placeholder="Password" required>
+                        <input type="password" autocomplete="off" id="password" name="password" placeholder="Password" required>
                     </div>
                     <div class="resp"></div>
                     <button type="submit" name="submit" id="btn">LOGIN</button>

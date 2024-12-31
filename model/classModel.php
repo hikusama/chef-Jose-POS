@@ -941,9 +941,34 @@
                 return null;
             }
         }
+
+
+        public function newComboItems($comboID,$productID)
+        {
+            $stmt = $this->connect()->prepare("INSERT INTO comboitems (comboID,productID) VALUES(?, ?)");
+            if ($stmt->execute([$comboID,$productID])) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+
+
+        public function updateComboThings($col,$data,$id)
+        {
+            $stmt = $this->connect()->prepare("UPDATE combo SET $col = ? where comboID = ?");
+            if ($stmt->execute([$data,$id])) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+
+
+
         public function comboDataLight($id)
         {
-            $sql = "SELECT cb.comboName,cb.comboCode,cb.availability,cb.comboPrice,ci.productID FROM combo AS cb INNER JOIN comboitems AS ci ON ci.comboID = cb.comboID WHERE cb.comboID = ?";
+            $sql = "SELECT cb.comboName,cb.comboCode,cb.availability,cb.comboPrice,ci.productID,ci.comboItemID FROM combo AS cb LEFT JOIN comboitems AS ci ON ci.comboID = cb.comboID WHERE cb.comboID = ?";
             $stmt = $this->connect()->prepare($sql);
             $stmt->execute([$id]);
             $rows =  $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -1016,6 +1041,20 @@
             error_log("Error deleting product: " . implode(", ", $stmt->errorInfo())); // Log error
             return false;
         }
+
+        public function combo_itemsdelete($combo_id)
+        {
+            $sql = "DELETE FROM comboitems WHERE comboID = ?";
+            $stmt = $this->connect()->prepare($sql);
+            $stmt->bindParam(1, $combo_id, PDO::PARAM_INT);
+
+            if ($stmt->execute()) {
+                return true;
+            }
+            error_log("Error deleting product: " . implode(", ", $stmt->errorInfo())); // Log error
+            return false;
+        }
+
 
         public function combo_delete($combo_id)
         {
