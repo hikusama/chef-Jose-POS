@@ -609,7 +609,7 @@
                 $search = "%" . $search . "%";
             }
 
-            $max_page_per_req = 15;
+            $max_page_per_req = 25;
 
             $offset = ($page - 1) * $max_page_per_req;
             $select = $itemtype === "products" ? "products" : "combo";
@@ -899,11 +899,11 @@
                 return null;
             }
         }
-        
-        public function updateProductThings($id,$col,$data)
+
+        public function updateProductThings($id, $col, $data)
         {
             $stmt = $this->connect()->prepare("UPDATE products SET $col = ? where productID = ?");
-            if ($stmt->execute([$data,$id])) {
+            if ($stmt->execute([$data, $id])) {
                 return true;
             } else {
                 return false;
@@ -943,10 +943,10 @@
         }
 
 
-        public function newComboItems($comboID,$productID)
+        public function newComboItems($comboID, $productID)
         {
             $stmt = $this->connect()->prepare("INSERT INTO comboitems (comboID,productID) VALUES(?, ?)");
-            if ($stmt->execute([$comboID,$productID])) {
+            if ($stmt->execute([$comboID, $productID])) {
                 return true;
             } else {
                 return false;
@@ -954,10 +954,10 @@
         }
 
 
-        public function updateComboThings($col,$data,$id)
+        public function updateComboThings($col, $data, $id)
         {
             $stmt = $this->connect()->prepare("UPDATE combo SET $col = ? where comboID = ?");
-            if ($stmt->execute([$data,$id])) {
+            if ($stmt->execute([$data, $id])) {
                 return true;
             } else {
                 return false;
@@ -980,10 +980,37 @@
         }
         public function comboData($id)
         {
-            $sql = "SELECT * FROM combo LEFT JOIN comboItems ON combo.comboID = comboItems.comboID WHERE combo.comboID = ?";
+            $sql = "SELECT * FROM combo LEFT JOIN comboitems ON combo.comboID = comboitems.comboID WHERE combo.comboID = ?";
             $stmt = $this->connect()->prepare($sql);
             $stmt->execute([$id]);
             $rows =  $stmt->fetch(PDO::FETCH_ASSOC);
+            if ($rows) {
+                return $rows;
+            } else {
+                return null;
+            }
+        }
+
+        public function comboDataView($id)
+        {
+            $sql = "SELECT 
+                    c.displayPic AS dpCmb,
+                    c.comboName,
+                    c.comboCode,
+                    c.comboPrice,
+                    c.availability,
+                    p.name,
+                    p.price,
+                    p.displayPic AS dpPrd,
+                    COUNT(*) OVER() AS totalItems
+                    FROM combo AS c 
+                    LEFT JOIN comboitems AS ci ON c.comboID = ci.comboID
+                    LEFT JOIN products AS p ON ci.productID = p.productID
+                    WHERE c.comboID = ?;
+            ";
+            $stmt = $this->connect()->prepare($sql);
+            $stmt->execute([$id]);
+            $rows =  $stmt->fetchAll(PDO::FETCH_ASSOC);
             if ($rows) {
                 return $rows;
             } else {
@@ -1048,8 +1075,8 @@
             $obj = $this->connect();
             $stmt = $obj->prepare($sql);
             $stmt->bindParam(1, $combo_id, PDO::PARAM_INT);
-            
-            
+
+
             if ($stmt->execute()) {
                 return true;
             }
@@ -1105,7 +1132,7 @@
 
         public function searchNView($product_name, $page = 1)
         {
-            $max_page_per_req = 10;
+            $max_page_per_req = 25;
 
             $offset = ($page - 1) * $max_page_per_req;
 
@@ -1317,7 +1344,7 @@
         public function findCombo($comboName, $page = 1)
         {
 
-            $max_page_per_req = 10;
+            $max_page_per_req = 25;
 
             $offset = ($page - 1) * $max_page_per_req;
 
@@ -1385,7 +1412,7 @@
         public function findCategory($categoryName, $page = 1)
         {
 
-            $max_page_per_req = 10;
+            $max_page_per_req = 25;
 
             $offset = ($page - 1) * $max_page_per_req;
 
@@ -1501,7 +1528,7 @@
         public function getOrders($ref, $date, $page)
         {
 
-            $max_page_per_req = 15;
+            $max_page_per_req = 25;
 
             $offset = ($page - 1) * $max_page_per_req;
 
@@ -1799,6 +1826,26 @@
                 return null;
             }
         }
+        
+        public function catViewData($id)
+        {
+            $sql = "SELECT 
+                    category.*,
+                    COUNT(*) OVER() AS totalItems
+                    FROM category 
+                    LEFT JOIN products ON products.category_id = category.category_id 
+                    WHERE category.category_id = ?;
+            ";
+            $stmt = $this->connect()->prepare($sql);
+            $stmt->execute([$id]);
+            $rows =  $stmt->fetch(PDO::FETCH_ASSOC);
+
+            if ($rows) {
+                return $rows;
+            } else {
+                return null;
+            }
+        }
 
 
         public function itemsForAddToCart($prod_id, $type): array
@@ -1931,10 +1978,10 @@
 
 
 
-        public function updateCategoryName($id,$catName)
+        public function updateCategoryName($id, $catName)
         {
             $stmt = $this->connect()->prepare("UPDATE category SET category_name = ? where category_id = ?");
-            if ($stmt->execute([$catName,$id])) {
+            if ($stmt->execute([$catName, $id])) {
                 return true;
             } else {
                 return false;

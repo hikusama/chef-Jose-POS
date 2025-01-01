@@ -316,18 +316,75 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['transac'])) {
     }
 
 
+
+
+    // VIEW THINGS
+
+    if (isset($_POST['transac']) && $_POST['transac'] == "fetchDataView") {
+        $ID = htmlspecialchars(strip_tags($_POST['ID']));
+        $form = "";
+        $formType = "products";
+        if (empty($ID)) {
+            http_response_code(400);
+            $form = "No id";
+            header("Content-Type: application/json");
+            echo json_encode(["form" => $form, "formType" => $formType]);
+            return false;
+        }
+
+        $state = 1;
+        if (isset($_SESSION['currstate'])) {
+            $state = $_SESSION['currstate'];
+        }
+
+        $obj = new ProductController(null, null, null, null, null, null, null);
+
+
+        if ($state === 1) {
+            $formType = "products";
+            $data = $obj->productData($ID);
+            $form = getProductView($data);
+        } else if ($state === 2) {
+            $formType = "category";
+            $data = $obj->catViewData($ID);
+            $form = getCategoryView($data);
+        } else if ($state === 3) {
+            $formType = "combo";
+            $data = $obj->comboDataView($ID);
+            $form = getComboView($data);
+        }
+
+
+
+
+
+        header("Content-Type: application/json");
+        echo json_encode(["form" => $form, "formType" => $formType]);
+        return;
+    }
+
+
+
+
+
+
+
+
+
+
+
     // ITEM UPDATE
 
     if (isset($_POST['transac']) && $_POST['transac'] == "fetchDataAction") {
 
         $ID = htmlspecialchars(strip_tags($_POST['ID']));
-        $res = "";
+        $form = "";
         $formType = "products";
         if (empty($ID)) {
             http_response_code(400);
-            $res = "No id";
+            $form = "No id";
             header("Content-Type: application/json");
-            echo json_encode(["form" => $res, "formType" => $formType]);
+            echo json_encode(["form" => $form, "formType" => $formType]);
             return false;
         }
 
@@ -344,23 +401,23 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['transac'])) {
             $formType = "products";
             $data = $obj->productData($ID);
             $bulk = getPForm($ID, $data, $rowsCat);
-            $res = $bulk["RtData"];
+            $form = $bulk["RtData"];
             $org = $bulk['check'];
         } else if ($state === 2) {
             $formType = "category";
             $data = $obj->categoryData($ID);
-            $res = getCatForm($ID, $data);
+            $form = getCatForm($ID, $data);
             $org = $data['category_name'];
         } else if ($state === 3) {
             $formType = "combo";
             $data = $obj->comboData($ID);
             $bulk = getCbForm($ID, $data);
-            $res = $bulk["RtData"];
+            $form = $bulk["RtData"];
             $org = $bulk['check'];
         }
-        if ($res === "") {
+        if ($form === "") {
             http_response_code(400);
-            $res = "No data";
+            $form = "No data";
         }
 
 
@@ -368,7 +425,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['transac'])) {
 
 
         header("Content-Type: application/json");
-        echo json_encode(["form" => $res, "formType" => $formType, "orgData" => $org]);
+        echo json_encode(["form" => $form, "formType" => $formType, "orgData" => $org]);
         return;
     }
 
@@ -1738,180 +1795,325 @@ function getCbForm($id, $data)
         $totalItemCombo = $sum['totalItemCombo'];
     }
     return ["RtData" => '
-    <div class="exitedit">
-    <i class="fas fa-plus"></i>
-</div>
-<form id="editComboForm" enctype="multipart/form-data">
-    <section>
-        <div class="img-wrap-out">
-
-            <div class="image-wrap">
-                <img src="data:image/jpeg;base64 ,' . base64_encode($data['displayPic']) . '" id="comboDPEdit" dt="' . $id . '" alt="">
-                <input type="file" style="visibility: hidden;" id="selectComboPicEdit" name="comboPic">
-            </div>
-            <label for="selectComboPicEdit">
-                <i class="fas fa-plus"></i>
-            </label>
+            <div class="exitedit">
+            <i class="fas fa-plus"></i>
         </div>
-    </section>
-    <section>
-        <ol>
-            <li>
-                <i class="fas fa-book"></i>
-                <input type="text" autocomplete="off"  name="comboName" value="' . $data['comboName'] . '" placeholder="Combo name..." id="comboNameEdit">
-                <p>Combo name</p>
-            </li>
-            <li>
-                <i class="fas fa-book"></i>
-                <input type="text" autocomplete="off"  name="comboCode" value="' . $data['comboCode'] . '" placeholder="Combo code..." id="comboCodeEdit">
-                <p>Combo code</p>
-            </li>
-        </ol>
-        <ol>
-            <li>
-                <i class="fas fa-book"></i>
-                <input type="number"  value="' . $data['comboPrice'] . '" name="comboPrice" placeholder="Price..." id="comboPriceEdit">
-                <p>Price</p>
-            </li>
-            <div class="data_summary_combo_edit">
-                <li>
-                    <h3>₱' . $totalPriceCombo . '</h3>
-                    <p>Products in Total</p>
-                </li>
-                <li>
-                    <h3>' . $totalItemCombo . '</h3>
-                    <p>Item/s</p>
-                </li>
-            </div>
-        </ol>
-        <ol>
-            <li>
-                <i class="fas fa-book"></i>
-                <select name="availability" id="availEdit">
-                    ' . $av . '
-                </select>
-            </li>
-        </ol>
-        <button id="tgedit" type="submit"></button>
-    </section>
-</form>
-<div class="outer-response">
-    <section>
-        <div class="action-products-outer">
+        <form id="editComboForm" enctype="multipart/form-data">
+            <section>
+                <div class="img-wrap-out">
 
-            <div class="action-products">
-                <div id="viewSelEdit">
-
-                    <h3>Products selected</h3>
-                    <div class="data-products-selected">
-                        <div class="loadingScComboForm-outer">
-
-                            <div class="loadingScComboForm">
-                                <ol>
-                                    <li>
-                                        <div>
-
-                                        </div>
-                                    </li>
-                                    <li>
-
-                                    </li>
-                                </ol>
-                                <ol>
-                                    <li>
-                                        <div>
-
-                                        </div>
-                                    </li>
-                                    <li>
-
-                                    </li>
-                                </ol>
-                                <ol>
-                                    <li>
-                                        <div>
-
-                                        </div>
-                                    </li>
-                                    <li>
-
-                                    </li>
-                                </ol>
-                            </div>
-                        </div>
-
+                    <div class="image-wrap">
+                        <img src="data:image/jpeg;base64 ,' . base64_encode($data['displayPic']) . '" id="comboDPEdit" dt="' . $id . '" alt="">
+                        <input type="file" style="visibility: hidden;" id="selectComboPicEdit" name="comboPic">
                     </div>
+                    <label for="selectComboPicEdit">
+                        <i class="fas fa-plus"></i>
+                    </label>
                 </div>
-
-                <div id="findProdControllerEdit">
-
-                    <h3>Find to add</h3>
-                    <div class="find-prod">
+            </section>
+            <section>
+                <ol>
+                    <li>
+                        <i class="fas fa-book"></i>
+                        <input type="text" autocomplete="off"  name="comboName" value="' . $data['comboName'] . '" placeholder="Combo name..." id="comboNameEdit">
+                        <p>Combo name</p>
+                    </li>
+                    <li>
+                        <i class="fas fa-book"></i>
+                        <input type="text" autocomplete="off"  name="comboCode" value="' . $data['comboCode'] . '" placeholder="Combo code..." id="comboCodeEdit">
+                        <p>Combo code</p>
+                    </li>
+                </ol>
+                <ol>
+                    <li>
+                        <i class="fas fa-book"></i>
+                        <input type="number"  value="' . $data['comboPrice'] . '" name="comboPrice" placeholder="Price..." id="comboPriceEdit">
+                        <p>Price</p>
+                    </li>
+                    <div class="data_summary_combo_edit">
                         <li>
-                            <i class="fas fa-search"></i>
-                            <input type="search" id="findProdInputEdit" autocomplete="off"
-                                placeholder="Search for products or category..">
+                            <h3>₱' . $totalPriceCombo . '</h3>
+                            <p>Products in Total</p>
+                        </li>
+                        <li>
+                            <h3>' . $totalItemCombo . '</h3>
+                            <p>Item/s</p>
                         </li>
                     </div>
-                    <div class="data-products">
-                        <div class="loadingScComboForm-outer">
+                </ol>
+                <ol>
+                    <li>
+                        <i class="fas fa-book"></i>
+                        <select name="availability" id="availEdit">
+                            ' . $av . '
+                        </select>
+                    </li>
+                </ol>
+                <button id="tgedit" type="submit"></button>
+            </section>
+        </form>
+        <div class="outer-response">
+            <section>
+                <div class="action-products-outer">
 
-                            <div class="loadingScComboForm">
-                                <ol>
-                                    <li>
-                                        <div>
+                    <div class="action-products">
+                        <div id="viewSelEdit">
 
-                                        </div>
-                                    </li>
-                                    <li>
+                            <h3>Products selected</h3>
+                            <div class="data-products-selected">
+                                <div class="loadingScComboForm-outer">
 
-                                    </li>
-                                </ol>
-                                <ol>
-                                    <li>
-                                        <div>
+                                    <div class="loadingScComboForm">
+                                        <ol>
+                                            <li>
+                                                <div>
 
-                                        </div>
-                                    </li>
-                                    <li>
+                                                </div>
+                                            </li>
+                                            <li>
 
-                                    </li>
-                                </ol>
-                                <ol>
-                                    <li>
-                                        <div>
+                                            </li>
+                                        </ol>
+                                        <ol>
+                                            <li>
+                                                <div>
 
-                                        </div>
-                                    </li>
-                                    <li>
+                                                </div>
+                                            </li>
+                                            <li>
 
-                                    </li>
-                                </ol>
+                                            </li>
+                                        </ol>
+                                        <ol>
+                                            <li>
+                                                <div>
+
+                                                </div>
+                                            </li>
+                                            <li>
+
+                                            </li>
+                                        </ol>
+                                    </div>
+                                </div>
+
                             </div>
                         </div>
 
+                        <div id="findProdControllerEdit">
+
+                            <h3>Find to add</h3>
+                            <div class="find-prod">
+                                <li>
+                                    <i class="fas fa-search"></i>
+                                    <input type="search" id="findProdInputEdit" autocomplete="off"
+                                        placeholder="Search for products or category..">
+                                </li>
+                            </div>
+                            <div class="data-products">
+                                <div class="loadingScComboForm-outer">
+
+                                    <div class="loadingScComboForm">
+                                        <ol>
+                                            <li>
+                                                <div>
+
+                                                </div>
+                                            </li>
+                                            <li>
+
+                                            </li>
+                                        </ol>
+                                        <ol>
+                                            <li>
+                                                <div>
+
+                                                </div>
+                                            </li>
+                                            <li>
+
+                                            </li>
+                                        </ol>
+                                        <ol>
+                                            <li>
+                                                <div>
+
+                                                </div>
+                                            </li>
+                                            <li>
+
+                                            </li>
+                                        </ol>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
+            </section>
+            <section>
+                <div class="combo-main-action">
+                    <button id="addRm-comboEdit" type="button"> <i class="fas fa-search"></i>Find producs</button>
+                    <button id="validateCombo" class="comboActr" type="submit" name="reqtype" value="check"><i class="fas fa-check-square"></i> Validate</button>
+                </div>
+                <div class="combo-response">
+                    <div class="waiting">
+                        <p></p>
+                        <p></p>
+                        <p></p>
+                        <p></p>
+                    </div>
+                </div>
+            </section>
         </div>
-    </section>
-    <section>
-        <div class="combo-main-action">
-            <button id="addRm-comboEdit" type="button"> <i class="fas fa-search"></i>Find producs</button>
-            <button id="validateCombo" class="comboActr" type="submit" name="reqtype" value="check"><i class="fas fa-check-square"></i> Validate</button>
-        </div>
-        <div class="combo-response">
-            <div class="waiting">
-                <p></p>
-                <p></p>
-                <p></p>
-                <p></p>
-            </div>
-        </div>
-    </section>
-</div>
     ', "check" => $check];
 }
+
+
+// view data
+function getProductView($data)
+{
+    return '
+        <button type="button" id="exitviewProd" title="Cancel" style="">
+            <i class="fas fa-plus"></i>
+        </button>
+        <div class="secPrd">
+            <section class="fViewPrd">
+                <ol>
+                    <p>' . $data['category_name'] . '</p>
+                    <p>Castegory name</p>
+                </ol>
+                <ol>
+                    <p>' . $data['availability'] . '</p>
+                    <p>Availability</p>
+                </ol>
+            </section>
+            <section class="sViewPrd">
+                <div class="secondS">
+                    <li>
+                        <ol>
+                            <p>₱' . $data['price'] . '</p>
+                            <p>Price</p>
+                        </ol>
+                        <div class="wrapPicViewPrd">
+                            <img src="data:image/jpeg;base64,'.base64_encode($data['displayPic'] ).'" alt="">
+                        </div>
+                    </li>
+                    <ol>
+                        <p>' . $data['name'] . '</p>
+                        <p>Product Name</p>
+                    </ol>
+                </div>
+            </section>
+        </div>
+
+    ';
+}
+function getCategoryView($data)
+{
+    return '
+        <button type="button" id="exitviewCat" title="Cancel">
+            <i class="fas fa-plus"></i>
+        </button>
+        <div class="secCat">
+            <li>
+                <p>' . $data['totalItems'] . '</p>
+                <p>Item/s</p>
+            </li>
+            <ol>
+                <p>' . $data['category_name'] . '</p>
+                <p>Category name</p>
+            </ol>
+        </div>
+    ';
+}
+
+function getComboView($data)
+{
+    /*
+c.dpCmb,
+c.comboName,
+c.comboCode,
+c.comboPrice,
+c.availability,
+p.name,
+p.price,
+dpPrd,
+totalItems
+    
+*/
+
+    $bulk = '
+        <div class="exitViewCombo">
+            <i class="fas fa-plus" style="transform: rotate(45deg);"></i>
+        </div>
+        <section class="fViewCombo">
+            <ol>
+                <div class="imgwrapCmb">
+                    <img src="data:image/jpeg;base64, ' . base64_encode($data[0]['dpCmb']) . '" id="imgViewCmb" alt="">
+                </div>
+            </ol>
+            <ol>
+                <li>
+                    <p>' . $data[0]['comboName'] . '</p>
+                    <p>Name</p>
+                </li>
+                <li>
+                    <p>₱' . $data[0]['comboPrice'] . '</p>
+                    <p>Price</p>
+                </li>
+                <li>
+                    <p>' . $data[0]['availability'] . '</p>
+                    <p>Availability</p>
+                </li>
+                <li>
+                    <p>' . $data[0]['comboCode'] . '</p>
+                    <p>Code</p>
+                </li>
+            </ol>
+        </section>
+        <section class="sViewCombo">
+
+            <div class="headVcmb">
+                <h3>Products in this combo</h3>
+                <p><b>' . $data[0]['totalItems'] . '</b> Items</p>
+            </div>
+            <div class="dataCmbItems">
+    ';
+
+    foreach ($data as $row) {
+        $bulk .= '
+            <ol>
+                <div class="fpart">
+                    <li>
+                        <div>
+                            <img src="data:image/jpeg;base64,'.base64_encode($row['dpPrd']).'" alt="">
+                        </div>
+                    </li>
+                    <li>
+                        <p>' . $row['name'] . '</p>
+                    </li>
+                </div>
+                <li>
+                    <p>₱' . $row['price'] . '</p>
+                </li>
+            </ol>
+        ';
+    }
+
+
+    $bulk .= '</div>
+        </section>
+        </div>
+    ';
+
+    return $bulk;
+}
+
+
+
+
 
 function isNotSame($org, $test)
 {

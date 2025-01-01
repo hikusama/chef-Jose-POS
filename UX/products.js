@@ -14,6 +14,12 @@ $(document).ready(function () {
     let editPorm = $("#editProductForm").detach();
     let editCat = $(".editcategoryForm-outer").detach();
     let editCombo = $(".comboEdit-form-cont").detach();
+
+
+    let viewProd = $(".productsView-outer").detach();
+    let viewCat = $(".categoryView-outer").detach();
+    let viewCombo = $(".viewComboWrap").detach();
+
     let orgProdData = [];
     let orgComboData = [];
     let orgCatData = [];
@@ -229,6 +235,40 @@ $(document).ready(function () {
 
 
 
+    $(".myproducts").on("click", "#viewByID", function (e) {
+        e.preventDefault()
+        id = parseInt($(this).parent().attr("id"))
+        $("#overlay_prod").show();
+
+
+
+
+
+        if (prdShowState == 1) {
+            $(".myproducts").append(viewProd)
+            // $(".viewCombo").html("")
+            $(viewProd).show()
+        } else if (prdShowState == 2) {
+            $(".myproducts").append(viewCat)
+            // $(".viewCombo").html("")
+            $(viewCat).show()
+
+        } else if (prdShowState == 3) {
+            $(".myproducts").append(viewCombo)
+            // $(".viewCombo").html("")
+            $(viewCombo).show()
+        }
+        interval = setInterval(() => {
+            manipulated = $("#overlay_prod").css("display", "none");
+            if (manipulated) {
+                $("#overlay_prod").show();
+            }
+        }, 800);
+        open_Insertion = false;
+        getViewForm(id)
+
+
+    })
 
 
 
@@ -642,6 +682,30 @@ $(document).ready(function () {
 
 
 
+
+
+    $(".myproducts").on("click", "#exitviewCat", function () {
+        $(".categoryView-inner").html("")
+        $(viewCat).detach()
+        $("#overlay_prod").hide();
+        clearInterval(interval)
+    });
+
+
+    $(".myproducts").on("click", "#exitviewProd", function () {
+        $(".productsView-inner").html("")
+        $(viewProd).detach()
+        $("#overlay_prod").hide();
+        clearInterval(interval)
+    });
+
+
+    $(".myproducts").on("click", ".exitViewCombo", function () {
+        $(".viewCombo").html("")
+        $(viewCombo).detach()
+        $("#overlay_prod").hide();
+        clearInterval(interval)
+    });
 
 
     $(".myproducts").on("click", ".exitedit", function () {
@@ -1157,7 +1221,7 @@ $(document).ready(function () {
                     });
                     // $(".loading_sc").parent().css("overflow-y", "scroll");
                     return reqOpen = true
-                }, 1500);
+                }, 800);
             }
         });
     }
@@ -1187,7 +1251,7 @@ $(document).ready(function () {
                     });
                     // $(".loading_sc").parent().css("overflow-y", "scroll");
                     return reqOpen = true
-                }, 1500);
+                }, 800);
             }
         });
     }
@@ -1230,7 +1294,7 @@ $(document).ready(function () {
                     });
                     // $(".loading_sc").parent().css("overflow-y", "scroll");
                     return reqOpen = true
-                }, 1500);
+                }, 800);
             }
         });
     }
@@ -1238,6 +1302,62 @@ $(document).ready(function () {
 
 
     // ACTION
+
+    function getViewForm(id) {
+
+        formData = new FormData()
+        formData.append("ID", id)
+        formData.append("transac", "fetchDataView")
+
+        $.ajax({
+            url: '../views/productView.php',
+            method: 'POST',
+            data: formData,
+            dataType: 'json',
+            contentType: false,
+            processData: false,
+            success: function (response) {
+                if (response.formType === "products") {
+                    $(".productsView-inner").html(response.form);
+                    $(".productsView-inner > *").hide()
+                    $(".productsView-inner").append(loadNtCombo);
+                    $(loadNtCombo).html(loadNt)
+                    $(loadNt).show()
+                    setTimeout(() => {
+                        $(loadNtCombo).detach()
+                        $(".productsView-inner > *").show()
+                        $(".productsView-outer").show();
+                    }, 800);
+                    
+                } else if (response.formType === "category") {
+                    $(".categoryView-inner").html(response.form);
+                    $(".categoryView-inner > *").hide()
+                    $(".categoryView-inner").append(loadNtCombo);
+                    $(loadNtCombo).html(loadNt)
+                    $(loadNt).show()
+                    setTimeout(() => {
+                        $(loadNtCombo).detach()
+                        $(".categoryView-inner > *").show()
+                        $(".categoryView-outer").show();
+                    }, 800);
+
+                } else if (response.formType === "combo") {
+                    $(".viewCombo").html(response.form);
+                    $(".viewCombo > *").hide()
+                    $(".viewCombo").append(loadNtCombo);
+                    $(loadNtCombo).html(loadNt)
+                    $(loadNt).show()
+                    setTimeout(() => {
+                        $(loadNtCombo).detach()
+                        $(".viewCombo > *").show()
+                        $(".viewComboWrap").show();
+                    }, 800);
+                }
+                open_Insertion = true
+            }
+        })
+    }
+
 
     function getEditForm(id) {
         formData = new FormData()

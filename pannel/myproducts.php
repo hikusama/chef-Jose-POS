@@ -597,11 +597,32 @@ $isbaibing = validate($_SERVER['REQUEST_URI']);
                         <div class="bar12"></div>
                     </div>
                 </div>
+
+
+
+                <div class="viewComboWrap">
+                    <div class="viewCombo">
+                        <div class="loadPa">
+                        </div>
+
+                    </div>
+                </div>
+                <div class="productsView-outer">
+                    <div class="productsView-inner">
+                        <div class="loadPa">
+                        </div>
+                    </div>
+                </div>
+                <div class="categoryView-outer">
+                    <div class="categoryView-inner">
+                        <div class="loadPa">
+                        </div>
+                    </div>
+                </div>
+
             </div>
 
         </div>
-
-    </div>
 
 
 </body>
