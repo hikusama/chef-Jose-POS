@@ -23,6 +23,15 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $historyOBJ = new HistoryController(null, $ref);
         $_SESSION['openPrint'] = true;
         $rows = $historyOBJ->getOrderRecordControll();
+        $uid = $rows[0]["userID"];
+        $tenredByInfo = $historyOBJ->getName($uid);
+        $tenderedByRole = $tenredByInfo["rL"];
+        $tenderedBy = $tenredByInfo["rN"];
+        if(isset($_SESSION['insert'])){
+            unset($_SESSION['insert']);
+        }
+        $_SESSION["userIDReceipt"] = $uid;
+        $_SESSION["userRoleReceipt"] = $tenderedByRole;
 
 
         if ($rows) {

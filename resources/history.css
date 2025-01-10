@@ -65,7 +65,7 @@
     overflow: hidden;
     height: fit-content;
     max-height: 70%;
-    min-height: 45%;
+    min-height: 28rem;
     padding: 0 0 2rem 0;
     background-color: white;
     position: absolute;
@@ -73,11 +73,9 @@
     border-top: solid 1px rgb(189, 189, 189);
     width: 100%;
     min-width: 14rem;
-    left: 50%;
-    top: 54%;
-    transform: translate(-50%, -50%);
+    top: 0;
     border-radius: 1rem 0 0 1rem;
-
+    margin-top: 15rem;
 }
 
 .monokai_mode .history_info {

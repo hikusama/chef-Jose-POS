@@ -79,6 +79,8 @@ $isbaibing = validate($_SERVER['REQUEST_URI']);
             </div>
         </div>
         <div class="middle_side">
+            <div id="overlay_prod"></div>
+
             <div class="settings_cont">
                 <div class="overlay_settings"></div>
                 <div class="notif_settings">
@@ -89,20 +91,20 @@ $isbaibing = validate($_SERVER['REQUEST_URI']);
                     <h3><i class="fas fa-user-cog"></i>Profiles and Account</h3>
                     <hr>
                     <li>
-                        <p><i class="fas fa-pen"></i> Edit Cedentials</p>
+                        <p><i class="fas fa-pen"></i> Personal info</p>
                         <button type="button" id="edit_prof"><i class="fas fa-pen"></i>Edit</button>
                     </li>
                     <li>
-                        <p><i class="fas fa-key"></i> Change password</p>
-                        <button type="button" id="change_pw"><i class="fas fa-key"></i>Change password</button>
+                        <p><i class="fas fa-key"></i> Login info</p>
+                        <button type="button" id="change_pw"><i class="fas fa-key"></i>Change</button>
                     </li>
                     <?php if ($isbaibing["ios"] === 485) { ?>
 
-                    <li class="addm" >
-                        <p><i class="fas fa-key"></i> Create Employee or Cashier account</p>
-                        <button type="button" id="creatempacc"><i class="fas fa-key"></i>Create</button>
-                    </li>
-                    <?php }?>
+                        <li class="addm">
+                            <p><i class="fas fa-key"></i> Create Employee or Cashier account</p>
+                            <button type="button" id="creatempacc"><i class="fas fa-key"></i>Create</button>
+                        </li>
+                    <?php } ?>
 
                 </ol>
                 <ol>
@@ -164,9 +166,39 @@ $isbaibing = validate($_SERVER['REQUEST_URI']);
                 </div>
 
             </div>
-        </div>
 
+            <div class="cpw-outer">
+                <div class="cpw-inner">
+                    <div class="loadPa">
+                    </div>
+                </div>
+            </div>
+
+            <div class="pinfo-outer">
+                <div class="pinfo-inner">
+                    <div class="loadPa">
+                    </div>
+                </div>
+            </div>
+            <div id="loadNt" style="display: none;">
+                    <div class="loader">
+                        <div class="bar1"></div>
+                        <div class="bar2"></div>
+                        <div class="bar3"></div>
+                        <div class="bar4"></div>
+                        <div class="bar5"></div>
+                        <div class="bar6"></div>
+                        <div class="bar7"></div>
+                        <div class="bar8"></div>
+                        <div class="bar9"></div>
+                        <div class="bar10"></div>
+                        <div class="bar11"></div>
+                        <div class="bar12"></div>
+                    </div>
+                </div>
+        </div>
     </div>
+
 
 
 

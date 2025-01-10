@@ -9,6 +9,20 @@
         //------------------------- LOGIN-SIGNUP THINGS -----------------------------
 
         // GET USER
+        public function getUserEdData($userName)
+        {
+            $stmt = $this->connect()->prepare('SELECT * FROM user WHERE userName = ?;');
+
+            if ($stmt->execute(array($userName))) {
+                if ($stmt->rowCount() == 0) {
+                    return false;
+                }else{
+                    return true;
+                }
+            } else {
+                return null;
+            }
+        }
         public function getUser($username, $password)
         {
             $stmt = $this->connect()->prepare('SELECT * FROM user WHERE userName = ?;');
@@ -40,6 +54,34 @@
 
             $stmt = null;
             return $user["userRole"];
+        }
+
+        public function getName($id)
+        {
+
+            $stmt = $this->connect()->prepare('SELECT * FROM user WHERE userID = ?;');
+            $stmt->execute([$id]);
+            $user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+
+            $ad = "SELECT name as pname FROM admin WHERE userID = ?;";
+            $em = "SELECT fName as pname FROM employees WHERE userID = ?;";
+            $sql = "";
+            if ($user["userRole"] === "Employee") {
+                $sql = $em;
+            } else if ($user["userRole"] === "Admin") {
+                $sql = $ad;
+            }
+            $stmt2 = $this->connect()->prepare($sql);
+
+            if ($stmt2->execute([$id])) {
+                $userRoleName = $stmt2->fetch(PDO::FETCH_ASSOC);
+                return [
+                    "rL" => $user["userRole"],
+                    "rN" => $userRoleName["pname"]
+                ];
+            }
+            return null;
         }
 
 
@@ -1826,7 +1868,7 @@
                 return null;
             }
         }
-        
+
         public function catViewData($id)
         {
             $sql = "SELECT 
@@ -1883,12 +1925,11 @@
             $stmt2 = $this->connect()->prepare("INSERT INTO orderitems (comboID,itemType,quantity,unitPrice,ref_no) 
             VALUES (?, ?, ?, ?, ?)");
 
-            $stmtF = $this->connect()->prepare("INSERT INTO orders (totalAmount,discount,discountType,ref_no,paymentMethod,gcashAccountName,gcashAccountNo,subtotal,tendered)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
+            $stmtF = $this->connect()->prepare("INSERT INTO orders (userID,totalAmount,discount,discountType,ref_no,paymentMethod,gcashAccountName,gcashAccountNo,subtotal,tendered)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
 
-
-            if ($stmtF->execute([$orders[0]['totalAmount'], $orders[0]['discount'], $orders[0]['discountType'], $orders[0]['refNo'], $orders[0]['pmethod'], $orders[0]['gcashName'], $orders[0]['gcashNum'], $orders[0]['subtotal'], $orders[0]['tendered']])) {
+            if ($stmtF->execute([$orders[0]['userID'], $orders[0]['totalAmount'], $orders[0]['discount'], $orders[0]['discountType'], $orders[0]['refNo'], $orders[0]['pmethod'], $orders[0]['gcashName'], $orders[0]['gcashNum'], $orders[0]['subtotal'], $orders[0]['tendered']])) {
             } else {
                 return false;
             }
@@ -2184,6 +2225,21 @@
         }
 
 
+        public function getAdminData($id)
+        {
+
+            $sql = "SELECT * FROM admin LEFT JOIN user ON user.userID = admin.userID WHERE user.userID = ?;";
+            $stmt = $this->connect()->prepare($sql);
+
+            if ($stmt->execute([$id])) {
+                $row = $stmt->fetch(PDO::FETCH_ASSOC);
+                return $row;
+            } else {
+                return false;
+            }
+        }
+
+
         public function getEmployeeData($id)
         {
 
@@ -2193,6 +2249,92 @@
             if ($stmt->execute([$id])) {
                 $row = $stmt->fetch(PDO::FETCH_ASSOC);
                 return $row;
+            } else {
+                return false;
+            }
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        //------------------------- SETTINGS THINGS -----------------------------
+
+
+        public function getAdminPersonalDataEdit($id)
+        {
+
+            $sql = "SELECT * FROM admin LEFT JOIN user ON user.userID = admin.userID WHERE user.userID = ?;";
+            $stmt = $this->connect()->prepare($sql);
+
+            if ($stmt->execute([$id])) {
+                $row = $stmt->fetch(PDO::FETCH_ASSOC);
+                return $row;
+            } else {
+                return false;
+            }
+        }
+
+        public function getEmpPersonalDataEdit($id)
+        {
+
+            $sql = "SELECT * FROM employees LEFT JOIN user ON user.userID = employees.userID WHERE user.userID = ?;";
+            $stmt = $this->connect()->prepare($sql);
+
+            if ($stmt->execute([$id])) {
+                $row = $stmt->fetch(PDO::FETCH_ASSOC);
+                return $row;
+            } else {
+                return false;
+            }
+        }
+
+
+        public function getUserLoginDataEdit($id)
+        {
+
+            $sql = "SELECT userName,userID FROM user WHERE userID = ?;";
+            $stmt = $this->connect()->prepare($sql);
+
+            if ($stmt->execute([$id])) {
+                $row = $stmt->fetch(PDO::FETCH_ASSOC);
+                return $row;
+            } else {
+                return false;
+            }
+        }
+
+        public function getUserLoginRole($id)
+        {
+
+            $sql = "SELECT userRole FROM user WHERE userID = ?;";
+            $stmt = $this->connect()->prepare($sql);
+
+            if ($stmt->execute([$id])) {
+                $row = $stmt->fetch(PDO::FETCH_ASSOC);
+                return $row;
+            } else {
+                return false;
+            }
+        }
+
+        public function updateAdminData($data, $keyVal, $id)
+        {
+            $stmt = $this->connect()->prepare(
+                "UPDATE admin SET $keyVal = ? WHERE userID = ?"
+            );
+            if ($stmt->execute([$data, $id])) {
+                return true;
             } else {
                 return false;
             }

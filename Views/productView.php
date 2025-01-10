@@ -426,7 +426,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['transac'])) {
 
         header("Content-Type: application/json");
         echo json_encode(["form" => $form, "formType" => $formType, "orgData" => $org]);
-        return;
     }
 
 

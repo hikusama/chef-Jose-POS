@@ -58,6 +58,7 @@
     gap: 1rem;
     flex-wrap: wrap;
     margin-top: 1rem;
+    align-items: center;
 }
 
 .dashboard_body li {
@@ -81,9 +82,13 @@
     border: solid 1px rgb(49 49 49 / 35%);
     background: white;
     position: relative;
-
 }
-
+.summary_showNh{
+    flex-direction: column;
+}
+.summary_showNh li{
+    width: 85%;
+}
 .monokai_mode .sales-sum-inn,
 .monokai_mode .top-prod-inn,
 .monokai_mode .summary_show li,
