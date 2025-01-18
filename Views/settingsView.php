@@ -3,8 +3,8 @@
 
 
 require_once '../Controller/employeesController.php';
-session_start();
-
+require_once "../function.php";
+start_secure_session();
 
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {

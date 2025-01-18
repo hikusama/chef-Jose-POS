@@ -1,0 +1,60 @@
+services:
+  www:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: test_docker-www-1
+    volumes:
+      - ./:/var/www/html  # Mount only your source code
+    ports:
+      - "80:80"
+      # Uncomment 443 if you're using HTTPS
+      # - "443:443"
+    depends_on:
+      - db
+    networks:
+      - mynetwork
+
+  db:
+    image: mysql:latest
+    container_name: test_docker-db-1
+    environment:
+      MYSQL_ROOT_PASSWORD: root  # Set a root password (important for security)
+      MYSQL_DATABASE: chef_jose_db
+      MYSQL_USER: chefjose
+      MYSQL_PASSWORD: chefjose4545
+    volumes:
+      - db_data:/var/lib/mysql  # Use a named volume to persist DB data
+    # Expose ports if needed (for debugging):
+    # ports:
+    #   - "3306:3306"
+    networks:
+      - mynetwork
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: test_docker-phpmyadmin-1
+    ports:
+      - "8002:80"
+    environment:
+      PMA_HOST: db
+      PMA_PORT: 3306
+      UPLOAD_LIMIT: 100M
+      MEMORY_LIMIT: 512M
+      PHP_UPLOAD_MAX_FILESIZE: 100M
+      POST_MAX_SIZE: 100M
+      SESSION_COOKIE_SECURE: "false"  # Allow non-secure cookies, adjust if using HTTPS
+      # Optional useful options:
+      # PMA_ARBITRARY: 1  # Allow connecting to any server
+      # COMPRESSION: gzip  # Enable gzip compression
+    depends_on:
+      - db
+    networks:
+      - mynetwork
+
+volumes:
+  db_data:  # Define the named volume for database persistence
+
+networks:
+  mynetwork:
+    driver: bridge

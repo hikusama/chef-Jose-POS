@@ -1,6 +1,7 @@
-    <?php
+<?php
     require_once "../Connection/dbh.php";
-
+    require_once "../function.php";
+    
     class Model extends Connection
     {
 
@@ -8,7 +9,7 @@
 
         //------------------------- LOGIN-SIGNUP THINGS -----------------------------
 
-        // GET USER
+        // GET USER 9.0.1 / 
         public function getUserEdData($userName)
         {
             $stmt = $this->connect()->prepare('SELECT * FROM user WHERE userName = ?;');
@@ -47,7 +48,8 @@
                 exit();
             }
 
-            session_start();
+            start_secure_session();
+            
             $_SESSION["userName"] = $user["userName"];
             $_SESSION["userID"] = $user["userID"];
             $_SESSION["userRole"] = $user["userRole"];
@@ -645,7 +647,7 @@
 
 
 
-        public function itemsReport($itemtype, $order, $range, $data, $page = 1, $search)
+        public function itemsReport($itemtype, $order, $range, $data, $page, $search)
         {
             if (!empty($search)) {
                 $search = "%" . $search . "%";
@@ -1172,7 +1174,7 @@
         // SEARCH W VIEW
 
 
-        public function searchNView($product_name, $page = 1)
+        public function searchNView($product_name, $page)
         {
             $max_page_per_req = 25;
 
@@ -1383,7 +1385,7 @@
         }
 
         // SEARCH COMBO   
-        public function findCombo($comboName, $page = 1)
+        public function findCombo($comboName, $page)
         {
 
             $max_page_per_req = 25;
@@ -1451,7 +1453,7 @@
 
 
         // SEARCH CATEGORY   
-        public function findCategory($categoryName, $page = 1)
+        public function findCategory($categoryName, $page)
         {
 
             $max_page_per_req = 25;
@@ -1685,7 +1687,7 @@
 
         //------------------------- CASHIER THINGS -----------------------------
 
-        public function getAllCombosModel($comboName, $page = 1)
+        public function getAllCombosModel($comboName, $page)
         {
             $max_page_per_req = 25;
             $offset = ($page - 1) * $max_page_per_req;
@@ -1758,7 +1760,7 @@
         }
 
 
-        public function getAllProductss($product_name, $category, $page = 1)
+        public function getAllProductss($product_name, $category, $page)
         {
 
             // fme
@@ -1925,11 +1927,28 @@
             $stmt2 = $this->connect()->prepare("INSERT INTO orderitems (comboID,itemType,quantity,unitPrice,ref_no) 
             VALUES (?, ?, ?, ?, ?)");
 
-            $stmtF = $this->connect()->prepare("INSERT INTO orders (userID,totalAmount,discount,discountType,ref_no,paymentMethod,gcashAccountName,gcashAccountNo,subtotal,tendered)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+            $stmtF = $this->connect()->prepare("INSERT INTO orders (userID,totalAmount,discount,discountType,ref_no,paymentMethod,gcashAccountName,gcashAccountNo,subtotal,tendered,orderDate,orderTime)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+            date_default_timezone_set("Asia/manila");
+            $date = new DateTime();
+            $CD = $date->format("Y:m:d");
+            $CT = $date->format("h:i A");
 
-
-            if ($stmtF->execute([$orders[0]['userID'], $orders[0]['totalAmount'], $orders[0]['discount'], $orders[0]['discountType'], $orders[0]['refNo'], $orders[0]['pmethod'], $orders[0]['gcashName'], $orders[0]['gcashNum'], $orders[0]['subtotal'], $orders[0]['tendered']])) {
+            if ($stmtF->execute(
+                [
+                    $orders[0]['userID'], 
+                    $orders[0]['totalAmount'], 
+                    $orders[0]['discount'], 
+                    $orders[0]['discountType'], 
+                    $orders[0]['refNo'], 
+                    $orders[0]['pmethod'], 
+                    $orders[0]['gcashName'], 
+                    $orders[0]['gcashNum'], 
+                    $orders[0]['subtotal'], 
+                    $orders[0]['tendered'],
+                    $CD,
+                    $CT
+                    ])) {
             } else {
                 return false;
             }

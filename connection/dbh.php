@@ -1,9 +1,9 @@
 <?php
 
 class Connection {
-  private $host = 'localhost';
-  private $user = 'root';
-  private $pass = '';
+  private $host = 'db';
+  private $user = 'chefjose';
+  private $pass = 'chefjose4545';
   private $dbname = 'chef_jose_db'; 
   protected function connect() {
       try {
@@ -17,3 +17,4 @@ class Connection {
       }
   }
 }
+

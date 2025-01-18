@@ -1,5 +1,6 @@
 <?php
-session_start();
+require_once "function.php";
+start_secure_session();
 
 if (isset($_SESSION["userID"])) {
     if ($_SESSION["userRole"] === "Admin") {

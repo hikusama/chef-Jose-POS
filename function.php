@@ -1,10 +1,52 @@
 <?php
 
-session_start();
+    // if (!function_exists('start_secure_session')) {
+    // }
 
-
-
-
+    // Start a secure session with proper configurations
+    if (!function_exists('start_secure_session')) {
+        function start_secure_session() {
+            // Start session only if not already started
+            if (session_status() === PHP_SESSION_NONE) {
+                session_start([
+                    'cookie_lifetime' => 0,           // Session ends when browser closes
+                    'cookie_secure'   => true,        // Cookies sent only over HTTPS
+                    'cookie_httponly' => true,        // Prevent JavaScript from accessing cookies
+                    'use_strict_mode' => true,        // Reject invalid session IDs
+                    'use_only_cookies' => true,       // Disallow session ID in URLs
+                    'sid_length'      => 64,          // Long session IDs
+                    'sid_bits_per_character' => 6     // Stronger session IDs
+                ]);
+            }
+    
+            // Regenerate session ID periodically
+            if (!isset($_SESSION['initialized'])) {
+                session_regenerate_id(true); // Regenerate and delete old session
+                $_SESSION['initialized'] = true;
+            }
+    
+            // Implement session timeout (e.g., 15 minutes inactivity)
+            if (isset($_SESSION['last_activity']) && (time() - $_SESSION['last_activity'] > 1500)) {
+                session_unset(); // Clear session variables
+                session_destroy(); // Destroy session
+                header("Location: ../../index.php");
+            }
+            $_SESSION['last_activity'] = time(); // Update last activity time
+    
+            // Validate session integrity
+            if (!isset($_SESSION['ip_address'])) {
+                $_SESSION['ip_address'] = $_SERVER['REMOTE_ADDR']; // Store IP address
+                $_SESSION['user_agent'] = $_SERVER['HTTP_USER_AGENT']; // Store user agent
+            } elseif ($_SESSION['ip_address'] !== $_SERVER['REMOTE_ADDR'] || 
+                      $_SESSION['user_agent'] !== $_SERVER['HTTP_USER_AGENT']) {
+                session_unset();
+                session_destroy();
+                header("Location: ../../index.php");
+            }
+        }
+    }
+    
+    start_secure_session();
 
 
 function getRole()
@@ -57,11 +99,11 @@ function checkRole($role, $uri)
 
         if ($role === "Employee") {
             $employee_routes = [
-                '/chef-Jose-POS/pannel/cashier.php',
+                '/pannel/cashier.php',
 
-                '/chef-Jose-POS/pannel/history.php',
+                '/pannel/history.php',
 
-                '/chef-Jose-POS/pannel/settings.php',
+                '/pannel/settings.php',
 
             ];
             if (checkUri($uri, $employee_routes)) {
@@ -69,21 +111,21 @@ function checkRole($role, $uri)
             }
         } else if ($role === "Admin") {
             $admin_routes = [
-                '/chef-Jose-POS/pannel/home.php',
+                '/pannel/home.php',
 
-                '/chef-Jose-POS/pannel/cashier.php',
+                '/pannel/cashier.php',
 
-                '/chef-Jose-POS/pannel/history.php',
+                '/pannel/history.php',
 
-                '/chef-Jose-POS/pannel/cashiers.php',
+                '/pannel/cashiers.php',
 
-                '/chef-Jose-POS/pannel/overview.php',
+                '/pannel/overview.php',
 
-                '/chef-Jose-POS/pannel/myproducts.php',
+                '/pannel/myproducts.php',
 
-                '/chef-Jose-POS/pannel/reports.php',
+                '/pannel/reports.php',
 
-                '/chef-Jose-POS/pannel/settings.php',
+                '/pannel/settings.php',
 
             ];
             if (checkUri($uri, $admin_routes)) {

@@ -4,6 +4,7 @@ include '../Connection/dbh.php';
 include '../Model/classModel.php';
 include '../Controller/productController.php';
 require_once "../function.php";
+start_secure_session();
 isAdminRole();
 
 

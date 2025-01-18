@@ -115,8 +115,8 @@ CREATE TABLE `orderitems` (
 CREATE TABLE `orders` (
   `orderID` int(11) NOT NULL,
   `ref_no` bigint(25) NOT NULL,
-  `orderDate` date DEFAULT current_timestamp(),
-  `orderTime` time NOT NULL DEFAULT current_timestamp(),
+  `orderDate` date,
+  `orderTime` varchar(10),
   `userID` int(11) DEFAULT NULL,
   `tendered` int(11) DEFAULT NULL,
   `subtotal` int(11) DEFAULT NULL,

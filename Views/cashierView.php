@@ -1,8 +1,9 @@
 <?php
 
 require_once '../Controller/cashierController.php';
+require_once '../function.php';
 
-
+start_secure_session();
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
@@ -12,7 +13,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     // PRODUCTS SHOW/SEARCH
 
     if (isset($_POST['transac']) && $_POST["transac"] === "searchNView") {
-        session_start();
+        // session_start();
 
         $page = htmlspecialchars(trim($_POST["page"]));
         $searchVal = htmlspecialchars(trim($_POST["searchVal"]));
@@ -127,7 +128,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     if (isset($_POST['transac']) && $_POST["transac"] === "changeqntity" &&  isset($_POST["qntity"])) {
 
-        session_start();
+        // session_start();
 
 
         $qntity = htmlspecialchars(trim($_POST["qntity"]));
@@ -207,7 +208,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $prodOrder = array();
         $comboOrder = array();
 
-        session_start();
+        // session_start();
         if (isset($_SESSION['orders'])) {
             $ordersSession = $_SESSION['orders'];
             if (isset($_SESSION['prodOrders'])) {
@@ -260,7 +261,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $comboOrder = array();
         $orderSelected = array();
 
-        session_start();
+        // session_start();
 
         if (isset($_SESSION['comboOrders'])) {
             $comboOrder = $_SESSION['comboOrders'];
@@ -326,7 +327,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     if (isset($_POST['transac']) && $_POST["transac"] === "addToCart") {
         // $transac =;
-        session_start();
+        // session_start();
         $id = htmlspecialchars(trim($_POST["product_id"]));
 
         $pdoTemp = new cashierController(null, null, $id);
@@ -460,7 +461,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
 
     if (isset($_POST['transac']) && $_POST['transac'] === "showDiscountForm") {
-        session_start();
+        // session_start();
         $discount;
         $discountType;
         if (isset($_SESSION['discount'], $_SESSION['discountType'])) {
@@ -508,7 +509,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
 
     if (isset($_POST['transac']) && $_POST['transac'] === "print") {
-        session_start();
+        // session_start();
         $uid = $_SESSION["userID"];
         $role = $_SESSION["userRole"];
 
@@ -695,7 +696,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
 
     if (isset($_POST['transac']) && $_POST['transac'] === "pay") {
-        session_start();
+        // session_start();
         $customer_money = intval($_POST["money"]);
         if (isset($_SESSION['total'])) {
             $total = $_SESSION['total'];
@@ -772,7 +773,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     if (isset($_POST['transac']) && $_POST['transac'] === "addingDiscount") {
         $discountType = htmlspecialchars(trim($_POST["discountType"]));
         $discount = (int)$_POST["discount"];
-        session_start();
+        // session_start();
 
         if (
             empty($discount) ||
@@ -803,7 +804,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     if (isset($_POST['transac']) && $_POST['transac'] === "totalShow") {
 
 
-        session_start();
+        // session_start();
 
         if (!isset($_SESSION['orders'])) {
             echo '
@@ -932,7 +933,6 @@ function dpCart($prodArr, $comboArr)
 
 function submitOrders($refNo, $totalAmount, $pmethod, $gcashName, $gcashNum, $tendered,$uid)
 {
-    // session_start();
 
     if (isset($_SESSION['orders'])) {
         $subtotal = $_SESSION['subtotal'];

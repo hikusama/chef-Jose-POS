@@ -1,6 +1,7 @@
 <?php
 
-session_start();
+require_once "../function.php";
+start_secure_session();
 if (!isset($_SESSION['openPrint'])) {
     header("Location: 404.php");
 }
@@ -44,7 +45,8 @@ if (!isset($_SESSION['openPrint'])) {
             border-radius: .8rem;
             place-items: center;
         }
-        .receipt{
+
+        .receipt {
             padding-bottom: 2.4rem;
 
         }
@@ -77,7 +79,8 @@ if (!isset($_SESSION['openPrint'])) {
         <div class="th">Thank you for choosing us....</div>
         <p style="
     text-align: center;
-">*****************************************</p>    </div>
+">*****************************************</p>
+    </div>
     <!-- <div class="prmp">
         <button id="done">Next order</button>
     </div> -->

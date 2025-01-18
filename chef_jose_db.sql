@@ -154,14 +154,14 @@ CREATE TABLE `orderitems` (
 --
 
 CREATE TABLE `orders` (
-  `orderID` int(11) NOT NULL,
-  `ref_no` bigint(25) NOT NULL,
-  `orderDate` date DEFAULT current_timestamp(),
-  `orderTime` time NOT NULL DEFAULT current_timestamp(),
+  `orderID` int(11) NOT NULL,  
+  `ref_no` bigint NOT NULL,  
+  `orderDate` date ,  
+  `orderTime`  varchar(10) ,  
   `userID` int(11) DEFAULT NULL,
   `tendered` int(11) DEFAULT NULL,
-  `subtotal` int(11) DEFAULT NULL,
-  `totalAmount` double DEFAULT NULL,
+  `subtotal` DECIMAL(10,2) DEFAULT NULL,   
+  `totalAmount` DECIMAL(10,2) DEFAULT NULL,   
   `paymentMethod` varchar(100) DEFAULT 'Cash',
   `gcashAccountName` varchar(50) DEFAULT NULL,
   `gcashAccountNo` varchar(50) DEFAULT NULL,

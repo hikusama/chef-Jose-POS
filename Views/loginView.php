@@ -1,5 +1,4 @@
 <?php
-session_start();
 include '../Connection/dbh.php';
 include '../Model/classModel.php';
 include '../Controller/Logincontroller.php';
@@ -19,11 +18,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $role = $login->loginUser(); 
 
         if ($role === "Admin") {
-            header("Location: /chef-Jose-POS/pannel/overview.php");
+            header("Location: /pannel/overview.php");
         }else if ($role === "Employee"){
-            header("Location: /chef-Jose-POS/pannel/cashier.php");
+            header("Location: /pannel/cashier.php");
         }else{
-            header("Location: /chef-Jose-POS/pannel/404.php");
+            header("Location: /pannel/404.php");
         }
         exit();
     } else {
