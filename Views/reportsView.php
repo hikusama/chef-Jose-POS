@@ -17,8 +17,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         ];
 
         $pmethod = [
-            (int)$row["gcash_count"] ?? 0,
-            (int)$row["cash_count"] ?? 0
+            (int)$row["cash_count"] ?? 0,
+            (int)$row["gcash_count"] ?? 0
         ];
 
         $ts = $row["today_sales"] ?? 0;
@@ -260,8 +260,8 @@ SUM(CASE WHEN MONTH(orderDate) = MONTH(CURRENT_DATE()) THEN totalAmount ELSE 0 E
         ];
 
         $pmethod = [
-            (int)$row["gcash_count"] ?? 0,
-            (int)$row["cash_count"] ?? 0
+            (int)$row["cash_count"] ?? 0,
+            (int)$row["gcash_count"] ?? 0
         ];
 
         $ts = $row["today_sales"] ?? 0;

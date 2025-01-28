@@ -87,8 +87,8 @@ $isbaibing = validate($_SERVER['REQUEST_URI']);
                 <div class="hdr">
                     <h3>Todays Report</h3>
                     <button id="todayRecordPDF" title="Download as PDF">
-                        <i class="fas fa-book"></i>
-                        Export PDF
+                    <i class="fas fa-download"></i>
+                        Export to PDF
                     </button>
                 </div>
                 <div class="squared-data">
@@ -292,12 +292,17 @@ $isbaibing = validate($_SERVER['REQUEST_URI']);
                         </div>
                     </div>
                 </div>
+                <div class="exbt">
+                    <button id="exportPdfCD">
+                        <i class="fas fa-download"></i>
+                        Export to pdf
+                    </button>
+                </div>
                 <div class="showThings">
                     <h5 id="showT"><i class="fas fa-arrow-left"></i>
                         <p>Show more</p> <i class="fas fa-arrow-right"></i>
                     </h5>
                 </div>
-
             </div>
 
 

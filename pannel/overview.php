@@ -223,7 +223,7 @@ $isbaibing = validate($_SERVER['REQUEST_URI']);
                         </div>
                         <div class="top-prod">
                             <div class="top-prod-inn">
-                                <h3>Top 10 products</h3>
+                                <h3>10 popular products this week</h3>
                                 <div class="data-prod">
                                     <div class="lab">
                                         <label for="">Product</label>

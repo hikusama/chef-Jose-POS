@@ -67,7 +67,7 @@
     width: 100%;
     justify-content: space-between;
 }
-
+#exportPdfCD,
 #traceReport,
 #todayRecordPDF {
     padding: .4rem .2rem;
@@ -80,6 +80,13 @@
     cursor: pointer;
 }
 
+#exportPdfCD{
+    margin: 2rem 0 3rem;
+    padding: .7rem 3rem !important;
+    width: unset;
+}
+
+#exportPdfCD:hover,
 #traceReport:hover,
 #todayRecordPDF:hover {
     background-color: rgba(255, 104, 3, 0.199);
@@ -313,7 +320,7 @@
 }
 
 .trace_form {
-
+    overflow: hidden;
     z-index: 1;
     height: 16rem;
     width: 20rem;
@@ -322,9 +329,15 @@
     top: 0;
     right: -23rem;
     background-color: #ffffff;
-    border: solid 1px;
+    border: solid 1px ;
 
 }
+.exbt{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
 
 .trace_form ol {
     display: flex;
@@ -604,6 +617,7 @@
     font-size: 1.7rem;
     font-weight: 600;
     position: relative;
+    
 }
 
 .ogCards section ol>*:nth-child(3) {

@@ -276,7 +276,7 @@ $(document).ready(function () {
         }
 
     });
-    
+
     $(".middle_side").on("input", "#findItem input", function (e) {
         e.preventDefault();
         let search = $(this).val()
@@ -284,7 +284,7 @@ $(document).ready(function () {
         let itemtype = $(".onRank").attr("id")
         let order = $(".onOrdered").attr("id")
         let rtype = $('.rt input[name="rTypeAnl"]:checked').val()
- 
+
         let data = $(".onDataType").attr("id")
         let from = $('.startAnl input[name="fromAnl"]').val()
 
@@ -318,9 +318,9 @@ $(document).ready(function () {
             $(this).parent().removeClass('hidePart')
             $(this).find('h5').html('<i class="fas fa-arrow-right"></i> <p>Show less</p> <i class="fas fa-arrow-left"></i>')
             console.log(55);
-            
 
-        }else{
+
+        } else {
             $(".showThings h5").html('<i class="fas fa-arrow-left"></i> <p>Show more</p> <i class="fas fa-arrow-right"></i>')
             $(".todays-report").addClass('hidePart')
             $(".cstmRp").addClass('hidePart')
@@ -364,6 +364,81 @@ $(document).ready(function () {
         getItems(itemtype, order, rtype, data, from, to, 1)
 
 
+    });
+
+
+
+    $('#todayRecordPDF').click(function () {
+        const today = new Date().toISOString().split('T')[0]
+
+        $.ajax({
+            url: '../Views/generate_pdf.php',
+            type: 'POST',
+            data: {
+                transac : "todayReports",
+                start : today
+            },
+            xhrFields: {
+                responseType: 'blob',
+            },
+            success: function (data) {
+                // Create a download link for the PDF
+                const blob = new Blob([data], { type: 'application/pdf' });
+                const link = document.createElement('a');
+                link.href = window.URL.createObjectURL(blob);
+                link.download = 'chefJose' + today + '.pdf';
+                link.click();
+                window.URL.revokeObjectURL(link)
+            },
+            error: function () {
+                alert('Failed to generate PDF.');
+            }
+        });
+    });
+
+
+    $('#exportPdfCD').click(function () {
+        let fdate = $("#frD").val() 
+        let toD = $("#toD").val() 
+
+        
+        const today = new Date().toISOString().split('T')[0]
+
+        let formData = new FormData()
+        
+        formData.append('transac', 'todayReports')
+        if (fdate == "") {
+            formData.append('start', today)
+        }else{
+            formData.append('start', fdate)
+            if (toD != "") {
+                formData.append('end', toD)
+            }
+        }
+        console.log(fdate);
+        console.log(toD);
+        $.ajax({
+            url: '../Views/generate_pdf.php',
+            type: 'POST',
+            data: formData,
+            contentType: false,
+            processData: false,
+            xhrFields: {
+                responseType: 'blob',
+            },
+            success: function (data) {
+                // Create a download link for the PDF
+                const blob = new Blob([data], { type: 'application/pdf' });
+                const link = document.createElement('a');
+                link.href = window.URL.createObjectURL(blob);
+                link.download = 'chefJose' + today + '.pdf';
+                link.click();
+                window.URL.revokeObjectURL(link)
+            },
+            error: function () {
+                alert('Failed to generate PDF.');
+            }
+        });
     });
 
 

@@ -10,7 +10,7 @@
             if (session_status() === PHP_SESSION_NONE) {
                 session_start([
                     'cookie_lifetime' => 0,           // Session ends when browser closes
-                    'cookie_secure'   => true,        // Cookies sent only over HTTPS
+                    'cookie_secure'   => false,        // Cookies sent only over HTTP
                     'cookie_httponly' => true,        // Prevent JavaScript from accessing cookies
                     'use_strict_mode' => true,        // Reject invalid session IDs
                     'use_only_cookies' => true,       // Disallow session ID in URLs

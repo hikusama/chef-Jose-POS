@@ -337,6 +337,7 @@
     width: fit-content;
     display: flex;
     flex-direction: column;
+    margin-top: 2rem;
 }
 
 .description-topProd {
@@ -479,8 +480,8 @@
 }
 
 .top-prod-inn::after {
-    width: 14rem;
-    height: 8rem;
+    width: 23rem;
+    height: 9rem;
     left: 50%;
     top: -.5rem;
 }
@@ -588,7 +589,8 @@
 }
 
 .data-top-products {
-    height: 14.4rem;
+    height: fit-content;
+    max-height: 14.4rem;
     overflow-y: scroll;
     scrollbar-width: none;
     padding: 0 .8rem .5rem;

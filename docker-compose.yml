@@ -23,6 +23,7 @@ services:
       MYSQL_DATABASE: chef_jose_db
       MYSQL_USER: chefjose
       MYSQL_PASSWORD: chefjose4545
+      MYSQL_INITDB_SKIP_TZINFO: 1
     volumes:
       - db_data:/var/lib/mysql  # Use a named volume to persist DB data
     # Expose ports if needed (for debugging):
@@ -40,7 +41,7 @@ services:
       PMA_HOST: db
       PMA_PORT: 3306
       UPLOAD_LIMIT: 100M
-      MEMORY_LIMIT: 512M
+      MEMORY_LIMIT: 2GB
       PHP_UPLOAD_MAX_FILESIZE: 100M
       POST_MAX_SIZE: 100M
       SESSION_COOKIE_SECURE: "false"  # Allow non-secure cookies, adjust if using HTTPS

@@ -139,21 +139,32 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
         $top_products = "";
 
-        foreach ($topProducts_raw as $row) {
-            $top_products .= '
+        if ($top_products) {
+            
+            foreach ($topProducts_raw as $row) {
+                $top_products .= '
                 <section>
-                    <div class="description-topProd">
-                        <div class="dpPr">
-                            <img src="data:image/jpeg;base64, '.base64_encode($row['displayPic']).'" alt="">
-                        </div>
-                        <p>'.$row['name'].'</p>
-                    </div>
-                    <p>
-                        '.$row['total_order'].'
-                    </p>
+                <div class="description-topProd">
+                <div class="dpPr">
+                <img src="data:image/jpeg;base64, '.base64_encode($row['displayPic']).'" alt="">
+                </div>
+                <p>'.$row['name'].'</p>
+                </div>
+                <p>
+                '.$row['total_order'].'
+                </p>
                 </section>';
+            }
+            
+        }else{
+            $top_products .= '
+            <section>
+            <div class="description-topProd">
+                <p>No orders..</p>
+            </div>
+            <p>0</p>
+            </section>';
         }
-
         
  
 
