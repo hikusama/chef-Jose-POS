@@ -1,15 +1,3 @@
--- phpMyAdmin SQL Dump
--- version 5.2.1
--- https://www.phpmyadmin.net/
---
--- Host: 127.0.0.1
-<<<<<<< HEAD
--- Generation Time: Nov 25, 2024 at 07:31 AM
-=======
--- Generation Time: Jan 10, 2025 at 06:22 PM
->>>>>>> dockerized
--- Server version: 10.4.32-MariaDB
--- PHP Version: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -158,20 +146,17 @@ CREATE TABLE `orderitems` (
 -- Table structure for table `sessions`
 --
 
-<<<<<<< HEAD
 INSERT INTO `orderitems` (`orderItemId`, `ref_no`, `itemType`, `productID`, `comboID`, `quantity`, `unitPrice`) VALUES
 (91, 3269917, 'product', 51, NULL, 1, 25),
 (92, 3269917, 'product', 46, NULL, 1, 25),
 (95, 3457288, 'product', 58, NULL, 2, 138),
 (96, 3543536, 'product', 58, NULL, 2, 138);
-=======
 CREATE TABLE `sessions` (
   `sessionID` int NOT NULL,
   `userID` int NOT NULL,
   `sessionToken` varchar(150) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
->>>>>>> dockerized
 
 -- --------------------------------------------------------
 
@@ -195,7 +180,7 @@ CREATE TABLE `orders` (
   `discount` int(10) DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
-<<<<<<< HEAD
+
 --
 -- Dumping data for table `orders`
 --
@@ -205,8 +190,7 @@ INSERT INTO `orders` (`orderID`, `ref_no`, `orderDate`, `orderTime`, `employeeID
 (34, 3457288, '2024-11-25', '14:19:51', NULL, 138, 124.2, 'Cash', NULL, NULL, 'senior cetizens', '13.8'),
 (35, 3543536, '2023-01-25', '14:22:22', NULL, 138, 124.2, 'Cash', NULL, NULL, 'PWD', '13.8');
 
-=======
->>>>>>> dockerized
+
 -- --------------------------------------------------------
 
 --
@@ -398,21 +382,15 @@ ALTER TABLE `employees`
 -- AUTO_INCREMENT for table `orderitems`
 --
 ALTER TABLE `orderitems`
-<<<<<<< HEAD
-  MODIFY `orderItemId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=97;
-=======
+
   MODIFY `orderItemId` int(11) NOT NULL AUTO_INCREMENT;
->>>>>>> dockerized
 
 --
 -- AUTO_INCREMENT for table `orders`
 --
 ALTER TABLE `orders`
-<<<<<<< HEAD
-  MODIFY `orderID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
-=======
+
   MODIFY `orderID` int(11) NOT NULL AUTO_INCREMENT;
->>>>>>> dockerized
 
 --
 -- AUTO_INCREMENT for table `products`

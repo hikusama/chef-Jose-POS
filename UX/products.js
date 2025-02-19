@@ -4,17 +4,12 @@
 
 
 $(document).ready(function () {
-<<<<<<< HEAD
 
-    addPorm = $("#addProductForm").detach();
-    addCat = $(".categoryForm-outer").detach();
-=======
     let loadNt = $("#loadNt").detach();
     $(".loadPa").html(loadNt);
     let loadNtCombo = $(".loadPa").detach();
     let addPorm = $("#addProductForm").detach();
     let addCat = $(".categoryForm-outer").detach();
->>>>>>> dockerized
     let comboAdd = $(".comboAdd-form-cont").detach();
 
     let editPorm = $("#editProductForm").detach();
@@ -316,15 +311,6 @@ $(document).ready(function () {
         id = parseInt($(this).parent().attr("id"))
         if (prompt("Type 'delete' to confirm.") === "delete") {
 
-<<<<<<< HEAD
-        deleteThings(id)
-        $(".more_showPane").trigger("click");
-        $("#content_products .action_select").removeClass("action_selectNew");
-        $(this).closest('li').addClass('delItem')
-        setTimeout(() => {
-            $(this).closest('li').detach()
-        }, 300);
-=======
             deleteThings(id)
             $(".more_showPane").trigger("click");
             $("#content_products .action_select").removeClass("action_selectNew");
@@ -332,7 +318,6 @@ $(document).ready(function () {
             setTimeout(() => {
                 $(this).closest('li').detach()
             }, 300);
->>>>>>> dockerized
 
         }
 
@@ -516,10 +501,7 @@ $(document).ready(function () {
 
     $(".myproducts").on("click", "#submit-combo_form", function (e) {
         e.preventDefault()
-<<<<<<< HEAD
-
-=======
->>>>>>> dockerized
+ 
         $("#addComboForm").trigger("submit");
     });
 
@@ -785,10 +767,7 @@ $(document).ready(function () {
 
     $(".myproducts").on("change", "#addpicedit", function (e) {
         e.preventDefault();
-<<<<<<< HEAD
-        const input = $('#addpic')[0];
-=======
->>>>>>> dockerized
+
 
         imagePick("#editimgdisplay", "#addpicedit", 3);
         imgChangeProd = 1
@@ -1137,170 +1116,7 @@ $(document).ready(function () {
         formData = new FormData()
         formData.append("transac", "viewComboSummary")
 
-<<<<<<< HEAD
-function comboShowProd(search) {
-    loadScCombo("sh")
 
-    formData = new FormData()
-    formData.append("transac", "comboSectionShowSearchProd")
-    formData.append("name", search)
-
-
-
-    $.ajax({
-        url: '../views/productView.php',
-        method: 'POST',
-        data: formData,
-        contentType: false,
-        processData: false,
-        success: function (response) {
-            $('.data-products').html(response);
-            // $(".data-products ol").addClass("new-data-products");
-
-            // $(".loading_sc").parent().css("overflow-y", "hidden");
-            // setTimeout(() => {
-            //     $(".data-products ol").each(function (index) {
-            //         if (index > 1) {
-            //             $(this).delay(index * 100).fadeIn(200);   
-            //         }
-            //     });
-            //     // $(".loading_sc").parent().css("overflow-y", "scroll");
-            // }, 1500);
-
-        }, complete: function () {
-            setTimeout(() => {
-                loadScCombo("rm")
-            }, 500);
-            $(".data-products ol").addClass("new-data-products");
-
-        }
-    });
-}
-
-
-function allCat(catName, page = 1) {
-    formData = new FormData()
-    formData.append("transac", "findCat")
-    formData.append("page", page)
-    formData.append("catName", catName)
-
-    $.ajax({
-        url: '../views/productView.php',
-        method: 'POST',
-        data: formData,
-        contentType: false,
-        processData: false,
-        success: function (response) {
-            $('#content_products').html("");
-            $('#content_products').append(response);
-            $('#content_products li').hide();
-            $(".loading_sc").show();
-            // $(".loading_sc").parent().css("overflow-y", "hidden");
-            setTimeout(() => {
-                $(".loading_sc").hide();
-                $("#content_products li").each(function (index) {
-                    $(this).delay(index * 100).fadeIn(200);
-                });
-                // $(".loading_sc").parent().css("overflow-y", "scroll");
-                return reqOpen = true
-            }, 1500);
-        }
-    });
-}
-function allCombo(comboName, page = 1) {
-    formData = new FormData()
-    formData.append("transac", "findCombo")
-    formData.append("page", page)
-    formData.append("comboName", comboName)
-
-    $.ajax({
-        url: '../views/productView.php',
-        method: 'POST',
-        data: formData,
-        contentType: false,
-        processData: false,
-        success: function (response) {
-            $('#content_products').html("");
-            $('#content_products').append(response);
-            $('#content_products li').hide();
-            $(".loading_sc").show();
-            // $(".loading_sc").parent().css("overflow-y", "hidden");
-            setTimeout(() => {
-                $(".loading_sc").hide();
-                $("#content_products li").each(function (index) {
-                    $(this).delay(index * 100).fadeIn(200);
-                });
-                // $(".loading_sc").parent().css("overflow-y", "scroll");
-                return reqOpen = true
-            }, 1500);
-        }
-    });
-}
-
-function allProducts(searchArg, page = 1) {
-    // hasClass = $("#content_products").children().hasClass("loading_sc");
-    $('#content_products li').hide();
-    $(".loading_sc").show();
-
-    formData = new FormData()
-    formData.append("page", page)
-    formData.append("transac", "showSearchProd")
-    formData.append("name", searchArg)
-    // if (hasClass) {
-    //     $(".loading_sc").show();
-    // }else{
-
-    //     $('#content_products li').detach();
-    //     $('#content_products').append(loading_sc);
-
-    // }
-
-
-    $.ajax({
-        url: '../views/productView.php',
-        method: 'POST',
-        data: formData,
-        contentType: false,
-        processData: false,
-        success: function (response) {
-            $('#content_products').html("");
-            $('#content_products').append(response);
-            $('#content_products li').hide();
-            $(".loading_sc").show();
-            // $(".loading_sc").parent().css("overflow-y", "hidden");
-            setTimeout(() => {
-                $(".loading_sc").hide();
-                $("#content_products li").each(function (index) {
-                    $(this).delay(index * 100).fadeIn(200);
-                });
-                // $(".loading_sc").parent().css("overflow-y", "scroll");
-                return reqOpen = true
-            }, 1500);
-        }
-    });
-}
-
-
-// ACTION
-
-function deleteThings(id) {
-
-    formData = new FormData()
-    formData.append("ID", id)
-    formData.append("transac", "removeProd")
-
-    $.ajax({
-        url: '../views/productView.php',
-        method: 'POST',
-        data: formData,
-        contentType: false,
-        processData: false,
-        success: function (response) {
-            response = response.trim()
-
-            if (response == "Deleted") {
-                notify("Deleted successfully")
-=======
         $.ajax({
             url: '../views/productView.php',
             method: 'POST',
@@ -1309,7 +1125,6 @@ function deleteThings(id) {
             processData: false,
             success: function (response) {
                 $('.data_summary_combo').html(response);
->>>>>>> dockerized
             }
         });
 
@@ -1968,37 +1783,9 @@ function deleteThings(id) {
             $(".notification i").css("animation-name", "on_notif");
         }, 1500);
 
-<<<<<<< HEAD
-    setTimeout(() => {
-        $(".notification").css("transform", "translateX(20rem)");
-    }, 4000);
-
-    setTimeout(() => {
-        $(".notification").detach();
-    }, 6000);
-}
-
-
-function imagePick(dp, inpt) {
-    const profileImage = $(dp);
-    const input = $(inpt)[0];
-    const file = input.files[0];
-
-    if (file) {
-        const reader = new FileReader();
-        reader.onload = function () {
-            profileImage.attr('src', reader.result);
-        };
-        reader.readAsDataURL(file);
-
-    } else {
-
-        profileImage.attr('src', '../image/dpTemplate.png');
-=======
         setTimeout(() => {
             $(".notification").css("transform", "translateX(20rem)");
         }, 4000);
->>>>>>> dockerized
 
         setTimeout(() => {
             $(".notification").detach();

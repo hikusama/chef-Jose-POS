@@ -1507,11 +1507,7 @@
     position: absolute;
     top: 50%;
     left: 50%;
-<<<<<<< HEAD
-    transform: translate(-50%,-50%);
-=======
     transform: translate(-50%, -50%);
->>>>>>> dockerized
     border-radius: 50%;
     height: 10rem;
 }

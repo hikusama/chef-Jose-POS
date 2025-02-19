@@ -12,18 +12,7 @@ $(document).ready(function () {
 
     $(".history_info").on("click", "#delReceipt", function (e) {
         e.preventDefault();
-<<<<<<< HEAD
 
-        if (reqOpen == true) {
-            reqOpen = false
-            let rf = $(this).parent().attr('id');
-            $(".data").find("#" + rf).parent().addClass("rmByRf")
-            setTimeout(() => {
-                $(".data").find(".rmByRf").detach()
-            }, 450);
-            delOrder($(this).parent().attr('id'))
-
-=======
         if (prompt("Type 'delete' to confirm.") === "delete") {
 
             if (reqOpen == true) {
@@ -36,7 +25,6 @@ $(document).ready(function () {
                 delOrder($(this).parent().attr('id'))
 
             }
->>>>>>> dockerized
         }
 
 
@@ -106,10 +94,8 @@ $(document).ready(function () {
     $(".data_history_cont").on("click", ".data ol", function (e) {
         e.preventDefault()
         hasC = $(this).hasClass("onHistoryDp");
-<<<<<<< HEAD
-=======
+
         odo = $(this).attr("id");
->>>>>>> dockerized
 
 
         if (!hasC && reqOpen && odo != "page-dir-cont") {

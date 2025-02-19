@@ -50,19 +50,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             ';
             $ordersSession = array();
             $subtotal = $rows[0]["subtotal"];
-<<<<<<< HEAD
-            $gname = ($rows[0]["gcashAccountName"] != NULL) ? $rows[0]["gcashAccountName"] : "N/A";
-            $gno = ($rows[0]["gcashAccountNo"] != NULL) ? $rows[0]["gcashAccountNo"] : "N/A";
-            $dc = ($rows[0]["discount"] != NULL) ? ($rows[0]["discount"]/$subtotal) *100 : "N/A";
-            $dcT = ($rows[0]["discountType"] != NULL) ? $rows[0]["discountType"] : "N/A";
-            $tA = $rows[0]["totalAmount"];
-=======
             $gname = ($rows[0]["gcashAccountName"] != NULL) ? $rows[0]["gcashAccountName"] : NULL;
             $gno = ($rows[0]["gcashAccountNo"] != NULL) ? $rows[0]["gcashAccountNo"] : NULL;
             $dc = ($rows[0]["discount"] != NULL) ? ($rows[0]["discount"] / $subtotal) * 100 : NULL;
             $dcT = ($rows[0]["discountType"] != NULL) ? $rows[0]["discountType"] : NULL;
             $tA = intval($rows[0]["totalAmount"]);
->>>>>>> dockerized
             $pM = $rows[0]["paymentMethod"];
             $change = intval($rows[0]["tendered"]) - $tA;
             $tendered = intval($rows[0]["tendered"]);
@@ -135,10 +127,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 $order = [
                     "name" => $name,
                     "price" => $unitPrice,
-<<<<<<< HEAD
-=======
                     "itemprice" => $itemp,
->>>>>>> dockerized
                     "qntity" => $quantity
                 ];
                 array_push($ordersSession, $order);
@@ -153,24 +142,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                         <li>
                             <p>Payment Method</p>
                             <p>' . $pM . '</p>
-<<<<<<< HEAD
-                        </li>
-                        <li>
-                            <p>Gcash Acc. name</p>
-                            <p>' . $gname . '</p>
-                        </li>
-                        <li>
-                            <p>Gcash Acc. no.</p>
-                            <p>' . $gno . '</p>
-                        </li>
-                        <li>
-                            <p>Discount (%)</p>
-                            <p>' . $dc . '</p>
-                        </li>
-                        <li>
-                            <p>Discount type</p>
-                            <p>' . $dcT . '</p>
-=======
                         </li>
                         ' . $gcashSection . $dsSection . '
                         <li>
@@ -180,7 +151,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                         <li>
                             <p>Change</p>
                             <p>₱' . $change . '</p>
->>>>>>> dockerized
                         </li>
                         <li>
                             <p>Total Amount</p>
@@ -197,11 +167,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $_SESSION['totalT'] = $tA;
             $_SESSION['subtotalT'] = $subtotal;
             $_SESSION['refNo2'] = $refNO;
-<<<<<<< HEAD
-=======
             $_SESSION['tendered'] = $tendered;
             $_SESSION['gcash'] = $gcash;
->>>>>>> dockerized
         } else {
             echo '<div style="position: absolute;top: 50%;left: 50%;transform: translate(-50%,-50%);">No producs...</div>';
         }
@@ -212,14 +179,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
 
     if (isset($_POST['transac']) && $_POST['transac'] === "deleteOrder") {
-<<<<<<< HEAD
-        $ref = htmlspecialchars(strip_tags($_POST['refno']));
-
-=======
         $ref = htmlspecialchars(trim($_POST['refno']));
         require_once "../function.php";
         isAdminRole();
->>>>>>> dockerized
         $historyOBJ = new HistoryController(null, $ref);
         $historyOBJ->deleteOrderRecordControll();
     }

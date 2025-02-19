@@ -199,11 +199,8 @@ $isbaibing = validate($_SERVER['REQUEST_URI']);
                                         <p class="dsttlSales">₱0</p>
                                     </section>
                                 </div>
-<<<<<<< HEAD
-                                <a href="reports" title="Redirect to reports" class="goto">See more <i class="fas fa-arrow-right"></i></a>
-=======
+
                                 <a href="reports.php" title="Redirect to reports" class="goto">See more <i class="fas fa-arrow-right"></i></a>
->>>>>>> dockerized
                             </div>
                         </div>
                         <div class="sales-sum">

@@ -547,12 +547,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         if (isset($_SESSION['discountT'], $_SESSION['discountTypeT']) && (($_SESSION['discountT'] = ! NULL) && ($_SESSION['discountT'] != NULL))) {
             $discountType = $_SESSION['discountTypeT'];
             // $discount = $_SESSION['discountT'] . '%';
-<<<<<<< HEAD
-            $discount = $_SESSION['discountT'] ;
-            $sbt = $_SESSION['subtotalT'];
-            $tt = $_SESSION['totalT'];
-            $discount = (($sbt-$tt)/$sbt)*100 . '%';
-=======
             $discount = $_SESSION['discountT'];
             $sbt = $_SESSION['subtotalT'];
             $tt = $_SESSION['totalT'];
@@ -566,7 +560,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 <li>Discount type</li>
                 <li style="text-align: end;">' . $discountType . '</li>
             </ol>';
->>>>>>> dockerized
         }
 
         $ordersSession = array();

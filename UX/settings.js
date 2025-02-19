@@ -791,19 +791,7 @@ $(document).ready(function () {
         const theme = localStorage.getItem('theme');
 
         if (theme === "light") {
-<<<<<<< HEAD
-            
-            document.body.classList.remove("dark_mode")
-            document.body.classList.remove("monokai_mode")
-        }else if(theme === "monokai"){
-            document.body.classList.remove("dark_mode")
-            document.body.classList.add("monokai_mode")
-        }else if(theme === "dark_modern"){
-            document.body.classList.remove("monokai_mode")
-            document.body.classList.add("dark_mode")
-            
-        }else{
-=======
+ 
 
             document.body.classList.remove("dark_mode")
             document.body.classList.remove("monokai_mode")
@@ -815,7 +803,6 @@ $(document).ready(function () {
             document.body.classList.add("dark_mode")
 
         } else {
->>>>>>> dockerized
             document.body.classList.remove("dark_mode")
             document.body.classList.remove("monokai_mode")
         }
