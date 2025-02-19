@@ -1,3 +1,8 @@
+<?php
+require_once "../function.php";
+validateByLoc("in");
+$isbaibing = validate($_SERVER['REQUEST_URI']);
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -5,12 +10,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="../UX/jquery-3.5.1.min.js"></script>
-    <script src="../UX/script.js"></script>
-    <script src="../UX/history.js"></script>
-    <link rel="stylesheet" href="../resources/style.css">
-    <link rel="stylesheet" href="../resources/history.css">
-    <link rel="stylesheet" href="../resources/fontawesome-free-5.15.4-web/css/all.css">
+    <script src="../UX/jquery-3.5.1.min.js?v=<?php echo time(); ?>"></script>
+    <script src="../UX/script.js?v=<?php echo time(); ?>"></script>
+    <script src="../UX/history.js?v=<?php echo time(); ?>"></script>
+    <link rel="stylesheet" href="../resources/style.css?v=<?php echo time(); ?>">
+    <link rel="stylesheet" href="../resources/history.css?v=<?php echo time(); ?>">
+    <link rel="stylesheet" href="../resources/fontawesome-free-5.15.4-web/css/all.css?v=<?php echo time(); ?>">
+    <style>
+        .middle_side {
+            grid-template-columns: auto 20rem;
+        }
+    </style>
     <title>POS</title>
     <style>
         .middle_side{
@@ -30,9 +40,9 @@
                 <li class="title_section">History</li>
             </section>
             <section>
-                <li class="first">r</li>
-                <li class="second">f</li>
-                <li class="last">s</li>
+                <li class="first" title="Refresh" id="refresh"><i class="fas fa-sync"></i></li>
+                <li class="second" id="screencontroll" title="View full screen."><i class="fas fa-expand"></i></li>
+                <li class="last"><i class="fas fa-user"></i></li>
             </section>
         </div>
     </div>
@@ -42,27 +52,41 @@
             <div class="side_nav2d">
 
                 <div class="inner_side_nav">
-                    <li id="overview">
-                        <div class="textdp"><i class="fas fa-chart-pie"></i>Overview</div>
-                    </li>
-                    <li id="cashier">
-                        <div class="textdp"><i class="fas fa-home"></i>Cashier</div>
-                    </li>
-                    <li id="reports">
-                        <div class="textdp"><i class="fas fa-file-medical-alt"></i>Reports</div>
-                    </li>
-                    <li id="myproducts">
-                        <div class="textdp"><i class="fas fa-hamburger"></i>Products</div>
-                    </li>
 
-                    <li id="history" class="on_select">
-                        <div class="bgsect"></div>
-                        <div class="textdp"><i class="fas fa-history"></i>History</div>
-                    </li>
+                    <?php if ($isbaibing["ios"] === 485) { ?>
+                        <li id="overview">
+                            <div class="textdp"><i class="fas fa-chart-pie"></i>Overview</div>
+                        <?php } ?>
+                        </li>
+                        <li id="cashier">
+                            <div class="textdp"><i class="fas fa-home"></i>Cashier</div>
+                        </li>
+                        <?php if ($isbaibing["ios"] === 485) { ?>
+                            <li id="reports">
+                                <div class="textdp"><i class="fas fa-file-medical-alt"></i>Reports</div>
+                            </li>
+                            <li id="myproducts">
+                                <div class="textdp"><i class="fas fa-hamburger"></i>Products</div>
+                            </li>
+                        <?php } ?>
+
+                        <li id="history" class="on_select">
+                            <div class="bgsect"></div>
+                            <div class="textdp"><i class="fas fa-history"></i>History</div>
+                        </li>
+                        <?php if ($isbaibing["ios"] === 485) { ?>
+                        <li id="cashiers">
+                            <div class="textdp"><i class="fas fa-users"></i>Cashiers</div>
+                        </li>
+
+                    <?php } ?>
                 </div>
                 <div class="inner_side_nav_settings">
                     <li id="settings">
                         <div class="textdp"><i class="fas fa-cog"></i>Settings</div>
+                    </li>
+                    <li id="logoutMhen">
+                        <div class="textdp"><i class="fas fa-external-link-alt"></i>Logout</div>
                     </li>
                 </div>
             </div>

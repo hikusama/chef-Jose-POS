@@ -2,6 +2,7 @@
     margin: 0;
     padding: 0;
     font-family: sans-serif;
+    box-sizing:border-box;
 }
 
 body {
@@ -23,13 +24,13 @@ main {
     align-items: center;
     justify-content: center;
     width: 21rem;
-    height: 15rem;
+    height: fit-content;
     box-shadow: 2px 2px 5px rgba(60, 62, 50, 0.493);
     border-radius: 10px;
-
 }
 
 #login {
+    padding: 0 0 1rem;
     border-radius: 10px;
     width: 100%;
     height: 100%;
@@ -37,6 +38,7 @@ main {
 }
 
 #logo {
+    padding: 1rem 0;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -170,4 +172,17 @@ background-size: px px; */
     background-color: white;
     transform: rotate(45deg) translate(50%, 50%);
     bottom: .8rem;
+}
+.resp{
+    color: red;
+    animation-name: rp;
+    animation-duration: .8s;
+    animation-iteration-count: 1;
+    margin-top: 1rem;
+}
+
+@keyframes rp {
+    0%{
+        transform: translateX(-2.5rem);
+    }
 }

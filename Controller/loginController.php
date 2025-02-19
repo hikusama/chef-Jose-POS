@@ -19,7 +19,7 @@ class Logincontroller extends Model {
             exit();
         }
 
-        $this->getUser($this->username, $this->password);
+        return $this->getUser($this->username, $this->password);
     }
 
 }

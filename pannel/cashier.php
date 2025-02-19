@@ -1,16 +1,22 @@
+<?php
+require_once "../function.php";
+validateByLoc("in");
+
+$isbaibing = validate($_SERVER['REQUEST_URI']);
+?>
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../resources/fontawesome-free-5.15.4-web/css/all.css">
+    <link rel="stylesheet" href="../resources/fontawesome-free-5.15.4-web/css/all.css?v=<?php echo time(); ?>">
 
-    <script src="../UX/jquery-3.5.1.min.js"></script>
-    <script src="../UX/cashier.js"></script>
-    <script src="../UX/script.js"></script>
-    <link rel="stylesheet" href="../resources/style.css">
-    <link rel="stylesheet" href="../resources/cashier.css">
+    <script src="../UX/jquery-3.5.1.min.js?v=<?php echo time(); ?>"></script>
+    <script src="../UX/cashier.js?v=<?php echo time(); ?>"></script>
+    <script src="../UX/script.js?v=<?php echo time(); ?>"></script>
+    <link rel="stylesheet" href="../resources/style.css?v=<?php echo time(); ?>">
+    <link rel="stylesheet" href="../resources/cashier.css?v=<?php echo time(); ?>">
     <title>POS</title>
 </head>
 
@@ -26,9 +32,9 @@
                 </li>
             </section>
             <section>
-                <li class="first" id="refresh"><img src="../image/refresh.png" alt="refresh"></li>
-                <li class="second" id="screencontroll"><img src="../image/fullscreen.png" alt="refresh"></li>
-                <li class="last">s</li>
+                <li class="first" title="Refresh" id="refresh"><i class="fas fa-sync"></i></li>
+                <li class="second" id="screencontroll" title="View full screen."><i class="fas fa-expand"></i></li>
+                <li class="last"><i class="fas fa-user"></i></li>
             </section>
         </div>
     </div>
@@ -37,27 +43,42 @@
         <div class="side_nav">
             <div class="side_nav2d">
                 <div class="inner_side_nav">
+                <?php if ($isbaibing["ios"] === 485) { ?>
+                    
                     <li id="overview">
                         <div class="textdp"><i class="fas fa-chart-pie"></i>Overview</div>
-                    </li>
+                        </li>
+                    <?php } ?>
                     <li id="cashier" class="on_select">
                         <div class="bgsect"></div>
                         <div class="textdp"><i class="fas fa-home"></i>Cashier</div>
                     </li>
-                    <li id="reports">
-                        <div class="textdp"><i class="fas fa-file-medical-alt"></i>Reports</div>
-                    </li>
-                    <li id="myproducts">
-                        <div class="textdp"><i class="fas fa-hamburger"></i>Products</div>
-                    </li>
+                    <?php if ($isbaibing["ios"] === 485) { ?>
+
+                        <li id="reports">
+                            <div class="textdp"><i class="fas fa-file-medical-alt"></i>Reports</div>
+                        </li>
+                        <li id="myproducts">
+                            <div class="textdp"><i class="fas fa-hamburger"></i>Products</div>
+                        </li>
+                    <?php } ?>
 
                     <li id="history">
                         <div class="textdp"><i class="fas fa-history"></i>History</div>
                     </li>
+                    <?php if ($isbaibing["ios"] === 485) { ?>
+                        <li id="cashiers">
+                            <div class="textdp"><i class="fas fa-users"></i>Cashiers</div>
+                        </li>
+
+                    <?php } ?>
                 </div>
                 <div class="inner_side_nav_settings">
                     <li id="settings">
                         <div class="textdp"><i class="fas fa-cog"></i>Settings</div>
+                    </li>
+                    <li id="logoutMhen">
+                        <div class="textdp"><i class="fas fa-external-link-alt"></i>Logout</div>
                     </li>
                 </div>
 
@@ -97,9 +118,9 @@
                                 <option value="Cash">Cash</option>
                                 <option value="G-Cash">G-Cash</option>
                             </select>
-                            <input type="text" placeholder="G-Cash account name.." id="gcashName" autocomplete="off" name="gcashName"> 
-                            <input type="number" placeholder="G-Cash account number.." id="gcashNum" name="gcashNum"> 
-                            <input type="number" placeholder="Tender amount.." name="money" id="CMmoney">
+                            <input type="text" placeholder="G-Cash account name.." id="gcashName" autocomplete="off" name="gcashName">
+                            <input type="number" min="0" placeholder="G-Cash account number.." id="gcashNum" name="gcashNum">
+                            <input type="number" min="0" placeholder="Tender amount.." name="money" id="CMmoney">
                             <div class="actionPay">
                                 <button type="button" id="cancCM">Cancel</button>
                                 <button type="submit" id="pay_orders">Pay</button>

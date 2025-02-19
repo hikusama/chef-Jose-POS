@@ -18,13 +18,13 @@ class cashierController extends Model
         $this->product_id = $product_id;
     }
 
-    public function getAllProducts($category)
+    public function getAllProducts($category,$page)
     {
-        return $this->getAllProductss($this->product_name, $category);
+        return $this->getAllProductss($this->product_name, $category,$page);
     }
-    public function getAllComboss()
+    public function getAllComboss($page)
     {
-        return $this->getAllCombosModel($this->product_name);
+        return $this->getAllCombosModel($this->product_name,$page);
     }
 
     public function addToCart($type)

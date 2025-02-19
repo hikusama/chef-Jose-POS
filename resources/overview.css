@@ -13,6 +13,14 @@
 
 .summary_show li,
 
+.data-FLW ,
+.data-FLD{
+    font-size: .8rem;
+}
+.data-FLW b,
+.data-FLD b{
+    font-weight: 100;
+}
 .dashboard_body li {
     position: relative;
 
@@ -50,6 +58,7 @@
     gap: 1rem;
     flex-wrap: wrap;
     margin-top: 1rem;
+    align-items: center;
 }
 
 .dashboard_body li {
@@ -73,9 +82,13 @@
     border: solid 1px rgb(49 49 49 / 35%);
     background: white;
     position: relative;
-
 }
-
+.summary_showNh{
+    flex-direction: column;
+}
+.summary_showNh li{
+    width: 85%;
+}
 .monokai_mode .sales-sum-inn,
 .monokai_mode .top-prod-inn,
 .monokai_mode .summary_show li,
@@ -324,6 +337,7 @@
     width: fit-content;
     display: flex;
     flex-direction: column;
+    margin-top: 2rem;
 }
 
 .description-topProd {
@@ -466,16 +480,16 @@
 }
 
 .top-prod-inn::after {
-    width: 14rem;
-    height: 8rem;
+    width: 23rem;
+    height: 9rem;
     left: 50%;
     top: -.5rem;
 }
 
 .sales-sum-inn::after {
-    top: 1rem;
-    width: 9rem;
-    height: 9rem;
+    top: -1rem;
+    width: 15rem;
+    height: 15rem;
     left: 1rem;
 }
 
@@ -575,7 +589,8 @@
 }
 
 .data-top-products {
-    height: 14.4rem;
+    height: fit-content;
+    max-height: 14.4rem;
     overflow-y: scroll;
     scrollbar-width: none;
     padding: 0 .8rem .5rem;
@@ -605,6 +620,22 @@
 
 
 
+@media screen and (max-width :1508px) {
+    .pieSum {
+        justify-content: start;
+    }
+    
+    
+    
+}
+@media screen and (max-width :1147px) {
+    .pieSum {
+        justify-content: center;
+    }
+
+
+
+}
 @media screen and (max-width :1041px) {
     .data_from_graphical {
         width: 100%;

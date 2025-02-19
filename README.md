@@ -3,13 +3,11 @@
 3rd year software engineering project
 
 ## Steps:
+- download docker desktop
+- set it up
+- login to phpmyadmin (un: root, pw: root)
 - create DB 'chef_jose_db'
+- go to mysql > user > change the user root to 'chefjose'
+- nextime login to phpmyadmin (un: chefjose, pw: chefjose4545)
 - import the file 'chef_jose_db.sql'
-
-### start 2 ways:
-1. manual type
-- run php -S localhost:8080 in current directory
-- open xampp start the mysql server
-
-2. locate to /app folder and edit the 'chef_Jose.bat' and change the path to your machine path
-- change this path cd C:\Users\Hikusama\Desktop\chef-Jose-POS\app 
+- good to go

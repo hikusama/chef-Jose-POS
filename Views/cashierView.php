@@ -1,7 +1,7 @@
 <?php
 
 require_once '../Controller/cashierController.php';
-
+require_once '../function.php';
 
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
@@ -12,20 +12,30 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     // PRODUCTS SHOW/SEARCH
 
     if (isset($_POST['transac']) && $_POST["transac"] === "searchNView") {
-        session_start();
+        // session_start();
 
-        $searchVal = $_POST["searchVal"];
-        $category_id = $_POST["category_id"];
+        $page = htmlspecialchars(trim($_POST["page"]));
+        $searchVal = htmlspecialchars(trim($_POST["searchVal"]));
+        $category_id = htmlspecialchars(trim($_POST["category_id"]));
 
         $pdoTemp = new cashierController(null, $searchVal, null);
         $allCombo;
         $allProd;
+
+        $total_pages = 0;
+        $current_page = 1;
         if ($category_id == "cmb") {
-            $allCombo = $pdoTemp->getAllComboss();
+            $obj = $pdoTemp->getAllComboss($page);
+            $allCombo = $obj['data'];
+            $total_pages = intval($obj['total_pages']);
+            $current_page = intval($obj['current_page']);
             $_SESSION['categoryState'] = 'cmb';
         } else if (is_numeric((int)$category_id)) {
             unset($_SESSION['categoryState']);
-            $allProd = $pdoTemp->getAllProducts($category_id);
+            $obj = $pdoTemp->getAllProducts($category_id, $page);
+            $allProd = $obj['data'];
+            $total_pages = intval($obj['total_pages']);
+            $current_page = intval($obj['current_page']);
         } else {
             echo "Something went wrong..";
             return;
@@ -39,12 +49,12 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                     $ntv = "";
                     $ops = "";
                     $crs = "";
-                    if($availability === "Not-available"){
-                        
-                        $ntv = '<p class="ntv">Not-available</p>'; 
+                    if ($availability === "Not-available") {
+
+                        $ntv = '<p class="ntv">Not-available</p>';
                         $ops = ' style="opacity:50%;"';
                         $crs = ' style="pointer-events:none;"';
-                    } 
+                    }
                     echo '
                     <ol' . $crs . '>' . $ntv . '
                         <li' . $ops . '><img id="' . $cmb['comboID'] . '" src="data:image/jpeg;base64,' . base64_encode($cmb['displayPic']) . '" alt="item"></li>
@@ -56,6 +66,17 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 
                 ';
                 }
+                echo '
+                <li id="page-dir-cont" style="">
+                    <div class="main-dir-link">';
+                for ($i = 1; $i <= $total_pages; $i++) {
+                    $g = ($i === $current_page) ? '<button type="button" id="pageON">' : '<button type="button" class="data-link" id="' . $i . '">';
+                    echo $g . $i;
+                    echo '</button>';
+                }
+                echo '</div>
+                </li>
+                ';
             } else {
                 echo '<div class="nopr">No combo\'s..</div>';
             }
@@ -68,11 +89,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                     $ntv = "";
                     $ops = "";
                     $crs = "";
-                    if($availability === "Not-available"){
-                        $ntv = '<p class="ntv">Not-available</p>'; 
+                    if ($availability === "Not-available") {
+                        $ntv = '<p class="ntv">Not-available</p>';
                         $ops = ' style="opacity:50%;"';
                         $crs = ' style="pointer-events:none;"';
-                    } 
+                    }
                     echo '
                     <ol' . $crs . '>' . $ntv . '
                         <li' . $ops . '><img id="' . $prod['productID'] . '" src="data:image/jpeg;base64,' . base64_encode($prod['displayPic']) . '" alt="item"></li>
@@ -84,6 +105,17 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 
                 ';
                 }
+                echo '
+            <li id="page-dir-cont" style="">
+                <div class="main-dir-link">';
+                for ($i = 1; $i <= $total_pages; $i++) {
+                    $g = ($i === $current_page) ? '<button type="button" id="pageON">' : '<button type="button" class="data-link" id="' . $i . '">';
+                    echo $g . $i;
+                    echo '</button>';
+                }
+                echo '</div>
+            </li>
+            ';
             } else {
                 echo '<div class="nopr">No products..</div>';
             }
@@ -95,12 +127,24 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     if (isset($_POST['transac']) && $_POST["transac"] === "changeqntity" &&  isset($_POST["qntity"])) {
 
-        session_start();
+        // session_start();
 
 
-        $qntity = $_POST["qntity"];
-        $product_id = $_POST["product_id"];
-        $type = $_POST["type"];
+        $qntity = htmlspecialchars(trim($_POST["qntity"]));
+        $product_id = htmlspecialchars(trim($_POST["product_id"]));
+        $type = htmlspecialchars(trim($_POST["type"]));
+
+
+        if (
+            empty($qntity) ||
+            empty($product_id) ||
+            empty($type)
+        ) {
+            return;
+        }
+        if ($qntity < 0) {
+            return;
+        }
 
         $prodOrder = array();
         $comboOrder = array();
@@ -163,7 +207,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $prodOrder = array();
         $comboOrder = array();
 
-        session_start();
+        // session_start();
         if (isset($_SESSION['orders'])) {
             $ordersSession = $_SESSION['orders'];
             if (isset($_SESSION['prodOrders'])) {
@@ -208,15 +252,15 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     // CART ITEM REMOVE
 
     if (isset($_POST['transac']) && $_POST["transac"] === "removeToCart") {
-        $product_id = $_POST["product_id"];
-        $itemType = $_POST["itemType"];
+        $product_id = htmlspecialchars(trim($_POST["product_id"]));
+        $itemType = htmlspecialchars(trim($_POST["itemType"]));
 
         $ordersSession = array();
         $prodOrder = array();
         $comboOrder = array();
         $orderSelected = array();
 
-        session_start();
+        // session_start();
 
         if (isset($_SESSION['comboOrders'])) {
             $comboOrder = $_SESSION['comboOrders'];
@@ -282,8 +326,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     if (isset($_POST['transac']) && $_POST["transac"] === "addToCart") {
         // $transac =;
-        session_start();
-        $id = $_POST["product_id"];
+        // session_start();
+        $id = htmlspecialchars(trim($_POST["product_id"]));
 
         $pdoTemp = new cashierController(null, null, $id);
         $prodOrder = array();
@@ -304,6 +348,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                     "id" => $id,
                     "name" => $fetch['comboName'],
                     "qntity" => 1,
+                    "itemprice" => $price,
                     "price" => $price
                 );
 
@@ -345,6 +390,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 "id" => $id,
                 "name" => $fetch['name'],
                 "qntity" => 1,
+                "itemprice" => $price,
                 "price" => $price
             );
 
@@ -414,7 +460,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
 
     if (isset($_POST['transac']) && $_POST['transac'] === "showDiscountForm") {
-        session_start();
+        // session_start();
         $discount;
         $discountType;
         if (isset($_SESSION['discount'], $_SESSION['discountType'])) {
@@ -462,12 +508,35 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
 
     if (isset($_POST['transac']) && $_POST['transac'] === "print") {
-        session_start();
+        // session_start();
+        $uid = $_SESSION["userID"];
+        $role = $_SESSION["userRole"];
+
+        if(!isset($_SESSION['insert'])){
+            $uid = $_SESSION["userIDReceipt"];
+            $role = $_SESSION["userRoleReceipt"];
+        }
+
+        if ($role === "Admin") {
+            $role = "Owner";
+        }
+        $obj = new cashierController(null, null, null);
+
+        $tenderedByInfo = $obj->getName($uid);
+        $tenderedBy = $tenderedByInfo["rN"];
         $refNo = '----';
         $subtotal = '----';
         $total = '----';
         $discount = '0';
+        $change = "₱0";
+        $tendered = "₱";
         $discountType = 'N/A';
+        $dsSection = "";
+        $gcashSection = "";
+        $gcash = [
+            "name" => NULL
+        ];
+
         if (isset($_SESSION['subtotalT'], $_SESSION['totalT'])) {
             $subtotal = '₱' . $_SESSION['subtotalT'];
             $total = '₱' . $_SESSION['totalT'];
@@ -478,20 +547,54 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         if (isset($_SESSION['discountT'], $_SESSION['discountTypeT']) && (($_SESSION['discountT'] = ! NULL) && ($_SESSION['discountT'] != NULL))) {
             $discountType = $_SESSION['discountTypeT'];
             // $discount = $_SESSION['discountT'] . '%';
+<<<<<<< HEAD
             $discount = $_SESSION['discountT'] ;
             $sbt = $_SESSION['subtotalT'];
             $tt = $_SESSION['totalT'];
             $discount = (($sbt-$tt)/$sbt)*100 . '%';
+=======
+            $discount = $_SESSION['discountT'];
+            $sbt = $_SESSION['subtotalT'];
+            $tt = $_SESSION['totalT'];
+            $discount = (($sbt - $tt) / $sbt) * 100 . '%';
+            $dsSection = '
+            <ol>
+                <li>Discount (%)</li>
+                <li>' . $discount . '</li>
+            </ol>
+            <ol>
+                <li>Discount type</li>
+                <li style="text-align: end;">' . $discountType . '</li>
+            </ol>';
+>>>>>>> dockerized
         }
+
         $ordersSession = array();
         if (isset($_SESSION['ordersT'])) {
             $ordersSession = $_SESSION['ordersT'];
+            $tt = $_SESSION['totalT'];
+            $tendered = $_SESSION['tendered'];
+            $change = "₱" . $tendered - $tt;
+        }
+        if (isset($_SESSION['gcash'])) {
+            $gcash = $_SESSION['gcash'];
         }
         $array_size = count($ordersSession);
         date_default_timezone_set("Asia/manila");
         $date = date('d/m/Y');
         $time = date('h:i A');
 
+        if ($gcash['name'] !== NULL) {
+            $gcashSection = '
+                            <ol>
+                                <li>Gcash Acc. Name </li>
+                                <li style="text-align: end;">' . $gcash["name"] . '</li>
+                            </ol>
+                            <ol>
+                                <li>Gcash Acc. No </li>
+                                <li>' . $gcash["no"]  . '</li>
+                            </ol>';
+        }
 
 
         echo '
@@ -501,8 +604,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                     <hr>
                     <ol>
                         <li>Tendered</li>
-                        <li>Hikusama</li>
-                        <li>Employee</li>
+                        <li>'.$tenderedBy.'</li>
+                        <li>'.$role.'</li>
                     </ol>
                     <hr>
                     <ol>
@@ -535,7 +638,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 echo '
                     <tr>
                         <td>' . $order['qntity'] . '</td>
-                            <td>' . $order['name'] . '</td>
+                            <td>' . $order['name'] . ' @' . $order['itemprice'] . '</td>
                             <td>₱' . $order['price'] . '</td>
                         </tr>
                      ';
@@ -554,18 +657,20 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                     <li>Sub Total</li>
                     <li>' . $subtotal . '</li>
                 </ol>
+                ' . $gcashSection . $dsSection . '
+
                 <ol>
-                    <li>Discount</li>
-                    <li>' . $discount . '</li>
+                    <li>Tendered</li>
+                    <li>' . $tendered . '</li>
                 </ol>
-                <ol>
-                    <li>Discount Type</li>
-                    <li>' . $discountType . '</li>
-                </ol>
-                <hr>
                 <ol>
                     <li>Total</li>
                     <li>' . $total . '</li>
+                </ol>
+                <hr>
+                <ol class="chg">
+                    <li>Change</li>
+                    <li>' . $change . '</li>
                 </ol>
             </div>
         ';
@@ -577,6 +682,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             unset($_SESSION['discountTypeT']);
             unset($_SESSION['totalT']);
             unset($_SESSION['subtotalT']);
+            unset($_SESSION['tendered']);
+            unset($_SESSION['gcash']);
+
+            unset($_SESSION["userIDReceipt"]);
+            unset($_SESSION["userRoleReceipt"]);
         }
         // var_dump($ordersSession);
         // var_dump(implode($ordersSession));
@@ -592,13 +702,13 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
 
     if (isset($_POST['transac']) && $_POST['transac'] === "pay") {
-        session_start();
+        // session_start();
         $customer_money = intval($_POST["money"]);
         if (isset($_SESSION['total'])) {
             $total = $_SESSION['total'];
             $gcashName = NULL;
             $gcashNum = NULL;
-            $pmethod = $_POST['pmethod'];
+            $pmethod = htmlspecialchars(trim($_POST['pmethod']));
 
 
             if (!($pmethod == 'Cash' || $pmethod == 'G-Cash')) {
@@ -606,8 +716,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 return;
             }
             if ($pmethod == 'G-Cash') {
-                $gcashName = $_POST['gcashName'];
-                $gcashNum = $_POST['gcashNum'];
+                $gcashName = htmlspecialchars(trim($_POST['gcashName']));
+                $gcashNum = htmlspecialchars(trim($_POST['gcashNum']));
                 $numSize = $gcashNum;
                 $numSize = strlen($numSize);
                 if (empty($gcashNum) || empty($gcashName)) {
@@ -627,15 +737,21 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             } else if ($total > $customer_money) {
                 echo 'Customer money is not enough.';
             } else if ($total != 0) {
+                $_SESSION['insert'] = true;
                 $_SESSION['openPrint'] = true;
+                $uid = $_SESSION['userID'];
                 $pdoTemp = new cashierController(null, null, null);
                 $lastId = strval($pdoTemp->getRefNo());
                 $randNo = random_int(10000, 99999);
                 $refNo = $lastId . strval($randNo);
                 $refNo = intval($refNo);
                 $_SESSION['refNo2'] = $refNo;
+                $gcash = [
+                    "name" => $gcashName,
+                    "no" => $gcashNum,
+                ];
 
-                submitOrders($refNo, $total, $pmethod, $gcashName, $gcashNum);
+                submitOrders($refNo, $total, $pmethod, $gcashName, $gcashNum, $customer_money,$uid);
 
                 $tempTotal = ($customer_money - $total);
                 $tempTotal = number_format($tempTotal, 2, '.');
@@ -649,6 +765,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                         </div>
                     </div>
                 ';
+                $_SESSION['tendered'] = $customer_money;
+                $_SESSION['gcash'] = $gcash;
                 $_SESSION['confirmation'] = true;
             }
         } else {
@@ -659,9 +777,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
 
     if (isset($_POST['transac']) && $_POST['transac'] === "addingDiscount") {
-        $discountType = $_POST["discountType"];
+        $discountType = htmlspecialchars(trim($_POST["discountType"]));
         $discount = (int)$_POST["discount"];
-        session_start();
+        // session_start();
 
         if (
             empty($discount) ||
@@ -692,7 +810,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     if (isset($_POST['transac']) && $_POST['transac'] === "totalShow") {
 
 
-        session_start();
+        // session_start();
 
         if (!isset($_SESSION['orders'])) {
             echo '
@@ -819,16 +937,15 @@ function dpCart($prodArr, $comboArr)
     }
 }
 
-function submitOrders($refNo, $totalAmount, $pmethod, $gcashName, $gcashNum)
+function submitOrders($refNo, $totalAmount, $pmethod, $gcashName, $gcashNum, $tendered,$uid)
 {
-    // session_start();
 
     if (isset($_SESSION['orders'])) {
         $subtotal = $_SESSION['subtotal'];
         $orders = $_SESSION['orders'];
         $prodOrder = (isset($_SESSION['prodOrders'])) ? $_SESSION['prodOrders'] : [];
         $comboOrder = (isset($_SESSION['comboOrders'])) ? $_SESSION['comboOrders'] : [];
-        $discount = NULL;
+        $discount = 0;
         $discountType = NULL;
         if (isset($_SESSION['discount'])) {
             $discount = $subtotal - $totalAmount;
@@ -844,6 +961,7 @@ function submitOrders($refNo, $totalAmount, $pmethod, $gcashName, $gcashNum)
             $qntity = $dd['qntity'];
             // array_push($orderList,)
             $orderList[] = [
+                "userID" => $uid,
                 "product_id" => $id,
                 "price" => $price,
                 "qntity" => $qntity,
@@ -855,6 +973,7 @@ function submitOrders($refNo, $totalAmount, $pmethod, $gcashName, $gcashNum)
                 "gcashName" => $gcashName,
                 "gcashNum" => $gcashNum,
                 "subtotal" => $subtotal,
+                "tendered" => $tendered,
             ];
         }
 
@@ -865,6 +984,7 @@ function submitOrders($refNo, $totalAmount, $pmethod, $gcashName, $gcashNum)
             $qntity = $dd['qntity'];
             // array_push($orderList,)
             $comboOrderList[] = [
+                "userID" => $uid,
                 "combo_id" => $id,
                 "price" => $price,
                 "qntity" => $qntity,
@@ -876,6 +996,7 @@ function submitOrders($refNo, $totalAmount, $pmethod, $gcashName, $gcashNum)
                 "gcashName" => $gcashName,
                 "gcashNum" => $gcashNum,
                 "subtotal" => $subtotal,
+                "tendered" => $tendered,
 
             ];
         }

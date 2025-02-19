@@ -4,29 +4,319 @@
 
 
 $(document).ready(function () {
+<<<<<<< HEAD
 
     addPorm = $("#addProductForm").detach();
     addCat = $(".categoryForm-outer").detach();
+=======
+    let loadNt = $("#loadNt").detach();
+    $(".loadPa").html(loadNt);
+    let loadNtCombo = $(".loadPa").detach();
+    let addPorm = $("#addProductForm").detach();
+    let addCat = $(".categoryForm-outer").detach();
+>>>>>>> dockerized
     let comboAdd = $(".comboAdd-form-cont").detach();
+
+    let editPorm = $("#editProductForm").detach();
+    let editCat = $(".editcategoryForm-outer").detach();
+    let editCombo = $(".comboEdit-form-cont").detach();
+
+
+    let viewProd = $(".productsView-outer").detach();
+    let viewCat = $(".categoryView-outer").detach();
+    let viewCombo = $(".viewComboWrap").detach();
+
+    let orgProdData = [];
+    let orgComboData = [];
+    let orgCatData = [];
+    let imgChangeProd = 0
+    let imgChange = 0
+    let stCounts = 0;
 
     // $(".myproducts").detach(addPorm);
     $("#addProductForm").detach();
     // $(".categoryForm-outer").detach();
-    let actionSelect;
     reqOpen = false;
     allProducts("");
     let prdShowState = 1;
 
+    let clickedFnd = false
+    let clickedFndEdit = false
+    let norun = true
+    let norunEdit = true
     open_Insertion = true;
+    let findPrEdit
     let findPr
+    let viewSelEdit
     let viewSel
     let interval = "";
     // });
 
+    // validation front-end product Edit 
+
+    $(".myproducts").on("change", "#editProductForm select", function (e) {
+        e.preventDefault()
+        $(".myproducts #editProductForm .actr").html(`<i class="fas fa-check-square"></i> Validate`)
+        $(".myproducts #editProductForm .actr").attr(`value`, `check`)
+        $(".myproducts #editProductForm .actr").attr(`id`, `validateProd`)
+        $(".responseedit").html("")
+    });
+
+    $(".myproducts").on("input", "#editProductForm input", function (e) {
+        e.preventDefault()
+        $(".myproducts #editProductForm .actr").html(`<i class="fas fa-check-square"></i> Validate`)
+        $(".myproducts #editProductForm .actr").attr(`value`, `check`)
+        $(".myproducts #editProductForm .actr").attr(`id`, `validateProd`)
+        $(".responseedit").html("")
+    });
+    $(".myproducts").on("input", "#prod_priceedit", function (e) {
+        e.preventDefault()
+        val = $(this).val().trim()
+
+        $(this).removeClass("modif")
+        $(this).removeClass("emptyI")
+
+        if (val === "") {
+            $(this).addClass("emptyI")
+        } else if (val != orgProdData.price) {
+            $(this).addClass("modif")
+        }
+    });
+
+    $(".myproducts").on("input", "#prod_nameedit", function (e) {
+        e.preventDefault()
+        val = $(this).val().trim()
+
+        $(this).removeClass("modif")
+        $(this).removeClass("emptyI")
+
+        if (val === "") {
+            $(this).addClass("emptyI")
+        } else if (val != orgProdData.name) {
+            $(this).addClass("modif")
+        }
+    });
+
+    $(".myproducts").on("change", "#availabilityedit", function (e) {
+        e.preventDefault()
+        val = $(this).val().trim()
+
+        $(this).removeClass("modif")
+        $(this).removeClass("emptyI")
+
+        if (val === "") {
+            $(this).addClass("emptyI")
+        } else if (val != orgProdData.availability) {
+            $(this).addClass("modif")
+        }
+    });
+
+    $(".myproducts").on("change", "#prod_category", function (e) {
+        e.preventDefault()
+        val = $(this).val().trim()
+
+        $(this).removeClass("modif")
+        $(this).removeClass("emptyI")
+
+        if (val === "") {
+            $(this).addClass("emptyI")
+        } else if (val != orgProdData.categoryID) {
+            $(this).addClass("modif")
+        }
+    });
+
+
+
+
+
+
+
+    // validation front-end Category Edit 
+    $(".myproducts").on("input", "#editCatInput", function (e) {
+        e.preventDefault()
+        val = $(this).val().trim()
+
+        $(this).removeClass("modif")
+        $(this).removeClass("emptyI")
+        $(".myproducts #editcategory button").html(`<i class="fas fa-check-square"></i> Validate`)
+        $(".myproducts #editcategory button").attr(`value`, `check`)
+        $(".myproducts #editcategory button").attr(`id`, `validateCat`)
+        $(".editcategory-response").html("")
+
+        if (val === "") {
+            $(this).addClass("emptyI")
+        } else if (val != orgCatData) {
+            $(this).addClass("modif")
+        }
+
+    });
+
+
+
+
+
+
+
+
+
+
+
+
+
+    // validation front-end Combo Edit 
+
+    $(".myproducts").on("input", "#comboNameEdit", function (e) {
+        e.preventDefault();
+        val = $(this).val().trim()
+        $(this).removeClass("modif")
+        $(this).removeClass("emptyI")
+        $('#submitChanges').attr('id', "validate");
+        $('#validate').html('<i class="fas fa-check-square"></i>Validate');
+        $('.combo-response').html(`<div class="waiting"><p></p><p></p><p></p><p></p></div>`);
+
+
+        if (val === "") {
+            $(this).addClass("emptyI")
+        } else if (val != orgComboData.comboName) {
+            $(this).addClass("modif")
+        }
+    })
+
+    $(".myproducts").on("input", "#comboPriceEdit", function (e) {
+        e.preventDefault();
+        val = $(this).val().trim()
+        $(this).removeClass("modif")
+        $(this).removeClass("emptyI")
+        $('#submitChanges').attr('id', "validate");
+        $('#validate').html('<i class="fas fa-check-square"></i>Validate');
+        $('.combo-response').html(`<div class="waiting"><p></p><p></p><p></p><p></p></div>`);
+
+        if (val === "") {
+            $(this).addClass("emptyI")
+        } else if (val != orgComboData.comboPrice) {
+            $(this).addClass("modif")
+        }
+    })
+
+
+    $(".myproducts").on("input", "#comboCodeEdit", function (e) {
+        e.preventDefault();
+        val = $(this).val().trim()
+        $(this).removeClass("modif")
+        $(this).removeClass("emptyI")
+        $('#submitChanges').attr('id', "validate");
+        $('#validate').html('<i class="fas fa-check-square"></i>Validate');
+        $('.combo-response').html(`<div class="waiting"><p></p><p></p><p></p><p></p></div>`);
+
+        if (val === "") {
+            $(this).addClass("emptyI")
+        } else if (val != orgComboData.comboCode) {
+            $(this).addClass("modif")
+        }
+    })
+
+    $(".myproducts").on("change", "#availEdit", function (e) {
+        e.preventDefault();
+        val = $(this).val().trim()
+        $(this).removeClass("modif")
+        $(this).removeClass("emptyI")
+        $('#submitChanges').attr('id', "validate");
+        $('#validate').html('<i class="fas fa-check-square"></i>Validate');
+        $('.combo-response').html(`<div class="waiting"><p></p><p></p><p></p><p></p></div>`);
+
+
+        if (val === "") {
+            $(this).addClass("emptyI")
+        } else if (val != orgComboData.availability) {
+            $(this).addClass("modif")
+        }
+    })
+
+
+
+
+
+
+
+
+
+
+    $(".myproducts").on("click", "#viewByID", function (e) {
+        e.preventDefault()
+        id = parseInt($(this).parent().attr("id"))
+        $("#overlay_prod").show();
+
+
+
+
+
+        if (prdShowState == 1) {
+            $(".myproducts").append(viewProd)
+            // $(".viewCombo").html("")
+            $(viewProd).show()
+        } else if (prdShowState == 2) {
+            $(".myproducts").append(viewCat)
+            // $(".viewCombo").html("")
+            $(viewCat).show()
+
+        } else if (prdShowState == 3) {
+            $(".myproducts").append(viewCombo)
+            // $(".viewCombo").html("")
+            $(viewCombo).show()
+        }
+        interval = setInterval(() => {
+            manipulated = $("#overlay_prod").css("display", "none");
+            if (manipulated) {
+                $("#overlay_prod").show();
+            }
+        }, 800);
+        open_Insertion = false;
+        getViewForm(id)
+
+
+    })
+
+
+
+
+    $(".myproducts").on("click", "#editByID", function (e) {
+        e.preventDefault()
+        id = parseInt($(this).parent().attr("id"))
+        $("#editsubmit_form").html("");
+        $("#editProductForm").show();
+
+        $("#overlay_prod").show();
+        if (prdShowState == 1) {
+            $(".myproducts").append(editPorm);
+            $(editPorm).show();
+        } else if (prdShowState == 2) {
+            $(".myproducts").append(editCat);
+            $(editCat).show();
+        } else if (prdShowState == 3) {
+            dumpProdIDs(id)
+            $(".myproducts").append(editCombo);
+            $(editCombo).show();
+        }
+        getEditForm(id)
+
+
+
+        interval = setInterval(() => {
+            manipulated = $("#overlay_prod").css("display", "none");
+            if (manipulated) {
+                $("#overlay_prod").show();
+            }
+        }, 800);
+        open_Insertion = false;
+    });
+
+
     $(".myproducts").on("click", "#deleteByID", function (e) {
         e.preventDefault()
         id = parseInt($(this).parent().attr("id"))
+        if (prompt("Type 'delete' to confirm.") === "delete") {
 
+<<<<<<< HEAD
         deleteThings(id)
         $(".more_showPane").trigger("click");
         $("#content_products .action_select").removeClass("action_selectNew");
@@ -34,7 +324,17 @@ $(document).ready(function () {
         setTimeout(() => {
             $(this).closest('li').detach()
         }, 300);
+=======
+            deleteThings(id)
+            $(".more_showPane").trigger("click");
+            $("#content_products .action_select").removeClass("action_selectNew");
+            $(this).closest('li').addClass('delItem')
+            setTimeout(() => {
+                $(this).closest('li').detach()
+            }, 300);
+>>>>>>> dockerized
 
+        }
 
 
     });
@@ -63,6 +363,15 @@ $(document).ready(function () {
     $(".myproducts").on("change", "#selectComboPic", function (e) {
         e.preventDefault();
         imagePick("#comboDP", "#selectComboPic");
+
+    });
+    $(".myproducts").on("change", "#selectComboPicEdit", function (e) {
+        e.preventDefault();
+        imagePick("#comboDPEdit", "#selectComboPicEdit", 2);
+        imgChange = 1
+        $('#submitChanges').attr('id', "validate");
+        $('#validate').html('<i class="fas fa-check-square"></i>Validate');
+        $('.combo-response').html(`<div class="waiting"><p></p><p></p><p></p><p></p></div>`);
 
     });
     $("#content_products-cont").on("click", "#prdType", function (e) {
@@ -112,7 +421,6 @@ $(document).ready(function () {
                 $("#content_products >*").removeClass("changeComboSec")
                 $("#content_products >*").detach()
                 allCombo("")
-
             }, 250);
             $(".find_prod input").val("");
             $(".find_prod input").attr("placeholder", "Search for combo's or code...");
@@ -141,14 +449,64 @@ $(document).ready(function () {
                     $('.combo-response').html(response);
                 } else {
                     $(".myproducts #addComboForm input").val("");
+                    $(".data_summary_combo").html(` 
+                    <li>
+                        <h3>₱0</h3>
+                        <p>Products in Total</p>
+                    </li>
+                    <li>
+                        <h3>0</h3>
+                        <p>Item/s</p>
+                    </li>`);
                     $(".combo-response").html("");
                     $(".exit").trigger("click");
-                    if (prdShowState != 3) {
-                        $("#cmboType").trigger("click");
-                    } else {
-                        allCombo("")
-                    }
+                    prdShowState = 3
+                    $("#cmboType").trigger("click");
                     notify("Combo added successfully...")
+                }
+            }
+        });
+
+    });
+
+
+    $(".myproducts").on("submit", "#editComboForm", function (ae) {
+        ae.preventDefault()
+        id = parseInt($("#comboDPEdit").attr("dt"))
+        reqtype = $(".comboActr").attr("value")
+
+        formData = new FormData(this)
+        formData.append("transac", "comboDoubleAction")
+        formData.append("reqtype", reqtype)
+        formData.append("comboID", id)
+        formData.append("imgChanges", imgChange)
+
+        $.ajax({
+            url: '../views/productView.php',
+            method: 'POST',
+            data: formData,
+            contentType: false,
+            processData: false,
+            success: function (response) {
+                $('.combo-response').html(response.msg);
+
+
+                if (response.res !== "minorerr") {
+                    if (response.res === "no error") {
+                        $("#validateCombo").html(`<i class="fas fa-plus"></i> Submit changes`)
+                        $("#validateCombo").attr(`value`, `update`)
+                        $("#validateCombo").attr(`id`, `submiteditCombo`)
+                    } else if (response.res === "success") {
+                        $(".exitedit").trigger("click");
+                        prdShowState = 3
+                        clearInterval(interval)
+                        allCombo("", 1)
+                        notify(response.msg)
+                    } else {
+                        $("#submiteditCombo").html(`<i class="fas fa-check-square"></i> Validate`)
+                        $("#submiteditCombo").attr(`value`, `check`)
+                        $("#submiteditCombo").attr(`id`, `validateCombo`)
+                    }
                 }
             }
         });
@@ -158,8 +516,20 @@ $(document).ready(function () {
 
     $(".myproducts").on("click", "#submit-combo_form", function (e) {
         e.preventDefault()
+<<<<<<< HEAD
 
+=======
+>>>>>>> dockerized
         $("#addComboForm").trigger("submit");
+    });
+
+    $(".myproducts").on("click", "#validateCombo", function (e) {
+        e.preventDefault()
+        $("#editComboForm").trigger("submit");
+    });
+    $(".myproducts").on("click", "#submiteditCombo", function (e) {
+        e.preventDefault()
+        $("#editComboForm").trigger("submit");
     });
 
 
@@ -176,12 +546,54 @@ $(document).ready(function () {
 
     });
 
+    let lastitem55
+    $(".myproducts").on("click", "#rmSelectedComboEdit", function (e) {
+        e.preventDefault()
+        prodIDSel = $(this).parent().attr('id')
+        lastitem55 = $(this).closest('ol').html()
+        deselectProdEdit(prodIDSel)
+        $(this).closest('ol').addClass('ol_anim_rm')
+        setTimeout(() => {
+            $(this).closest('ol').detach()
+        }, 220);
+        $('.new-data-products').addClass("modif")
+        $('#submitChanges').attr('id', "validate");
+        $('#validate').html('<i class="fas fa-check-square"></i>Validate');
+        $('.combo-response').html(`<div class="waiting"><p></p><p></p><p></p><p></p></div>`);
+        $(".data_summary_combo_edit").addClass("ng")
+    });
 
 
+    let lastitemEdit;
+
+
+    $(".myproducts").on("click", "#selectProdEdit", function (e) {
+        e.preventDefault()
+        prodIDSel = $(this).parent().attr('id')
+        lastitemEdit = $(this).closest('ol').html()
+        selectProdEdit(prodIDSel)
+        $(this).closest('ol').addClass('ol_anim_sel')
+        setTimeout(() => {
+            $(this).closest('ol').detach()
+            T = $(".data-products").html().trim();
+            $(".data-products").addClass('unsd');
+            if (T == "") {
+                $(".data-products").html("No products..");
+            } else {
+            }
+        }, 220);
+        $('#submitChanges').attr('id', "validate");
+        $('#validate').html('<i class="fas fa-check-square"></i>Validate');
+        $('.combo-response').html(`<div class="waiting"><p></p><p></p><p></p><p></p></div>`);
+        $(".data_summary_combo_edit").addClass("ng")
+
+    });
+    let lastitem;
 
     $(".myproducts").on("click", "#selectProd", function (e) {
         e.preventDefault()
         prodIDSel = $(this).parent().attr('id')
+        lastitem = $(this).closest('ol').html()
         selectProd(prodIDSel)
         $(this).closest('ol').addClass('ol_anim_sel')
         setTimeout(() => {
@@ -200,12 +612,16 @@ $(document).ready(function () {
         e.preventDefault()
         comboShowProd($(this).val())
     });
+    $(".myproducts").on("input", "#findProdInputEdit", function (e) {
+        e.preventDefault()
+        comboShowProdEdit($(this).val())
+    });
 
 
 
 
 
-    let clickedFnd = false
+
     $(".myproducts").on("click", "#addRm-combo", function (e) {
         e.preventDefault();
 
@@ -222,7 +638,30 @@ $(document).ready(function () {
             viewSelectedCombo();
 
             clickedFnd = false
-            $(this).html(`<i class="fas fa-search"></i>Find producs`)
+            $(this).html(`<i class="fas fa-search"></i>Find products`)
+            // $(".data-products ol").removeClass("new-data-products");
+            $('.data-products').html("");
+
+
+        }
+    });
+    $(".myproducts").on("click", "#addRm-comboEdit", function (e) {
+        e.preventDefault();
+        id = parseInt($("#comboDPEdit").attr("dt"))
+
+        if (!clickedFndEdit) {
+            $(this).html(`<i class="fas fa-eye"></i>View selected`)
+            clickedFndEdit = true
+            $(viewSelEdit).detach()
+            $(".action-products").append(findPrEdit)
+            comboShowProdEdit("")
+        } else {
+            $(findPrEdit).detach()
+            $(".action-products").append(viewSelEdit)
+            viewSelectedDumpedProd(id)
+            viewComboSumEdit()
+            clickedFndEdit = false
+            $(this).html(`<i class="fas fa-search"></i>Find products`)
             // $(".data-products ol").removeClass("new-data-products");
             $('.data-products').html("");
 
@@ -232,7 +671,6 @@ $(document).ready(function () {
 
 
 
-    let norun = true
     $("#addCombo").click(function (e) {
         e.preventDefault();
         $("#overlay_prod").show();
@@ -260,6 +698,43 @@ $(document).ready(function () {
         setTimeout(() => {
             loadScCombo("rm")
         }, 500);
+    });
+
+
+
+
+
+    $(".myproducts").on("click", "#exitviewCat", function () {
+        $(".categoryView-inner").html("")
+        $(viewCat).detach()
+        $("#overlay_prod").hide();
+        clearInterval(interval)
+    });
+
+
+    $(".myproducts").on("click", "#exitviewProd", function () {
+        $(".productsView-inner").html("")
+        $(viewProd).detach()
+        $("#overlay_prod").hide();
+        clearInterval(interval)
+    });
+
+
+    $(".myproducts").on("click", ".exitViewCombo", function () {
+        $(".viewCombo").html("")
+        $(viewCombo).detach()
+        $("#overlay_prod").hide();
+        clearInterval(interval)
+    });
+
+
+    $(".myproducts").on("click", ".exitedit", function () {
+        $(".comboEdit-form-inner").html('');
+        $(editCombo).detach()
+        $("#overlay_prod").hide();
+        clearInterval(interval)
+        un()
+
     });
 
 
@@ -308,16 +783,39 @@ $(document).ready(function () {
     });
 
 
-    $(".myproducts").on("change", "#addpic", function (e) {
+    $(".myproducts").on("change", "#addpicedit", function (e) {
         e.preventDefault();
+<<<<<<< HEAD
         const input = $('#addpic')[0];
+=======
+>>>>>>> dockerized
 
-        if (input) {
-            imagePick("#imgdisplay", "#addpic");
-        }
+        imagePick("#editimgdisplay", "#addpicedit", 3);
+        imgChangeProd = 1
+
     });
 
 
+    $(".myproducts").on("change", "#addpic", function (e) {
+        e.preventDefault();
+
+        imagePick("#imgdisplay", "#addpic");
+
+    });
+
+
+
+    $(".myproducts").on("click", "#cancedit", function (e) {
+        e.preventDefault();
+        open_Insertion = true;
+        clearInterval(interval)
+        $(".label_style").removeClass("newlabel_style");
+        $("#overlay_prod").hide();
+        $("#editsubmit_form").html("");
+        $("#editProductForm").detach();
+
+
+    });
 
     $(".myproducts").on("click", "#canc", function (e) {
         e.preventDefault();
@@ -368,6 +866,46 @@ $(document).ready(function () {
 
                 }
                 $('.response').html(response);
+            }
+        });
+
+    });
+
+    $(".myproducts").on("submit", "#editsubmit_form", function (e) {
+        e.preventDefault();
+        reqtype = $("#editsubmit_form .actr").attr("value")
+        id = parseInt($("#editimgdisplay").attr("dt"))
+
+        formData = new FormData(this)
+        formData.append("transac", "editProd")
+        formData.append("imgChange", imgChangeProd)
+        formData.append("id", id)
+        formData.append("reqtype", reqtype)
+
+        $.ajax({
+            url: '../views/productView.php',
+            method: 'POST',
+            data: formData,
+            contentType: false,
+            processData: false,
+            success: function (response) {
+                $('.responseedit').html(response.msg);
+                if (response.res !== "minorerr") {
+                    if (response.res === "no error") {
+                        $("#validateProd").html(`<i class="fas fa-plus"></i> Submit changes`)
+                        $("#validateProd").attr(`value`, `update`)
+                        $("#validateProd").attr(`id`, `submit_editprod`)
+                    } else if (response.res === "success") {
+                        $("#cancedit").trigger("click");
+                        prdShowState = 1
+                        allProducts("", 1)
+                        notify(response.msg)
+                    } else {
+                        $("#submit_editprod").html(`<i class="fas fa-check-square"></i> Validate`)
+                        $("#submit_editprod").attr(`value`, `check`)
+                        $("#submit_editprod").attr(`id`, `validateProd`)
+                    }
+                }
             }
         });
 
@@ -451,6 +989,25 @@ $(document).ready(function () {
         $(".categoryForm-outer").detach();
     });
 
+    $(".myproducts").on("click", "#cancelEditCat", function (e) {
+        e.preventDefault();
+        open_Insertion = true;
+        clearInterval(interval)
+        $(".uiInfo").hide();
+        $("#overlay_prod").hide();
+        $(".editcategoryForm-outer").detach();
+    });
+
+
+    $(".myproducts").on("submit", "#editcategory", function (e) {
+        e.preventDefault()
+        formData = new FormData(this)
+
+        editCatSubmit(formData)
+
+    });
+
+
 
     $(".myproducts").on("submit", "#category", function (e) {
         e.preventDefault()
@@ -469,13 +1026,13 @@ $(document).ready(function () {
                     notify("Category Added Successfully")
                     open_Insertion = true;
                     clearInterval(interval2)
-
+                    prdShowState = 2
                     $("#categoryForm .category-response").html("");
                     $("#categoryForm input").val("");
                     $(".uiInfo").hide();
                     $("#overlay_prod").hide();
                     $(".categoryForm-outer").detach();
-                    allProducts("")
+                    allCat("", 1)
                 }
                 $('.category-response').html(response);
             }
@@ -505,130 +1062,82 @@ $(document).ready(function () {
 
 
 
-});
 
 
-function deselectProd(prodIDSel) {
+    function deselectProd(prodIDSel) {
 
-    formData = new FormData()
-    formData.append("productID", prodIDSel)
-    formData.append("transac", "rmSelectedProd")
+        formData = new FormData()
+        formData.append("productID", prodIDSel)
+        formData.append("transac", "rmSelectedProd")
 
-    $.ajax({
-        url: '../views/productView.php',
-        method: 'POST',
-        data: formData,
-        contentType: false,
-        processData: false,
-        success: function (response) {
-            response = response.trim()
-            if (response == "No products..") {
+        $.ajax({
+            url: '../views/productView.php',
+            method: 'POST',
+            data: formData,
+            contentType: false,
+            processData: false,
+            success: function (response) {
+                response = response.trim()
+                if (response == "No products..") {
 
-                $(".data-products-selected").html(response);
+                    $(".data-products-selected").html(response);
+                }
+            }, complete: function () {
+                viewComboSum();
+
             }
-        }, complete: function () {
-            viewComboSum();
-
-        }
-    });
-}
-function selectProd(prodIDSel) {
-
-    formData = new FormData()
-    formData.append("productID", prodIDSel)
-    formData.append("transac", "selectProd")
-
-    $.ajax({
-        url: '../views/productView.php',
-        method: 'POST',
-        data: formData,
-        contentType: false,
-        processData: false,
-        success: function (response) {
-            response = response.trim()
-            $(".data-products .loadingScComboForm-outer").detach();
-
-        }, complete: function () {
-            viewComboSum();
-
-        }
-    });
-
-
-}
-function loadScCombo(action) {
-
-    if (action == "sh") {
-        $(".loadingScComboForm").removeClass("newLoadingScComboForm");
-        $(".loadingScComboForm, .data-products").css("height", "10rem");
-        $(".loadingScComboForm, .data-products-selected").css("height", "11rem");
-    } else {
-        $(".loadingScComboForm").addClass("newLoadingScComboForm");
-        $(".loadingScComboForm, .data-products").css("height", "fit-content");
-        $(".loadingScComboForm, .data-products-selected").css("height", "fit-content");
+        });
     }
 
-}
+    function selectProd(prodIDSel) {
 
+        formData = new FormData()
+        formData.append("productID", prodIDSel)
+        formData.append("transac", "selectProd")
 
-function viewComboSum() {
-    formData = new FormData()
-    formData.append("transac", "viewComboSummary")
+        $.ajax({
+            url: '../views/productView.php',
+            method: 'POST',
+            data: formData,
+            contentType: false,
+            processData: false,
+            success: function (response) {
+                if (response.res === "error") {
+                    ab = `<ol class="new-data-products">${lastitem}</ol>`
+                    $(".data-products").append(ab);
+                    $(ab).show()
+                    $('.combo-response').html(response.msg);
+                }
+                $(".data-products .loadingScComboForm-outer").detach();
 
-    $.ajax({
-        url: '../views/productView.php',
-        method: 'POST',
-        data: formData,
-        contentType: false,
-        processData: false,
-        success: function (response) {
-            $('.data_summary_combo').html(response);
-        }
-    });
-
-}
-let runOnce = false
-function viewSelectedCombo() {
-    loadScCombo("sh")
-
-    formData = new FormData()
-    formData.append("transac", "viewSelectedProd")
-
-    $.ajax({
-        url: '../views/productView.php',
-        method: 'POST',
-        data: formData,
-        contentType: false,
-        processData: false,
-        success: function (response) {
-            $('.data-products-selected').html(response);
-            // $(".data-products ol").addClass("new-data-products");
-
-            // $(".loading_sc").parent().css("overflow-y", "hidden");
-            // setTimeout(() => {
-            //     $(".data-products ol").each(function (index) {
-            //         if (index > 1) {
-            //             $(this).delay(index * 100).fadeIn(200);   
-            //         }
-            //     });
-            //     // $(".loading_sc").parent().css("overflow-y", "scroll");
-            // }, 1500);
-
-        }, complete: function () {
-            setTimeout(() => {
-                loadScCombo("rm")
-            }, 500);
-            $(".data-products-selected ol").addClass("new-data-products");
-            if (runOnce == false) {
+            }, complete: function () {
                 viewComboSum();
-                runOnce = true
+
             }
+        });
+
+
+    }
+
+    function loadScCombo(action) {
+
+        if (action == "sh") {
+            $(".loadingScComboForm").removeClass("newLoadingScComboForm");
+            $(".loadingScComboForm, .data-products").css("height", "10rem");
+            $(".loadingScComboForm, .data-products-selected").css("height", "11rem");
+        } else {
+            $(".loadingScComboForm").addClass("newLoadingScComboForm");
+            $(".loadingScComboForm, .data-products").css("height", "fit-content");
+            $(".loadingScComboForm, .data-products-selected").css("height", "fit-content");
         }
-    });
 
+    }
 
-}
+    function viewComboSum() {
+        formData = new FormData()
+        formData.append("transac", "viewComboSummary")
 
+<<<<<<< HEAD
 function comboShowProd(search) {
     loadScCombo("sh")
 
@@ -791,24 +1300,675 @@ function deleteThings(id) {
 
             if (response == "Deleted") {
                 notify("Deleted successfully")
+=======
+        $.ajax({
+            url: '../views/productView.php',
+            method: 'POST',
+            data: formData,
+            contentType: false,
+            processData: false,
+            success: function (response) {
+                $('.data_summary_combo').html(response);
+>>>>>>> dockerized
             }
+        });
+
+    }
+
+    let runOnce = false
+    function viewSelectedCombo() {
+        loadScCombo("sh")
+
+        formData = new FormData()
+        formData.append("transac", "viewSelectedProd")
+
+        $.ajax({
+            url: '../views/productView.php',
+            method: 'POST',
+            data: formData,
+            contentType: false,
+            processData: false,
+            success: function (response) {
+                $('.data-products-selected').html(response);
+                // $(".data-products ol").addClass("new-data-products");
+
+                // $(".loading_sc").parent().css("overflow-y", "hidden");
+                // setTimeout(() => {
+                //     $(".data-products ol").each(function (index) {
+                //         if (index > 1) {
+                //             $(this).delay(index * 100).fadeIn(200);   
+                //         }
+                //     });
+                //     // $(".loading_sc").parent().css("overflow-y", "scroll");
+                // }, 1500);
+
+            }, complete: function () {
+                setTimeout(() => {
+                    loadScCombo("rm")
+                }, 500);
+                $(".data-products-selected ol").addClass("new-data-products");
+                if (runOnce == false) {
+                    viewComboSum();
+                    runOnce = true
+                }
+            }
+        });
+
+
+    }
+
+    function comboShowProd(search) {
+        loadScCombo("sh")
+
+        formData = new FormData()
+        formData.append("transac", "comboSectionShowSearchProd")
+        formData.append("name", search)
+
+
+
+        $.ajax({
+            url: '../views/productView.php',
+            method: 'POST',
+            data: formData,
+            contentType: false,
+            processData: false,
+            success: function (response) {
+                $('.data-products').html(response);
+
+            }, complete: function () {
+                setTimeout(() => {
+                    loadScCombo("rm")
+                }, 500);
+                $(".data-products ol").addClass("new-data-products");
+
+            }
+        });
+    }
+
+    function allCat(catName, page = 1) {
+        formData = new FormData()
+        formData.append("transac", "findCat")
+        formData.append("page", page)
+        formData.append("catName", catName)
+
+        $.ajax({
+            url: '../views/productView.php',
+            method: 'POST',
+            data: formData,
+            contentType: false,
+            processData: false,
+            success: function (response) {
+                $('#content_products').html("");
+                $('#content_products').append(response);
+                $('#content_products li').hide();
+                $(".loading_sc").show();
+                // $(".loading_sc").parent().css("overflow-y", "hidden");
+                setTimeout(() => {
+                    $(".loading_sc").hide();
+                    $("#content_products li").each(function (index) {
+                        $(this).delay(index * 100).fadeIn(200);
+                    });
+                    // $(".loading_sc").parent().css("overflow-y", "scroll");
+                    return reqOpen = true
+                }, 800);
+            }
+        });
+    }
+
+    function allCombo(comboName, page = 1) {
+        formData = new FormData()
+        formData.append("transac", "findCombo")
+        formData.append("page", page)
+        formData.append("comboName", comboName)
+
+        $.ajax({
+            url: '../views/productView.php',
+            method: 'POST',
+            data: formData,
+            contentType: false,
+            processData: false,
+            success: function (response) {
+                $('#content_products').html("");
+                $('#content_products').append(response);
+                $('#content_products li').hide();
+                $(".loading_sc").show();
+                // $(".loading_sc").parent().css("overflow-y", "hidden");
+                setTimeout(() => {
+                    $(".loading_sc").hide();
+                    $("#content_products li").each(function (index) {
+                        $(this).delay(index * 100).fadeIn(200);
+                    });
+                    // $(".loading_sc").parent().css("overflow-y", "scroll");
+                    return reqOpen = true
+                }, 800);
+            }
+        });
+    }
+
+    function allProducts(searchArg, page = 1) {
+        // hasClass = $("#content_products").children().hasClass("loading_sc");
+        $('#content_products li').hide();
+        $(".loading_sc").show();
+
+        formData = new FormData()
+        formData.append("page", page)
+        formData.append("transac", "showSearchProd")
+        formData.append("name", searchArg)
+        // if (hasClass) {
+        //     $(".loading_sc").show();
+        // }else{
+
+        //     $('#content_products li').detach();
+        //     $('#content_products').append(loading_sc);
+
+        // }
+
+
+        $.ajax({
+            url: '../views/productView.php',
+            method: 'POST',
+            data: formData,
+            contentType: false,
+            processData: false,
+            success: function (response) {
+                $('#content_products').html("");
+                $('#content_products').append(response);
+                $('#content_products li').hide();
+                $(".loading_sc").show();
+                // $(".loading_sc").parent().css("overflow-y", "hidden");
+                setTimeout(() => {
+                    $(".loading_sc").hide();
+                    $("#content_products li").each(function (index) {
+                        $(this).delay(index * 100).fadeIn(200);
+                    });
+                    // $(".loading_sc").parent().css("overflow-y", "scroll");
+                    return reqOpen = true
+                }, 800);
+            }
+        });
+    }
+
+
+
+    // ACTION
+
+    function getViewForm(id) {
+
+        formData = new FormData()
+        formData.append("ID", id)
+        formData.append("transac", "fetchDataView")
+
+        $.ajax({
+            url: '../views/productView.php',
+            method: 'POST',
+            data: formData,
+            dataType: 'json',
+            contentType: false,
+            processData: false,
+            success: function (response) {
+                if (response.formType === "products") {
+                    $(".productsView-inner").html(response.form);
+                    $(".productsView-inner > *").hide()
+                    $(".productsView-inner").append(loadNtCombo);
+                    $(loadNtCombo).html(loadNt)
+                    $(loadNt).show()
+                    setTimeout(() => {
+                        $(loadNtCombo).detach()
+                        $(".productsView-inner > *").show()
+                        $(".productsView-outer").show();
+                    }, 800);
+                    
+                } else if (response.formType === "category") {
+                    $(".categoryView-inner").html(response.form);
+                    $(".categoryView-inner > *").hide()
+                    $(".categoryView-inner").append(loadNtCombo);
+                    $(loadNtCombo).html(loadNt)
+                    $(loadNt).show()
+                    setTimeout(() => {
+                        $(loadNtCombo).detach()
+                        $(".categoryView-inner > *").show()
+                        $(".categoryView-outer").show();
+                    }, 800);
+
+                } else if (response.formType === "combo") {
+                    $(".viewCombo").html(response.form);
+                    $(".viewCombo > *").hide()
+                    $(".viewCombo").append(loadNtCombo);
+                    $(loadNtCombo).html(loadNt)
+                    $(loadNt).show()
+                    setTimeout(() => {
+                        $(loadNtCombo).detach()
+                        $(".viewCombo > *").show()
+                        $(".viewComboWrap").show();
+                    }, 800);
+                }
+                open_Insertion = true
+            }
+        })
+    }
+
+
+    function getEditForm(id) {
+        formData = new FormData()
+        formData.append("ID", id)
+        formData.append("transac", "fetchDataAction")
+
+        $.ajax({
+            url: '../views/productView.php',
+            method: 'POST',
+            data: formData,
+            dataType: 'json',
+            contentType: false,
+            processData: false,
+            success: function (response) {
+                open_Insertion = true
+                if (response.formType === "products") {
+                    $("#editsubmit_form").html(response.form);
+                    $("#editsubmit_form > *").hide()
+                    $("#editsubmit_form").append(loadNt);
+                    $(loadNt).show()
+                    insertF($("#editsubmit_form #editimgdisplay").attr('src'), '#addpicedit')
+
+                    orgProdData = response.orgData
+
+                    setTimeout(() => {
+                        $(loadNt).detach()
+                        $("#editsubmit_form > *").show()
+                        $("#editsubmit_form .label_style").hide()
+                        setTimeout(() => {
+                            $(".label_style").addClass("newlabel_style");
+                        }, 600);
+                    }, 800);
+                } else if (response.formType === "category") {
+                    $("#editcategoryForm").html(response.form);
+                    $("#editcategoryForm > *").hide()
+                    $("#editcategoryForm").append(loadNt);
+                    $(loadNt).show()
+
+                    orgCatData = response.orgData
+
+                    setTimeout(() => {
+                        $(loadNt).detach()
+                        $("#editcategoryForm > *").show()
+                        $("#editcategoryForm .label_style").hide()
+                        setTimeout(() => {
+                            $(".label_style").addClass("newlabel_style");
+                        }, 600);
+                    }, 800);
+                } else if (response.formType === "combo") {
+                    // loadNtCombo = 
+
+                    $(".comboEdit-form-inner").html(response.form);
+                    insertF($(".comboEdit-form-inner #comboDPEdit").attr('src'), '#selectComboPicEdit')
+                    $(".comboEdit-form-inner > *").hide()
+                    $(".comboEdit-form-inner").append(loadNtCombo);
+                    $(loadNtCombo).html(loadNt)
+                    $(loadNt).show()
+
+                    orgComboData = response.orgData
+
+                    setTimeout(() => {
+                        $(loadNtCombo).detach()
+                        $(".comboEdit-form-inner > *").show()
+                        $(".action-products-outer").show();
+
+                    }, 800);
+                    if (norunEdit == true) {
+                        findPrEdit = $("#findProdControllerEdit").detach();
+                        viewSelEdit = $("#viewSelEdit").detach();
+                        norunEdit = false
+                    }
+                    $(".action-products").html(viewSelEdit)
+                    viewSelectedDumpedProd(id)
+                    clickedFndEdit = false
+                    // if (clickedFndEdit) {
+                    //     $(viewSelEdit).detach()
+                    //     $(".action-products").html(findPrEdit)
+                    //     $("#addRm-comboEdit").html(`<i class="fas fa-eye"></i>View selected`)
+                    // } else {
+                    //     $(findPrEdit).detach()
+                    //     $("#addRm-comboEdit").html(`<i class="fas fa-search"></i>Find products`)
+
+                    // }
+
+
+                }
+            }
+        });
+    }
+
+    function updateThings(id) {
+
+        formData = new FormData(this)
+        formData.append("ID", id)
+        formData.append("transac", "updateAction")
+
+        $.ajax({
+            url: '../views/productView.php',
+            method: 'POST',
+            data: formData,
+            dataType: 'json',
+            contentType: false,
+            processData: false,
+            success: function (response) {
+                if (response.result == "Updated") {
+                    notify("Updated successfully...")
+                }
+            }
+        });
+
+    }
+
+
+    function deleteThings(id) {
+
+        formData = new FormData()
+        formData.append("ID", id)
+        formData.append("transac", "removeAction")
+
+        $.ajax({
+            url: '../views/productView.php',
+            method: 'POST',
+            data: formData,
+            dataType: 'json',
+            contentType: false,
+            processData: false,
+            success: function (response) {
+                if (response.result == "Deleted") {
+                    notify("Deleted successfully...")
+                }
+            }
+        });
+
+    }
+
+    function insertF(imgSrc, inputFile) {
+        let input3 = $(inputFile)[0];
+        fetch(imgSrc)
+            .then(response => response.blob())
+            .then(blob => {
+                const file = new File([blob], "image.png", { type: "image/png" });
+                const fileList = new DataTransfer();
+                fileList.items.add(file);
+                input3.files = fileList.files;
+
+            });
+    }
+
+
+
+
+
+    function isNotSame($org, $test) {
+        if ($org != $test) {
+            return true;
         }
-    });
+        return false;
+    }
 
-}
 
 
-function notify(msg) {
-    notif = `<div class="notification">
+
+
+    // combo edit
+
+
+    function un() {
+        formData = new FormData()
+        formData.append("transac", "unsetF")
+        $.ajax({
+            url: '../views/productView.php',
+            method: 'POST',
+            data: formData,
+            contentType: false,
+            processData: false,
+            success: function (response) {
+
+            }, complete: function () {
+            }
+        });
+    }
+
+    function dumpProdIDs(comboID) {
+
+        formData = new FormData()
+        formData.append("transac", "dumpComboProd")
+        formData.append("comboID", comboID)
+        $.ajax({
+            url: '../views/productView.php',
+            method: 'POST',
+            data: formData,
+            contentType: false,
+            processData: false,
+            success: function (response) {
+                if (response.res === "error") {
+                    $(".exitedit").trigger("click");
+                }
+            }, complete: function () {
+            }
+        });
+    }
+
+    function viewSelectedDumpedProd(id) {
+        loadScCombo("sh")
+
+        formData = new FormData()
+        formData.append("transac", "viewSelectedDumpedProd")
+        formData.append("comboID", parseInt(id))
+
+
+        $.ajax({
+            url: '../views/productView.php',
+            method: 'POST',
+            data: formData,
+            contentType: false,
+            processData: false,
+            success: function (response) {
+                $('.data-products-selected').html(response);
+
+
+            }, complete: function () {
+                setTimeout(() => {
+                    loadScCombo("rm")
+                }, 500);
+                $(".data-products-selected ol").addClass("new-data-products");
+                if (runOnce == false) {
+                    viewComboSumEdit();
+                    runOnce = true
+                }
+            }
+        });
+
+
+    }
+
+    function comboShowProdEdit(search) {
+        loadScCombo("sh")
+
+        formData = new FormData()
+        formData.append("transac", "comboSectionShowSearchProdEdit")
+        formData.append("name", search)
+
+
+
+        $.ajax({
+            url: '../views/productView.php',
+            method: 'POST',
+            data: formData,
+            contentType: false,
+            processData: false,
+            success: function (response) {
+                $('.data-products').html(response);
+
+            }, complete: function () {
+                setTimeout(() => {
+                    loadScCombo("rm")
+                }, 500);
+                $(".data-products ol").addClass("new-data-products");
+
+            }
+        });
+    }
+
+    function deselectProdEdit(prodIDSel) {
+
+        formData = new FormData()
+        formData.append("productID", prodIDSel)
+        formData.append("transac", "rmSelectedProdEdit")
+
+        $.ajax({
+            url: '../views/productView.php',
+            method: 'POST',
+            data: formData,
+            contentType: false,
+            processData: false,
+            success: function (response) {
+
+                if (response.res == "error") {
+                    $(".data_summary_combo_edit").removeClass("ng")
+                    $('.new-data-products').removeClass("modif")
+
+                    ab = `<ol class="new-data-products">${lastitem55}</ol>`
+                    setTimeout(() => {
+                        $(".data-products-selected").append(ab);
+                        $(ab).show()
+                    }, 230);
+                    $('.combo-response').html(response.msg);
+                } else {
+                    viewComboSumEdit();
+
+                }
+            }, complete: function () {
+
+            }
+        });
+    }
+
+    function selectProdEdit(prodIDSel) {
+
+        formData = new FormData()
+        formData.append("productID", prodIDSel)
+        formData.append("transac", "selectProdEdit")
+
+        $.ajax({
+            url: '../views/productView.php',
+            method: 'POST',
+            data: formData,
+            contentType: false,
+            processData: false,
+            success: function (response) {
+                if (response.res === "error") {
+                    if (stCounts == 0) {
+                        $(".data_summary_combo_edit").removeClass("ng")
+                    }
+                    ab = `<ol class="new-data-products">${lastitemEdit}</ol>`
+                    setTimeout(() => {
+                        $(".data-products").append(ab);
+                        $(ab).show()
+                    }, 230);
+                    $('.combo-response').html(response.msg);
+                } else {
+                    stCounts += 1;
+                }
+                $(".data-products .loadingScComboForm-outer").detach();
+
+            }, complete: function () {
+                viewComboSumEdit();
+
+            }
+        });
+
+
+    }
+
+    function viewComboSumEdit() {
+        formData = new FormData()
+        formData.append("transac", "viewComboSummaryEdit")
+
+        $.ajax({
+            url: '../views/productView.php',
+            method: 'POST',
+            data: formData,
+            contentType: false,
+            processData: false,
+            success: function (response) {
+                $('.data_summary_combo_edit').html(response);
+
+            }
+        });
+
+    }
+
+
+
+
+
+    // category edit
+
+    function editCatSubmit(formData) {
+        id = parseInt($("#editcategory").attr("dt"))
+        reqtype = $("#editcategory button").attr("value")
+
+        formData.append("ID", id)
+        formData.append("transac", "editCategory")
+        formData.append("reqtype", reqtype)
+
+
+
+        $.ajax({
+            url: '../views/productView.php',
+            method: 'POST',
+            data: formData,
+            dataType: 'json',
+            contentType: false,
+            processData: false,
+            success: function (response) {
+
+                $('.editcategory-response').html(response.msg);
+                if (response.res !== "minorerr") {
+                    if (response.res === "no error") {
+                        $("#validateCat").html(`<i class="fas fa-plus"></i> Submit changes`)
+                        $("#validateCat").attr(`value`, `update`)
+                        $("#validateCat").attr(`id`, `submiteditCategory`)
+                    } else if (response.res === "success") {
+                        $("#editcategory input").val("");
+                        $("#overlay_prod").hide();
+                        prdShowState = 2
+                        clearInterval(interval)
+                        $(".editcategoryForm-outer").detach();
+                        allCat("", 1)
+                        notify(response.msg)
+                    } else {
+                        $("#submiteditCategory").html(`<i class="fas fa-check-square"></i> Validate`)
+                        $("#submiteditCategory").attr(`value`, `check`)
+                        $("#submiteditCategory").attr(`id`, `validateCat`)
+                    }
+                }
+
+            }
+        });
+
+    }
+
+
+
+
+
+
+
+
+    function notify(msg) {
+        notif = `<div class="notification">
                     <i class="fas fa-check"></i>
                     <h5>${msg}...</h5>
                 </div>`;
-    $(".myproducts").append(notif);
+        $(".myproducts").append(notif);
 
-    setTimeout(() => {
-        $(".notification i").css("animation-name", "on_notif");
-    }, 1500);
+        setTimeout(() => {
+            $(".notification i").css("animation-name", "on_notif");
+        }, 1500);
 
+<<<<<<< HEAD
     setTimeout(() => {
         $(".notification").css("transform", "translateX(20rem)");
     }, 4000);
@@ -834,7 +1994,47 @@ function imagePick(dp, inpt) {
     } else {
 
         profileImage.attr('src', '../image/dpTemplate.png');
+=======
+        setTimeout(() => {
+            $(".notification").css("transform", "translateX(20rem)");
+        }, 4000);
+>>>>>>> dockerized
 
+        setTimeout(() => {
+            $(".notification").detach();
+        }, 6000);
     }
 
-}
+
+    function imagePick(dp, inpt, type = 1) {
+        const profileImage = $(dp);
+        const input = $(inpt)[0];
+        const file = input.files[0];
+
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function () {
+                profileImage.attr('src', reader.result);
+            };
+            reader.readAsDataURL(file);
+
+            if (type === 2) {
+                $(".img-wrap-out > *").removeClass("emptyIP")
+                $(".img-wrap-out > *").addClass("modifP")
+            } else if (type === 3) {
+                $(".picmeEdit").removeClass("emptyIP3")
+                $(".picmeEdit").addClass("modifP3")
+            }
+        } else {
+            profileImage.attr('src', '../image/dpTemplate.png');
+            if (type === 2) {
+                $(".img-wrap-out > *").removeClass("modifP")
+                $(".img-wrap-out > *").addClass("emptyIP")
+            } else if (type === 3) {
+                $(".picmeEdit").removeClass("modifP3")
+                $(".picmeEdit").addClass("emptyIP3")
+            }
+        }
+
+    }
+});

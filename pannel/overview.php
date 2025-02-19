@@ -1,21 +1,27 @@
+<?php
+require_once "../function.php";
+validateByLoc("in");
+$isbaibing = validate($_SERVER['REQUEST_URI']);
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="../UX/jquery-3.5.1.min.js"></script>
-    <script src="../UX/script.js"></script>
-    <script src="../UX/node_modules/chart.js/dist/chart.umd.js"></script>
-    <script src="../UX/overview.js"></script>
-    <link rel="stylesheet" href="../resources/style.css">
-    <link rel="stylesheet" href="../resources/overview.css">
-    <link rel="stylesheet" href="../resources/fontawesome-free-5.15.4-web/css/all.css">
+    <script src="../UX/jquery-3.5.1.min.js?v=<?php echo time(); ?>"></script>
+    <script src="../UX/script.js?v=<?php echo time(); ?>"></script>
+    <script src="../UX/node_modules/chart.js/dist/chart.umd.js?v=<?php echo time(); ?>"></script>
+    <script src="../UX/overview.js?v=<?php echo time(); ?>"></script>
+    <link rel="stylesheet" href="../resources/style.css?v=<?php echo time(); ?>">
+    <link rel="stylesheet" href="../resources/overview.css?v=<?php echo time(); ?>">
+    <link rel="stylesheet" href="../resources/fontawesome-free-5.15.4-web/css/all.css?v=<?php echo time(); ?>">
     <title>POS</title>
 </head>
 
 <body>
-
 
     <div id="header">
         <div class="header_inner">
@@ -25,9 +31,9 @@
                 <li class="title_section">Overview</li>
             </section>
             <section>
-                <li class="first">r</li>
-                <li class="second">f</li>
-                <li class="last">s</li>
+                <li class="first" title="Refresh" id="refresh"><i class="fas fa-sync"></i></li>
+                <li class="second" id="screencontroll" title="View full screen."><i class="fas fa-expand"></i></li>
+                <li class="last"><i class="fas fa-user"></i></li>
             </section>
         </div>
     </div>
@@ -36,27 +42,40 @@
         <div class="side_nav">
             <div class="side_nav2d">
                 <div class="inner_side_nav">
-                    <li id="overview" class="on_select">
-                        <div class="bgsect"></div>
-                        <div class="textdp"><i class="fas fa-chart-pie"></i>Overview</div>
-                    </li>
+                    <?php if ($isbaibing["ios"] === 485) { ?>
+                        <li id="overview" class="on_select">
+                            <div class="bgsect"></div>
+                            <div class="textdp"><i class="fas fa-chart-pie"></i>Overview</div>
+                        </li>
+                    <?php } ?>
                     <li id="cashier">
                         <div class="textdp"><i class="fas fa-home"></i>Cashier</div>
                     </li>
-                    <li id="reports">
-                        <div class="textdp"><i class="fas fa-file-medical-alt"></i>Reports</div>
-                    </li>
-                    <li id="myproducts">
-                        <div class="textdp"><i class="fas fa-hamburger"></i>Products</div>
-                    </li>
+                    <?php if ($isbaibing["ios"] === 485) { ?>
+                        <li id="reports">
+                            <div class="textdp"><i class="fas fa-file-medical-alt"></i>Reports</div>
+                        </li>
+                        <li id="myproducts">
+                            <div class="textdp"><i class="fas fa-hamburger"></i>Products</div>
+                        </li>
+                    <?php } ?>
 
                     <li id="history">
                         <div class="textdp"><i class="fas fa-history"></i>History</div>
                     </li>
+                    <?php if ($isbaibing["ios"] === 485) { ?>
+                        <li id="cashiers">
+                            <div class="textdp"><i class="fas fa-users"></i>Cashiers</div>
+                        </li>
+
+                    <?php } ?>
                 </div>
                 <div class="inner_side_nav_settings">
                     <li id="settings">
                         <div class="textdp"><i class="fas fa-cog"></i>Settings</div>
+                    </li>
+                    <li id="logoutMhen">
+                        <div class="textdp"><i class="fas fa-external-link-alt"></i>Logout</div>
                     </li>
                 </div>
             </div>
@@ -111,19 +130,19 @@
 
                             <div class="gp">
                                 <ol class="cYY highCur">
-                                    <p>₱20,000</p>
+                                    <p>₱0</p>
                                     <h3>Heighest</h3>
                                 </ol>
                                 <ol class="cYY lowCur">
-                                    <p>₱20,000</p>
+                                    <p>₱0</p>
                                     <h3>Lowest</h3>
                                 </ol>
                                 <ol class="lastYY highLast">
-                                    <p>₱20,000</p>
+                                    <p>₱0</p>
                                     <h3>Heighest</h3>
                                 </ol>
                                 <ol class="lastYY lowLast">
-                                    <p>₱20,000</p>
+                                    <p>₱0</p>
                                     <h3>Lowest</h3>
                                 </ol>
                             </div>
@@ -180,7 +199,11 @@
                                         <p class="dsttlSales">₱0</p>
                                     </section>
                                 </div>
+<<<<<<< HEAD
                                 <a href="reports" title="Redirect to reports" class="goto">See more <i class="fas fa-arrow-right"></i></a>
+=======
+                                <a href="reports.php" title="Redirect to reports" class="goto">See more <i class="fas fa-arrow-right"></i></a>
+>>>>>>> dockerized
                             </div>
                         </div>
                         <div class="sales-sum">
@@ -200,12 +223,12 @@
                                         <p class="ttlSales">₱0</p>
                                     </section>
                                 </div>
-                                <a href="reports" title="Redirect to reports" class="goto">See more <i class="fas fa-arrow-right"></i></a>
+                                <a href="reports.php" title="Redirect to reports" class="goto">See more <i class="fas fa-arrow-right"></i></a>
                             </div>
                         </div>
                         <div class="top-prod">
                             <div class="top-prod-inn">
-                                <h3>Top 10 products</h3>
+                                <h3>10 popular products this week</h3>
                                 <div class="data-prod">
                                     <div class="lab">
                                         <label for="">Product</label>
@@ -217,7 +240,7 @@
                                     </div>
 
                                 </div>
-                                <a href="reports" title="Redirect to reports" class="goto">See more <i class="fas fa-arrow-right"></i></a>
+                                <a href="reports.php" title="Redirect to reports" class="goto">See more <i class="fas fa-arrow-right"></i></a>
 
                             </div>
                         </div>

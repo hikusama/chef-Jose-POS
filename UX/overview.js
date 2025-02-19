@@ -7,6 +7,9 @@ $(document).ready(function () {
   $(".mnt").next().append(samp);
 
 
+  if (handleDeviceWidth()) {
+    $(".summary_show").addClass("summary_showNh")
+  }
   countOrders()
   graphMonthData()
   getPieData()
@@ -236,6 +239,13 @@ $(document).ready(function () {
 
   }
 
-
+  function handleDeviceWidth() {
+    const deviceWidth = window.innerWidth;
+    if (deviceWidth <= 715) {
+        return true;
+    } else {
+        return false;
+    }
+}
 
 });

@@ -7,7 +7,7 @@ $(document).ready(function () {
     GlobalformData = new FormData();
     GlobalformData.append("transac", "viewCart");
     addToCart(GlobalformData, "viewCart");
-    searchNView("", "");
+    searchNView("", "",1);
     getCategory()
     allTotal()
     let reqOpen = true
@@ -56,6 +56,19 @@ $(document).ready(function () {
         }
 
     });
+
+
+    $('.products_content').on('click', '#page-dir-cont button', function (e) {
+        e.preventDefault()
+        let page = $(this).attr("id")
+        let searchVal = $("#search").val()
+        let category_id = $('.category_nav_inner').find(".prod_nav").attr('id');
+
+        if (page != "pageON") {
+            searchNView(searchVal,category_id, parseInt($(this).attr("id")))
+        }
+    });
+
 
     $(".middle_side").on("submit", "#addDC", function (ab) {
         ab.preventDefault()
@@ -309,7 +322,7 @@ $(document).ready(function () {
 
     $("#search").on("input", function () {
         category_id = $('.category_nav_inner').find(".prod_nav").attr('id');
-        searchNView($(this).val(), category_id);
+        searchNView($(this).val(), category_id,1);
     });
 
 
@@ -331,7 +344,7 @@ $(document).ready(function () {
         qntity = parseInt(qntity);
         test = $(this).closest("ol").find(".arrow_controll").next().html();
 
-        if (qntity != "" && qntity <= 1000 && qntity != 0) {
+        if (qntity != "" && qntity <= 1000 && qntity >= 1) {
             if (qntity != test) {
 
                 price = $(this).closest("ol").find(".pr").html();
@@ -412,7 +425,7 @@ $(document).ready(function () {
             $(".category_nav_inner li").removeClass("prod_nav");
             $(this).addClass("prod_nav")
             $("#search").val('')
-            searchNView('', catId);
+            searchNView('', catId,1);
 
         } else {
 
@@ -629,9 +642,10 @@ $(document).ready(function () {
         });
     }
 
-    function searchNView(searchVal, category_id) {
+    function searchNView(searchVal, category_id,page) {
         formData = new FormData();
         formData.append("searchVal", searchVal)
+        formData.append("page", page)
         formData.append("transac", "searchNView")
         formData.append("category_id", category_id)
         $('.products_content').html("");
