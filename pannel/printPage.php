@@ -1,7 +1,6 @@
 <?php
 
 require_once "../function.php";
-start_secure_session();
 if (!isset($_SESSION['openPrint'])) {
     header("Location: 404.php");
 }

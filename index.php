@@ -1,15 +1,8 @@
 <?php
 require_once "function.php";
-start_secure_session();
 
-if (isset($_SESSION["userID"])) {
-    if ($_SESSION["userRole"] === "Admin") {
-        header("Location: pannel/overview.php");
-    }else if ($_SESSION["userRole"] === "Employee") {
-        header("Location: pannel/cashier.php");
-    }
-}
 
+validateByLoc("endex");
 
 ?>
 <!DOCTYPE html>

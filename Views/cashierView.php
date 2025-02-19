@@ -3,7 +3,6 @@
 require_once '../Controller/cashierController.php';
 require_once '../function.php';
 
-start_secure_session();
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
 

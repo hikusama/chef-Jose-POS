@@ -1,5 +1,6 @@
 <?php
 require_once "../function.php";
+validateByLoc("in");
 $isbaibing = validate($_SERVER['REQUEST_URI']);
 
 ?>

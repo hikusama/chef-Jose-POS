@@ -7,6 +7,64 @@ class Model extends Connection
 
 
 
+    //------------------------- SESSIONS THINGS -----------------------------
+
+    public function getSession($userID, $sessionToken)
+    {
+        $stmt = $this->connect()->prepare('SELECT * FROM sessions WHERE userID = ? AND sessionToken = ?;');
+
+        if ($stmt->execute([$userID, $sessionToken])) {
+            if ($stmt->rowCount() == 0) {
+                return false;
+            } else {
+                return true;
+            }
+        } else {
+            return false;
+        }
+    }
+
+    public function setSession($userID, $sessionToken)
+    {
+        $stmt = $this->connect()->prepare('SELECT userRole FROM sessions as ss LEFT JOIN user as u ON u.userID = ss.userID WHERE ss.userID = ?;');
+
+        if ($stmt->execute([$userID])) {
+            if ($stmt->rowCount() == 0) {
+                $stmt2 = $this->connect()->prepare('INSERT INTO sessions(sessionToken,userID) VALUE(?,?);');
+                if ($stmt2->execute([$sessionToken, $userID])) {
+                    $stmt3 = $this->connect()->prepare('SELECT userRole FROM user WHERE userID = ?;');
+                    $role = "unknown";
+                    if ($stmt3->execute([$userID])) {
+                        $ur = $stmt3->fetch(PDO::FETCH_ASSOC);
+                        $role = $ur['userRole'];
+                    }
+                    return $role;
+                } else {
+                    return false;
+                }
+            } else {
+                $stmt2 = $this->connect()->prepare('UPDATE sessions SET sessionToken = ? WHERE userID = ?;');
+                if ($stmt2->execute([$sessionToken, $userID])) {
+                    $stmt3 = $this->connect()->prepare('SELECT userRole FROM user WHERE userID = ?;');
+                    $role = "unknown";
+                    if ($stmt3->execute([$userID])) {
+                        $ur = $stmt3->fetch(PDO::FETCH_ASSOC);
+                        $role = $ur['userRole'];
+                    }
+                    return $role;
+                } else {
+                    return false;
+                }
+            }
+        } else {
+            return NULL;
+        }
+    }
+
+
+
+
+
     //------------------------- LOGIN-SIGNUP THINGS -----------------------------
 
     // GET USER 9.0.1 / 
@@ -48,11 +106,18 @@ class Model extends Connection
             exit();
         }
 
-        start_secure_session();
+        $newToken = bin2hex(random_bytes(32));
+        $hashedToken = hash("sha256", $newToken);
 
+
+        $this->setSession($user["userID"], $hashedToken);
+
+        $_SESSION["session_token"] = $hashedToken;
         $_SESSION["userName"] = $user["userName"];
         $_SESSION["userID"] = $user["userID"];
         $_SESSION["userRole"] = $user["userRole"];
+
+
 
         $stmt = null;
         return $user["userRole"];
