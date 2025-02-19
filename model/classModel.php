@@ -257,31 +257,13 @@ class Model extends Connection
         return null;
     }
 
-<<<<<<< HEAD
-        public function discountData()
-        {
-            $sql = "SELECT 
-=======
     public function discountData()
     {
         $sql = "SELECT 
->>>>>>> dockerized
             SUM(discount) AS total,
             SUM(CASE WHEN orderDate = CURRENT_DATE THEN discount ELSE 0 END) AS today_total,
             SUM(CASE WHEN MONTH(orderDate) = MONTH(CURRENT_DATE()) THEN discount ELSE 0 END) AS thismonth
             FROM orders";
-<<<<<<< HEAD
-            $stmt = $this->connect()->prepare($sql);
-            if ($stmt->execute()) {
-                $rws = $stmt->fetch(PDO::FETCH_ASSOC);
-                return $rws;
-            }
-            return null;
-        }
-
-        public function topProd()
-        {
-=======
         $stmt = $this->connect()->prepare($sql);
         if ($stmt->execute()) {
             $rws = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -473,7 +455,6 @@ class Model extends Connection
         $sql = "";
 
         if (!empty($ending)) {
->>>>>>> dockerized
             $sql = "SELECT 
                             SUM(CASE WHEN DATE(orderDate) BETWEEN :starting AND :ending  THEN discount ELSE 0 END) AS today_discount,
                             SUM(CASE WHEN DATE(orderDate) = :starting - INTERVAL 1 DAY THEN discount ELSE 0 END) AS yesterday_discount,
@@ -1622,24 +1603,6 @@ class Model extends Connection
     //------------------------- HISTORY THINGS -----------------------------
 
 
-<<<<<<< HEAD
-        public function delOrders($ref)
-        {
-            $sql = "DELETE FROM orders WHERE ref_no = ?";
-            $stmt = $this->connect()->prepare($sql);
-            $stmt->bindParam(1, $ref, PDO::PARAM_INT);
-            if ($stmt->execute()) {
-                return true;
-            } else {
-                return false;
-            }
-        }
-        public function getOrderRecord($ref)
-        {
-
-
-            $sql = "SELECT ord.*,ord.ref_no as rff, oi.*, pr.name,c.comboName FROM orders as ord
-=======
     public function delOrders($ref)
     {
         $sql = "DELETE FROM orders WHERE ref_no = ?";
@@ -1656,7 +1619,6 @@ class Model extends Connection
 
 
         $sql = "SELECT ord.*,ord.ref_no as rff, oi.*, pr.name,c.comboName FROM orders as ord
->>>>>>> dockerized
             left join orderitems as oi on ord.ref_no = oi.ref_no
             left join products as pr on oi.productID = pr.productID
             left join comboitems as ci on pr.productID = ci.productID
